@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import KioHomeView from '@/views/kiosk/KioHomeView.vue';
+import KioIndexView from '@/views/kiosk/KioIndexView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
-            name: 'home',
-            component: KioHomeView,
+            name: 'kio-index',
+            component: KioIndexView,
         },
         // {
         //     path: '/about',

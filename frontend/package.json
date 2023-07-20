@@ -13,9 +13,9 @@
         "prepare": "cd .. && husky install frontend/.husky"
     },
     "lint-staged": {
-        "*.{ts,tsx}": [
-            "prettier --write",
-            "eslint --fix"
+        "*.{ts,tsx,vue}": [
+            "npx eslint --fix",
+            "npx prettier --write"
         ]
     },
     "dependencies": {
