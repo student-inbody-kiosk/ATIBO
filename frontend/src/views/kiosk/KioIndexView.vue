@@ -6,7 +6,9 @@ import KioLayout from '@/components/kiosk/common/KioLayout.vue';
 <template>
     <KioLayout>
         <template #kiosk-header>
-            <KioHeader title="Title" />
+            <KioHeader title="Title">
+                <template #icon> <font-awesome-icon icon="user-lock" /> </template
+            ></KioHeader>
         </template>
         <template #kiosk-main> </template>
     </KioLayout>
