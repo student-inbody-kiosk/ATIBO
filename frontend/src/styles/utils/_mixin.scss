@@ -1,0 +1,13 @@
+// Laptop devices (up to 1280px)
+@mixin laptop {
+    @media (max-width: #{$breakpoint-laptop}) {
+        @content;
+    }
+}
+
+// Kiosk devices (up to 1023px)
+@mixin kiosk {
+    @media (max-width: #{$breakpoint-kiosk}) {
+        @content;
+    }
+}
