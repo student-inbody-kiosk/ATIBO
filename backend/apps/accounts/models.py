@@ -5,16 +5,18 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 
+
 class User(AbstractUser):
+    # SubClass for ENUM type 'role' field
     class Role(models.TextChoices):
         ADMIN = "admin", _("administrator")
         USER = "user", _("eneral user")
 
     # password validators are set in the settings.py
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = models.CharField(unique=True, max_length=20, validators=[RegexValidator('^(?=.*[A-Za-z])[A-Za-z\d]{5, 20}$', _('The username must be 5 to 20 characters in combination with letters and numbers'))])
+    username = models.CharField(unique=True, max_length=20, validators=[RegexValidator(r'^(?=.*[A-Za-z])[A-Za-z\d]{5,20}$', _('The username must be 5 to 20 characters in combination with letters and numbers'), 'username_invalid')])
     email = models.EmailField(unique=True)
-    name = models.CharField(unique=True, max_length=5, validators=[RegexValidator('^[가-힣]{2,5}$', _('The name must be written in 2-5 Korean characters'))])
+    name = models.CharField(max_length=5, validators=[RegexValidator(r'^[가-힣]{2,5}$', _('The name must be written in 2-5 Korean characters'), 'name_invalid')])
     role = models.CharField(max_length=5, choices=Role.choices, default=Role.USER)  # enum
     comment = models.CharField(max_length=100)
     refresh_token = models.TextField(blank=True, default='')

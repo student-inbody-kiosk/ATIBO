@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 import sys
+import environ
 
 from pathlib import Path
-import environ
+from datetime import timedelta
 
 # Default Setting for 'django-environ' 
 env = environ.Env(
@@ -24,7 +25,7 @@ env = environ.Env(
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# add '/apps' to the Python Interpretor's module path
+# Add '/apps' to the Python Interpretor's module path
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # Take environment variables from .env file
@@ -45,10 +46,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Activating Models
+    # https://docs.djangoproject.com/en/4.2/intro/tutorial02/#activating-models
     'accounts.apps.AccountsConfig',
     'students.apps.StudentsConfig',
     'gym.apps.GymConfig',
     'school.apps.SchoolConfig',
+
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',  # required for Django collectstatic discovery. UI contained drf_spectacular
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -57,6 +65,37 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+# rest_framework setting
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',    # simple JWT authenticatoin
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+# rest_framework_simplejwt setting
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
+    "REFRESH_TOKEN_LIFETIME": timedelta(hours=8),
+    "ALGORITHM": "HS384",
+}
+
+# drf_spectacular setting
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+
+    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -98,12 +137,16 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'read_default_file': os.path.join(BASE_DIR, 'mysql.cnf'),
+            'read_default_file': os.path.join(BASE_DIR, 'atibo/mysql.cnf'),
             'init_command': 'SET default_storage_engine=INNODB' 
         },
     }
 }
 
+# Tying transactions to HTTP requests.
+# https://docs.djangoproject.com/en/4.2/topics/db/transactions/#tying-transactions-to-http-requests
+
+ATOMIC_REQUESTS = True
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -128,23 +171,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'apps.accounts.validators.NumberValidator',
     },
     {
-        'NAME': 'apps.accounts.SpecialCharValidator',
+        'NAME': 'apps.accounts.validators.SpecialCharValidator',
     },
 ]
 
-# Change the Password Hasher to Argon which is the winner of 2015 Password Hashing Competition,
-# https://docs.djangoproject.com/en/4.2/topics/auth/passwords/#using-argon2-with-django
+# Change the Password Hasher from the default 'PBKDF2PasswordHasher'
+# https://docs.djangoproject.com/en/4.2/topics/auth/passwords/#how-django-stores-passwords
 
-PASSWORD_HASHERS = [
-    "django.contrib.auth.hashers.Argon2PasswordHasher",
-    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
-    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
-    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
-    "django.contrib.auth.hashers.ScryptPasswordHasher",
-]
+PASSWORD_HASHERS = [env.str('PRIMARY_PASSWORD_HASHER', default='django.contrib.auth.hashers.PBKDF2PasswordHasher')]
 
 AUTH_USER_MODEL = 'accounts.User'
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

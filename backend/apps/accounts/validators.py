@@ -3,6 +3,7 @@ import re
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+
 class NumberValidator(object):
     def validate(self, password, user=None):
         if not re.findall('\d', password):
@@ -16,7 +17,7 @@ class NumberValidator(object):
             "Your password must contain at least 1 digit, 0-9."
         )
     
-class SymbolValidator(object):
+class SpecialCharValidator(object):
     def validate(self, password, user=None):
         if not re.findall('[()[\]{}|\\`~!@#$%^&*_\-+=;:\'",<>./?]', password):
             raise ValidationError(
