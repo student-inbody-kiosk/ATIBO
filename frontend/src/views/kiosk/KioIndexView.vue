@@ -5,10 +5,10 @@ import KioLayout from '@/components/kiosk/common/KioLayout.vue';
 
 <template>
     <KioLayout>
-        <template #header>
-            <KioHeader />
+        <template #kiosk-header>
+            <KioHeader title="Title" />
         </template>
-        <template #main> </template>
+        <template #kiosk-main> </template>
     </KioLayout>
 </template>
 
