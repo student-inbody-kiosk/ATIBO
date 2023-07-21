@@ -13,7 +13,8 @@ defineProps<{
         <IconButton
             class="kiosk-header__icon--left"
             text="버튼텍스트"
-            :url="leftUrl">
+            emitMessage="routing"
+            @routing="$router.push({ name: leftUrl })">
             <template #icon>
                 <font-awesome-icon icon="circle-arrow-left" />
             </template>
@@ -24,7 +25,8 @@ defineProps<{
         <IconButton
             class="kiosk-header__icon--right"
             text="버튼텍스트"
-            :url="rightUrl">
+            emitMessage="routing"
+            @routing="$router.push({ name: rightUrl })">
             <template #icon>
                 <slot name="icon"></slot>
             </template>

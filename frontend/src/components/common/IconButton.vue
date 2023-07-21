@@ -1,12 +1,12 @@
 <script setup lang="ts">
 defineProps<{
     text?: string;
-    url: string;
+    emitMessage: string;
 }>();
 </script>
 
 <template>
-    <span class="icon-button" @click="this.$router.push({ name: url })">
+    <span class="icon-button" @click="$emit(emitMessage)">
         <slot name="icon" />
         <span>{{ text }}</span>
     </span>
