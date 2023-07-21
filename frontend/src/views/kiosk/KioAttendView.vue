@@ -19,7 +19,7 @@ const deleteInput = function deleteAttendData() {
 <template>
     <KioLayout>
         <template #kiosk-header>
-            <KioHeader title="Title">
+            <KioHeader title="Title" leftUrl="kiosk" rightUrl="kiosk">
                 <template #icon> <font-awesome-icon icon="house" /> </template
             ></KioHeader>
         </template>

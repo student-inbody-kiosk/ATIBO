@@ -1,16 +1,22 @@
 <script setup lang="ts">
 defineProps<{
-    title?: string;
+    title: string;
+    leftUrl: string;
+    rightUrl: string;
 }>();
 </script>
 
 <template lang="">
     <div class="kiosk-header">
-        <span class="kiosk-header__icon kiosk-header__icon--left"
+        <span
+            class="kiosk-header__icon kiosk-header__icon--left"
+            @click="$router.push({ name: leftUrl })"
             ><font-awesome-icon icon="circle-arrow-left"
         /></span>
         <span class="kiosk-header__title">{{ title }} </span>
-        <span class="kiosk-header__icon kiosk-header__icon--right"
+        <span
+            class="kiosk-header__icon kiosk-header__icon--right"
+            @click="$router.push({ name: rightUrl })"
             ><slot name="icon"
         /></span>
     </div>
