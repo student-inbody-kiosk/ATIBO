@@ -8,22 +8,19 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            name: 'kio-index',
+            name: 'kiosk',
             component: KioIndexView,
         },
         {
             path: '/attend',
-            name: 'kio-attend',
+            name: 'kiosk-attend',
             component: KioAttendView,
         },
-        // {
-        //     path: '/about',
-        //     name: 'about',
-        //     // route level code-splitting
-        //     // this generates a separate chunk (About.[hash].js) for this route
-        //     // which is lazy-loaded when the route is visited.
-        //     component: () => import('../views/AboutView.vue'),
-        // },
+        {
+            path: '/admin',
+            name: 'admin',
+            component: () => import('@/views/admin/AdmIndexView.vue'),
+        },
     ],
 });
 

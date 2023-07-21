@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import KioHeader from '@/components/kiosk/common/KioHeader.vue';
-import KioLayout from '@/components/kiosk/common/KioLayout.vue';
+import KioHeader from '@/components/kiosk/KioHeader.vue';
+import KioLayout from '@/components/kiosk/KioLayout.vue';
 </script>
 
 <template>
     <KioLayout>
         <template #kiosk-header>
-            <KioHeader title="Title">
-                <template #icon>
-                    <font-awesome-icon icon="user-lock" /> </template
-            ></KioHeader>
+            <font-awesome-icon
+                icon="user-lock"
+                @click="$router.push({ name: 'kiosk-attend' })" />
         </template>
         <template #kiosk-main> </template>
     </KioLayout>
