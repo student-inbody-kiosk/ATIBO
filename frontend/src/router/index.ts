@@ -17,6 +17,16 @@ const router = createRouter({
             component: KioAttendView,
         },
         {
+            path: '/inbody',
+            name: 'kiosk-inbody',
+            component: () => import('@/views/kiosk/KioInbodyView.vue'),
+        },
+        {
+            path: '/gym',
+            name: 'kiosk-gym',
+            component: () => import('@/views/kiosk/KioGymView.vue'),
+        },
+        {
             path: '/admin',
             name: 'admin',
             component: () => import('@/views/admin/AdmIndexView.vue'),
