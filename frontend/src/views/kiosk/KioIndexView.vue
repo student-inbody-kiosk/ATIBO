@@ -6,10 +6,9 @@ import KioLayout from '@/components/kiosk/KioLayout.vue';
 <template>
     <KioLayout>
         <template #kiosk-header>
-            <KioHeader title="Title" leftUrl="kiosk" rightUrl="admin">
-                <template #icon>
-                    <font-awesome-icon icon="user-lock" /> </template
-            ></KioHeader>
+            <font-awesome-icon
+                icon="user-lock"
+                @click="$router.push({ name: 'kiosk-attend' })" />
         </template>
         <template #kiosk-main> </template>
     </KioLayout>

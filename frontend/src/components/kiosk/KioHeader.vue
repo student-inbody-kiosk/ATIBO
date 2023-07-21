@@ -3,8 +3,7 @@ import IconButton from '@/components/common/IconButton.vue';
 
 defineProps<{
     title: string;
-    leftUrl: string;
-    rightUrl: string;
+    backUrl: string;
 }>();
 </script>
 
@@ -12,9 +11,9 @@ defineProps<{
     <div class="kiosk-header">
         <IconButton
             class="kiosk-header__icon--left"
-            text="버튼텍스트"
+            text="뒤로가기"
             emitMessage="routing"
-            @routing="$router.push({ name: leftUrl })">
+            @routing="$router.push({ name: backUrl })">
             <template #icon>
                 <font-awesome-icon icon="circle-arrow-left" />
             </template>
@@ -24,11 +23,11 @@ defineProps<{
 
         <IconButton
             class="kiosk-header__icon--right"
-            text="버튼텍스트"
+            text="처음으로"
             emitMessage="routing"
-            @routing="$router.push({ name: rightUrl })">
+            @routing="$router.push({ name: 'kiosk' })">
             <template #icon>
-                <slot name="icon"></slot>
+                <font-awesome-icon icon="house" />
             </template>
         </IconButton>
     </div>

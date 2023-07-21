@@ -17,5 +17,9 @@ defineProps<{
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    :hover {
+        cursor: pointer;
+    }
 }
 </style>
