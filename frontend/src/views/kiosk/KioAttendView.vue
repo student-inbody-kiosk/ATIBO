@@ -1,28 +1,45 @@
 <script setup lang="ts">
-import KioHeader from '@/components/kiosk/KioHeader.vue';
 import KioLayout from '@/components/kiosk/KioLayout.vue';
+import KioHeader from '@/components/kiosk/KioHeader.vue';
+import InputGuide from '@/components/kiosk/InputGuide.vue';
+import TheInput from '@/components/common/TheInput.vue';
 import TheKeypad from '@/components/kiosk/TheKeypad.vue';
 
 import { ref } from 'vue';
-let attendData = ref('');
+let studentInfo = ref('');
 
-const handleInput = function updateAttendData(value: string) {
-    attendData.value += value;
+const handleInput = function addStudentInfo(value: string) {
+    studentInfo.value += value;
 };
 
-const deleteInput = function deleteAttendData() {
-    if (attendData.value.length == 0) return;
-    attendData.value = attendData.value.slice(0, -1);
+const deleteInput = function deleteStudentInfo() {
+    if (studentInfo.value.length == 0) return;
+    studentInfo.value = studentInfo.value.slice(0, -1);
+};
+
+const handleChange = function updateStudentInfo(info: string) {
+    studentInfo.value = info;
+};
+
+const handleSubmit = function checkAttendance() {
+    console.log(studentInfo.value);
 };
 </script>
 
 <template>
     <KioLayout>
         <template #kiosk-header>
-            <KioHeader title="Title" backUrl="kiosk" />
+            <KioHeader title="출석 확인" backUrl="kiosk" />
         </template>
         <template #kiosk-main>
-            <div>{{ attendData }}</div>
+            <InputGuide />
+            <TheInput
+                type="text"
+                refer="학년반번호"
+                :value="studentInfo"
+                @update-input="handleChange"
+                @submit="handleSubmit" />
+            <button @click="handleSubmit">완료</button>
             <TheKeypad @input="handleInput" @delete="deleteInput" />
         </template>
     </KioLayout>
