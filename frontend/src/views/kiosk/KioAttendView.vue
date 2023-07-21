@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import KioHeader from '@/components/kiosk/common/KioHeader.vue';
-import KioLayout from '@/components/kiosk/common/KioLayout.vue';
-import TheKeypad from '@/components/kiosk/common/TheKeypad.vue';
+import KioHeader from '@/components/kiosk/KioHeader.vue';
+import KioLayout from '@/components/kiosk/KioLayout.vue';
+import TheKeypad from '@/components/kiosk/TheKeypad.vue';
 
 import { ref } from 'vue';
 let attendData = ref('');
