@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import KioHeader from '@/components/kiosk/KioHeader.vue';
 import KioLayout from '@/components/kiosk/KioLayout.vue';
+import KioHeader from '@/components/kiosk/KioHeader.vue';
+import InputGuide from '@/components/kiosk/InputGuide.vue';
 import TheKeypad from '@/components/kiosk/TheKeypad.vue';
 
 import { ref } from 'vue';
@@ -19,9 +20,10 @@ const deleteInput = function deleteAttendData() {
 <template>
     <KioLayout>
         <template #kiosk-header>
-            <KioHeader title="Title" backUrl="kiosk" />
+            <KioHeader title="출석 확인" backUrl="kiosk" />
         </template>
         <template #kiosk-main>
+            <InputGuide />
             <div>{{ attendData }}</div>
             <TheKeypad @input="handleInput" @delete="deleteInput" />
         </template>
