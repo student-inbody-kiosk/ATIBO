@@ -10,7 +10,9 @@ defineProps<{
             ><font-awesome-icon icon="circle-arrow-left"
         /></span>
         <span class="kiosk-header__title">{{ title }} </span>
-        <span class="kiosk-header__icon kiosk-header__icon--right"><slot name="icon" /></span>
+        <span class="kiosk-header__icon kiosk-header__icon--right"
+            ><slot name="icon"
+        /></span>
     </div>
 </template>
 
