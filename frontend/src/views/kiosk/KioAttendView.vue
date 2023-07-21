@@ -5,15 +5,15 @@ import InputGuide from '@/components/kiosk/InputGuide.vue';
 import TheKeypad from '@/components/kiosk/TheKeypad.vue';
 
 import { ref } from 'vue';
-let attendData = ref('');
+let studentInfo = ref('');
 
 const handleInput = function updateAttendData(value: string) {
-    attendData.value += value;
+    studentInfo.value += value;
 };
 
 const deleteInput = function deleteAttendData() {
-    if (attendData.value.length == 0) return;
-    attendData.value = attendData.value.slice(0, -1);
+    if (studentInfo.value.length == 0) return;
+    studentInfo.value = studentInfo.value.slice(0, -1);
 };
 </script>
 
@@ -24,7 +24,7 @@ const deleteInput = function deleteAttendData() {
         </template>
         <template #kiosk-main>
             <InputGuide />
-            <div>{{ attendData }}</div>
+            <div>{{ studentInfo }}</div>
             <TheKeypad @input="handleInput" @delete="deleteInput" />
         </template>
     </KioLayout>
