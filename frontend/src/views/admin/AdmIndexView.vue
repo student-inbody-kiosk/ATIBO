@@ -1,5 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import AdmLayout from '@/components/admin/AdmLayout.vue';
+</script>
 
-<template><div></div></template>
+<template>
+    <AdmLayout></AdmLayout>
+</template>
 
 <style lang="scss"></style>

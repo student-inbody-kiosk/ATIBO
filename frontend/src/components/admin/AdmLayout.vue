@@ -10,10 +10,13 @@
             <slot name="admin-main"></slot>
         </main>
 
-        <footer>
-            <slot name="admin-footer"></slot>
-        </footer>
+        <footer class="admin-footer">ⓒ 2022. ATIBO all rights reserved.</footer>
     </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.admin-footer {
+    text-align: center;
+    color: $gray;
+}
+</style>
