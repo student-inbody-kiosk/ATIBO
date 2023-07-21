@@ -8,7 +8,14 @@ $admin-secondary: #81a0bb;
 $white: #ffffff;
 $black: #222222;
 $gray: #cccccc;
+$gray-opacity: #43434333;
 
 // breakpoints
 $breakpoint-laptop: 1280px;
 $breakpoint-kiosk: 1024px;
+
+// z-index
+$z-index: (
+    base: 0,
+    modal: 999,
+);

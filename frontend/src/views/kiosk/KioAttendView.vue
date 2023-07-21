@@ -4,9 +4,12 @@ import KioHeader from '@/components/kiosk/KioHeader.vue';
 import InputGuide from '@/components/kiosk/InputGuide.vue';
 import TheInput from '@/components/common/TheInput.vue';
 import TheKeypad from '@/components/kiosk/TheKeypad.vue';
+import TheModal from '@/components/common/TheModal.vue';
 
 import { ref } from 'vue';
-let studentInfo = ref('');
+
+const studentInfo = ref('');
+const isModalOpen = ref(false);
 
 const handleInput = function addStudentInfo(value: string) {
     studentInfo.value += value;
@@ -21,8 +24,14 @@ const handleChange = function updateStudentInfo(info: string) {
     studentInfo.value = info;
 };
 
+const handleModal = function closeModal() {
+    isModalOpen.value = false;
+    studentInfo.value = '';
+};
+
 const handleSubmit = function checkAttendance() {
-    console.log(studentInfo.value);
+    // Todo 정규식 검사
+    isModalOpen.value = true;
 };
 </script>
 
@@ -39,8 +48,16 @@ const handleSubmit = function checkAttendance() {
                 :value="studentInfo"
                 @update-input="handleChange"
                 @submit="handleSubmit" />
-            <button @click="handleSubmit">완료</button>
+            <button @click="handleSubmit">출석하기</button>
             <TheKeypad @input="handleInput" @delete="deleteInput" />
+            <!-- Modal -->
+            <teleport to="#teleport">
+                <TheModal v-show="isModalOpen" @close-modal="handleModal">
+                    <template #modal-content>
+                        <div>학년반번호 맞으시죠? {{ studentInfo }}</div>
+                    </template>
+                </TheModal>
+            </teleport>
         </template>
     </KioLayout>
 </template>
