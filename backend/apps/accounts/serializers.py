@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
@@ -7,14 +7,15 @@ from rest_framework import serializers
 class UserSerializer(serializers.ModelSerializer): # BaseAPI. get, create, delete
     class Meta:
         model = get_user_model()
-        fields = ['id', 'username', 'name', 'email', 'password', 'comment']
+        fields = ['id', 'username', 'name', 'email', 'role', 'comment', 'password']
         extra_kwargs = {
             'password': {'write_only': True}
         }
 
     def create(self, validated_data):
         User = self.Meta.model
-        user = User.objects.create_user(**validated_data)   # user emthod
+        validated_data['is_active'] = False
+        user = User.objects.create_user(**validated_data)
         return user
 
 
@@ -27,11 +28,24 @@ class LoginSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
+    def validate(self, data):
+        username = data.get('username')
+        password = data.get('password')
+
+        user = authenticate(request=self.context.get('request'), username=username, password=password)
+
+        if not user:
+            raise serializers.ValidationError(_('There\'s no corresponding user'))
+        data['user'] = user
+
+        return data
+
+
 class EmailChangeSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = get_user_model()
         fields = ['email']
+
 
 class PasswordChangeSerializer(serializers.Serializer):
     old_password = serializers.CharField(write_only=True, required=True)
@@ -53,10 +67,63 @@ class PasswordChangeSerializer(serializers.Serializer):
 
         return data
 
-    def update(self, user, validated_data):
+    def update(self, instance, validated_data):
         # user = self.context['request'].user
         new_password = validated_data['new_password']
-        user.set_password(new_password)
-        user.save()
-        return user
+        instance.set_password(new_password)
+        instance.save()
+        return instance
 
+
+class PasswordResetSerializer(serializers.Serializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['username', 'email']
+        extra_kwargs = {
+            'username': {'write_only': True},
+            'eamil': {'write_only': True}
+        }
+
+    def validate(self, data):
+        # 인증로직
+        username = data.get('username')
+        email = data.get('email')
+
+        User = self.Meta.model
+        user = User.objects.filter(username=username, email=email)
+
+        if not user:
+            raise serializers.ValidationError(_('There\'s no corresponding user'))
+        data['user'] = user
+
+        return data
+
+
+class AdminListSerializer(serializers.ListSerializer):
+    def to_representation(self, data):
+        user_list = super().to_representation(data)
+
+        classified_data = {
+            'inactive_users': [],
+            'active_users': []
+        }
+
+        for user in user_list:
+            if user['is_active']:
+                classified_data['active_users'].append(user)
+            else:
+                classified_data['inactive_users'].append(user)
+
+        return classified_data
+
+
+class AdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        list_serializer_class = AdminListSerializer
+        model = get_user_model()
+        fields = ['id', 'username', 'name', 'email', 'comment', 'is_active']
+
+    def update(self, instance, validated_data):
+        instance.is_active = True
+        instance.save()
+        return instance

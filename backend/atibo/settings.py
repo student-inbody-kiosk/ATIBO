@@ -23,24 +23,30 @@ env = environ.Env(
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Add '/apps' to the Python Interpretor's module path
+
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # Take environment variables from .env file
+
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -86,9 +92,9 @@ SIMPLE_JWT = {
 # drf_spectacular setting
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your Project API',
-    'DESCRIPTION': 'Your project description',
-    'VERSION': '1.0.0',
+    'TITLE': 'ATIBO API',
+    'DESCRIPTION': 'The smart kiosk program for managing ATtendance and InBOdy',
+    'VERSION': '2.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 
     'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
@@ -191,6 +197,8 @@ TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
 
@@ -203,3 +211,20 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Email Setting
+# https://docs.djangoproject.com/en/4.2/topics/email/#obtaining-an-instance-of-an-email-backend
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = env('EMAIL_HOST')
+
+EMAIL_PORT = env('EMAIL_PORT')
+
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+
+EMAIL_USE_TLS = True
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

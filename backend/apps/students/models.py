@@ -1,9 +1,12 @@
+import uuid
+
 from django.db import models
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator, MinLengthValidator
 from django.utils.translation import gettext_lazy as _
 from atibo.fields import TinyIntegerField
 
 class Student(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=5, validators=[RegexValidator(r'^[가-힣]{2,5}$', _('The name must be written in 2-5 Korean characters'), 'name_invalid')])
     grade = TinyIntegerField(validators=[MinValueValidator(1, _('The grade must be greater than 0')), MaxValueValidator(9,  _('The grade must be less than 10'))])
     room = TinyIntegerField(validators=[MinValueValidator(1, _('The room must be greater than 0')), MaxValueValidator(99,  _('The room must be less than 100'))])
