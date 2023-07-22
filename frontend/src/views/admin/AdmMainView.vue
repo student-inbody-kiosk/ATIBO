@@ -32,23 +32,23 @@ const handleModalClose = function closeModal() {
         <template #admin-main>
             <div class="admin-main__buttons">
                 <TheButton
-                    text="button"
+                    text="학생 관리"
                     color="admin-primary"
                     size="lg"
                     emitMessage="student"
-                    @student="$router.push({ name: 'admin' })" />
+                    @student="$router.push({ name: 'admin-student' })" />
                 <TheButton
-                    text="button"
+                    text="출결 관리"
                     color="admin-primary"
                     size="lg"
                     emitMessage="attend"
-                    @attend="$router.push({ name: 'admin' })" />
+                    @attend="$router.push({ name: 'admin-attend' })" />
                 <TheButton
-                    text="button"
+                    text="인바디 관리"
                     color="admin-primary"
                     size="lg"
                     emitMessage="inbody"
-                    @inbody="$router.push({ name: 'admin' })" />
+                    @inbody="$router.push({ name: 'admin-inbody' })" />
             </div>
 
             <teleport to="#teleport">
@@ -59,8 +59,8 @@ const handleModalClose = function closeModal() {
                         <div v-show="isEmailModalOpen">Email Form</div>
                         <div v-show="isPasswordModalOpen">passwordform</div>
                     </template>
-                </TheModal></teleport
-            >
+                </TheModal>
+            </teleport>
         </template>
     </AdmLayout>
 </template>

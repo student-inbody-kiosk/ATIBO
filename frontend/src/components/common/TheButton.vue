@@ -9,7 +9,7 @@ const props = defineProps<{
 
 <template>
     <button
-        :class="['button', props.color, props.size]"
+        :class="['the-button', props.color, props.size]"
         @click="$emit(emitMessage)">
         {{ text }}
     </button>
