@@ -30,7 +30,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: $admin-primary;
+    background-color: $admin-secondary;
 }
 .admin-container__footer {
     text-align: center;
