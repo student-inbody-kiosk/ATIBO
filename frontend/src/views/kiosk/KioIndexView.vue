@@ -1,24 +1,41 @@
 <script setup lang="ts">
 import KioLayout from '@/components/kiosk/KioLayout.vue';
+import IconButton from '@/components/common/IconButton.vue';
+import TheButton from '@/components/common/TheButton.vue';
 </script>
 
 <template>
     <KioLayout>
         <template #kiosk-header>
-            <font-awesome-icon
-                icon="user-lock"
-                @click="$router.push({ name: 'admin' })" />
+            <IconButton
+                text="관리자"
+                emitMessage="admin"
+                @admin="$router.push({ name: 'admin' })">
+                <template #icon>
+                    <font-awesome-icon icon="user-lock" />
+                </template>
+            </IconButton>
         </template>
         <template #kiosk-main>
-            <button @click="$router.push({ name: 'kiosk-attend' })">
-                출석 확인
-            </button>
-            <button @click="$router.push({ name: 'kiosk-inbody' })">
-                인바디
-            </button>
-            <button @click="$router.push({ name: 'kiosk-gym' })">
-                운동기구
-            </button>
+            <TheButton
+                text="출석 확인"
+                color="kiosk-primary"
+                size="lg"
+                emitMessage="attend"
+                @attend="$router.push({ name: 'kiosk-attend' })" />
+            <TheButton
+                text="인바디"
+                color="kiosk-primary"
+                size="lg"
+                emitMessage="attend"
+                @attend="$router.push({ name: 'kiosk-attend' })" />
+
+            <TheButton
+                text="운동기구"
+                color="kiosk-primary"
+                size="lg"
+                emitMessage="attend"
+                @attend="$router.push({ name: 'kiosk-attend' })" />
         </template>
     </KioLayout>
 </template>

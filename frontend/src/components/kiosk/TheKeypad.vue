@@ -47,6 +47,7 @@ import TheKeypadButton from './TheKeypadButton.vue';
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: minmax(5rem, auto);
     grid-gap: 1rem;
+    width: 100%;
 }
 
 .keypad__button {
