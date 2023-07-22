@@ -6,11 +6,13 @@
             <slot name="admin-header"></slot>
         </header>
 
-        <main>
+        <main class="admin-container__main">
             <slot name="admin-main"></slot>
         </main>
 
-        <footer class="admin-footer">ⓒ 2022. ATIBO all rights reserved.</footer>
+        <footer class="admin-container__footer">
+            ⓒ 2022. ATIBO all rights reserved.
+        </footer>
     </div>
 </template>
 
@@ -19,10 +21,18 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: min-content 1fr min-content;
+    justify-content: center;
     min-height: 100vh;
     background-color: $white;
 }
-.admin-footer {
+
+.admin-container__main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $admin-primary;
+}
+.admin-container__footer {
     text-align: center;
     color: $gray;
 }
