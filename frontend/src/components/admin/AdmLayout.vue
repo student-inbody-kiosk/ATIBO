@@ -14,7 +14,14 @@
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.admin-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr min-content;
+    min-height: 100vh;
+    background-color: $white;
+}
 .admin-footer {
     text-align: center;
     color: $gray;

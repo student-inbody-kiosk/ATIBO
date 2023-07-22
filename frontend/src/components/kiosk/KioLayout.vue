@@ -12,8 +12,12 @@
     </div>
 </template>
 
-<style lang="scss">
-body {
+<style lang="scss" scoped>
+.kiosk-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 1fr min-content;
+    min-height: 100vh;
     background-color: $kiosk-secondary;
 }
 </style>

@@ -23,8 +23,4 @@ import KioLayout from '@/components/kiosk/KioLayout.vue';
     </KioLayout>
 </template>
 
-<style lang="scss">
-body {
-    background-color: $kiosk-secondary;
-}
-</style>
+<style lang="scss" scoped></style>

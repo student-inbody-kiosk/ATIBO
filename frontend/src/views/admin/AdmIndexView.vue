@@ -60,8 +60,4 @@ const handleLoginSubmit = function login() {
     </AdmLayout>
 </template>
 
-<style lang="scss">
-body {
-    background-color: $white;
-}
-</style>
+<style lang="scss" scoped></style>
