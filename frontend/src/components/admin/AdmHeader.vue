@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import IconButton from '@/components/common/IconButton.vue';
 
-const handleModal = function openModal(message: string) {
-    console.log(`open ${message} modal`);
-};
-
 const handlLogout = function logoutAndRedirect() {
     console.log('logout');
 };
@@ -14,9 +10,9 @@ const handlLogout = function logoutAndRedirect() {
     <div class="admin-header">
         <IconButton
             class="admin-header__icon"
-            text="관리자홈"
+            text="홈"
             emitMessage="routing"
-            @routing="$router.push({ name: admin })"
+            @routing="$router.push({ name: 'admin' })"
             >>
             <template #icon>
                 <font-awesome-icon icon="house" />
@@ -27,7 +23,7 @@ const handlLogout = function logoutAndRedirect() {
             class="admin-header__icon"
             text="이메일 변경"
             emitMessage="modal"
-            @modal="() => handleModal('email')"
+            @modal="$emit('open-modal', 'email')"
             >>
             <template #icon>
                 <font-awesome-icon icon="house" />
@@ -38,7 +34,7 @@ const handlLogout = function logoutAndRedirect() {
             class="admin-header__icon"
             text="password"
             emitMessage="modal"
-            @modal="() => handleModal('password')"
+            @modal="$emit('open-modal', 'password')"
             >>
             <template #icon>
                 <font-awesome-icon icon="house" />
