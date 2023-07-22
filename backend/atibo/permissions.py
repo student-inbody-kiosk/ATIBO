@@ -4,6 +4,7 @@ from rest_framework.permissions import BasePermission
 # Example: https://www.django-rest-framework.org/tutorial/4-authentication-and-permissions/#object-level-permissions
 class CreateOnly(BasePermission):
     def has_permission(self, request, view):
+        print('reqeust', request.method)
         return request.method.upper() == 'POST'
     
 

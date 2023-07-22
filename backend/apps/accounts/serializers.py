@@ -9,24 +9,28 @@ class UserSerializer(serializers.ModelSerializer): # BaseAPI. get, create, delet
         model = get_user_model()
         fields = ['id', 'username', 'name', 'email', 'role', 'comment', 'password']
         extra_kwargs = {
+            'role': {'read_only': True},
             'password': {'write_only': True}
         }
 
+    def to_internal_value(self, data):
+        ret = super().to_internal_value(data)
+        ret['comment'] = ret.get('comment').strip()
+        return ret
+
     def create(self, validated_data):
         User = self.Meta.model
+        validated_data['role'] = 'user'
         validated_data['is_active'] = False
         user = User.objects.create_user(**validated_data)
         return user
 
 
-class LoginSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = get_user_model()
-        fields = ['username', 'password']
-        extra_kwargs = {
-            'username': {'write_only': True},
-            'password': {'write_only': True}
-        }
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+    access = serializers.CharField(read_only=True)
+    refresh = serializers.CharField(read_only=True)
 
     def validate(self, data):
         username = data.get('username')
@@ -39,6 +43,12 @@ class LoginSerializer(serializers.ModelSerializer):
         data['user'] = user
 
         return data
+
+
+class UsernameCheckSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['username']
 
 
 class EmailChangeSerializer(serializers.ModelSerializer):
@@ -99,29 +109,12 @@ class PasswordResetSerializer(serializers.Serializer):
         return data
 
 
-class AdminListSerializer(serializers.ListSerializer):
-    def to_representation(self, data):
-        user_list = super().to_representation(data)
-
-        classified_data = {
-            'inactive_users': [],
-            'active_users': []
-        }
-
-        for user in user_list:
-            if user['is_active']:
-                classified_data['active_users'].append(user)
-            else:
-                classified_data['inactive_users'].append(user)
-
-        return classified_data
-
-
 class AdminSerializer(serializers.ModelSerializer):
     class Meta:
-        list_serializer_class = AdminListSerializer
+        # list_serializer_class = AdminListSerializer
         model = get_user_model()
         fields = ['id', 'username', 'name', 'email', 'comment', 'is_active']
+        read_only_fields = ['id', 'username', 'name', 'email', 'comment', 'is_active']
 
     def update(self, instance, validated_data):
         instance.is_active = True

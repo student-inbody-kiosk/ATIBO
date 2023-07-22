@@ -13,7 +13,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 
 from atibo.permissions import CreateOnly, IsAdmin
-from .serializers import UserSerializer, LoginSerializer, EmailChangeSerializer, PasswordChangeSerializer, PasswordResetSerializer, AdminSerializer
+from .serializers import UserSerializer, LoginSerializer, UsernameCheckSerializer, EmailChangeSerializer, PasswordChangeSerializer, PasswordResetSerializer, AdminSerializer
 from .utils import generate_password
 
 """
@@ -23,7 +23,7 @@ from .utils import generate_password
 """
 class AccountAPIView(GenericAPIView, CreateModelMixin, RetrieveModelMixin, DestroyModelMixin):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated, CreateOnly]
+    permission_classes = [IsAuthenticated | CreateOnly]
 
     def get_object(self):
         return self.request.user
@@ -39,30 +39,31 @@ class AccountAPIView(GenericAPIView, CreateModelMixin, RetrieveModelMixin, Destr
 
 
 class LoginAPIView(APIView):
+    serializer_class = LoginSerializer
+
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
 
-        if serializer.is_valid():
-            user = serializer.validated_data.get('user')
+        serializer.is_valid(raise_exception=True)
 
-            # Create jwt token manually
-            refresh = RefreshToken.for_user(user)
-            refresh_token = str(refresh)                
-            access_token = str(refresh.access_token)   
+        user = serializer.validated_data.get('user')
 
-            # Save the refresh token in the DB
-            token = user.token
-            token.refresh_token = refresh_token 
-            token.save()
+        # Create jwt token manually
+        refresh = RefreshToken.for_user(user)
+        refresh_token = str(refresh)                
+        access_token = str(refresh.access_token)   
 
-            # Return the Repsponse
-            data = {
-                'access_token': access_token,
-                'refresh_token': refresh_token
-            }
-            return Response(data, status=status.HTTP_202_ACCEPTED)
+        # Save the refresh token in the DB
+        user.refresh_token = refresh_token 
+        user.save()
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Return the Repsponse
+        serializer = LoginSerializer(data = {
+            'refresh': refresh_token,
+            'access': access_token,
+        })
+        
+        return Response(serializer.initial_data, status=status.HTTP_202_ACCEPTED)
 
 
 class LogoutAPIView(APIView):
@@ -71,17 +72,22 @@ class LogoutAPIView(APIView):
     def post(self, request):
         # Delete Refresh Token
         user = request.user
-        token = user.token
-        token.refresh_token = ''
-        token.save()
+        user.refresh_token = ''
+        user.save()
 
         return Response({'message': _('Logged out successfully.')}, status=status.HTTP_200_OK)
 
 
 class UsernameCheckAPIView(APIView):
-    def get(self, request):
+    serializer_class = UsernameCheckSerializer
+
+    def post(self, request):
+        serializer = UsernameCheckSerializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+
         User = get_user_model()
-        username = request.query_params.get('useranme')
+        username = serializer.validated_data.get('username')
 
         if User.objects.filter(username=username).exists():
             return Response({"duplicate": True}, status=status.HTTP_200_OK)
@@ -111,36 +117,63 @@ class PasswordResetAPIView(APIView):
     def put(self, request):
         serializer = PasswordResetSerializer(data=request.data)
 
-        if serializer.is_valid():
-            # Find the user
-            user = serializer.validated_data['user']
-            email = serializer.validated_data['email']
-            # Create and reset password
-            new_password = generate_password()
-            user.set_password(new_password)
-            # Send Email
-            email_message = EmailMessage(
-                    _('Your ATIBO password has been reset.'), # Subject
-                    _(f'New password : {new_password}'), # Body
-                    to=[email], #받는 이메일
-                )
-            email_message.send()
-            return Response({'message': _('A new password has been sent to your email')}, status=status.HTTP_200_OK)    
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+
+        # Find the user
+        user = serializer.validated_data['user']
+        email = serializer.validated_data['email']
+        # Create and reset password
+        new_password = generate_password()
+        user.set_password(new_password)
+        # Send Email
+        email_message = EmailMessage(
+                _('Your ATIBO password has been reset.'), # Subject
+                _(f'New password : {new_password}'), # Body
+                to=[email], #받는 이메일
+            )
+        email_message.send()
+        return Response({'message': _('A new password has been sent to your email')}, status=status.HTTP_200_OK)    
 
 
-# Make Vieset for the account
 class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyModelMixin):
-    """
-    A viewset that provides the standard actions
-    """
-    queryset = get_user_model().objects.all()
+    queryset = get_user_model().objects.filter(role='user')
     serializer_class = AdminSerializer
-    permission_classes = [IsAdmin]
+    permission_classes = [IsAuthenticated, IsAdmin]
+    http_method_names = ["get", "put", "delete"]
 
-    @action(detail=True, methods=['get'])
+    @action(detail=False, methods=['get'])
     def waiting(self, request):
         if get_user_model().objects.filter(is_active=False).exists():
-            return Response({'isWaiting': True}, status=status.HTTP_200_OK)
+            return Response({'is_waiting': True}, status=status.HTTP_200_OK)
         else:
-            return Response({'isWaiting': False},  status=status.HTTP_204_NO_CONTENT)
+            return Response({'is_waiting': False}, status=status.HTTP_204_NO_CONTENT)
+        
+    
+    def list(self, request, *args, **kwargs):
+        """
+        ListModelMixin.list
+        """
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+
+        # Customize the final response representation
+        users = serializer.data
+
+        users_classified = {
+            'inactive_users': [],
+            'active_users': []
+        }
+
+        for user in users:
+            if user.get('is_active'):
+                users_classified['active_users'].append(user)
+            else:
+                users_classified['inactive_users'].append(user)
+
+        return Response(users_classified, status=status.HTTP_200_OK)

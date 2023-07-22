@@ -1,9 +1,8 @@
 import uuid
 
 from django.db import models
-from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinLengthValidator
 from django.utils.translation import gettext_lazy as _
 
 
@@ -20,18 +19,7 @@ class User(AbstractUser):
     name = models.CharField(max_length=5, validators=[RegexValidator(r'^[가-힣]{2,5}$', _('The name must be written in 2-5 Korean characters'), 'name_invalid')])
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=5, choices=Role.choices, default=Role.USER)  # enum
-    comment = models.CharField(max_length=100)
-
-
-
-# One to One Field. related name is the model itself.
-# https://docs.djangoproject.com/en/4.2/ref/models/fields/#onetoonefield
-class Token(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
+    comment = models.CharField(max_length=100, validators=[MinLengthValidator(10, _('The comment length must be longer than 10'))])
     refresh_token = models.TextField(blank=True, default='')
 
 
