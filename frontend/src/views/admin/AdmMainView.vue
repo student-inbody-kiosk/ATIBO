@@ -2,6 +2,7 @@
 import AdmLayout from '@/components/admin/AdmLayout.vue';
 import AdmHeader from '@/components/admin/AdmHeader.vue';
 import TheModal from '@/components/common/TheModal.vue';
+import TheButton from '@/components/common/TheButton.vue';
 
 import { ref } from 'vue';
 
@@ -29,6 +30,12 @@ const handleModalClose = function closeModal() {
         </template>
 
         <template #admin-main>
+            <div class="admin-main__buttons">
+                <TheButton text="button" color="admin-primary" size="lg" />
+                <TheButton text="button" color="admin-primary" size="lg" />
+                <TheButton text="button" color="admin-primary" size="lg" />
+            </div>
+
             <teleport to="#teleport">
                 <TheModal
                     v-show="isEmailModalOpen || isPasswordModalOpen"
@@ -46,5 +53,10 @@ const handleModalClose = function closeModal() {
 <style lang="scss">
 body {
     background-color: $white;
+}
+
+.admin-main__buttons {
+    display: flex;
+    flex-direction: column;
 }
 </style>
