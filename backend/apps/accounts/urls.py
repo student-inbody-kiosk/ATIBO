@@ -3,7 +3,7 @@ from django.urls import path
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from .views import AccountAPIView, LoginAPIView, LogoutAPIView, UsernameCheckAPIView, EmailChangeAPIView, PasswordChangeAPIView, PasswordResetAPIView, AdminViewSet
+from .views import AccountAPIView, LoginAPIView, LogoutAPIView, UsernameCheckAPIView, EmailChangeAPIView, PasswordChangeAPIView, PasswordResetAPIView, TokenRefreshAPIView, AdminViewSet
 
 app_name = 'accounts'
 
@@ -18,7 +18,7 @@ urlpatterns = [
     path('email/change', EmailChangeAPIView.as_view(), name='email_change'),
     path('password/change', PasswordChangeAPIView.as_view(), name='password_change'),
     path('password/reset', PasswordResetAPIView.as_view(), name='password_reset'),
-    path('token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/refresh', TokenRefreshAPIView.as_view(), name='token_refresh'),
 ]
 
 urlpatterns += router.urls

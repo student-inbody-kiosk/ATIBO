@@ -1,8 +1,11 @@
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model, authenticate
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
+from rest_framework_simplejwt.tokens import Token, RefreshToken, AccessToken
 
+from django.contrib.auth.password_validation import validate_password
 
 class UserSerializer(serializers.ModelSerializer): # BaseAPI. get, create, delete
     class Meta:
@@ -29,18 +32,23 @@ class UserSerializer(serializers.ModelSerializer): # BaseAPI. get, create, delet
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
-    access = serializers.CharField(read_only=True)
-    refresh = serializers.CharField(read_only=True)
+    access = serializers.CharField(read_only=True)  # Not Necessary. Just for drf-spectacular.
+    refresh = serializers.CharField(read_only=True) # Not Necessary. Just for drf-spectacular.
 
     def validate(self, data):
         username = data.get('username')
         password = data.get('password')
 
-        user = authenticate(request=self.context.get('request'), username=username, password=password)
-
-        if not user:
+        user = get_user_model().objects.get(username=username)
+        if not user.is_active:
+            raise serializers.ValidationError(_('The user is not active. Please contact your administrator'), 'inactive_user')
+        
+        authenticated_user = authenticate(request=self.context.get('request'), username=username, password=password)
+        print(username, password, authenticated_user)
+        if not authenticated_user:
             raise serializers.ValidationError(_('There\'s no corresponding user'))
-        data['user'] = user
+        
+        data['user'] = authenticated_user
 
         return data
 
@@ -60,19 +68,23 @@ class EmailChangeSerializer(serializers.ModelSerializer):
 class PasswordChangeSerializer(serializers.Serializer):
     old_password = serializers.CharField(write_only=True, required=True)
     new_password = serializers.CharField(write_only=True, required=True)
-    confrim_password = serializers.CharField(write_only=True, required=True)
+    confirm_password = serializers.CharField(write_only=True, required=True)
 
     def validate_old_password(self, value):
             user = self.context['request'].user
             if not user.check_password(value):
                 raise serializers.ValidationError(_('Incorrect old password'))
             return value
+    
+    def validate_new_password(self, value):
+            validate_password(value)
+            return value
 
     def validate(self, data):
         new_password = data.get('new_password')
         confirm_password = data.get('confirm_password')
 
-        if new_password  != confirm_password:
+        if new_password != confirm_password:
             raise serializers.ValidationError(_('The new passwords do not match'))
 
         return data
@@ -86,24 +98,43 @@ class PasswordChangeSerializer(serializers.Serializer):
 
 
 class PasswordResetSerializer(serializers.Serializer):
-    class Meta:
-        model = get_user_model()
-        fields = ['username', 'email']
-        extra_kwargs = {
-            'username': {'write_only': True},
-            'eamil': {'write_only': True}
-        }
+    username = serializers.CharField(write_only=True, required=True)
+    email = serializers.CharField(write_only=True, required=True)
 
     def validate(self, data):
-        # 인증로직
         username = data.get('username')
         email = data.get('email')
 
-        User = self.Meta.model
-        user = User.objects.filter(username=username, email=email)
+        User = get_user_model()
+        user = get_object_or_404(User, username=username, email=email)
 
         if not user:
             raise serializers.ValidationError(_('There\'s no corresponding user'))
+        data['user'] = user
+
+        return data
+
+
+class TokenRefreshSerializer(serializers.Serializer):
+    username = serializers.CharField(write_only=True)
+    refresh = serializers.CharField(write_only=True)
+    access = serializers.CharField(read_only=True)  # Not Necessary. Just for drf-spectacular.
+
+    def validate(self, data):
+        username = data.get('username')
+        refresh_token = data.get('refresh_token')
+
+        User = get_user_model()
+        user = get_object_or_404(User, username=username)
+
+        if not user.refresh_token == refresh_token:
+            raise serializers.ValidationError(_('You are logged in from another place with that ID'), 'different_refresh_token')
+        
+        try:
+            RefreshToken(refresh_token).verify()
+        except:
+            raise serializers.ValidationError(_('Your session in terminated'), 'invalid_refresh_token')
+
         data['user'] = user
 
         return data

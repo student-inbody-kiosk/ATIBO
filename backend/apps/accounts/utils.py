@@ -5,7 +5,7 @@ def generate_password():
     # The candidate letters
     alphabets = string.ascii_letters
     numbers = string.digits
-    special_chars = string.punctuation.replace("'", "").replace('"', "")
+    special_chars = string.punctuation.replace("'", "").replace('"', "").replace('`', "")
 
     # Select password chars
     password_list = []

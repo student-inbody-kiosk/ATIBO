@@ -9,12 +9,14 @@ from rest_framework.generics import GenericAPIView, UpdateAPIView
 from rest_framework.mixins import CreateModelMixin,ListModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import Token, RefreshToken, AccessToken
+from rest_framework_simplejwt.views import TokenRefreshView
 from rest_framework.views import APIView
 
 from atibo.permissions import CreateOnly, IsAdmin
-from .serializers import UserSerializer, LoginSerializer, UsernameCheckSerializer, EmailChangeSerializer, PasswordChangeSerializer, PasswordResetSerializer, AdminSerializer
+from .serializers import UserSerializer, LoginSerializer, UsernameCheckSerializer, EmailChangeSerializer, PasswordChangeSerializer, PasswordResetSerializer, TokenRefreshSerializer, AdminSerializer
 from .utils import generate_password
+
 
 """
 회원가입
@@ -23,7 +25,7 @@ from .utils import generate_password
 """
 class AccountAPIView(GenericAPIView, CreateModelMixin, RetrieveModelMixin, DestroyModelMixin):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated | CreateOnly]
+    permission_classes = [CreateOnly | IsAuthenticated]
 
     def get_object(self):
         return self.request.user
@@ -59,8 +61,8 @@ class LoginAPIView(APIView):
 
         # Return the Repsponse
         serializer = LoginSerializer(data = {
-            'refresh': refresh_token,
-            'access': access_token,
+            'refresh_token': refresh_token,
+            'access_token': access_token,
         })
         
         return Response(serializer.initial_data, status=status.HTTP_202_ACCEPTED)
@@ -114,17 +116,20 @@ class PasswordChangeAPIView(UpdateAPIView):
     
 
 class PasswordResetAPIView(APIView):
+    serializer_class = PasswordResetSerializer
+
     def put(self, request):
         serializer = PasswordResetSerializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
 
-        # Find the user
+        # Get Validated Data
         user = serializer.validated_data['user']
         email = serializer.validated_data['email']
         # Create and reset password
         new_password = generate_password()
         user.set_password(new_password)
+        user.save()
         # Send Email
         email_message = EmailMessage(
                 _('Your ATIBO password has been reset.'), # Subject
@@ -132,7 +137,28 @@ class PasswordResetAPIView(APIView):
                 to=[email], #받는 이메일
             )
         email_message.send()
+
         return Response({'message': _('A new password has been sent to your email')}, status=status.HTTP_200_OK)    
+
+
+class TokenRefreshAPIView(APIView):
+    serializer_class = TokenRefreshSerializer
+
+    def post(self, request):
+        serializer = TokenRefreshSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = serializer.validated_data.get('user')
+
+        access = AccessToken.for_user(user) 
+        access_token = str(access)
+
+        # Return the Repsponse
+        serializer = TokenRefreshSerializer(data = {
+            'access_token': access_token,
+        })
+        
+        return Response(serializer.initial_data, status=status.HTTP_202_ACCEPTED)
 
 
 class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyModelMixin):
