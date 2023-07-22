@@ -3,17 +3,22 @@ const props = defineProps<{
     text: string;
     color: 'kiosk-primary' | 'admin-primary' | 'green' | 'red' | 'gray';
     size: 'sm' | 'md' | 'lg';
+    emitMessage: string;
 }>();
 </script>
 
 <template>
-    <button :class="['button', props.color, props.size]">{{ text }}</button>
+    <button
+        :class="['button', props.color, props.size]"
+        @click="$emit(emitMessage)">
+        {{ text }}
+    </button>
 </template>
 
-<style lang="scss">
-.button {
+<style lang="scss" scoped>
+.the-button {
     border-radius: 0.2rem;
-    color: $black;
+    color: $white;
 }
 
 .kiosk-primary {
@@ -45,6 +50,7 @@ const props = defineProps<{
 }
 
 .lg {
-    width: 6rem;
+    width: 15rem;
+    padding: 1rem;
 }
 </style>

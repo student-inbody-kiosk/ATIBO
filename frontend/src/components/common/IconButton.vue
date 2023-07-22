@@ -6,10 +6,10 @@ defineProps<{
 </script>
 
 <template>
-    <span class="icon-button" @click="$emit(emitMessage)">
+    <button class="icon-button" @click="$emit(emitMessage)">
         <slot name="icon" />
         <span>{{ text }}</span>
-    </span>
+    </button>
 </template>
 
 <style lang="scss">
@@ -17,9 +17,5 @@ defineProps<{
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    :hover {
-        cursor: pointer;
-    }
 }
 </style>

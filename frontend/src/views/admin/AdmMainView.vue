@@ -31,9 +31,24 @@ const handleModalClose = function closeModal() {
 
         <template #admin-main>
             <div class="admin-main__buttons">
-                <TheButton text="button" color="admin-primary" size="lg" />
-                <TheButton text="button" color="admin-primary" size="lg" />
-                <TheButton text="button" color="admin-primary" size="lg" />
+                <TheButton
+                    text="button"
+                    color="admin-primary"
+                    size="lg"
+                    emitMessage="student"
+                    @student="$router.push({ name: 'admin' })" />
+                <TheButton
+                    text="button"
+                    color="admin-primary"
+                    size="lg"
+                    emitMessage="attend"
+                    @attend="$router.push({ name: 'admin' })" />
+                <TheButton
+                    text="button"
+                    color="admin-primary"
+                    size="lg"
+                    emitMessage="inbody"
+                    @inbody="$router.push({ name: 'admin' })" />
             </div>
 
             <teleport to="#teleport">

@@ -2,6 +2,7 @@
 import AdmLayout from '@/components/admin/AdmLayout.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import TheInput from '@/components/common/TheInput.vue';
+import TheButton from '@/components/common/TheButton.vue';
 
 import { useRouter } from 'vue-router';
 
@@ -54,7 +55,12 @@ const handleLoginSubmit = function login() {
                     label="비밀번호"
                     @update-input="handlePasswordInput"
                     @submit="handleLoginSubmit" />
-                <button @click="handleLoginSubmit">로그인</button>
+                <TheButton
+                    text="로그인"
+                    color="admin-primary"
+                    size="md"
+                    emitMessage="login"
+                    @login="handleLoginSubmit" />
             </div>
         </template>
     </AdmLayout>
