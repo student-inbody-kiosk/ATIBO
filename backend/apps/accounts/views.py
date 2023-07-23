@@ -9,8 +9,7 @@ from rest_framework.generics import GenericAPIView, UpdateAPIView
 from rest_framework.mixins import CreateModelMixin,ListModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import Token, RefreshToken, AccessToken
-from rest_framework_simplejwt.views import TokenRefreshView
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework.views import APIView
 
 from atibo.permissions import CreateOnly, IsAdmin
@@ -19,28 +18,40 @@ from .utils import generate_password
 
 
 """
-회원가입
-회원탈퇴
-회원정보 조회
+post: sign up
+get: userinfo
+delete: withdraw
 """
 class AccountAPIView(GenericAPIView, CreateModelMixin, RetrieveModelMixin, DestroyModelMixin):
-    serializer_class = UserSerializer
     permission_classes = [CreateOnly | IsAuthenticated]
+    serializer_class = UserSerializer
 
     def get_object(self):
         return self.request.user
+    
+    def get_authenticators(self):
+        if self.request and self.request.method == 'POST':
+            return []  # Empty list for authentication on POST method
+        else:
+            return [auth() for auth in self.authentication_classes]
     
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
     
     def get(self, request, *args, **kwargs):
+        self.authentication_classes = []
         return self.retrieve(request, *args, **kwargs)
     
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+    
+    def destroy(self, request, *args, **kwargs):
+        super().destroy(request, *args, **kwargs)
+        return Response({'message': _('The user is successfully deleted')}, status=status.HTTP_204_NO_CONTENT)
 
 
 class LoginAPIView(APIView):
+    authentication_classes = []
     serializer_class = LoginSerializer
 
     def post(self, request):
@@ -52,11 +63,11 @@ class LoginAPIView(APIView):
 
         # Create jwt token manually
         refresh = RefreshToken.for_user(user)
-        refresh_token = str(refresh)                
-        access_token = str(refresh.access_token)   
+        refresh_token = str(refresh)   
+        access_token = str(refresh.access_token)
 
         # Save the refresh token in the DB
-        user.refresh_token = refresh_token 
+        user.refresh_token = refresh_token
         user.save()
 
         # Return the Repsponse
@@ -77,10 +88,11 @@ class LogoutAPIView(APIView):
         user.refresh_token = ''
         user.save()
 
-        return Response({'message': _('Logged out successfully.')}, status=status.HTTP_200_OK)
+        return Response({'message': _('Logged out successfully')}, status=status.HTTP_200_OK)
 
 
 class UsernameCheckAPIView(APIView):
+    authentication_classes = []
     serializer_class = UsernameCheckSerializer
 
     def post(self, request):
@@ -98,24 +110,29 @@ class UsernameCheckAPIView(APIView):
 
 
 class EmailChangeAPIView(UpdateAPIView):
-    serializer_class = EmailChangeSerializer
-    permission_classes = [IsAuthenticated]
     http_method_names = ["put"]
+    permission_classes = [IsAuthenticated]
+    serializer_class = EmailChangeSerializer
 
     def get_object(self):
         return self.request.user
 
 
 class PasswordChangeAPIView(UpdateAPIView):
-    serializer_class = PasswordChangeSerializer
-    permission_classes = [IsAuthenticated]
     http_method_names = ["put"]
+    permission_classes = [IsAuthenticated]
+    serializer_class = PasswordChangeSerializer
 
     def get_object(self):
         return self.request.user
     
+    def update(self, request, *args, **kwargs):
+        super().update(request, *args, **kwargs)
+        return Response({'message': _('The password is changed')}, status=status.HTTP_200_OK)
+    
 
 class PasswordResetAPIView(APIView):
+    authentication_classes = []
     serializer_class = PasswordResetSerializer
 
     def put(self, request):
@@ -142,6 +159,7 @@ class PasswordResetAPIView(APIView):
 
 
 class TokenRefreshAPIView(APIView):
+    authentication_classes = []
     serializer_class = TokenRefreshSerializer
 
     def post(self, request):
@@ -161,11 +179,17 @@ class TokenRefreshAPIView(APIView):
         return Response(serializer.initial_data, status=status.HTTP_202_ACCEPTED)
 
 
+"""
+get: get normal user accounts
+waiting: get normal user accounts waiting (boolean)
+put: update an account to be active
+delete: delete an account
+"""
 class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyModelMixin):
-    queryset = get_user_model().objects.filter(role='user')
-    serializer_class = AdminSerializer
-    permission_classes = [IsAuthenticated, IsAdmin]
     http_method_names = ["get", "put", "delete"]
+    permission_classes = [IsAuthenticated, IsAdmin]
+    serializer_class = AdminSerializer
+    queryset = get_user_model().objects.filter(role='user')
 
     @action(detail=False, methods=['get'])
     def waiting(self, request):
