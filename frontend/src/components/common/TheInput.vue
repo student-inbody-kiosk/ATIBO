@@ -1,0 +1,26 @@
+<script setup lang="ts">
+defineProps<{
+    label?: string;
+    type: string;
+    refer: string;
+    value: number | string;
+    min?: number;
+    max?: number;
+}>();
+</script>
+
+<template>
+    <div>
+        <label :for="refer">{{ label }}</label>
+        <input
+            :type="type"
+            :id="refer"
+            :value="value"
+            :min="min"
+            :max="max"
+            @input="(e: any) => $emit('update-input', e.target.value)"
+            @keyup.enter="$emit('submit')" />
+    </div>
+</template>
+
+<style lang="scss"></style>

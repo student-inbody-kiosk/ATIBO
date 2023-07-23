@@ -1,0 +1,24 @@
+// colors
+$kiosk-primary: #ffa946;
+$kiosk-secondary: #ffe8d2;
+
+$admin-primary: #6396c3;
+$admin-secondary: #acc4da;
+
+$white: #ffffff;
+$black: #222222;
+$gray: #cccccc;
+$gray-dark: #797979;
+$gray-opacity: #43434333;
+$green: #6da31c;
+$red: #c1202a;
+
+// breakpoints
+$breakpoint-laptop: 1280px;
+$breakpoint-kiosk: 1024px;
+
+// z-index
+$z-index: (
+    base: 0,
+    modal: 999,
+);
