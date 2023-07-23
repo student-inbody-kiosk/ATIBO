@@ -1,11 +1,13 @@
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import serializers
-from rest_framework_simplejwt.tokens import Token, RefreshToken, AccessToken
+from rest_framework import status, serializers
+from rest_framework_simplejwt.tokens import RefreshToken
 
-from django.contrib.auth.password_validation import validate_password
+from atibo.exceptions import DetailException
+
 
 class UserSerializer(serializers.ModelSerializer): # BaseAPI. get, create, delete
     class Meta:
@@ -41,12 +43,12 @@ class LoginSerializer(serializers.Serializer):
 
         user = get_user_model().objects.get(username=username)
         if not user.is_active:
-            raise serializers.ValidationError(_('The user is not active. Please contact your administrator'), 'inactive_user')
+            raise DetailException(status.HTTP_403_FORBIDDEN, _('The user is not active. Please contact your administrator'), 'inactive_user')
         
         authenticated_user = authenticate(request=self.context.get('request'), username=username, password=password)
         print(username, password, authenticated_user)
         if not authenticated_user:
-            raise serializers.ValidationError(_('There\'s no corresponding user'))
+            raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username or password'), 'user_not_found')
         
         data['user'] = authenticated_user
 
@@ -85,7 +87,7 @@ class PasswordChangeSerializer(serializers.Serializer):
         confirm_password = data.get('confirm_password')
 
         if new_password != confirm_password:
-            raise serializers.ValidationError(_('The new passwords do not match'))
+            raise serializers.ValidationError({"confirm_password": _('The new passwords do not match')})
 
         return data
 
@@ -106,10 +108,10 @@ class PasswordResetSerializer(serializers.Serializer):
         email = data.get('email')
 
         User = get_user_model()
-        user = get_object_or_404(User, username=username, email=email)
-
+        user = User.objects.filter(username=username, email=email).first()  # Don't use `get_object_or_404` for Custom Response 
         if not user:
-            raise serializers.ValidationError(_('There\'s no corresponding user'))
+            raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username or email'), 'user_not_found')
+        
         data['user'] = user
 
         return data
@@ -125,15 +127,17 @@ class TokenRefreshSerializer(serializers.Serializer):
         refresh_token = data.get('refresh_token')
 
         User = get_user_model()
-        user = get_object_or_404(User, username=username)
+        user = User.objects.filter(username=username).first()  # Don't use `get_object_or_404` for Custom Response 
+        if not user:
+            raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username'), 'user_not_found')
 
         if not user.refresh_token == refresh_token:
-            raise serializers.ValidationError(_('You are logged in from another place with that ID'), 'different_refresh_token')
+            raise DetailException(status.HTTP_401_UNAUTHORIZED, _('You may be logged in from another place with that ID'), 'different_refresh_token')
         
         try:
             RefreshToken(refresh_token).verify()
         except:
-            raise serializers.ValidationError(_('Your session in terminated'), 'invalid_refresh_token')
+            raise DetailException(status.HTTP_401_UNAUTHORIZED, _('Your session in terminated'), 'invalid_refresh_token')
 
         data['user'] = user
 

@@ -72,11 +72,18 @@ INSTALLED_APPS = [
 ]
 
 # rest_framework setting
+# Effective only for API views created with Django Rest Framework
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',    # simple JWT authenticatoin
+        'rest_framework_simplejwt.authentication.JWTAuthentication',    # simple JWT authentication
     ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '100/minute'
+    },
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
@@ -162,9 +169,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        "OPTIONS": {
-            "min_length": 8,
-        },
+        "OPTIONS": { "min_length": 8 },
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -173,10 +178,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
     {
-        'NAME': 'apps.accounts.validators.NumberValidator',
+        'NAME': 'atibo.validators.NumberValidator',
     },
     {
-        'NAME': 'apps.accounts.validators.SpecialCharValidator',
+        'NAME': 'atibo.validators.SpecialCharValidator',
     },
 ]
 
