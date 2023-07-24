@@ -18,11 +18,11 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            name: 'kiosk',
             component: KioView,
             children: [
                 {
                     path: '',
+                    name: 'kiosk',
                     component: KioIndexView,
                 },
                 {
@@ -45,11 +45,11 @@ const router = createRouter({
 
         {
             path: '/admin',
-            name: 'admin',
             component: AdmView,
             children: [
                 {
                     path: '',
+                    name: 'admin',
                     component: AdmIndexView,
                 },
                 {

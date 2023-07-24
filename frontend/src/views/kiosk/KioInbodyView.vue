@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import KioHeader from '@/components/kiosk/KioHeader.vue';
-import KioLayout from '@/components/kiosk/KioLayout.vue';
 import TheKeypad from '@/components/kiosk/TheKeypad.vue';
 
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
+
+const emit = defineEmits(['before-mount']);
 let attendData = ref('');
+
+onBeforeMount(() => {
+    emit('before-mount', { title: '인바디', routeName: 'kiosk' });
+});
 
 const handleInput = function updateAttendData(value: string) {
     attendData.value += value;
@@ -17,15 +21,10 @@ const deleteInput = function deleteAttendData() {
 </script>
 
 <template>
-    <KioLayout>
-        <template #kiosk-header>
-            <KioHeader title="인바디" backUrl="kiosk" />
-        </template>
-        <template #kiosk-main>
-            <div>{{ attendData }}</div>
-            <TheKeypad @input="handleInput" @delete="deleteInput" />
-        </template>
-    </KioLayout>
+    <div>
+        <div>{{ attendData }}</div>
+        <TheKeypad @input="handleInput" @delete="deleteInput" />
+    </div>
 </template>
 
 <style lang="scss"></style>

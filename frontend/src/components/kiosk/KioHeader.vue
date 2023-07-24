@@ -3,7 +3,7 @@ import IconButton from '@/components/common/IconButton.vue';
 
 defineProps<{
     title: string;
-    backUrl: string;
+    routeName: string;
 }>();
 </script>
 
@@ -13,7 +13,7 @@ defineProps<{
             class="kiosk-header__icon--left"
             text="뒤로가기"
             emitMessage="routing"
-            @routing="$router.push({ name: backUrl })">
+            @routing="$router.push({ name: routeName })">
             <template #icon>
                 <font-awesome-icon icon="circle-arrow-left" />
             </template>
