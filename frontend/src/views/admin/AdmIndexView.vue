@@ -5,23 +5,25 @@ import TheInput from '@/components/common/TheInput.vue';
 import TheButton from '@/components/common/TheButton.vue';
 
 import { useRouter } from 'vue-router';
-
 import { ref } from 'vue';
 
+import { login } from '@/apis/services/auth';
+
 const router = useRouter();
-const userId = ref('');
-const userPassword = ref('');
+const username = ref('');
+const password = ref('');
 
 const handleIdInput = function updateUserId(value: string) {
-    userId.value = value;
+    username.value = value;
 };
 
 const handlePasswordInput = function updateUserPassword(value: string) {
-    userPassword.value = value;
+    password.value = value;
 };
 
-const handleLoginSubmit = function login() {
-    console.log(userId.value, userPassword.value);
+const handleLoginSubmit = function submitLogin() {
+    login(username.value, password.value);
+    console.log(username.value, password.value);
     router.push({ name: 'admin-main' });
 };
 </script>
@@ -44,14 +46,14 @@ const handleLoginSubmit = function login() {
                 <TheInput
                     type="text"
                     refer="id"
-                    :value="userId"
+                    :value="username"
                     label="아이디"
                     @update-input="handleIdInput"
                     @submit="handleLoginSubmit" />
                 <TheInput
                     type="password"
                     refer="password"
-                    :value="userPassword"
+                    :value="password"
                     label="비밀번호"
                     @update-input="handlePasswordInput"
                     @submit="handleLoginSubmit" />
