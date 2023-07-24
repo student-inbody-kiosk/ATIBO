@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import IconButton from '@/components/common/IconButton.vue';
 import TheInput from '@/components/common/TheInput.vue';
 import TheButton from '@/components/common/TheButton.vue';
 
@@ -29,14 +28,6 @@ const handleLoginSubmit = function submitLogin() {
 
 <template>
     <div>
-        <IconButton
-            text="키오스크"
-            emitMessage="routing"
-            @routing="$router.push({ name: 'kiosk' })">
-            <template #icon>
-                <font-awesome-icon icon="house" />
-            </template>
-        </IconButton>
         <TheInput
             type="text"
             refer="id"
