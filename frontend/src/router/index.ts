@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import KioView from '@/views/kiosk/KioView.vue';
 import KioIndexView from '@/views/kiosk/KioIndexView.vue';
 import KioAttendView from '@/views/kiosk/KioAttendView.vue';
 import KioInbodyView from '@/views/kiosk/KioInbodyView.vue';
@@ -18,23 +19,30 @@ const router = createRouter({
         {
             path: '/',
             name: 'kiosk',
-            component: KioIndexView,
+            component: KioView,
+            children: [
+                {
+                    path: '',
+                    component: KioIndexView,
+                },
+                {
+                    path: 'attend',
+                    name: 'kiosk-attend',
+                    component: KioAttendView,
+                },
+                {
+                    path: 'inbody',
+                    name: 'kiosk-inbody',
+                    component: KioInbodyView,
+                },
+                {
+                    path: 'gym',
+                    name: 'kiosk-gym',
+                    component: KioGymView,
+                },
+            ],
         },
-        {
-            path: '/attend',
-            name: 'kiosk-attend',
-            component: KioAttendView,
-        },
-        {
-            path: '/inbody',
-            name: 'kiosk-inbody',
-            component: KioInbodyView,
-        },
-        {
-            path: '/gym',
-            name: 'kiosk-gym',
-            component: KioGymView,
-        },
+
         {
             path: '/admin',
             name: 'admin',

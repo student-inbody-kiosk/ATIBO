@@ -21,9 +21,9 @@
     background-color: $kiosk-secondary;
 }
 
-.kiosk-container__main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+// .kiosk-container__main {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+// }
 </style>
