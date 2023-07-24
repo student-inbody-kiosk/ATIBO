@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import AdmLayout from '@/components/admin/AdmLayout.vue';
 import IconButton from '@/components/common/IconButton.vue';
 import TheInput from '@/components/common/TheInput.vue';
 import TheButton from '@/components/common/TheButton.vue';
@@ -29,43 +28,36 @@ const handleLoginSubmit = function submitLogin() {
 </script>
 
 <template>
-    <AdmLayout>
-        <template #admin-header>
-            <IconButton
-                text="키오스크"
-                emitMessage="routing"
-                @routing="$router.push({ name: 'kiosk' })">
-                <template #icon>
-                    <font-awesome-icon icon="house" />
-                </template>
-            </IconButton>
-        </template>
-
-        <template #admin-main>
-            <div>
-                <TheInput
-                    type="text"
-                    refer="id"
-                    :value="username"
-                    label="아이디"
-                    @update-input="handleIdInput"
-                    @submit="handleLoginSubmit" />
-                <TheInput
-                    type="password"
-                    refer="password"
-                    :value="password"
-                    label="비밀번호"
-                    @update-input="handlePasswordInput"
-                    @submit="handleLoginSubmit" />
-                <TheButton
-                    text="로그인"
-                    color="admin-primary"
-                    size="md"
-                    emitMessage="login"
-                    @login="handleLoginSubmit" />
-            </div>
-        </template>
-    </AdmLayout>
+    <div>
+        <IconButton
+            text="키오스크"
+            emitMessage="routing"
+            @routing="$router.push({ name: 'kiosk' })">
+            <template #icon>
+                <font-awesome-icon icon="house" />
+            </template>
+        </IconButton>
+        <TheInput
+            type="text"
+            refer="id"
+            :value="username"
+            label="아이디"
+            @update-input="handleIdInput"
+            @submit="handleLoginSubmit" />
+        <TheInput
+            type="password"
+            refer="password"
+            :value="password"
+            label="비밀번호"
+            @update-input="handlePasswordInput"
+            @submit="handleLoginSubmit" />
+        <TheButton
+            text="로그인"
+            color="admin-primary"
+            size="md"
+            emitMessage="login"
+            @login="handleLoginSubmit" />
+    </div>
 </template>
 
 <style lang="scss" scoped></style>

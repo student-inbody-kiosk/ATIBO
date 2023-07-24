@@ -17,6 +17,9 @@
 </template>
 
 <style lang="scss" scoped>
+body {
+    background-color: $white;
+}
 .admin-container {
     display: grid;
     grid-template-columns: 1fr;
