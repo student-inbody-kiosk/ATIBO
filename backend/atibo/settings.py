@@ -85,6 +85,7 @@ REST_FRAMEWORK = {
         'user': '100/minute'
     },
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'EXCEPTION_HANDLER': 'atibo.exceptions.default_exception_handler',
 }
 
 # rest_framework_simplejwt setting
@@ -157,8 +158,16 @@ DATABASES = {
 
 # Tying transactions to HTTP requests.
 # https://docs.djangoproject.com/en/4.2/topics/db/transactions/#tying-transactions-to-http-requests
-
+'''
 ATOMIC_REQUESTS = True
+
+1. Not working when Integrity Error is handled by Exption Handler or try statement
+   https://github.com/encode/django-rest-framework/issues/2034
+2. Tying every requests is inefficient
+   https://docs.djangoproject.com/en/4.2/topics/db/transactions/#tying-transactions-to-http-requests
+
+Therefore, Manually tie each fucntion with `@transaction.atomic` decorator
+'''
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
