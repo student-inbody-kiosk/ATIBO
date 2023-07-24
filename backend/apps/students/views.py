@@ -1,13 +1,9 @@
 import re
-import jwt
-from datetime import datetime, timedelta
 
-from django.conf import settings
 from django.db import transaction
 from django.db.models import Q
 from django.http.response import Http404
 from django.shortcuts import get_object_or_404
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.utils import extend_schema, OpenApiParameter, inline_serializer
@@ -20,12 +16,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from atibo.exceptions import DetailException
 from atibo.authentications import StudentJWTAuthentication
+from atibo.exceptions import DetailException
 from atibo.permissions import IsUserOrTheStudent
+from atibo.regexes import korean_name_regex
+from atibo.utils.custom_token import encode
 from .models import Student
 from .serializers import StudentAuthSerializer, StudentCheckSerializer, StudentLoginSerializer, StudentDetailSerializer
-from .regexes import student_name_regex
 
 
 class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin):
@@ -40,21 +37,19 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
         kwargs.setdefault('context', self.get_serializer_context())
 
         if self.request and self.request.method == 'GET':
-            return serializer_class(*args, **kwargs)    # Since ListModelMixin.list() add `many=True` internally 
+            return serializer_class(*args, **kwargs)    # ListModelMixin.list() add `many=True` internally 
         else:
             return serializer_class(many=True, *args, **kwargs)
 
     # Create dynamic query according to parameters
     def get_queryset(self):
-        query_filter = Q()
         original_queryset = self.queryset
 
+        query_filter = Q()
         grade = self.request.query_params.get('grade')
         room = self.request.query_params.get('room')
         number = self.request.query_params.get('number')
         name = self.request.query_params.get('name')
-
-        query_filter = Q()
         if grade:
             if not grade.isdecimal():
                 raise DetailException(status.HTTP_400_BAD_REQUEST, _('The grade must be a numeric value from 1 to 9'), 'invalid_grade')
@@ -65,15 +60,14 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
             query_filter &= Q(room=room)
         if number:
             if not number.isdecimal():
-                raise DetailException(status.HTTP_400_BAD_REQUEST, _('The number must be a numeric value from 1 to 99'), 'invalid_number')
+                raise DetailException(status.HTTP_400_BAD_REQUEST, _('The number must be a numeric value from 1 to 100'), 'invalid_number')
             query_filter &= Q(number=number)
         if name:
-            if not re.compile(student_name_regex).match(name):
+            if not re.compile(korean_name_regex).match(name):
                 raise DetailException(status.HTTP_400_BAD_REQUEST, _('The name must be written in 2-5 Korean characters'), 'invalid_name')
             query_filter &= Q(name=name)
 
         queryset = original_queryset.filter(query_filter)
-
         return queryset
     
     @extend_schema(
@@ -87,10 +81,12 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
     
+    # Multiple create
     @transaction.atomic
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
+    # Multiple update
     @transaction.atomic
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -109,14 +105,14 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     
-    # Multiple Update
+    # Multiple update
     def update(self, request, *args, **kwargs):
         # Get mutilple instance
         instance = []
         for student_data in request.data:
             try:
                 instance.append(get_object_or_404(Student, id=student_data['id']))
-            except Http404 as e:
+            except Http404:
                 grade = student_data['grade']
                 room = student_data['room']
                 number = student_data['number']
@@ -124,7 +120,7 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
                 raise DetailException(status.HTTP_404_NOT_FOUND, _(f'Not found the student info of {grade}-{room}-{number} {name}'), 'sutdent_not_found')
 
         """
-        UpdateModelMixin.update
+        UpdateModelMixin.update()
         """
         partial = kwargs.pop('partial', False)
         # instance = self.get_object()
@@ -135,14 +131,15 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
-
+        """
+        """
         return Response(serializer.data)
     
     # Multiple Delete 
     def destroy(self, request, *args, **kwargs):
         student_ids = request.data.get('ids')
 
-        # Ignore inavlid id
+        # Just ignore invalid id
         for id in student_ids:
             try:
                 instance = Student.objects.get(id=id)
@@ -164,6 +161,7 @@ class StudentCheckAPIView(RetrieveAPIView):
 
         student = Student.objects.filter(grade=grade, room=room, number=number)
 
+        # Find "the only one" student record
         if len(student) == 1:
             student = student[0]
         elif len(student) == 0:
@@ -191,17 +189,14 @@ class StudentLoginAPIView(APIView):
             'room': student.room,
             'number': student.number
         }
-        exp = timezone.now() + timedelta(seconds=10)     # Set expiration in the data entity
-        payload['exp'] = exp
-
-        access_token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+        access_token = encode(payload, minutes=30)
 
         # Return the Repsponse
-        serializer = StudentLoginSerializer(data = {
+        data = {
+            'refresh_token': None,
             'access_token': access_token,
-        })
-        
-        return Response(serializer.initial_data, status=status.HTTP_202_ACCEPTED)
+        }
+        return Response(data, status=status.HTTP_202_ACCEPTED)
 
 
 class StudentDetailAPIView(RetrieveAPIView):
@@ -216,6 +211,7 @@ class StudentDetailAPIView(RetrieveAPIView):
 
         student = Student.objects.filter(grade=grade, room=room, number=number)
 
+        # Find "the only one" student record
         if len(student) == 1:
             student = student[0]
         elif len(student) == 0:
@@ -224,7 +220,6 @@ class StudentDetailAPIView(RetrieveAPIView):
             raise DetailException(status.HTTP_409_CONFLICT, _(f'There\'re more than one student corresponding to this information. Please contact your administrator'), 'sutdent_too_many')
 
         return student
-    pass
 
 
 class StudentPasswordChangeAPIView(APIView):

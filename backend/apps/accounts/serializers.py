@@ -10,7 +10,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from atibo.exceptions import DetailException
 
 
-class UserSerializer(serializers.ModelSerializer): # BaseAPI. get, create, delete
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ['id', 'username', 'name', 'email', 'role', 'comment', 'password']
@@ -19,6 +19,7 @@ class UserSerializer(serializers.ModelSerializer): # BaseAPI. get, create, delet
             'password': {'write_only': True}
         }
 
+    # strip the comment data
     def to_internal_value(self, data):
         ret = super().to_internal_value(data)
         ret['comment'] = ret.get('comment').strip()
@@ -35,27 +36,27 @@ class UserSerializer(serializers.ModelSerializer): # BaseAPI. get, create, delet
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
-    access_token = serializers.CharField(read_only=True)  # Not Necessary. Just for drf-spectacular.
-    refresh_token = serializers.CharField(read_only=True) # Not Necessary. Just for drf-spectacular.
 
     def validate(self, data):
         username = data.get('username')
         password = data.get('password')
 
+        # Find the user with username
         try:
             user = get_object_or_404(get_user_model(), username=username)
         except Http404:
             raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username'), 'user_not_found')
 
+        # Check whether the user is active
         if not user.is_active:
             raise DetailException(status.HTTP_403_FORBIDDEN, _('The user is not active. Please contact your administrator'), 'inactive_user')
         
+        # Authenticate with username and apssword
         authenticated_user = authenticate(request=self.context.get('request'), username=username, password=password)
         if not authenticated_user:
             raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username or password'), 'user_not_found')
         
         data['user'] = authenticated_user
-
         return data
 
 
@@ -98,7 +99,6 @@ class PasswordChangeSerializer(serializers.Serializer):
         return data
 
     def update(self, instance, validated_data):
-        # user = self.context['request'].user
         new_password = validated_data['new_password']
         instance.set_password(new_password)
         instance.save()
@@ -110,45 +110,46 @@ class PasswordResetSerializer(serializers.Serializer):
     email = serializers.CharField(write_only=True, required=True)
 
     def validate(self, data):
+        User = get_user_model()
         username = data.get('username')
         email = data.get('email')
 
-        User = get_user_model()
+        # Find the user with username and email
         try:
             user = get_object_or_404(User, username=username, email=email)
         except Http404:
             raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username or email'), 'user_not_found')
         
         data['user'] = user
-
         return data
 
 
 class TokenRefreshSerializer(serializers.Serializer):
     username = serializers.CharField(write_only=True)
     refresh_token = serializers.CharField(write_only=True)
-    access_token = serializers.CharField(read_only=True)  # Not Necessary. Just for drf-spectacular.
 
     def validate(self, data):
+        User = get_user_model()
         username = data.get('username')
         refresh_token = data.get('refresh_token')
 
-        User = get_user_model()
+        # Find the user with username
         try:
             user = get_object_or_404(User, username=username)
         except Http404:
             raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username'), 'user_not_found')
 
+        # Compare the refresh_token (Concurrent Session Controll)
         if not user.refresh_token == refresh_token:
             raise DetailException(status.HTTP_401_UNAUTHORIZED, _('You may be logged in from another place with that ID'), 'different_refresh_token')
         
+        # Check the RefreshToken
         try:
             RefreshToken(refresh_token).verify()
         except:
             raise DetailException(status.HTTP_401_UNAUTHORIZED, _('Your session in terminated'), 'invalid_refresh_token')
 
         data['user'] = user
-
         return data
 
 
