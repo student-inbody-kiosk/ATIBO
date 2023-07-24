@@ -27,7 +27,7 @@ urlpatterns = [
 
     # applications
     path('api/accounts/', include('accounts.urls')),
-    # path('api/students/', include('students.urls')),
+    path('api/students/', include('students.urls')),
     # path('api/gym/', include('gym.urls')),
     # path('api/school/', include('school.urls')),
 

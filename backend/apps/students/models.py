@@ -12,7 +12,7 @@ class Student(models.Model):
     room = TinyIntegerField(validators=[MinValueValidator(1, _('The room must be greater than 0')), MaxValueValidator(99,  _('The room must be less than 100'))])
     number = TinyIntegerField(validators=[MinValueValidator(1, _('The number must be greater than 0')), MaxValueValidator(100,  _('The number must be less or equal than 100'))])
     sex = TinyIntegerField()
-    password = models.CharField(max_length=4, validators=[MinLengthValidator(4, _('The password length must be 4')), RegexValidator(r'^\d{4}$', _('The password must be a numeric value'), 'student_password_invalid')])
+    password = models.CharField(default='0000', max_length=4, validators=[MinLengthValidator(4, _('The password length must be 4')), RegexValidator(r'^\d{4}$', _('The password must be a numeric value'), 'student_password_invalid')])
     birth_date = models.DateField()
 
     class Meta:

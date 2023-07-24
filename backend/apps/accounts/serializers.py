@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
@@ -46,7 +45,6 @@ class LoginSerializer(serializers.Serializer):
             raise DetailException(status.HTTP_403_FORBIDDEN, _('The user is not active. Please contact your administrator'), 'inactive_user')
         
         authenticated_user = authenticate(request=self.context.get('request'), username=username, password=password)
-        print(username, password, authenticated_user)
         if not authenticated_user:
             raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username or password'), 'user_not_found')
         
@@ -75,10 +73,12 @@ class PasswordChangeSerializer(serializers.Serializer):
     def validate_old_password(self, value):
             user = self.context['request'].user
             if not user.check_password(value):
-                raise serializers.ValidationError(_('Incorrect old password'))
+                raise serializers.ValidationError(_('Incorrect old password'), 'invalid_old_password')
             return value
     
     def validate_new_password(self, value):
+            # Note that validators will not be run automatically when you save a model
+            # https://docs.djangoproject.com/en/4.2/ref/validators/#how-validators-are-run
             validate_password(value)
             return value
 
@@ -87,7 +87,7 @@ class PasswordChangeSerializer(serializers.Serializer):
         confirm_password = data.get('confirm_password')
 
         if new_password != confirm_password:
-            raise serializers.ValidationError({"confirm_password": _('The new passwords do not match')})
+            raise serializers.ValidationError({"confirm_password": _('The new passwords do not match')}, 'invalid_confirm_password')
 
         return data
 
@@ -119,8 +119,8 @@ class PasswordResetSerializer(serializers.Serializer):
 
 class TokenRefreshSerializer(serializers.Serializer):
     username = serializers.CharField(write_only=True)
-    refresh = serializers.CharField(write_only=True)
-    access = serializers.CharField(read_only=True)  # Not Necessary. Just for drf-spectacular.
+    refresh_token = serializers.CharField(write_only=True)
+    access_token = serializers.CharField(read_only=True)  # Not Necessary. Just for drf-spectacular.
 
     def validate(self, data):
         username = data.get('username')
@@ -146,7 +146,6 @@ class TokenRefreshSerializer(serializers.Serializer):
 
 class AdminSerializer(serializers.ModelSerializer):
     class Meta:
-        # list_serializer_class = AdminListSerializer
         model = get_user_model()
         fields = ['id', 'username', 'name', 'email', 'comment', 'is_active']
         read_only_fields = ['id', 'username', 'name', 'email', 'comment', 'is_active']

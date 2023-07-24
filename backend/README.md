@@ -13,10 +13,6 @@ This template should help get you started running Django 4.2 server.
 2. 가상환경 생성 및 실행
 
    ```bash
-   brew install pkg-config
-   ```
-
-   ```bash
    # Windows
    python -m venv venv
    source venv/Scripts/activate
