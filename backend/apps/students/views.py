@@ -1,27 +1,37 @@
 import re
+import jwt
+from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.db import transaction
 from django.db.models import Q
+from django.http.response import Http404
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.utils import extend_schema, OpenApiParameter, inline_serializer
 from rest_framework import status, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework.mixins import CreateModelMixin,ListModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from atibo.exceptions import DetailException
+from atibo.authentications import StudentJWTAuthentication
+from atibo.permissions import IsUserOrTheStudent
 from .models import Student
-from .serializers import StudentSerializer
+from .serializers import StudentAuthSerializer, StudentCheckSerializer, StudentLoginSerializer, StudentDetailSerializer
 from .regexes import student_name_regex
 
 
-class StudentAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin):
+class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin):
     http_method_names = ["post", "get", "put", "patch", "delete"]
     permission_classes = [IsAuthenticated]
-    serializer_class = StudentSerializer
+    serializer_class = StudentAuthSerializer
     queryset = Student.objects.all()
 
     # Alsways list Serailzer
@@ -105,9 +115,8 @@ class StudentAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, UpdateMod
         instance = []
         for student_data in request.data:
             try:
-                student = Student.objects.get(id=student_data['id'])
-                instance.append(student)
-            except:
+                instance.append(get_object_or_404(Student, id=student_data['id']))
+            except Http404 as e:
                 grade = student_data['grade']
                 room = student_data['room']
                 number = student_data['number']
@@ -144,7 +153,77 @@ class StudentAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, UpdateMod
         return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
 
 
+class StudentCheckAPIView(RetrieveAPIView):
+    authentication_classes = []
+    serializer_class = StudentCheckSerializer
+
+    def get_object(self):
+        grade = self.kwargs['grade']
+        room = self.kwargs['room']
+        number = self.kwargs['number']
+
+        student = Student.objects.filter(grade=grade, room=room, number=number)
+
+        if len(student) == 1:
+            student = student[0]
+        elif len(student) == 0:
+            raise DetailException(status.HTTP_404_NOT_FOUND, _(f'There\'s no corresponding student'), 'sutdent_not_found')
+        else:
+            raise DetailException(status.HTTP_409_CONFLICT, _(f'There\'re more than one student corresponding to this information. Please contact your administrator'), 'sutdent_too_many')
+
+        return student
+
+
 class StudentLoginAPIView(APIView):
+    authentication_classes = []
+    serializer_class = StudentLoginSerializer
+
+    def post(self, request):
+        serializer = StudentLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        # create custom JWT
+        student = serializer.validated_data.get('student')
+        payload = {
+            'id': str(student.id),
+            'name': student.name,
+            'grade': student.grade,
+            'room': student.room,
+            'number': student.number
+        }
+        exp = timezone.now() + timedelta(seconds=10)     # Set expiration in the data entity
+        payload['exp'] = exp
+
+        access_token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
+
+        # Return the Repsponse
+        serializer = StudentLoginSerializer(data = {
+            'access_token': access_token,
+        })
+        
+        return Response(serializer.initial_data, status=status.HTTP_202_ACCEPTED)
+
+
+class StudentDetailAPIView(RetrieveAPIView):
+    authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
+    permission_classes = [IsUserOrTheStudent]
+    serializer_class = StudentDetailSerializer
+
+    def get_object(self):
+        grade = self.kwargs['grade']
+        room = self.kwargs['room']
+        number = self.kwargs['number']
+
+        student = Student.objects.filter(grade=grade, room=room, number=number)
+
+        if len(student) == 1:
+            student = student[0]
+        elif len(student) == 0:
+            raise DetailException(status.HTTP_404_NOT_FOUND, _(f'There\'s no corresponding student'), 'sutdent_not_found')
+        else:
+            raise DetailException(status.HTTP_409_CONFLICT, _(f'There\'re more than one student corresponding to this information. Please contact your administrator'), 'sutdent_too_many')
+
+        return student
     pass
 
 

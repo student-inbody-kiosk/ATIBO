@@ -82,7 +82,7 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'user': '100/minute'
+        'user': '50/minute'
     },
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'EXCEPTION_HANDLER': 'atibo.exceptions.default_exception_handler',
@@ -94,6 +94,7 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
     "REFRESH_TOKEN_LIFETIME": timedelta(hours=8),
     "ALGORITHM": "HS384",
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
 
 # drf_spectacular setting

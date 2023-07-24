@@ -17,6 +17,7 @@ def default_exception_handler(exc, context):
     # to get the standard error response.
     response = exception_handler(exc, context)
 
+    print('exc', exc)
     # Now add the HTTP status code to the response.
     if response is None:
         return Response({'message': _('Service is not unavailable, try again or contact the developer')}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

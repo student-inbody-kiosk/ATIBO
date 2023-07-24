@@ -2,7 +2,8 @@ from django.contrib.auth import get_user_model, authenticate
 from django.core.mail import EmailMessage
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import status
+from drf_spectacular.utils import extend_schema, OpenApiParameter, inline_serializer
+from rest_framework import status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,7 +13,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
-from atibo.permissions import CreateOnly, IsAdmin
+from atibo.permissions import CreateOnly, IsAdminUser
 from .serializers import UserSerializer, LoginSerializer, UsernameCheckSerializer, EmailChangeSerializer, PasswordChangeSerializer, PasswordResetSerializer, TokenRefreshSerializer, AdminSerializer
 from .utils import generate_password
 
@@ -77,7 +78,14 @@ class LoginAPIView(APIView):
         
         return Response(serializer.initial_data, status=status.HTTP_202_ACCEPTED)
 
-
+@extend_schema(
+        responses=inline_serializer(
+            name="LogoutSerializer",
+            fields={
+                "message": serializers.CharField(),
+            },
+        ),
+    )
 class LogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -186,7 +194,7 @@ delete: delete an account
 """
 class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyModelMixin):
     http_method_names = ["get", "put", "delete"]
-    permission_classes = [IsAuthenticated, IsAdmin]
+    permission_classes = [IsAuthenticated, IsAdminUser]
     serializer_class = AdminSerializer
     queryset = get_user_model().objects.filter(role='user')
 
