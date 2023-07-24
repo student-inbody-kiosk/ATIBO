@@ -1,7 +1,7 @@
 import random
 import string
 
-def generate_password():
+def generate_random_password():
     # The candidate letters
     alphabets = string.ascii_letters
     numbers = string.digits
@@ -18,4 +18,3 @@ def generate_password():
     password = ''.join(password_list)
 
     return password
-

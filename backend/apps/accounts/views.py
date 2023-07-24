@@ -14,8 +14,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 from atibo.permissions import CreateOnly, IsAdminUser
+from atibo.utils.password import generate_random_password
 from .serializers import UserSerializer, LoginSerializer, UsernameCheckSerializer, EmailChangeSerializer, PasswordChangeSerializer, PasswordResetSerializer, TokenRefreshSerializer, AdminSerializer
-from .utils import generate_password
 
 
 """
@@ -50,13 +50,21 @@ class AccountAPIView(GenericAPIView, CreateModelMixin, RetrieveModelMixin, Destr
         return Response({'message': _('The user is successfully deleted')}, status=status.HTTP_204_NO_CONTENT)
 
 
+@extend_schema(
+    responses=inline_serializer(
+        name="LoginResponseSerializer",
+        fields={
+            "accessToken": serializers.CharField(),
+            "refreshToken": serializers.CharField(),
+        },
+    ),
+)
 class LoginAPIView(APIView):
     authentication_classes = []
     serializer_class = LoginSerializer
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
-
         serializer.is_valid(raise_exception=True)
 
         user = serializer.validated_data.get('user')
@@ -71,21 +79,21 @@ class LoginAPIView(APIView):
         user.save()
 
         # Return the Repsponse
-        serializer = LoginSerializer(data = {
+        data = {
             'refresh_token': refresh_token,
             'access_token': access_token,
-        })
-        
-        return Response(serializer.initial_data, status=status.HTTP_202_ACCEPTED)
+        }
+        return Response(data, status=status.HTTP_202_ACCEPTED)
+
 
 @extend_schema(
-        responses=inline_serializer(
-            name="LogoutSerializer",
-            fields={
-                "message": serializers.CharField(),
-            },
-        ),
-    )
+    responses=inline_serializer(
+        name="LogoutResponseSerializer",
+        fields={
+            "message": serializers.CharField(),
+        },
+    ),
+)
 class LogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -104,7 +112,6 @@ class UsernameCheckAPIView(APIView):
 
     def post(self, request):
         serializer = UsernameCheckSerializer(data=request.data)
-
         serializer.is_valid(raise_exception=True)
 
         User = get_user_model()
@@ -144,27 +151,35 @@ class PasswordResetAPIView(APIView):
 
     def put(self, request):
         serializer = PasswordResetSerializer(data=request.data)
-
         serializer.is_valid(raise_exception=True)
 
-        # Get Validated Data
         user = serializer.validated_data['user']
         email = serializer.validated_data['email']
+
         # Create and reset password
-        new_password = generate_password()
+        new_password = generate_random_password()
         user.set_password(new_password)
         user.save()
+
         # Send Email
         email_message = EmailMessage(
                 _('Your ATIBO password has been reset.'), # Subject
                 _(f'New password : {new_password}'), # Body
-                to=[email], #받는 이메일
+                to=[email],
             )
         email_message.send()
 
         return Response({'message': _('A new password has been sent to your email')}, status=status.HTTP_200_OK)    
 
 
+@extend_schema(
+    responses=inline_serializer(
+        name="TokenRefreshResponseSerializer",
+        fields={
+            "accessToken": serializers.CharField(),
+        },
+    ),
+)
 class TokenRefreshAPIView(APIView):
     authentication_classes = []
     serializer_class = TokenRefreshSerializer
@@ -178,12 +193,7 @@ class TokenRefreshAPIView(APIView):
         access = AccessToken.for_user(user) 
         access_token = str(access)
 
-        # Return the Repsponse
-        serializer = TokenRefreshSerializer(data = {
-            'access_token': access_token,
-        })
-        
-        return Response(serializer.initial_data, status=status.HTTP_202_ACCEPTED)
+        return Response({'access_token': access_token}, status=status.HTTP_202_ACCEPTED)
 
 
 """
@@ -198,6 +208,15 @@ class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyMode
     serializer_class = AdminSerializer
     queryset = get_user_model().objects.filter(role='user')
 
+    # Check there's an inactive user
+    @extend_schema(
+    responses=inline_serializer(
+            name="AdminWatingSerializer",
+            fields={
+                "isWaiting": serializers.BooleanField(),
+            },
+        ),
+    )
     @action(detail=False, methods=['get'])
     def waiting(self, request):
         if get_user_model().objects.filter(is_active=False).exists():
@@ -208,7 +227,7 @@ class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyMode
     
     def list(self, request, *args, **kwargs):
         """
-        ListModelMixin.list
+        ListModelMixin.list()
         """
         queryset = self.filter_queryset(self.get_queryset())
 
@@ -216,10 +235,12 @@ class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyMode
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-
+        
         serializer = self.get_serializer(queryset, many=True)
+        """
+        """
 
-        # Customize the final response representation
+        # Customize the serializer.data
         users = serializer.data
 
         users_classified = {
@@ -234,3 +255,7 @@ class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyMode
                 users_classified['inactive_users'].append(user)
 
         return Response(users_classified, status=status.HTTP_200_OK)
+    
+    def destroy(self, request, *args, **kwargs):
+        super().destroy()
+        return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)

@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'gym.apps.GymConfig',
     'school.apps.SchoolConfig',
 
+    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_spectacular',
@@ -71,7 +72,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-# rest_framework setting
+# corsheaders settings
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+]
+
+# rest_framework settings
 # Effective only for API views created with Django Rest Framework
 
 REST_FRAMEWORK = {
@@ -84,20 +92,26 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'user': '50/minute'
     },
+    'DEFAULT_RENDERER_CLASSES': (
+        'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+        'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+    ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'EXCEPTION_HANDLER': 'atibo.exceptions.default_exception_handler',
 }
 
-# rest_framework_simplejwt setting
+# rest_framework_simplejwt settings
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
     "REFRESH_TOKEN_LIFETIME": timedelta(hours=8),
     "ALGORITHM": "HS384",
-    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 }
 
-# drf_spectacular setting
+# drf_spectacular settings
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'ATIBO API',
@@ -112,6 +126,7 @@ SPECTACULAR_SETTINGS = {
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', # CorsMiddleware should be placed as high as possible. Especially before any middleware that can generate responses such as Django’s 'CommonMiddleware' or Whitenoise’s 'WhiteNoiseMiddleware'
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware', # Activate Translation. After SessionMideware & Befroe CommonMidware

@@ -16,7 +16,8 @@ class NumberValidator(object):
         return _(
             "Your password must contain at least 1 digit, 0-9."
         )
-    
+
+
 class SpecialCharValidator(object):
     def validate(self, password, user=None):
         if not re.findall('[()[\]{}|\~!@#$%^&*_\-+=;:,<>./?]', password):
