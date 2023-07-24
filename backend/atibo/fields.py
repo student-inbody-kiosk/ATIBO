@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class TinyIntegerField(models.SmallIntegerField):
     def db_type(self, connection):
         if connection.settings_dict['ENGINE'] == 'django.db.backends.mysql':

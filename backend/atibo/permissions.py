@@ -1,12 +1,13 @@
 from rest_framework.permissions import BasePermission
 
 
-# Example: https://www.django-rest-framework.org/tutorial/4-authentication-and-permissions/#object-level-permissions
+# Allow only POST method
 class CreateOnly(BasePermission):
     def has_permission(self, request, view):
         return request.method.upper() == 'POST'
 
 
+# Allow only admin user
 class IsAdminUser(BasePermission):
      def has_permission(self, request, view):
         user = request.user
@@ -15,6 +16,8 @@ class IsAdminUser(BasePermission):
         return False
 
 
+# Allow users or the student
+# The student is specified by 'grade', 'room', 'number' in URL path
 class IsUserOrTheStudent(BasePermission):
      def has_permission(self, request, view):
 

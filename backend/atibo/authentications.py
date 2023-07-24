@@ -1,39 +1,34 @@
-import jwt
-
-from django.conf import settings
-from django.contrib.auth.models import User
-
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework import authentication
-from rest_framework import exceptions
+from rest_framework.authentication import BaseAuthentication
 
-from atibo.exceptions import DetailException
+from atibo.utils.custom_token import decode
 
-# Header encoding (see RFC5987)
-HTTP_HEADER_ENCODING = 'iso-8859-1'
 
-class StudentJWTAuthentication(authentication.BaseAuthentication):
+class StudentJWTAuthentication(BaseAuthentication):
     def authenticate(self, request):
 
-        # Follow the JWT Authentication
+        # Follow the JWT Authentication procedures
         jwtAuthentication = JWTAuthentication()
         header = jwtAuthentication.get_header(request)
         raw_token = jwtAuthentication.get_raw_token(header)
 
+        # Don't raise Error
+        # The follow-up authentications should be performed
         try:
-            student= jwt.decode(raw_token, settings.SECRET_KEY, algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
+            student= decode(raw_token)
+        except:
             return None
-        except jwt.InvalidTokenError:
-            return None
+        
+        return Student(student), 'student' # (request.user, request.auth) 
 
-        # Which has .is_authenticated proeprtty
-        # rest_framework.throttling.UserRateThrottle
-        student = Student(student)
 
-        return student, 'student' # (.user, .auth)
-    
+"""
+This class is made for providing `is_authenticated` property.
+The `rest_framework.throttling.UserRateThrottle.get_cache_key()` requires `is_authenticated` property for the `request.user`
 
+If there's any other way to provide `is_authenticated` property for `get_cache_key()`
+This class can be substitued.
+"""
 class Student():
 
     def __init__(self, student):
