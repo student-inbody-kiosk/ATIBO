@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.password_validation import validate_password
+from django.http.response import Http404
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import status, serializers
@@ -33,14 +35,18 @@ class UserSerializer(serializers.ModelSerializer): # BaseAPI. get, create, delet
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
-    access = serializers.CharField(read_only=True)  # Not Necessary. Just for drf-spectacular.
-    refresh = serializers.CharField(read_only=True) # Not Necessary. Just for drf-spectacular.
+    access_token = serializers.CharField(read_only=True)  # Not Necessary. Just for drf-spectacular.
+    refresh_token = serializers.CharField(read_only=True) # Not Necessary. Just for drf-spectacular.
 
     def validate(self, data):
         username = data.get('username')
         password = data.get('password')
 
-        user = get_user_model().objects.get(username=username)
+        try:
+            user = get_object_or_404(get_user_model(), username=username)
+        except Http404:
+            raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username'), 'user_not_found')
+
         if not user.is_active:
             raise DetailException(status.HTTP_403_FORBIDDEN, _('The user is not active. Please contact your administrator'), 'inactive_user')
         
@@ -108,8 +114,9 @@ class PasswordResetSerializer(serializers.Serializer):
         email = data.get('email')
 
         User = get_user_model()
-        user = User.objects.filter(username=username, email=email).first()  # Don't use `get_object_or_404` for Custom Response 
-        if not user:
+        try:
+            user = get_object_or_404(User, username=username, email=email)
+        except Http404:
             raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username or email'), 'user_not_found')
         
         data['user'] = user
@@ -127,8 +134,9 @@ class TokenRefreshSerializer(serializers.Serializer):
         refresh_token = data.get('refresh_token')
 
         User = get_user_model()
-        user = User.objects.filter(username=username).first()  # Don't use `get_object_or_404` for Custom Response 
-        if not user:
+        try:
+            user = get_object_or_404(User, username=username)
+        except Http404:
             raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username'), 'user_not_found')
 
         if not user.refresh_token == refresh_token:
