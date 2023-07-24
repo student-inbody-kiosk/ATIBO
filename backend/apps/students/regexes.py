@@ -1,1 +1,0 @@
-student_name_regex = r'^[가-힣]{2,5}$'
