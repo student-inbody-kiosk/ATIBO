@@ -43,7 +43,7 @@ const handleModalClose = function closeModal() {
                 v-show="isIndexPage"
                 text="키오스크"
                 emitMessage="routing"
-                @routing="$router.push({ name: 'kiosk' })">
+                @routing="$router.push({ name: 'kiosk-index' })">
                 <template #icon>
                     <font-awesome-icon icon="house" />
                 </template>

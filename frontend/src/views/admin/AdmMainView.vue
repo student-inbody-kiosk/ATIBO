@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import TheButton from '@/components/common/TheButton.vue';
+import { getAccountInfo } from '@/apis/services/accounts';
+
+const handleClick = () => {
+    getAccountInfo();
+};
 </script>
 
 <template>
     <div class="admin-main__buttons">
+        <button @click="handleClick">ACCOUNT INFO</button>
         <TheButton
             text="학생 관리"
             color="admin-primary"

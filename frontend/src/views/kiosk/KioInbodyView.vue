@@ -7,7 +7,7 @@ const emit = defineEmits(['before-mount']);
 let attendData = ref('');
 
 onBeforeMount(() => {
-    emit('before-mount', { title: '인바디', routeName: 'kiosk' });
+    emit('before-mount', { title: '인바디', routeName: 'kiosk-index' });
 });
 
 const handleInput = function updateAttendData(value: string) {

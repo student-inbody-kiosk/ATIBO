@@ -36,7 +36,7 @@ watchEffect(() => {
                 v-show="isIndexPage"
                 text="관리자"
                 emitMessage="admin"
-                @admin="$router.push({ name: 'admin' })">
+                @admin="$router.push({ name: 'admin-index' })">
                 <template #icon>
                     <font-awesome-icon icon="user-lock" />
                 </template>

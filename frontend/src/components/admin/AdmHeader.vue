@@ -12,7 +12,7 @@ const handlLogout = function logoutAndRedirect() {
             class="admin-header__icon"
             text="홈"
             emitMessage="routing"
-            @routing="$router.push({ name: 'admin' })"
+            @routing="$router.push({ name: 'admin-index' })"
             >>
             <template #icon>
                 <font-awesome-icon icon="house" />

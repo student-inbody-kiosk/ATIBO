@@ -11,7 +11,7 @@ const studentInfo = ref('');
 const isModalOpen = ref(false);
 
 onBeforeMount(() => {
-    emit('before-mount', { title: '출석 확인', routeName: 'kiosk' });
+    emit('before-mount', { title: '출석 확인', routeName: 'kiosk-index' });
 });
 
 const handleInput = function addStudentInfo(value: string) {

@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/auth.store';
 
 export function login(username: string, password: string) {
     return apiRequest
-        .post('/api/accounts/login', {
+        .post('/accounts/login', {
             username,
             password,
         })
