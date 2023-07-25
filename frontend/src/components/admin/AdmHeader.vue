@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import IconButton from '@/components/common/IconButton.vue';
 
+import { useRouter } from 'vue-router';
+import { logout } from '@/apis/services/auth';
+
+const router = useRouter();
+
 const handlLogout = function logoutAndRedirect() {
-    console.log('logout');
+    logout().then(() => {
+        router.push({ name: 'admin-index' });
+    });
 };
 </script>
 

@@ -1,8 +1,8 @@
 import apiRequest from '@/apis/axiosInterceptors';
 import { useAuthStore } from '@/stores/auth.store';
 
-export function login(username: string, password: string) {
-    return apiRequest
+export async function login(username: string, password: string) {
+    return await apiRequest
         .post('/accounts/login', {
             username,
             password,
@@ -13,4 +13,10 @@ export function login(username: string, password: string) {
             authStore.refreshToken = refreshToken;
             authStore.accessToken = accessToken;
         });
+}
+
+export async function logout() {
+    return await apiRequest.post('/accounts/logout').then(() => {
+        localStorage.removeItem('auth');
+    });
 }
