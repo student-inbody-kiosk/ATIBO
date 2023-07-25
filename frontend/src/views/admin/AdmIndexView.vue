@@ -20,9 +20,9 @@ const handlePasswordInput = function updateUserPassword(value: string) {
 };
 
 const handleLoginSubmit = function submitLogin() {
-    login(username.value, password.value);
-    console.log(username.value, password.value);
-    router.push({ name: 'admin-main' });
+    login(username.value, password.value).then(() => {
+        router.push({ name: 'admin-main' });
+    });
 };
 </script>
 

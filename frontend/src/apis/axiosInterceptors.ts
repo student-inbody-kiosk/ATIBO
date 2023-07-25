@@ -28,6 +28,7 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     function (error) {
+        console.log('ERROR >>>', error.response.data?.detail);
         return Promise.reject(error);
     }
 );

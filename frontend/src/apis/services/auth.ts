@@ -8,7 +8,9 @@ export function login(username: string, password: string) {
             password,
         })
         .then((res) => {
-            const { refreshToken, accessToken } = useAuthStore();
-            console.log('토큰 가져와라', res.data);
+            const authStore = useAuthStore();
+            const { refreshToken, accessToken } = res.data;
+            authStore.refreshToken = refreshToken;
+            authStore.accessToken = accessToken;
         });
 }
