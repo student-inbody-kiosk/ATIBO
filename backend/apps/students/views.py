@@ -1,7 +1,11 @@
 import re
+import pytz
+from datetime import datetime, timedelta
+from django.utils import timezone
 
+from django.conf import settings
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.http.response import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
@@ -10,20 +14,19 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter, inline_serial
 from rest_framework import status, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import GenericAPIView, RetrieveAPIView
+from rest_framework.generics import GenericAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.mixins import CreateModelMixin,ListModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
 from atibo.authentications import StudentJWTAuthentication
 from atibo.exceptions import DetailException
 from atibo.permissions import IsUserOrTheStudent
 from atibo.regexes import korean_name_regex
 from atibo.utils.custom_token import encode
-from .models import Student
-from .serializers import StudentAuthSerializer, StudentCheckSerializer, StudentLoginSerializer, StudentDetailSerializer
-
+from .models import Student, Attendance
+from .serializers import StudentAuthSerializer, StudentCheckSerializer, StudentDetailSerializer, StudentPasswordChangeSerializer, AttendanceSerializer, StudentAttendanceSerializer
+from .utils import get_student_grade_room_number, get_student_queryset_from_query_params
 
 class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin):
     http_method_names = ["post", "get", "put", "patch", "delete"]
@@ -43,32 +46,8 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
 
     # Create dynamic query according to parameters
     def get_queryset(self):
-        original_queryset = self.queryset
-
-        query_filter = Q()
-        grade = self.request.query_params.get('grade')
-        room = self.request.query_params.get('room')
-        number = self.request.query_params.get('number')
-        name = self.request.query_params.get('name')
-        if grade:
-            if not grade.isdecimal():
-                raise DetailException(status.HTTP_400_BAD_REQUEST, _('The grade must be a numeric value from 1 to 9'), 'invalid_grade')
-            query_filter &= Q(grade=grade)
-        if room:
-            if not room.isdecimal():
-                raise DetailException(status.HTTP_400_BAD_REQUEST, _('The room must be a numeric value from 1 to 99'), 'invalid_room')
-            query_filter &= Q(room=room)
-        if number:
-            if not number.isdecimal():
-                raise DetailException(status.HTTP_400_BAD_REQUEST, _('The number must be a numeric value from 1 to 100'), 'invalid_number')
-            query_filter &= Q(number=number)
-        if name:
-            if not re.compile(korean_name_regex).match(name):
-                raise DetailException(status.HTTP_400_BAD_REQUEST, _('The name must be written in 2-5 Korean characters'), 'invalid_name')
-            query_filter &= Q(name=name)
-
-        queryset = original_queryset.filter(query_filter)
-        return queryset
+        request = self.request
+        return get_student_queryset_from_query_params(request)
     
     @extend_schema(
         parameters=[
@@ -159,35 +138,35 @@ class StudentCheckAPIView(RetrieveAPIView):
         room = self.kwargs['room']
         number = self.kwargs['number']
 
-        student = Student.objects.filter(grade=grade, room=room, number=number)
-
-        # Find "the only one" student record
-        if len(student) == 1:
-            student = student[0]
-        elif len(student) == 0:
-            raise DetailException(status.HTTP_404_NOT_FOUND, _(f'There\'s no corresponding student'), 'sutdent_not_found')
-        else:
-            raise DetailException(status.HTTP_409_CONFLICT, _(f'There\'re more than one student corresponding to this information. Please contact your administrator'), 'sutdent_too_many')
-
+        student = get_student_grade_room_number(grade, room, number)
         return student
 
 
+@extend_schema(
+    request=inline_serializer(
+        name="StudentLoginSerializer",
+        fields={
+            "password": serializers.CharField(),
+        },
+    ),
+)
 class StudentLoginAPIView(APIView):
     authentication_classes = []
-    serializer_class = StudentLoginSerializer
 
-    def post(self, request):
-        serializer = StudentLoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+    def post(self, request, *args, **kwargs):
+        grade = self.kwargs['grade']
+        room = self.kwargs['room']
+        number = self.kwargs['number']
 
-        # create custom JWT
-        student = serializer.validated_data.get('student')
+        student = get_student_grade_room_number(grade, room, number)
+
+        password = request.data.get('password')
+        if not student.password == password:
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('The password is not correct'), 'invalid_student_password')
+
+        # Create Custom Token
         payload = {
             'id': str(student.id),
-            'name': student.name,
-            'grade': student.grade,
-            'room': student.room,
-            'number': student.number
         }
         access_token = encode(payload, minutes=30)
 
@@ -209,18 +188,74 @@ class StudentDetailAPIView(RetrieveAPIView):
         room = self.kwargs['room']
         number = self.kwargs['number']
 
-        student = Student.objects.filter(grade=grade, room=room, number=number)
-
-        # Find "the only one" student record
-        if len(student) == 1:
-            student = student[0]
-        elif len(student) == 0:
-            raise DetailException(status.HTTP_404_NOT_FOUND, _(f'There\'s no corresponding student'), 'sutdent_not_found')
-        else:
-            raise DetailException(status.HTTP_409_CONFLICT, _(f'There\'re more than one student corresponding to this information. Please contact your administrator'), 'sutdent_too_many')
+        student = get_student_grade_room_number(grade, room, number)
 
         return student
 
+@extend_schema(
+    responses=inline_serializer(
+        name="StudentPasswordChangeResponseSerializer",
+        fields={
+            "message": serializers.CharField(),
+        },
+    ),
+)
+class StudentPasswordChangeAPIView(UpdateAPIView):
+    http_method_names = ["put"]
+    authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
+    permission_classes = [IsUserOrTheStudent]
+    serializer_class = StudentPasswordChangeSerializer
 
-class StudentPasswordChangeAPIView(APIView):
-    pass
+    def get_object(self):
+        grade = self.kwargs['grade']
+        room = self.kwargs['room']
+        number = self.kwargs['number']
+
+        student = get_student_grade_room_number(grade, room, number)
+        return student
+    
+    def update(self, request, *args, **kwargs):
+        super().update(request, *args, **kwargs)
+        return Response({ 'message': _('The password is changed')}, status=status.HTTP_200_OK)
+    
+
+class AttendanceCheckAPIView(CreateAPIView):
+    authentication_classes = []
+    serializer_class = AttendanceSerializer
+
+    def perform_create(self, serializer):
+        grade = self.kwargs['grade']
+        room = self.kwargs['room']
+        number = self.kwargs['number']
+        student = get_student_grade_room_number(grade, room, number)
+
+        serializer.save(student = student)  # It's converted as validated_data in the serialzer.save()
+
+
+@extend_schema(
+        parameters=[
+            OpenApiParameter(name='grade', description=_('student grade'), type=int),
+            OpenApiParameter(name='room', description=_('student room'), type=int),
+            OpenApiParameter(name='number', description=_('student number'), type=int),
+            OpenApiParameter(name='name', description=_('student name'), type=str),
+        ]
+    )
+class StudentAttendanceAPIView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = StudentAttendanceSerializer
+
+    # Create dynamic query according to parameters
+    def get_queryset(self):
+        request = self.request
+        student_queryset = get_student_queryset_from_query_params(request)
+
+        start_date = self.kwargs['start_date']
+        end_date = self.kwargs['end_date']
+
+        tz = pytz.timezone(settings.TIME_ZONE)
+        start_date = datetime.strptime(start_date, "%Y-%m-%d")
+        start_date = timezone.make_aware(start_date, timezone=tz)
+        end_date = datetime.strptime(end_date, "%Y-%m-%d")
+        end_date = timezone.make_aware(end_date, timezone=tz) + timedelta(days=1)
+
+        return student_queryset.prefetch_related(Prefetch('attendance_set', queryset=Attendance.objects.filter(date_attended__gte=start_date, date_attended__lte=end_date)))
