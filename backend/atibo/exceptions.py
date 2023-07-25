@@ -18,7 +18,7 @@ def default_exception_handler(exc, context):
     response = exception_handler(exc, context)
 
     if response is None:
-        print('exc', exc)
+        print('Error: ', exc, context)
         return Response({'message': _('Service is not unavailable, try again or contact the developer')}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return response
