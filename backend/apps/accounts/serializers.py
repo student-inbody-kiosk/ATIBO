@@ -34,8 +34,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(write_only=True)
-    password = serializers.CharField(write_only=True)
+    username = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True, required=True)
 
     def validate(self, data):
         username = data.get('username')
@@ -78,16 +78,16 @@ class PasswordChangeSerializer(serializers.Serializer):
     confirm_password = serializers.CharField(write_only=True, required=True)
 
     def validate_old_password(self, value):
-            user = self.context['request'].user
-            if not user.check_password(value):
-                raise serializers.ValidationError(_('Incorrect old password'), 'invalid_old_password')
-            return value
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError(_('The existing password is incorrect'), 'invalid_old_password')
+        return value
     
     def validate_new_password(self, value):
-            # Note that validators will not be run automatically when you save a model
-            # https://docs.djangoproject.com/en/4.2/ref/validators/#how-validators-are-run
-            validate_password(value)
-            return value
+        # Note that validators will not be run automatically when you save a model
+        # https://docs.djangoproject.com/en/4.2/ref/validators/#how-validators-are-run
+        validate_password(value)
+        return value
 
     def validate(self, data):
         new_password = data.get('new_password')
@@ -125,8 +125,8 @@ class PasswordResetSerializer(serializers.Serializer):
 
 
 class TokenRefreshSerializer(serializers.Serializer):
-    username = serializers.CharField(write_only=True)
-    refresh_token = serializers.CharField(write_only=True)
+    username = serializers.CharField(write_only=True, required=True)
+    refresh_token = serializers.CharField(write_only=True, required=True)
 
     def validate(self, data):
         User = get_user_model()

@@ -20,24 +20,17 @@ class IsAdminUser(BasePermission):
 # The student is specified by 'grade', 'room', 'number' in URL path
 class IsUserOrTheStudent(BasePermission):
      def has_permission(self, request, view):
-
-        if not request.auth:
+        if not request.auth:            # Anonymous
             return False
-        if request.auth != 'student':
+        if request.auth != 'student':   # User
             return True
-        else:
+        else:                           # Student
             student = request.user
-
-            print(student)
-
             grade = view.kwargs.get('grade')
             room = view.kwargs.get('room')
             number = view.kwargs.get('number')
-
             if grade == student.grade and room == student.room and number == student.number:
-                print(1)
                 return True
-
             return False
 
 

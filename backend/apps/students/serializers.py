@@ -1,14 +1,21 @@
-from datetime import date
+import re
+import pytz
+from datetime import date, datetime, timedelta
 
+from django.conf import settings
 from django.db.utils import IntegrityError
 from django.http.response import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
+from drf_spectacular.utils import extend_schema_serializer
 from rest_framework import status, serializers
 
 from atibo.exceptions import DetailException
-from .models import Student
+from atibo.regexes import student_password_regex
+from atibo.utils.datetime import datetime_to_date_time
+from .models import Student, Attendance
+from .utils import get_student_grade_room_number
 
 
 class StudentListAuthSerializer(serializers.ListSerializer):
@@ -63,40 +70,84 @@ class StudentAuthSerializer(serializers.ModelSerializer):
 
 
 class StudentCheckSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Student
-        fields = ['id', 'name', 'grade', 'room', 'number']
+        fields = ['name', 'grade', 'room', 'number']
 
-
-class StudentLoginSerializer(serializers.ModelSerializer):
-    id = serializers.UUIDField()
-
-    class Meta:
-        model = Student
-        fields = ['id', 'password']
-        extra_kwargs = {
-            'id': {'write_only': True},
-            'password': {'write_only': True}
-        }
-
-    def validate(self, data):
-        id = data.get('id')
-        password = data.get('password')
-
-        # Find the student with id
-        student = get_object_or_404(Student, id = id)
-
-        # Check the password
-        if student.password != password:
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _('The password is incorrect'), 'invalid_password')
-        
-        data['student'] = student
-        return data
 
 class StudentDetailSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Student
         fields = ['id', 'name', 'grade', 'room', 'number', 'sex', 'birth_date']
 
+
+class StudentPasswordChangeSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True, required=True)
+    new_password = serializers.CharField(write_only=True, required=True)
+    confirm_password  = serializers.CharField(write_only=True, required=True)
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.password == value:
+            raise serializers.ValidationError(_('The existing password is incorrect'), 'invalid_old_password')
+        return value
+    
+    def validate_new_password(self, value):
+        if not re.compile(student_password_regex).match(value):
+            raise serializers.ValidationError(_('Password must be a 4 digit number'), 'invalid_old_password')
+        return value
+    
+    def validate(self, data):
+        new_password = data.get('new_password')
+        confirm_password = data.get('confirm_password')
+
+        if new_password != confirm_password:
+            raise serializers.ValidationError({"confirm_password": _('The new passwords do not match')}, 'invalid_student_confirm_password')
+
+        return data
+    
+    def update(self, instance, validated_data):
+        new_password = validated_data['new_password']
+        instance.password = new_password
+        instance.save()
+        return instance
+
+
+class AttendanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attendance
+        fields = ['id', 'date_attended']
+        read_only_fields = ['id', 'date_attended']
+
+    def create(self, validated_data):
+        student = validated_data['student']
+
+        # Attendance Check can be repeated within 30min
+        attendance =  Attendance.objects.filter(student=student).order_by('-date_attended')[:1]
+
+        if attendance:
+            attendance = attendance[0]
+            tz = pytz.timezone(settings.TIME_ZONE)
+            time_interval = datetime.now(tz=tz) - attendance.date_attended
+            if time_interval < timedelta(minutes=30):
+                time_interval_min = int(time_interval.total_seconds() / 60)
+                raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'Attendance already checked {time_interval_min} minutes ago. Attendance check is available every 30 minutes'), 'too_fast_attendance')
+        
+        return super().create(validated_data)
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+
+        # Change the datetime format    
+        date_attended = ret.get('date_attended')
+        ret['date_attended'] = datetime_to_date_time(date_attended)
+
+        return ret
+
+
+class StudentAttendanceSerializer(serializers.ModelSerializer):
+    attendance_set = AttendanceSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Student
+        fields = ['name', 'grade', 'room', 'number', 'attendance_set']
