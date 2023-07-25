@@ -20,8 +20,9 @@ const handleBeforeMount = function allocateTitleAndRouteName(data: {
     routeName.value = data.routeName;
 };
 
+// show different components based on the route name
 watchEffect(() => {
-    if (route.name === 'kiosk') {
+    if (route.name === 'kiosk-index') {
         isIndexPage.value = true;
     } else {
         isIndexPage.value = false;

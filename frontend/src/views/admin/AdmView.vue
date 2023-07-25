@@ -14,8 +14,8 @@ const isEmailModalOpen = ref(false);
 const isPasswordModalOpen = ref(false);
 
 watchEffect(() => {
-    // TODO: based on the presence of tokens
-    if (route.name === 'admin') {
+    // show different components based on the route name
+    if (route.name === 'admin-index') {
         isIndexPage.value = true;
     } else {
         isIndexPage.value = false;
