@@ -31,41 +31,25 @@ const handleSubmit = function searchStudents() {
                 type="text"
                 refer="grade"
                 :value="grade"
-                @update-input="
-                    (value) => {
-                        grade = value;
-                    }
-                " />
+                @update-input="(value) => (grade = value)" />
             <TheInput
                 label="반"
                 type="text"
                 refer="room"
                 :value="room"
-                @update-input="
-                    (value) => {
-                        room = value;
-                    }
-                " />
+                @update-input="(value) => (room = value)" />
             <TheInput
                 label="번호"
                 type="text"
                 refer="number"
                 :value="number"
-                @update-input="
-                    (value) => {
-                        number = value;
-                    }
-                " />
+                @update-input="(value) => (number = value)" />
             <TheInput
                 label="이름"
                 type="text"
                 refer="name"
                 :value="name"
-                @update-input="
-                    (value) => {
-                        name = value;
-                    }
-                " />
+                @update-input="(value) => (name = value)" />
             <TheButton
                 text="조회"
                 color="admin-primary"

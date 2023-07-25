@@ -11,14 +11,6 @@ const router = useRouter();
 const username = ref('');
 const password = ref('');
 
-const handleIdInput = function updateUserId(value: string) {
-    username.value = value;
-};
-
-const handlePasswordInput = function updateUserPassword(value: string) {
-    password.value = value;
-};
-
 const handleLoginSubmit = function submitLogin() {
     login(username.value, password.value).then(() => {
         router.push({ name: 'admin-main' });
@@ -33,14 +25,14 @@ const handleLoginSubmit = function submitLogin() {
             refer="id"
             :value="username"
             label="아이디"
-            @update-input="handleIdInput"
+            @update-input="(value) => (username = value)"
             @submit="handleLoginSubmit" />
         <TheInput
             type="password"
             refer="password"
             :value="password"
             label="비밀번호"
-            @update-input="handlePasswordInput"
+            @update-input="(value) => (password = value)"
             @submit="handleLoginSubmit" />
         <TheButton
             text="로그인"

@@ -14,17 +14,9 @@ onBeforeMount(() => {
     emit('before-mount', { title: '출석 확인', routeName: 'kiosk-index' });
 });
 
-const handleInput = function addStudentInfo(value: string) {
-    studentInfo.value += value;
-};
-
 const deleteInput = function deleteStudentInfo() {
     if (studentInfo.value.length == 0) return;
     studentInfo.value = studentInfo.value.slice(0, -1);
-};
-
-const handleChange = function updateStudentInfo(info: string) {
-    studentInfo.value = info;
 };
 
 const handleModal = function closeModal() {
@@ -45,10 +37,12 @@ const handleSubmit = function checkAttendance() {
             type="text"
             refer="학년반번호"
             :value="studentInfo"
-            @update-input="handleChange"
+            @update-input="(value) => (studentInfo = value)"
             @submit="handleSubmit" />
         <button @click="handleSubmit">출석하기</button>
-        <TheKeypad @input="handleInput" @delete="deleteInput" />
+        <TheKeypad
+            @input="(value) => (studentInfo += value)"
+            @delete="deleteInput" />
         <!-- Modal -->
         <teleport to="#teleport">
             <TheModal v-show="isModalOpen" @close-modal="handleModal">
