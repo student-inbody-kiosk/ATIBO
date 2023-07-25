@@ -16,25 +16,44 @@ class IsAdminUser(BasePermission):
         return False
 
 
-# Allow users or the student
-# The student is specified by 'grade', 'room', 'number' in URL path
-class IsUserOrTheStudent(BasePermission):
+# IsUser(BasePermission):
+class IsUser(BasePermission):
      def has_permission(self, request, view):
-        if not request.auth:            # Anonymous
-            return False
-        if request.auth != 'student':   # User
+        user = request.user
+        if user.is_authenticated:
             return True
-        else:                           # Student
-            student = request.user
-            grade = view.kwargs.get('grade')
-            room = view.kwargs.get('room')
-            number = view.kwargs.get('number')
-            if grade == student.grade and room == student.room and number == student.number:
-                return True
+        return False
+
+
+# Allow authenticated user or "the student"
+# The student is specified by {'grade', 'room', 'number'} which are in URL or Query Params
+class IsTheStudent(BasePermission):
+     def has_permission(self, request, view):
+        if request.auth != 'student':   # User
             return False
+               
+        # Check the permision of the student
+        student = request.user
+        print('student', student.grade, student.room, student.number)
+
+        # Path variable
+        grade = int(view.kwargs.get('grade'))
+        room = int(view.kwargs.get('room'))
+        number = int(view.kwargs.get('number'))
+        if grade == student.grade and room == student.room and number == student.number:
+            return True
+        
+        # Query Params
+        grade = request.query_params.get('grade')
+        room = request.query_params.get('room')
+        number = request.query_params.get('number')
+        if grade == student.grade and room == student.room and number == student.number:
+            return True
+        
+        return False
 
 
 class IsOwner(BasePermission):
     def has_object_permission(self, request, view, obj):
         # Write permissions are only allowed to the owner of the snippet.
-        return obj.owner == request.user
+        return obj.student == request.user
