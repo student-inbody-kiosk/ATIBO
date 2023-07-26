@@ -9,8 +9,16 @@ export const useAuthStore = defineStore(
         const updateAccessToken = (token: string) => {
             accessToken.value = token;
         };
+        const updateRefreshToken = (token: string) => {
+            refreshToken.value = token;
+        };
 
-        return { refreshToken, accessToken, updateAccessToken };
+        return {
+            refreshToken,
+            accessToken,
+            updateAccessToken,
+            updateRefreshToken,
+        };
     },
     {
         persist: true,

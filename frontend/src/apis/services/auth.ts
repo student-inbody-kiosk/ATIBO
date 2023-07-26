@@ -8,10 +8,9 @@ export async function login(username: string, password: string) {
             password,
         })
         .then((res) => {
-            const authStore = useAuthStore();
-            const { refreshToken, accessToken } = res.data;
-            authStore.refreshToken = refreshToken;
-            authStore.accessToken = accessToken;
+            const { updateAccessToken, updateRefreshToken } = useAuthStore();
+            updateAccessToken(res.data.accessToken);
+            updateRefreshToken(res.data.refreshToken);
         });
 }
 
