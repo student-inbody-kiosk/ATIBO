@@ -36,24 +36,19 @@ axiosInstance.interceptors.response.use(
 
         if (error.response.status === 401) {
             if (refreshToken.length) {
-                axios
+                return axios
                     .post('http://127.0.0.1:8000/api/accounts/token/refresh/', {
                         username: 'admin',
                         refreshToken,
                     })
                     .then((res) => {
+                        console.log(res);
                         updateAccessToken(res.data?.accessToken);
                         originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
                         return axiosInstance(originalRequest);
                     })
                     .catch((error) => {
                         alert('다시 로그인해주세요.');
-                        // redirect to index page based on the parent route
-                        // const currentRoute =
-                        //     router.currentRoute.value?.matched[0]?.name;
-                        // currentRoute === 'admin'
-                        //     ? router.push({ name: 'admin-index' })
-                        //     : router.push({ name: 'kioks-index' });
                         return Promise.reject(error);
                     });
             } else {
