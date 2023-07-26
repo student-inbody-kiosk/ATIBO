@@ -254,5 +254,5 @@ class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyMode
         return Response(users_classified, status=status.HTTP_200_OK)
     
     def destroy(self, request, *args, **kwargs):
-        super().destroy()
+        super().destroy(request, *args, **kwargs)
         return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
