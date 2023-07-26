@@ -28,7 +28,7 @@ const students: Ref<Student[]> = ref([
     },
 ]);
 
-const handleClick = function addStudent() {
+const handleAddClick = function addStudent() {
     students.value.push({
         grade: '',
         room: '',
@@ -48,6 +48,19 @@ const handleInput = function updateStudentData<T extends keyof Student>(
     students.value[index][item] = data;
     console.log(students.value[index][item]);
 };
+
+const handleDeleteClick = function deleteStudent(index: number) {
+    if (students.value.length === 1) return;
+    students.value = students.value.filter((student, idx) => {
+        return idx !== index;
+    });
+};
+
+const handleSubmit = function createStudent() {
+    students.value.forEach((student) => {
+        console.log(student.grade);
+    });
+};
 </script>
 
 <template>
@@ -58,13 +71,13 @@ const handleInput = function updateStudentData<T extends keyof Student>(
             color="green"
             size="md"
             emitMessage="submit"
-            @submit="handleClick" />
+            @submit="handleAddClick" />
         <TheButton
             text="등록"
             color="admin-primary"
             size="md"
             emitMessage="submit"
-            @submit="() => console.log('등록')" />
+            @submit="handleSubmit" />
 
         <section>
             <table class="admin-student__table">
@@ -75,7 +88,8 @@ const handleInput = function updateStudentData<T extends keyof Student>(
                         :key="index"
                         :index="index"
                         :student="student"
-                        @update-input="handleInput" />
+                        @update-input="handleInput"
+                        @delete-student="handleDeleteClick" />
                 </tbody>
             </table>
         </section>

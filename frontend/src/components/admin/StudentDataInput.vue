@@ -13,6 +13,7 @@ const props = defineProps<{
 }>();
 
 import TheInput from '@/components/common/TheInput.vue';
+import IconButton from '../common/IconButton.vue';
 
 import { ref } from 'vue';
 
@@ -21,7 +22,15 @@ const sexData = ref(props.student.sex);
 
 <template>
     <tr>
-        <td class="student-data-input__content">{{ index + 1 }}</td>
+        <td class="student-data-input__content">
+            <IconButton
+                emitMessage="delete"
+                @delete="() => $emit('delete-student', index)">
+                <template #icon>
+                    <font-awesome-icon icon="circle-minus" color="red" />
+                </template>
+            </IconButton>
+        </td>
         <td class="student-data-input__content">
             <TheInput
                 type="text"

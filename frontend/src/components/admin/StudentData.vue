@@ -5,7 +5,7 @@ defineProps<{
     room: number;
     number: number;
     name: string;
-    sex: string;
+    sex: number;
     birthDate: string;
     password: string;
 }>();
