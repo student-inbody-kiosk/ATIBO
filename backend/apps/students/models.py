@@ -27,14 +27,39 @@ class Student(models.Model):
         # Django Model Index
         # https://docs.djangoproject.com/en/4.2/ref/models/options/#indexes
         indexes = [
-            models.Index(fields=['grade', 'room', 'number'], name='grade_room_number_idx')
+            models.Index(fields=['grade', 'room', 'number'], name='grade_room_number_idx'),
         ]
 
 
 class Attendance(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     date_attended = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         indexes = [
-            models.Index(fields=['student', 'date_attended'], name='attendance_student_idx')
+            models.Index(fields=['student', 'date_attended'], name='attendance_student_idx'),
+        ]
+
+
+class Inbody(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    test_date = models.DateField()
+    weight = models.FloatField()
+    percent_body_fat = models.FloatField()
+    skeletal_muscle_mass = models.FloatField()
+    height = models.FloatField(null=True)
+    age = TinyIntegerField(null=True, validators=[MinValueValidator(1, _('The grade must be greater than 0')), MaxValueValidator(127,  _('The grade must be less than 127'))])
+    total_body_water = models.FloatField(null=True)
+    protein = models.FloatField(null=True)
+    minerals = models.FloatField(null=True)
+    body_fat_mass = models.FloatField(null=True)
+    body_mass_index = models.FloatField(null=True)
+    score = TinyIntegerField(null=True, validators=[MinValueValidator(1, _('The grade must be greater than 0')), MaxValueValidator(100,  _('The grade must be less than 100'))])
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['student', 'test_date'], name='test_per_day'),   
+        ]
+        indexes = [
+            models.Index(fields=['student', 'test_date'], name='student_test_date_idx'),
         ]

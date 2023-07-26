@@ -14,8 +14,7 @@ from rest_framework import status, serializers
 from atibo.exceptions import DetailException
 from atibo.regexes import student_password_regex
 from atibo.utils.datetime import datetime_to_date_time
-from .models import Student, Attendance
-from .utils import get_student_grade_room_number
+from .models import Student, Attendance, Inbody
 
 
 class StudentListAuthSerializer(serializers.ListSerializer):
@@ -37,14 +36,14 @@ class StudentListAuthSerializer(serializers.ListSerializer):
         data_mapping = {item['id']: item for item in validated_data}
 
         ret = []
-        for student_id, data in data_mapping.items():
-            student = student_mapping.get(student_id, None)
-            # Handle DB integrity error
-            try:
+        # Handle DB integrity error
+        try:
+            for student_id, data in data_mapping.items():
+                student = student_mapping.get(student_id, None)
                 ret.append(self.child.update(student, data))
-            except IntegrityError as e:
-                code, message = e.args
-                raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{message}'), f'db_{code}')
+        except IntegrityError as e:
+            code, message = e.args
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{message}'), f'db_{code}')
             
         return ret
 
@@ -151,3 +150,55 @@ class StudentAttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['name', 'grade', 'room', 'number', 'attendance_set']
+
+
+class InbodyListSerializer(serializers.ListSerializer):    
+    # Multiple Create/Update
+    def update(self, instance, validated_data):
+        inbody_mapping = {inbody.id: inbody for inbody in instance}
+        data_mapping = {item['id']: item for item in validated_data}
+
+        ret = []
+        # Handle DB integrity error
+        try:
+            for inbody_id, data in data_mapping.items():
+                student = inbody_mapping.get(inbody_id, None)
+                if student is None:
+                    ret.append(self.child.create(data))
+                else:
+                    ret.append(self.child.update(student, data))
+                    
+        except IntegrityError as e:
+            code, message = e.args
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{message}'), f'db_{code}')
+            
+        return ret
+
+
+class InbodySerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)    # For multiple update
+
+    class Meta:
+        list_serializer_class = InbodyListSerializer
+        model = Inbody
+        exclude = ['student']
+
+    def create(self, validated_data):
+        try:
+            return super().create(validated_data)
+        except IntegrityError as e:
+            code, message = e.args
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('Inbody history for that date already exists.'), f'db_{code}')
+
+    def validate_test_date(self, value):
+        if value > date.today():
+            raise serializers.ValidationError(_('The date of birth cannot be later than today'), 'invalid_birth_date')
+        return value
+
+
+class StudentInbodySerializer(serializers.ModelSerializer):
+    inbody_set = InbodySerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Student
+        fields = ['name', 'grade', 'room', 'number', 'inbody_set']

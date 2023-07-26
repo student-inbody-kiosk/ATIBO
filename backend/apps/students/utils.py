@@ -1,15 +1,22 @@
-from django.db.models import Q
 import re
+import pytz
+from datetime import datetime, timedelta
 
+from django.utils import timezone
+from django.conf import settings
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import status
 
 from atibo.exceptions import DetailException
-from atibo.regexes import korean_name_regex
+from atibo.regexes import korean_name_regex, date_regex
 from .models import Student
 
-def get_student_grade_room_number(grade, room, number):
+def get_student_object_from_path_variables(variables):
+        grade = variables['grade']
+        room = variables['room']
+        number = variables['number']
 
         student = Student.objects.filter(grade=grade, room=room, number=number)
 
@@ -24,13 +31,13 @@ def get_student_grade_room_number(grade, room, number):
         return student
 
 
-def get_student_queryset_from_query_params(request):
+def get_student_queryset_from_query_params(query_params):
 
         query_filter = Q()
-        grade = request.query_params.get('grade')
-        room = request.query_params.get('room')
-        number = request.query_params.get('number')
-        name = request.query_params.get('name')
+        grade = query_params.get('grade')
+        room = query_params.get('room')
+        number = query_params.get('number')
+        name = query_params.get('name')
         if grade:
             if not grade.isdecimal():
                 raise DetailException(status.HTTP_400_BAD_REQUEST, _('The grade must be a numeric value from 1 to 9'), 'invalid_grade')
@@ -50,3 +57,31 @@ def get_student_queryset_from_query_params(request):
 
         queryset = Student.objects.filter(query_filter)
         return queryset
+
+
+def get_date_from_path_variables(variables):
+    start_date = variables['start_date']
+    end_date = variables['end_date']
+
+    tz = pytz.timezone(settings.TIME_ZONE)
+    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    start_date = timezone.make_aware(start_date, timezone=tz)
+    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    end_date = timezone.make_aware(end_date, timezone=tz) + timedelta(days=1)
+
+    return start_date, end_date
+
+def get_date_from_query_params(query_params):
+
+    start_date = query_params.get('start_date', '2023-01-01')
+    end_date = query_params.get('end_date', datetime.today().strftime('%Y-%m-%d'))
+    if not re.compile(date_regex).match(start_date) or not re.compile(date_regex).match(end_date):
+        raise DetailException(status.HTTP_400_BAD_REQUEST, _('Check the date format'), 'invalid_name')
+
+    tz = pytz.timezone(settings.TIME_ZONE)
+    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    start_date = timezone.make_aware(start_date, timezone=tz)
+    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    end_date = timezone.make_aware(end_date, timezone=tz) + timedelta(days=1)
+
+    return start_date, end_date
