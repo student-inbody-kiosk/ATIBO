@@ -14,11 +14,13 @@ const number = ref('');
 const handleSubmit = function searchStudents() {
     // TODO: check regular expression
     getStudents(
-        Number(grade.value),
-        Number(room.value),
-        Number(number.value),
+        parseInt(grade.value),
+        parseInt(room.value),
+        parseInt(number.value),
         name.value
     );
+
+    console.log(grade.value, room.value, number.value, name.value);
 };
 </script>
 

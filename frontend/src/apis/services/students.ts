@@ -7,7 +7,7 @@ export async function getStudents(
     name?: string
 ) {
     return await apiRequest
-        .get('/students', {
+        .get('/students/', {
             params: {
                 grade,
                 room,

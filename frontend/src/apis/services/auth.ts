@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/auth.store';
 
 export async function login(username: string, password: string) {
     return await apiRequest
-        .post('/accounts/login', {
+        .post('/accounts/login/', {
             username,
             password,
         })
@@ -16,7 +16,7 @@ export async function login(username: string, password: string) {
 }
 
 export async function logout() {
-    return await apiRequest.post('/accounts/logout').then(() => {
+    return await apiRequest.post('/accounts/logout/').then(() => {
         localStorage.removeItem('auth');
     });
 }
