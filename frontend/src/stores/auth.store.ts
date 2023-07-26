@@ -21,6 +21,11 @@ export const useAuthStore = defineStore(
         };
     },
     {
-        persist: true,
+        // default : localStorage
+        // refreshToken will be stored with the key name 'ATIBO'
+        persist: {
+            key: 'ATIBO',
+            paths: ['refreshToken'],
+        },
     }
 );
