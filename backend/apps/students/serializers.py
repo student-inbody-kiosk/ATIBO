@@ -12,7 +12,7 @@ from drf_spectacular.utils import extend_schema_serializer
 from rest_framework import status, serializers
 
 from atibo.exceptions import DetailException
-from atibo.regexes import student_password_regex
+from atibo.regexes import STUDENT_PASSWORD_REGEX
 from atibo.utils.datetime import datetime_to_date_time
 from .models import Student, Attendance, Inbody
 
@@ -92,7 +92,7 @@ class StudentPasswordChangeSerializer(serializers.Serializer):
         return value
     
     def validate_new_password(self, value):
-        if not re.compile(student_password_regex).match(value):
+        if not re.compile(STUDENT_PASSWORD_REGEX).match(value):
             raise serializers.ValidationError(_('Password must be a 4 digit number'), 'invalid_old_password')
         return value
     

@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 
 from atibo.exceptions import DetailException
-from atibo.regexes import korean_name_regex, date_regex
+from atibo.regexes import KOREAN_NAME_REGEX, DATE_REGEX
 from .models import Student
 
 def get_student_object_from_path_variables(variables):
@@ -51,7 +51,7 @@ def get_student_queryset_from_query_params(query_params):
                 raise DetailException(status.HTTP_400_BAD_REQUEST, _('The number must be a numeric value from 1 to 100'), 'invalid_number')
             query_filter &= Q(number=number)
         if name:
-            if not re.compile(korean_name_regex).match(name):
+            if not re.compile(KOREAN_NAME_REGEX).match(name):
                 raise DetailException(status.HTTP_400_BAD_REQUEST, _('The name must be written in 2-5 Korean characters'), 'invalid_name')
             query_filter &= Q(name=name)
 
@@ -75,7 +75,7 @@ def get_date_from_query_params(query_params):
 
     start_date = query_params.get('start_date', '2023-01-01')
     end_date = query_params.get('end_date', datetime.today().strftime('%Y-%m-%d'))
-    if not re.compile(date_regex).match(start_date) or not re.compile(date_regex).match(end_date):
+    if not re.compile(DATE_REGEX).match(start_date) or not re.compile(DATE_REGEX).match(end_date):
         raise DetailException(status.HTTP_400_BAD_REQUEST, _('Check the date format'), 'invalid_name')
 
     tz = pytz.timezone(settings.TIME_ZONE)

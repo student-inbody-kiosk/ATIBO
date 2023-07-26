@@ -25,7 +25,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from atibo.authentications import StudentJWTAuthentication
 from atibo.exceptions import DetailException
 from atibo.permissions import IsUser, IsTheStudent, IsOwner
-from atibo.regexes import korean_name_regex, date_regex
+from atibo.regexes import KOREAN_NAME_REGEX, DATE_REGEX
 from atibo.utils.custom_token import encode
 from .models import Student, Attendance, Inbody
 from .serializers import StudentAuthSerializer, StudentCheckSerializer, StudentDetailSerializer, StudentPasswordChangeSerializer, AttendanceSerializer, StudentAttendanceSerializer, InbodySerializer, StudentInbodySerializer
@@ -117,17 +117,10 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
         """
         return Response(serializer.data)
     
-    # Multiple Delete 
+    # Multiple Delete : Ignore the invalid id
     def destroy(self, request, *args, **kwargs):
         student_ids = request.data.get('ids')
-
-        # Just ignore invalid id
-        for id in student_ids:
-            try:
-                instance = Student.objects.get(id=id)
-                self.perform_destroy(instance)
-            except:
-                pass
+        Student.objects.filter(id__in=student_ids).delete()
 
         return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
 
@@ -292,7 +285,7 @@ class StudentInbodyAPIView(ListAPIView):
         return student_queryset.prefetch_related(Prefetch('inbody_set', queryset=Inbody.objects.filter(test_date__gte=start_date, test_date__lte=end_date)))
 
 
-class InbodyListAPIView(GenericAPIView, UpdateModelMixin, DestroyModelMixin):
+class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
     permission_classes = [IsAuthenticated]
     serializer_class = InbodySerializer
     
@@ -351,16 +344,9 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin, DestroyModelMixin):
         """
         return Response(serializer.data)
     
-    # Multiple Delete 
+    # Multiple Delete : Ignore invalid id
     def destroy(self, request, *args, **kwargs):
         inbody_ids = request.data.get('ids')
-
-        # Just ignore invalid id
-        for id in inbody_ids:
-            try:
-                instance = Inbody.objects.get(id=id)
-                self.perform_destroy(instance)
-            except:
-                pass
+        Inbody.objects.filter(id__in=inbody_ids).delete()
 
         return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)

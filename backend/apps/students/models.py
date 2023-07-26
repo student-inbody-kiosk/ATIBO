@@ -5,17 +5,17 @@ from django.core.validators import RegexValidator, MinValueValidator, MaxValueVa
 from django.utils.translation import gettext_lazy as _
 
 from atibo.fields import TinyIntegerField
-from atibo.regexes import korean_name_regex, student_password_regex
+from atibo.regexes import KOREAN_NAME_REGEX, STUDENT_PASSWORD_REGEX
 
 
 class Student(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=5, validators=[RegexValidator(korean_name_regex, _('The name must be written in 2-5 Korean characters'), 'name_invalid')])
+    name = models.CharField(max_length=25, validators=[RegexValidator(KOREAN_NAME_REGEX, _('The name must be written in 2-5 Korean characters'), 'name_invalid')])
     grade = TinyIntegerField(validators=[MinValueValidator(1, _('The grade must be greater than 0')), MaxValueValidator(9,  _('The grade must be less than 10'))])
     room = TinyIntegerField(validators=[MinValueValidator(1, _('The room must be greater than 0')), MaxValueValidator(99,  _('The room must be less than 100'))])
     number = TinyIntegerField(validators=[MinValueValidator(1, _('The number must be greater than 0')), MaxValueValidator(100,  _('The number must be less or equal than 100'))])
     sex = TinyIntegerField()
-    password = models.CharField(default='0000', max_length=4, validators=[MinLengthValidator(4, _('The password length must be 4')), RegexValidator(student_password_regex, _('The password must be a numeric value'), 'student_password_invalid')])
+    password = models.CharField(default='0000', max_length=4, validators=[MinLengthValidator(4, _('The password length must be 4')), RegexValidator(STUDENT_PASSWORD_REGEX, _('The password must be a numeric value'), 'student_password_invalid')])
     birth_date = models.DateField()
     is_authenticated = models.BooleanField(default=False, editable=False)   # Just for the 'is_authenticated' property, which is required by 'rest_framework.throttling.UserRateThrottle.get_cache_key()'
 

@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
+    'ckeditor',
+    'ckeditor_uploader',
     'drf_spectacular',
     'drf_spectacular_sidecar',  # required for Django collectstatic discovery. UI contained drf_spectacular
 
@@ -70,60 +72,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django_cleanup.apps.CleanupConfig',    # Should be the last. The app for clean-up stale images. If you don't want just comment out this row.
 ]
-
-# corsheaders settings
-
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5173",
-    "http://localhost:5173",
-]
-
-# rest_framework settings
-# Effective only for API views created with Django Rest Framework
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',    # simple JWT authentication
-    ),
-    'DEFAULT_THROTTLE_CLASSES': [
-        'rest_framework.throttling.UserRateThrottle'
-    ],
-    'DEFAULT_THROTTLE_RATES': {
-        'user': '50/minute'
-    },
-    'DEFAULT_RENDERER_CLASSES': (
-        'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
-        'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
-    ),
-    'DEFAULT_PARSER_CLASSES': (
-        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
-    ),
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'EXCEPTION_HANDLER': 'atibo.exceptions.default_exception_handler',
-}
-
-# rest_framework_simplejwt settings
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
-    "REFRESH_TOKEN_LIFETIME": timedelta(hours=8),
-    "ALGORITHM": "HS384",
-}
-
-# drf_spectacular settings
-
-SPECTACULAR_SETTINGS = {
-    'TITLE': 'ATIBO API',
-    'DESCRIPTION': 'The smart kiosk program for managing ATtendance and InBOdy',
-    'VERSION': '2.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
-
-    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
-    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
-    'REDOC_DIST': 'SIDECAR',
-}
-
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', # CorsMiddleware should be placed as high as possible. Especially before any middleware that can generate responses such as Django’s 'CommonMiddleware' or Whitenoise’s 'WhiteNoiseMiddleware'
@@ -233,8 +184,22 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
+# https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-STATICFILES_DIRS
 
 STATIC_URL = 'static/'
+
+STATIC_ROOT = BASE_DIR / 'static/'
+
+STATICFILES_DIRS = [
+     os.path.join(BASE_DIR, 'atibo/static'),
+]
+
+# Media files (User uploaded static fiels)
+# https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-MEDIA_ROOT
+
+MEDIA_URL = 'media/'
+
+MEDIA_ROOT = BASE_DIR / 'media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -257,3 +222,62 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# corsheaders settings
+
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:5173',
+    'http://localhost:5173',
+]
+
+# ckeditor settings
+# https://django-ckeditor.readthedocs.io/en/latest/
+
+CKEDITOR_BASEPATH = STATIC_URL + 'ckeditor/ckeditor/'
+
+CKEDITOR_UPLOAD_PATH = "ckeditor/"   # relative path for MEDIA_ROOT
+
+# rest_framework settings
+# Effective only for API views created with Django Rest Framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',    # simple JWT authentication
+    ),
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '50/minute'
+    },
+    'DEFAULT_RENDERER_CLASSES': (
+        'djangorestframework_camel_case.render.CamelCaseJSONRenderer',
+        'djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'djangorestframework_camel_case.parser.CamelCaseJSONParser',
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'EXCEPTION_HANDLER': 'atibo.exceptions.default_exception_handler',
+}
+
+# rest_framework_simplejwt settings
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=20),
+    "REFRESH_TOKEN_LIFETIME": timedelta(hours=8),
+    "ALGORITHM": "HS384",
+}
+
+# drf_spectacular settings
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'ATIBO API',
+    'DESCRIPTION': 'The smart kiosk program for managing ATtendance and InBOdy',
+    'VERSION': '2.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+
+    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+}
