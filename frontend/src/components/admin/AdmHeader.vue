@@ -1,16 +1,6 @@
 <script setup lang="ts">
 import IconButton from '@/components/common/IconButton.vue';
-
-import { useRouter } from 'vue-router';
 import { logout } from '@/apis/services/auth';
-
-const router = useRouter();
-
-const handlLogout = function logoutAndRedirect() {
-    logout().then(() => {
-        router.push({ name: 'admin-index' });
-    });
-};
 </script>
 
 <template lang="">
@@ -52,7 +42,7 @@ const handlLogout = function logoutAndRedirect() {
             class="admin-header__icon"
             text="로그아웃"
             emitMessage="logout"
-            @logout="handlLogout"
+            @logout="logout"
             >>
             <template #icon>
                 <font-awesome-icon icon="house" />
