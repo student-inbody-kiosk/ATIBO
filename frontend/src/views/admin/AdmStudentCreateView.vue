@@ -2,19 +2,11 @@
 import TheButton from '@/components/common/TheButton.vue';
 import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
 import StudentDataInput from '@/components/admin/StudentDataInput.vue';
+import { createStudents } from '@/apis/services/students';
+import type { Student } from '@/types/students.interface';
 
 import { ref } from 'vue';
 import type { Ref } from 'vue';
-
-interface Student {
-    grade: string;
-    room: string;
-    number: string;
-    name: string;
-    sex: number;
-    birthDate: string;
-    password: string;
-}
 
 const students: Ref<Student[]> = ref([
     {
@@ -55,12 +47,6 @@ const handleDeleteClick = function deleteStudent(index: number) {
         return idx !== index;
     });
 };
-
-const handleSubmit = function createStudent() {
-    students.value.forEach((student) => {
-        console.log(student.grade);
-    });
-};
 </script>
 
 <template>
@@ -77,7 +63,7 @@ const handleSubmit = function createStudent() {
             color="admin-primary"
             size="md"
             emitMessage="submit"
-            @submit="handleSubmit" />
+            @submit="() => createStudents(students)" />
 
         <section>
             <table class="admin-student__table">
