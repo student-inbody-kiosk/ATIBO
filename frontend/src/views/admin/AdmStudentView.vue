@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import TheInput from '@/components/common/TheInput.vue';
 import TheButton from '@/components/common/TheButton.vue';
+import StudentLabel from '@/components/admin/StudentLabel.vue';
 
 import { ref } from 'vue';
 
@@ -25,9 +26,9 @@ const handleSubmit = function searchStudents() {
 </script>
 
 <template>
-    <div>
-        <h2>학생 관리</h2>
-        <section>
+    <div class="admin-student">
+        <div class="admin-student__header">학생 관리</div>
+        <section class="admin-student__searchbar">
             <TheInput
                 label="학년"
                 type="text"
@@ -59,7 +60,21 @@ const handleSubmit = function searchStudents() {
                 emitMessage="submit"
                 @submit="handleSubmit" />
         </section>
+        <section>
+            <table class="admin-student__table">
+                <StudentLabel />
+            </table>
+        </section>
     </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.admin-student__searchbar {
+    display: flex;
+}
+
+.admin-student__table {
+    background-color: $gray-opacity;
+    width: 100%;
+}
+</style>
