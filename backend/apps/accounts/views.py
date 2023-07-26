@@ -31,7 +31,7 @@ class AccountAPIView(GenericAPIView, CreateModelMixin, RetrieveModelMixin, Destr
         return self.request.user
     
     def get_authenticators(self):
-        if self.request and self.request.method == 'POST':
+        if self.request and self.request.method.lower() == 'post':
             return []  # Empty list for authentication on POST method
         else:
             return [auth() for auth in self.authentication_classes]
