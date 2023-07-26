@@ -113,17 +113,19 @@ const dummy = [
         <section>
             <table class="admin-student__table">
                 <StudentDataLabel />
-                <StudentData
-                    v-for="(data, index) in dummy"
-                    :key="data.id"
-                    :id="index + 1"
-                    :grade="data.grade"
-                    :room="data.room"
-                    :number="data.number"
-                    :name="data.name"
-                    :sex="data.sex"
-                    :birthDate="data.birthDate"
-                    :password="data.password" />
+                <tbody>
+                    <StudentData
+                        v-for="(data, index) in dummy"
+                        :key="data.id"
+                        :id="index + 1"
+                        :grade="data.grade"
+                        :room="data.room"
+                        :number="data.number"
+                        :name="data.name"
+                        :sex="data.sex"
+                        :birthDate="data.birthDate"
+                        :password="data.password" />
+                </tbody>
             </table>
         </section>
     </div>

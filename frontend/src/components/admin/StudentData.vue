@@ -12,18 +12,16 @@ defineProps<{
 </script>
 
 <template>
-    <tbody>
-        <tr class="student-data">
-            <td class="student-data__content">{{ id }}</td>
-            <td class="student-data__content">{{ grade }}</td>
-            <td class="student-data__content">{{ room }}</td>
-            <td class="student-data__content">{{ number }}</td>
-            <td class="student-data__content">{{ name }}</td>
-            <td class="student-data__content">{{ sex }}</td>
-            <td class="student-data__content">{{ birthDate }}</td>
-            <td class="student-data__content">{{ password }}</td>
-        </tr>
-    </tbody>
+    <tr class="student-data">
+        <td class="student-data__content">{{ id }}</td>
+        <td class="student-data__content">{{ grade }}</td>
+        <td class="student-data__content">{{ room }}</td>
+        <td class="student-data__content">{{ number }}</td>
+        <td class="student-data__content">{{ name }}</td>
+        <td class="student-data__content">{{ sex }}</td>
+        <td class="student-data__content">{{ birthDate }}</td>
+        <td class="student-data__content">{{ password }}</td>
+    </tr>
 </template>
 
 <style lang="scss" scoped>

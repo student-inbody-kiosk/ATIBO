@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
     label?: string;
-    type: 'text' | 'number' | 'password';
+    type: 'text' | 'number' | 'password' | 'date';
     refer: string;
     value: number | string;
     min?: number;
