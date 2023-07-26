@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import TheInput from '@/components/common/TheInput.vue';
 import TheButton from '@/components/common/TheButton.vue';
-import StudentLabel from '@/components/admin/StudentLabel.vue';
-import StudentLabelData from '@/components/admin/StudentLabelData.vue';
+import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
+import StudentData from '@/components/admin/StudentData.vue';
 
 import { ref } from 'vue';
 
 import { getStudents } from '@/apis/services/students';
 
-const studentLabel = ref<HTMLDivElement>();
 const grade = ref('');
 const room = ref('');
 const name = ref('');
@@ -104,11 +103,17 @@ const dummy = [
                 size="md"
                 emitMessage="submit"
                 @submit="handleSubmit" />
+            <TheButton
+                text="+ 학생 추가"
+                color="green"
+                size="md"
+                emitMessage="go-create"
+                @go-create="$router.push({ name: 'admin-student-create' })" />
         </section>
         <section>
             <table class="admin-student__table">
-                <StudentLabel />
-                <StudentLabelData
+                <StudentDataLabel />
+                <StudentData
                     v-for="(data, index) in dummy"
                     :key="data.id"
                     :id="index + 1"
