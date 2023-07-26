@@ -49,6 +49,7 @@ axiosInstance.interceptors.response.use(
                     })
                     .catch((error) => {
                         alert('다시 로그인해주세요.');
+                        router.push({ name: 'admin-index' });
                         return Promise.reject(error);
                     });
             } else {
