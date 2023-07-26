@@ -2,11 +2,13 @@
 import TheInput from '@/components/common/TheInput.vue';
 import TheButton from '@/components/common/TheButton.vue';
 import StudentLabel from '@/components/admin/StudentLabel.vue';
+import StudentLabelData from '@/components/admin/StudentLabelData.vue';
 
 import { ref } from 'vue';
 
 import { getStudents } from '@/apis/services/students';
 
+const studentLabel = ref<HTMLDivElement>();
 const grade = ref('');
 const room = ref('');
 const name = ref('');
@@ -23,6 +25,49 @@ const handleSubmit = function searchStudents() {
 
     console.log(grade.value, room.value, number.value, name.value);
 };
+
+const dummy = [
+    {
+        id: '4d9f1679-9c87-4ece-8f90-863002780b4b',
+        name: '이병호',
+        grade: 1,
+        room: 1,
+        number: 1,
+        sex: '남',
+        password: '0000',
+        birthDate: '2023-07-24',
+    },
+    {
+        id: '4d9f1679-9c87-4ece-8f90-863002780b4b',
+        name: '정예지',
+        grade: 1,
+        room: 1,
+        number: 1,
+        sex: '여',
+        password: '0000',
+        birthDate: '2023-04-01',
+    },
+    {
+        id: '4d9f1679-9c87-4ece-8f90-863002780b4b',
+        name: '정예지',
+        grade: 1,
+        room: 1,
+        number: 1,
+        sex: '여',
+        password: '0000',
+        birthDate: '2023-04-01',
+    },
+    {
+        id: '4d9f1679-9c87-4ece-8f90-863002780b4b',
+        name: '정예지',
+        grade: 1,
+        room: 1,
+        number: 1,
+        sex: '여',
+        password: '0000',
+        birthDate: '2023-04-01',
+    },
+];
 </script>
 
 <template>
@@ -63,6 +108,17 @@ const handleSubmit = function searchStudents() {
         <section>
             <table class="admin-student__table">
                 <StudentLabel />
+                <StudentLabelData
+                    v-for="(data, index) in dummy"
+                    :key="data.id"
+                    :id="index + 1"
+                    :grade="data.grade"
+                    :room="data.room"
+                    :number="data.number"
+                    :name="data.name"
+                    :sex="data.sex"
+                    :birthDate="data.birthDate"
+                    :password="data.password" />
             </table>
         </section>
     </div>
@@ -74,7 +130,6 @@ const handleSubmit = function searchStudents() {
 }
 
 .admin-student__table {
-    background-color: $gray-opacity;
     width: 100%;
 }
 </style>
