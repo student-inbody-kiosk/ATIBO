@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import TheInput from '@/components/common/TheInput.vue';
 import TheButton from '@/components/common/TheButton.vue';
+import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
+import StudentData from '@/components/admin/StudentData.vue';
 
 import { ref } from 'vue';
 
@@ -22,12 +24,55 @@ const handleSubmit = function searchStudents() {
 
     console.log(grade.value, room.value, number.value, name.value);
 };
+
+const dummy = [
+    {
+        id: '4d9f1679-9c87-4ece-8f90-863002780b4b',
+        name: '이병호',
+        grade: 1,
+        room: 1,
+        number: 1,
+        sex: '남',
+        password: '0000',
+        birthDate: '2023-07-24',
+    },
+    {
+        id: '4d9f1679-9c87-4ece-8f90-863002780b4b',
+        name: '정예지',
+        grade: 1,
+        room: 1,
+        number: 1,
+        sex: '여',
+        password: '0000',
+        birthDate: '2023-04-01',
+    },
+    {
+        id: '4d9f1679-9c87-4ece-8f90-863002780b4b',
+        name: '정예지',
+        grade: 1,
+        room: 1,
+        number: 1,
+        sex: '여',
+        password: '0000',
+        birthDate: '2023-04-01',
+    },
+    {
+        id: '4d9f1679-9c87-4ece-8f90-863002780b4b',
+        name: '정예지',
+        grade: 1,
+        room: 1,
+        number: 1,
+        sex: '여',
+        password: '0000',
+        birthDate: '2023-04-01',
+    },
+];
 </script>
 
 <template>
-    <div>
-        <h2>학생 관리</h2>
-        <section>
+    <div class="admin-student">
+        <div class="admin-student__header">학생 관리</div>
+        <section class="admin-student__searchbar">
             <TheInput
                 label="학년"
                 type="text"
@@ -58,8 +103,38 @@ const handleSubmit = function searchStudents() {
                 size="md"
                 emitMessage="submit"
                 @submit="handleSubmit" />
+            <TheButton
+                text="+ 학생 추가"
+                color="green"
+                size="md"
+                emitMessage="go-create"
+                @go-create="$router.push({ name: 'admin-student-create' })" />
+        </section>
+        <section>
+            <table class="admin-student__table">
+                <StudentDataLabel />
+                <StudentData
+                    v-for="(data, index) in dummy"
+                    :key="data.id"
+                    :id="index + 1"
+                    :grade="data.grade"
+                    :room="data.room"
+                    :number="data.number"
+                    :name="data.name"
+                    :sex="data.sex"
+                    :birthDate="data.birthDate"
+                    :password="data.password" />
+            </table>
         </section>
     </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.admin-student__searchbar {
+    display: flex;
+}
+
+.admin-student__table {
+    width: 100%;
+}
+</style>

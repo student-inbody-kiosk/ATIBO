@@ -32,33 +32,33 @@ axiosInstance.interceptors.response.use(
         console.log('ERROR >>>', error.response.data);
         const originalRequest = error.config;
         // Unauthorized : request a new accessToken
-        if (
-            error.response.status === 401 &&
-            error.response.data?.code === 'token_not_valid'
-        ) {
-            const { refreshToken, updateAccessToken } = useAuthStore();
-            axios
-                .post('http://127.0.0.1:8000/api/accounts/token/refresh', {
-                    username: 'admin',
-                    refreshToken,
-                })
-                .then((res) => {
-                    updateAccessToken(res.data?.accessToken);
-                    originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
-                    return axiosInstance(originalRequest);
-                })
-                .catch((error) => {
-                    // request relogin
-                    localStorage.removeItem('auth');
-                    alert('다시 로그인해주세요.');
-                    // redirect to index page based on the parent route
-                    const currentRoute =
-                        router.currentRoute.value?.matched[0]?.name;
-                    currentRoute === 'admin'
-                        ? router.push({ name: 'admin-index' })
-                        : router.push({ name: 'kioks-index' });
-                    return Promise.reject(error);
-                });
+        const { refreshToken, updateAccessToken } = useAuthStore();
+
+        if (error.response.status === 401) {
+            if (refreshToken.length) {
+                axios
+                    .post('http://127.0.0.1:8000/api/accounts/token/refresh/', {
+                        username: 'admin',
+                        refreshToken,
+                    })
+                    .then((res) => {
+                        updateAccessToken(res.data?.accessToken);
+                        originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
+                        return axiosInstance(originalRequest);
+                    })
+                    .catch((error) => {
+                        alert('다시 로그인해주세요.');
+                        // redirect to index page based on the parent route
+                        // const currentRoute =
+                        //     router.currentRoute.value?.matched[0]?.name;
+                        // currentRoute === 'admin'
+                        //     ? router.push({ name: 'admin-index' })
+                        //     : router.push({ name: 'kioks-index' });
+                        return Promise.reject(error);
+                    });
+            } else {
+                router.push({ name: 'kiosk-index' });
+            }
         }
 
         return Promise.reject(error);
