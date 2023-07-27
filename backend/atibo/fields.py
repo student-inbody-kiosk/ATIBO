@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.db import models
+from django.db.models.fields.files import ImageFieldFile
 
 
 class TinyIntegerField(models.SmallIntegerField):
@@ -7,6 +9,7 @@ class TinyIntegerField(models.SmallIntegerField):
             return "tinyint"
         else:
             return super(TinyIntegerField, self).db_type(connection)
+
 
 class PositiveTinyIntegerField(models.PositiveSmallIntegerField):
     def db_type(self, connection):

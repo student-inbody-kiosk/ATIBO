@@ -1,10 +1,16 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 
+
+# Allow only POST method
+class ReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        return request.method in SAFE_METHODS
+    
 
 # Allow only POST method
 class CreateOnly(BasePermission):
     def has_permission(self, request, view):
-        return request.method.upper() == 'POST'
+        return request.method.lower() == 'post'
 
 
 # Allow only admin user

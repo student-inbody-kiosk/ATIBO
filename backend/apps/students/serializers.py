@@ -4,16 +4,13 @@ from datetime import date, datetime, timedelta
 
 from django.conf import settings
 from django.db.utils import IntegrityError
-from django.http.response import Http404
-from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
-from drf_spectacular.utils import extend_schema_serializer
 from rest_framework import status, serializers
 
 from atibo.exceptions import DetailException
-from atibo.regexes import student_password_regex
-from atibo.utils.datetime import datetime_to_date_time
+from atibo.regexes import STUDENT_PASSWORD_REGEX
+from atibo.utils.datetime_converter import datetime_to_date_time
 from .models import Student, Attendance, Inbody
 
 
@@ -92,7 +89,7 @@ class StudentPasswordChangeSerializer(serializers.Serializer):
         return value
     
     def validate_new_password(self, value):
-        if not re.compile(student_password_regex).match(value):
+        if not re.compile(STUDENT_PASSWORD_REGEX).match(value):
             raise serializers.ValidationError(_('Password must be a 4 digit number'), 'invalid_old_password')
         return value
     
@@ -118,21 +115,11 @@ class AttendanceSerializer(serializers.ModelSerializer):
         fields = ['id', 'date_attended']
         read_only_fields = ['id', 'date_attended']
 
-    def create(self, validated_data):
-        student = validated_data['student']
-
-        # Attendance Check can be repeated within 30min
-        attendance =  Attendance.objects.filter(student=student).order_by('-date_attended')[:1]
-
-        if attendance:
-            attendance = attendance[0]
-            tz = pytz.timezone(settings.TIME_ZONE)
-            time_interval = datetime.now(tz=tz) - attendance.date_attended
-            if time_interval < timedelta(minutes=30):
-                time_interval_min = int(time_interval.total_seconds() / 60)
-                raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'Attendance already checked {time_interval_min} minutes ago. Attendance check is available every 30 minutes'), 'too_fast_attendance')
-        
-        return super().create(validated_data)
+    # def to_internal_value(self, data):
+    #     ret = super().to_internal_value(data)
+    #     tz = pytz.timezone(settings.TIME_ZONE)
+    #     ret['date_attended'] = datetime.now(tz = tz )
+    #     return ret
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
@@ -142,6 +129,24 @@ class AttendanceSerializer(serializers.ModelSerializer):
         ret['date_attended'] = datetime_to_date_time(date_attended)
 
         return ret
+    
+    def create(self, validated_data):
+        student = validated_data['student']
+
+        # Attendance Check can be repeated within 30min
+        attendance =  Attendance.objects.filter(student=student).order_by('-date_attended')[:1]
+
+        if attendance:
+            attendance = attendance[0]
+            tz = pytz.timezone(settings.TIME_ZONE)
+            now = datetime.now(tz=tz)
+            time_interval = now - attendance.date_attended
+            if time_interval < timedelta(minutes=30):
+                time_interval_min = int(time_interval.total_seconds() / 60)
+                raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'Attendance already checked {time_interval_min} minutes ago. Attendance check is available every 30 minutes'), 'too_fast_attendance')
+            validated_data['date_attended'] = now
+
+        return super().create(validated_data)
 
 
 class StudentAttendanceSerializer(serializers.ModelSerializer):

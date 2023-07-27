@@ -1,3 +1,22 @@
-from django.shortcuts import render
+from django.utils.translation import gettext_lazy as _
 
-# Create your views here.
+from rest_framework.generics import RetrieveUpdateAPIView
+
+from atibo.permissions import ReadOnly, IsAdminUser
+from .serializers import SchoolSerializer
+from .models import School
+
+
+class SchoolAPIView(RetrieveUpdateAPIView):
+    http_method_names = ["get", "put"]
+    permission_classes = [ReadOnly | IsAdminUser]
+    serializer_class = SchoolSerializer
+
+    def get_object(self):
+        return School.objects.get(id=1)
+    
+    def get_authenticators(self):
+        if self.request and self.request.method.lower() == 'get':
+            return []  # Empty list for authentication on get  method
+        else:
+            return [auth() for auth in self.authentication_classes]
