@@ -25,6 +25,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 urlpatterns = [
     # django admin page
     path('django/admin/', admin.site.urls),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 
     # applications
     path('api/accounts/', include('accounts.urls')),

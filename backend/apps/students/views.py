@@ -341,9 +341,7 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
     def destroy(self, request, *args, **kwargs):
         inbody_ids = request.data.get('ids')
         Inbody.objects.filter(id__in=inbody_ids).delete()
-
         return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
-
 
 """
 Create dummy data. Only for superuser

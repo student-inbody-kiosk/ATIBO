@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib import admin
 
-# from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from ckeditor.widgets import CKEditorWidget
 
 from .models import Equipment, Image
@@ -18,5 +17,5 @@ class EquipmentAdmin(admin.ModelAdmin):
     form = EquipmentAdminForm
 
 @admin.register(Image)
-class ImagetAdmin(admin.ModelAdmin):
+class ImageAdmin(admin.ModelAdmin):
     pass

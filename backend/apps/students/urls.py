@@ -18,5 +18,5 @@ urlpatterns = [
     path('inbody/<int:pk>/', InbodyDetailAPIView.as_view(), name='inbody_detail'),
     re_path(r'inbody/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})/', StudentInbodyAPIView.as_view(), name='student_inbody_list'),
     path('inbody/list/', InbodyListAPIView.as_view(), name='inbody_list'),
-    path('dummy/', CreateDummyAPIView.as_view(), name='create_dummy'),
+    # path('dummy/', CreateDummyAPIView.as_view(), name='create_dummy'),
 ]

@@ -91,7 +91,6 @@ def get_date_from_query_params(query_params, limit_period_days = 730):
     start_date = query_params.get('start_date', '2023-01-01')
     end_date = query_params.get('end_date', datetime.today().strftime('%Y-%m-%d'))
 
-    # Handle the invalid param
     if not re.compile(DATE_REGEX).match(start_date) or not re.compile(DATE_REGEX).match(end_date):
         raise DetailException(status.HTTP_400_BAD_REQUEST, _('Check the date format'), 'invalid_name')
 
