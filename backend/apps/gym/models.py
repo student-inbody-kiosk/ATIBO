@@ -14,9 +14,4 @@ class Equipment(models.Model):
 
 class Image(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
-    image = models.ImageField(blank=True, upload_to=gym_equipment_directory_path)
-
-    class Meta:
-        indexes = [
-            models.Index(fields=['equipment'], name='image_equipment_idx'),
-        ]
+    image = models.ImageField(blank=True, upload_to=gym_equipment_directory_path, max_length=255)

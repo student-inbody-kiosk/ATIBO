@@ -1,10 +1,7 @@
-from django.conf import settings
-from django.db.utils import IntegrityError
 from django.utils.translation import gettext_lazy as _
 
-from rest_framework import status, serializers
+from rest_framework import serializers
 
-from atibo.exceptions import DetailException
 from .models import Equipment, Image
 
 

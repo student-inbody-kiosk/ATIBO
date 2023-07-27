@@ -1,8 +1,8 @@
-from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth import get_user_model
 from django.core.mail import EmailMessage
 from django.utils.translation import gettext_lazy as _
 
-from drf_spectacular.utils import extend_schema, OpenApiParameter, inline_serializer
+from drf_spectacular.utils import extend_schema, inline_serializer
 from rest_framework import status, serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -14,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 
 from atibo.permissions import CreateOnly, IsAdminUser
-from atibo.utils.password import generate_random_password
+from atibo.utils.password_generator import generate_random_password
 from .serializers import UserSerializer, LoginSerializer, UsernameCheckSerializer, EmailChangeSerializer, PasswordChangeSerializer, PasswordResetSerializer, TokenRefreshSerializer, AdminSerializer
 
 
