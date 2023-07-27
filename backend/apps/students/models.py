@@ -33,7 +33,7 @@ class Student(models.Model):
 
 class Attendance(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    date_attended = models.DateTimeField(auto_now_add=True)
+    date_attended = models.DateTimeField(auto_now_add=False)
 
     class Meta:
         indexes = [

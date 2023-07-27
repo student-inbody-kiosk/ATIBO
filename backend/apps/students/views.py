@@ -1,32 +1,25 @@
-import re
-import pytz
-from datetime import date, datetime, timedelta
-from django.utils import timezone
+from datetime import date
 
-from django.conf import settings
 from django.db import transaction
-from django.db.models import Q, Prefetch
+from django.db.models import Prefetch
 from django.http.response import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
 from drf_spectacular.utils import extend_schema, OpenApiParameter, inline_serializer
 from rest_framework import status, serializers
-from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.mixins import CreateModelMixin,ListModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.mixins import CreateModelMixin,ListModelMixin, UpdateModelMixin, DestroyModelMixin
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from atibo.authentications import StudentJWTAuthentication
 from atibo.exceptions import DetailException
 from atibo.permissions import IsUser, IsTheStudent, IsOwner
-from atibo.regexes import KOREAN_NAME_REGEX, DATE_REGEX
 from atibo.utils.custom_token import encode
+from atibo.utils.dummy_data import generateStudentDummyData
 from .models import Student, Attendance, Inbody
 from .serializers import StudentAuthSerializer, StudentCheckSerializer, StudentDetailSerializer, StudentPasswordChangeSerializer, AttendanceSerializer, StudentAttendanceSerializer, InbodySerializer, StudentInbodySerializer
 from .utils import get_student_object_from_path_variables, get_student_queryset_from_query_params, get_date_from_path_variables, get_date_from_query_params
@@ -224,7 +217,7 @@ class StudentAttendanceAPIView(ListAPIView):
     # Create dynamic query according to parameters
     def get_queryset(self):
         student_queryset = get_student_queryset_from_query_params(self.request.query_params)
-        start_date, end_date = get_date_from_query_params(self.kwargs)
+        start_date, end_date = get_date_from_path_variables(self.kwargs)
         return student_queryset.prefetch_related(Prefetch('attendance_set', queryset=Attendance.objects.filter(date_attended__gte=start_date, date_attended__lte=end_date)))
 
 
@@ -236,7 +229,7 @@ class InbodyStudentAPIView(ListCreateAPIView):
     # Create dynamic query according to parameters
     def get_queryset(self):
         student = get_student_object_from_path_variables(self.kwargs)
-        start_date, end_date = get_student_queryset_from_query_params(self.request.query_parmas)
+        start_date, end_date = get_date_from_query_params(self.request.query_params)
         return Inbody.objects.filter(student=student, test_date__gte=start_date, test_date__lte=end_date)
     
     @extend_schema(
@@ -348,5 +341,17 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
     def destroy(self, request, *args, **kwargs):
         inbody_ids = request.data.get('ids')
         Inbody.objects.filter(id__in=inbody_ids).delete()
-
         return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
+
+"""
+Create dummy data. Only for superuser
+"""
+class CreateDummyAPIView(APIView):
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        print('Start Generating Dummy')
+        generateStudentDummyData()
+        return Response(status=status.HTTP_201_CREATED)

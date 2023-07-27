@@ -31,7 +31,7 @@ urlpatterns = [
     path('api/accounts/', include('accounts.urls')),
     path('api/students/', include('students.urls')),
     path('api/school/', include('school.urls')),
-    # path('api/gym/', include('gym.urls')),
+    path('api/gym/', include('gym.urls')),
 
     # drf_spectacular
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
