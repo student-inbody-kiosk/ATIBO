@@ -1,7 +1,8 @@
 export interface Student {
-    grade: string;
-    room: string;
-    number: string;
+    id: string;
+    grade: number;
+    room: number;
+    number: number;
     name: string;
     sex: number;
     birthDate: string;

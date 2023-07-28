@@ -8,10 +8,14 @@ import { ref } from 'vue';
 
 import { getStudents } from '@/apis/services/students';
 
+import type { Ref } from 'vue';
+import type { Student } from '@/apis/types/students.interface';
+
 const grade = ref('');
 const room = ref('');
 const name = ref('');
 const number = ref('');
+const students: Ref<Student[]> = ref([]);
 
 const handleSubmit = function searchStudents() {
     // TODO: check regular expression
@@ -20,53 +24,10 @@ const handleSubmit = function searchStudents() {
         parseInt(room.value),
         parseInt(number.value),
         name.value
-    );
-
-    console.log(grade.value, room.value, number.value, name.value);
+    ).then((res) => {
+        students.value = res?.data;
+    });
 };
-
-const dummy = [
-    {
-        id: '4d9f1679-9c87-4ece-8f90-863002780b4b',
-        name: '이병호',
-        grade: 1,
-        room: 1,
-        number: 1,
-        sex: 1,
-        password: '0000',
-        birthDate: '2023-07-24',
-    },
-    {
-        id: '4d9f1679-9c87-4ece-8f90-863002780b4b',
-        name: '정예지',
-        grade: 1,
-        room: 1,
-        number: 1,
-        sex: 2,
-        password: '0000',
-        birthDate: '2023-04-01',
-    },
-    {
-        id: '4d9f1679-9c87-4ece-8f90-863002780b4b',
-        name: '정예지',
-        grade: 1,
-        room: 1,
-        number: 1,
-        sex: 2,
-        password: '0000',
-        birthDate: '2023-04-01',
-    },
-    {
-        id: '4d9f1679-9c87-4ece-8f90-863002780b4b',
-        name: '정예지',
-        grade: 1,
-        room: 1,
-        number: 1,
-        sex: 2,
-        password: '0000',
-        birthDate: '2023-04-01',
-    },
-];
 </script>
 
 <template>
@@ -110,12 +71,12 @@ const dummy = [
                 emitMessage="go-create"
                 @go-create="$router.push({ name: 'admin-student-create' })" />
         </section>
-        <section>
-            <table class="admin-student__table">
-                <StudentDataLabel />
-                <tbody>
+        <section class="admin-student-list">
+            <table class="admin-student-list__table">
+                <StudentDataLabel class="admin-student-list__table__head" />
+                <tbody class="admin-student-list__table__body">
                     <StudentData
-                        v-for="(data, index) in dummy"
+                        v-for="(data, index) in students"
                         :key="data.id"
                         :id="index + 1"
                         :grade="data.grade"
@@ -136,7 +97,20 @@ const dummy = [
     display: flex;
 }
 
-.admin-student__table {
+.admin-student-list {
+    height: 85vh;
+    overflow: auto;
+}
+
+.admin-student-list__table {
     width: 100%;
+}
+.admin-student-list__table__head {
+    tr,
+    th {
+        @include z-index(label);
+        position: sticky;
+        top: 0;
+    }
 }
 </style>

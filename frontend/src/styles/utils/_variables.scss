@@ -4,6 +4,7 @@ $kiosk-secondary: #ffe8d2;
 
 $admin-primary: #6396c3;
 $admin-secondary: #acc4da;
+$admin-tertiary: #c2d2e0;
 
 $white: #ffffff;
 $black: #222222;
@@ -21,4 +22,5 @@ $breakpoint-kiosk: 1024px;
 $z-index: (
     base: 0,
     modal: 999,
+    label: 1,
 );

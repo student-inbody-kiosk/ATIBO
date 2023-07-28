@@ -1,5 +1,5 @@
 import apiRequest from '@/apis/axiosInterceptors';
-import type { Student } from '@/types/students.interface';
+// import type { Student } from '@/types/students.interface';
 
 export async function getStudents(
     grade?: number,
@@ -7,19 +7,23 @@ export async function getStudents(
     number?: number,
     name?: string
 ) {
-    return await apiRequest
-        .get('/students/', {
-            params: {
-                grade,
-                room,
-                number,
-                name,
-            },
-        })
-        .then((res) => console.log(res.data));
+    return await apiRequest.get('/students/', {
+        params: {
+            grade,
+            room,
+            number,
+            name,
+        },
+    });
 }
 
-export async function createStudents(students: Student[]) {
+// export async function createStudents(students: Student[]) {
+//     return await apiRequest
+//         .post('/students/', students)
+//         .then(() => console.log('SUCCESS'));
+// }
+
+export async function createStudents(students: []) {
     return await apiRequest
         .post('/students/', students)
         .then(() => console.log('SUCCESS'));

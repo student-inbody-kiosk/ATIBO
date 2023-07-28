@@ -17,7 +17,7 @@
 
 <style lang="scss" scoped>
 .student-data-label {
-    background-color: $gray-opacity;
+    background-color: $admin-tertiary;
 }
 
 .student-data-label__content {
