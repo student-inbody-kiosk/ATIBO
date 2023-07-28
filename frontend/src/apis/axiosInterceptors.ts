@@ -3,7 +3,7 @@ import router from '@/router/index';
 import { useAuthStore } from '@/stores/auth.store';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/',
+    baseURL: import.meta.env.VITE_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -36,24 +36,25 @@ axiosInstance.interceptors.response.use(
 
         if (error.response.status === 401) {
             if (refreshToken.length) {
-                axios
-                    .post('http://127.0.0.1:8000/api/accounts/token/refresh/', {
-                        username: 'admin',
-                        refreshToken,
-                    })
+                return axios
+                    .post(
+                        `${
+                            import.meta.env.VITE_BASE_URL
+                        }accounts/token/refresh/`,
+                        {
+                            username: 'admin',
+                            refreshToken,
+                        }
+                    )
                     .then((res) => {
+                        console.log(res);
                         updateAccessToken(res.data?.accessToken);
                         originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
                         return axiosInstance(originalRequest);
                     })
                     .catch((error) => {
                         alert('다시 로그인해주세요.');
-                        // redirect to index page based on the parent route
-                        // const currentRoute =
-                        //     router.currentRoute.value?.matched[0]?.name;
-                        // currentRoute === 'admin'
-                        //     ? router.push({ name: 'admin-index' })
-                        //     : router.push({ name: 'kioks-index' });
+                        router.push({ name: 'admin-index' });
                         return Promise.reject(error);
                     });
             } else {

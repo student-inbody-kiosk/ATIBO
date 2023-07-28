@@ -31,7 +31,7 @@ body {
 
 .admin-container__main {
     display: flex;
-    align-items: center;
+    // align-items: center;
     justify-content: center;
     background-color: $admin-secondary;
 }
