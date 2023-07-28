@@ -3,7 +3,7 @@ import router from '@/router/index';
 import { useAuthStore } from '@/stores/auth.store';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://127.0.0.1:8000/api/',
+    baseURL: import.meta.env.VITE_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -37,10 +37,15 @@ axiosInstance.interceptors.response.use(
         if (error.response.status === 401) {
             if (refreshToken.length) {
                 return axios
-                    .post('http://127.0.0.1:8000/api/accounts/token/refresh/', {
-                        username: 'admin',
-                        refreshToken,
-                    })
+                    .post(
+                        `${
+                            import.meta.env.VITE_BASE_URL
+                        }accounts/token/refresh/`,
+                        {
+                            username: 'admin',
+                            refreshToken,
+                        }
+                    )
                     .then((res) => {
                         console.log(res);
                         updateAccessToken(res.data?.accessToken);
