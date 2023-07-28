@@ -1,12 +1,15 @@
 <script setup lang="ts">
-defineProps<{
-    label?: string;
-    type: 'text' | 'number' | 'password' | 'date';
-    refer: string;
-    value: number | string;
-    min?: number;
-    max?: number;
-}>();
+withDefaults(
+    defineProps<{
+        label?: string;
+        type?: 'text' | 'number' | 'password' | 'date' | 'checkbox';
+        refer: string;
+        value?: number | string;
+        min?: number;
+        max?: number;
+    }>(),
+    { type: 'text' }
+);
 </script>
 
 <template>

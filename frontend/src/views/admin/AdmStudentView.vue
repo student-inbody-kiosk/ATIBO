@@ -4,7 +4,7 @@ import TheButton from '@/components/common/TheButton.vue';
 import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
 import StudentData from '@/components/admin/StudentData.vue';
 
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 import { getStudents } from '@/apis/services/students';
 
@@ -16,6 +16,14 @@ const room = ref('');
 const name = ref('');
 const number = ref('');
 const students: Ref<Student[]> = ref([]);
+const query = computed(() => {
+    return {
+        grade: grade.value,
+        room: room.value,
+        number: number.value,
+        name: name.value,
+    };
+});
 
 const handleSubmit = function searchStudents() {
     // TODO: check regular expression
@@ -65,11 +73,22 @@ const handleSubmit = function searchStudents() {
                 emitMessage="submit"
                 @submit="handleSubmit" />
             <TheButton
-                text="+ 학생 추가"
+                text="학생 추가"
                 color="green"
                 size="md"
-                emitMessage="go-create"
-                @go-create="$router.push({ name: 'admin-student-create' })" />
+                emitMessage="create"
+                @create="
+                    $router.push({ name: 'admin-student-create', query })
+                " />
+            <TheButton
+                v-if="students.length"
+                text="학생 삭제"
+                color="red"
+                size="md"
+                emitMessage="delete"
+                @delete="
+                    $router.push({ name: 'admin-student-delete', query })
+                " />
         </section>
         <section class="admin-student-list">
             <table class="admin-student-list__table">
@@ -78,7 +97,7 @@ const handleSubmit = function searchStudents() {
                     <StudentData
                         v-for="(data, index) in students"
                         :key="data.id"
-                        :id="index + 1"
+                        :id="index"
                         :grade="data.grade"
                         :room="data.room"
                         :number="data.number"

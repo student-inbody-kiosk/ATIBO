@@ -1,19 +1,31 @@
 <script setup lang="ts">
-defineProps<{
-    id: number;
-    grade: number;
-    room: number;
-    number: number;
-    name: string;
-    sex: number;
-    birthDate: string;
-    password: string;
-}>();
+withDefaults(
+    defineProps<{
+        id: number;
+        grade: number;
+        room: number;
+        number: number;
+        name: string;
+        sex: number;
+        birthDate: string;
+        password: string;
+        isDelete?: boolean;
+    }>(),
+    { isDelete: false }
+);
+
+import TheInput from '../common/TheInput.vue';
 </script>
 
 <template>
     <tr class="student-data">
-        <td class="student-data__content">{{ id }}</td>
+        <td v-if="!isDelete" class="student-data__content">{{ id + 1 }}</td>
+        <td v-if="isDelete" class="student-data__content">
+            <TheInput
+                type="checkbox"
+                refer="del"
+                @update-input="$emit('update-input', id)" />
+        </td>
         <td class="student-data__content">{{ grade }}</td>
         <td class="student-data__content">{{ room }}</td>
         <td class="student-data__content">{{ number }}</td>
