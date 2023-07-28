@@ -9,7 +9,7 @@ import { ref, computed } from 'vue';
 import { getStudents } from '@/apis/services/students';
 
 import type { Ref } from 'vue';
-import type { Student } from '@/apis/types/students.interface';
+import type { Student } from '@/types/students.interface';
 
 const grade = ref('');
 const room = ref('');

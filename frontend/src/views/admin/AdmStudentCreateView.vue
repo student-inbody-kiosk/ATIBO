@@ -3,7 +3,7 @@ import TheButton from '@/components/common/TheButton.vue';
 import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
 import StudentDataInput from '@/components/admin/StudentDataInput.vue';
 import { createStudents } from '@/apis/services/students';
-import type { Student } from '@/types/students.interface';
+import type { Student } from '@/types/admin.interface';
 
 import { ref } from 'vue';
 import type { Ref } from 'vue';
