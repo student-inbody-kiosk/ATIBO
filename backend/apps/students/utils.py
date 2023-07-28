@@ -56,12 +56,13 @@ def get_student_queryset_from_query_params(query_params):
         query_filter &= Q(number=int(number))
         # raise DetailException(status.HTTP_400_BAD_REQUEST, _('The number must be a numeric value from 1 to 100'), 'invalid_number')
     if name and re.compile(KOREAN_NAME_REGEX).match(name):
+        params_valid = True
         query_filter &= Q(name=name)
         # raise DetailException(status.HTTP_400_BAD_REQUEST, _('The name must be written in 2-5 Korean characters'), 'invalid_name')
 
     # For prevent large data transferring, constrain the params
     if not params_valid:
-        raise DetailException(status.HTTP_400_BAD_REQUEST, _('You must enter at least one of the following values: Grade, Class, or Number'), 'invalid_params')
+        raise DetailException(status.HTTP_400_BAD_REQUEST, _('You must enter at least one of the following values: Grade, Room, Number, Name'), 'invalid_params')
 
     return Student.objects.filter(query_filter)
 
@@ -78,7 +79,6 @@ def get_date_from_path_variables(variables, limit_period_days = 62):
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
     end_date = timezone.make_aware(end_date, timezone=tz) + timedelta(days=1)
 
-    print('path', start_date, end_date, timedelta(days=limit_period_days))
     # Limit the period
     if end_date - start_date > timedelta(days=limit_period_days):
         raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'Set the period within {limit_period_days} days'), 'invalid_period')
