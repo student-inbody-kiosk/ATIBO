@@ -83,6 +83,21 @@ def get_date_from_path_variables(variables, limit_period_days = 62):
     if end_date - start_date > timedelta(days=limit_period_days):
         raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'Set the period within {limit_period_days} days'), 'invalid_period')
     
+    return start_date, end_date
+
+def get_date_from_month_in_path_variables(variables):
+    # Extract values from path variables
+    year_month = variables['year_month']
+
+    tz = pytz.timezone(settings.TIME_ZONE)
+
+    current_month = datetime.strptime(year_month, '%Y-%m')
+    start_date = current_month.replace(day=1)
+    start_date = timezone.make_aware(start_date, timezone=tz)
+
+    next_month = current_month + timedelta(days=31)
+    end_date = next_month.replace(day=1) - timedelta(days=1)
+    end_date = timezone.make_aware(end_date, timezone=tz)
 
     return start_date, end_date
 
@@ -99,8 +114,9 @@ def get_date_from_query_params(query_params, limit_period_days = 730):
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
     start_date = timezone.make_aware(start_date, timezone=tz)
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
-    end_date = timezone.make_aware(end_date, timezone=tz) + timedelta(days=limit_period_days)
+    end_date = timezone.make_aware(end_date, timezone=tz)
 
+    # # Limit the search time period
     # if end_date - start_date > timedelta(days=limit_period_days):
     #     raise DetailException(status.HTTP_400_BAD_REQUEST, _('Set the period within two months'), 'invalid_period')
 

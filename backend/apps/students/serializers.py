@@ -51,7 +51,7 @@ class StudentAuthSerializer(serializers.ModelSerializer):
     class Meta:
         list_serializer_class = StudentListAuthSerializer
         model = Student
-        fields = '__all__'
+        exclude = ['is_authenticated']
 
     # Since this is constraints, and the default validator isn't set.
     def validate_sex(self, value):
