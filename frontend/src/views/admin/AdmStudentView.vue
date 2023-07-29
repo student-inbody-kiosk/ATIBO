@@ -80,6 +80,15 @@ const handleSubmit = function searchStudents() {
                 @create="$router.push({ name: 'admin-student-create' })" />
             <TheButton
                 v-if="students.length"
+                text="학생 수정"
+                color="admin-primary"
+                size="md"
+                emitMessage="update"
+                @update="
+                    $router.push({ name: 'admin-student-update', query })
+                " />
+            <TheButton
+                v-if="students.length"
                 text="학생 삭제"
                 color="red"
                 size="md"

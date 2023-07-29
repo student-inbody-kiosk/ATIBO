@@ -1,16 +1,20 @@
 <script setup lang="ts">
-const props = defineProps<{
-    index: number;
-    student: {
-        grade: string;
-        room: string;
-        number: string;
-        name: string;
-        sex: number;
-        birthDate: string;
-        password: string;
-    };
-}>();
+const props = withDefaults(
+    defineProps<{
+        index: number;
+        student: {
+            grade: string;
+            room: string;
+            number: string;
+            name: string;
+            sex: number;
+            birthDate: string;
+            password: string;
+        };
+        isCreate?: boolean;
+    }>(),
+    { isCreate: false }
+);
 
 import TheInput from '@/components/common/TheInput.vue';
 import IconButton from '../common/IconButton.vue';
@@ -23,7 +27,9 @@ const sexData = ref(props.student.sex);
 <template>
     <tr>
         <td class="student-data-input__content">
+            <span v-if="!isCreate">{{ index + 1 }}</span>
             <IconButton
+                v-if="isCreate"
                 emitMessage="delete"
                 @delete="() => $emit('delete-student', index)">
                 <template #icon>
@@ -113,6 +119,10 @@ const sexData = ref(props.student.sex);
     padding: 0.2rem;
     border: 0.1rem solid $admin-secondary;
     background-color: $white;
+    text-align: center;
+}
+
+input {
     text-align: center;
 }
 </style>

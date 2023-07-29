@@ -34,7 +34,7 @@ const handleCheckClick = function selectStudent(studentId: string) {
 const handleDeleteClick = function deleteStudent() {
     const ids = Object.keys(deleteList.value);
     deleteStudents(ids).then(() => {
-        router.push({ name: 'admin-student' });
+        router.push({ name: 'admin-student', query: route.query });
     });
 };
 </script>
