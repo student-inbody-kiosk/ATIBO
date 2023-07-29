@@ -5,15 +5,24 @@ import TheButton from '@/components/common/TheButton.vue';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 
+import type { Account } from '@/types/admin.interace';
+import type { AxiosResponse } from 'axios';
+
 import { login } from '@/apis/services/auth';
+import { getAccountInfo } from '@/apis/services/accounts';
+import { useAccountsStore } from '@/stores/accounts.store';
 
 const router = useRouter();
 const username = ref('');
 const password = ref('');
+const { updateAccounts } = useAccountsStore();
 
 const handleLoginSubmit = function submitLogin() {
     login(username.value, password.value).then(() => {
-        router.push({ name: 'admin-main' });
+        getAccountInfo().then((res: AxiosResponse<Account>) => {
+            updateAccounts(res?.data);
+            router.push({ name: 'admin-main' });
+        });
     });
 };
 </script>
