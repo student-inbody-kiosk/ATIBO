@@ -84,7 +84,7 @@ const handleDeleteClick = function deleteStudent() {
 }
 
 .admin-student-list {
-    height: 85vh;
+    height: 40rem;
     overflow: auto;
 }
 

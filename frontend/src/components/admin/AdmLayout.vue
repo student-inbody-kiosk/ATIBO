@@ -26,13 +26,15 @@ body {
     grid-template-rows: min-content 1fr min-content;
     justify-content: center;
     min-height: 100vh;
+    padding: 2rem;
     background-color: $white;
 }
 
 .admin-container__main {
     display: flex;
-    // align-items: center;
+    align-items: center;
     justify-content: center;
+    padding: 2rem;
     background-color: $admin-secondary;
 }
 .admin-container__footer {

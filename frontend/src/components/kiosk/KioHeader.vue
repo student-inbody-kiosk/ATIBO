@@ -25,7 +25,7 @@ defineProps<{
             class="kiosk-header__icon--right"
             text="처음으로"
             emitMessage="routing"
-            @routing="$router.push({ name: 'kiosk' })">
+            @routing="$router.push({ name: 'kiosk-index' })">
             <template #icon>
                 <font-awesome-icon icon="house" />
             </template>

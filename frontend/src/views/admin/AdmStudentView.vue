@@ -9,7 +9,7 @@ import { ref, computed } from 'vue';
 import { getStudents } from '@/apis/services/students';
 
 import type { Ref } from 'vue';
-import type { Student } from '@/apis/types/students.interface';
+import type { Student } from '@/types/students.interface';
 
 const grade = ref('');
 const room = ref('');
@@ -77,9 +77,7 @@ const handleSubmit = function searchStudents() {
                 color="green"
                 size="md"
                 emitMessage="create"
-                @create="
-                    $router.push({ name: 'admin-student-create', query })
-                " />
+                @create="$router.push({ name: 'admin-student-create' })" />
             <TheButton
                 v-if="students.length"
                 text="학생 삭제"
@@ -93,7 +91,7 @@ const handleSubmit = function searchStudents() {
         <section class="admin-student-list">
             <table class="admin-student-list__table">
                 <StudentDataLabel class="admin-student-list__table__head" />
-                <tbody class="admin-student-list__table__body">
+                <tbody>
                     <StudentData
                         v-for="(data, index) in students"
                         :key="data.id"
@@ -111,13 +109,13 @@ const handleSubmit = function searchStudents() {
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .admin-student__searchbar {
     display: flex;
 }
 
 .admin-student-list {
-    height: 85vh;
+    height: 36rem;
     overflow: auto;
 }
 

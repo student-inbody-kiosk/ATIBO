@@ -1,5 +1,5 @@
 import apiRequest from '@/apis/axiosInterceptors';
-import type { Student } from '@/types/students.interface';
+import type { Student } from '@/types/admin.interface';
 
 export async function getStudents(
     grade?: number | null,

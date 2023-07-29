@@ -1,7 +1,6 @@
 import apiRequest from '@/apis/axiosInterceptors';
 import router from '@/router/index';
 import { useAuthStore } from '@/stores/auth.store';
-import { useAccountsStore } from '@/stores/accounts.store';
 
 export async function login(username: string, password: string) {
     return await apiRequest
@@ -13,9 +12,6 @@ export async function login(username: string, password: string) {
             const { updateAccessToken, updateRefreshToken } = useAuthStore();
             updateAccessToken(res.data.accessToken);
             updateRefreshToken(res.data.refreshToken);
-
-            const { updateAccounts } = useAccountsStore();
-            updateAccounts(res.data);
         });
 }
 
