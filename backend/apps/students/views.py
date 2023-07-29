@@ -22,10 +22,10 @@ from atibo.utils.custom_token import encode
 from atibo.utils.dummy_data import generateStudentDummyData
 from .models import Student, Attendance, Inbody
 from .serializers import StudentAuthSerializer, StudentCheckSerializer, StudentDetailSerializer, StudentPasswordChangeSerializer, AttendanceSerializer, StudentAttendanceSerializer, InbodySerializer, StudentInbodySerializer
-from .utils import get_student_object_from_path_variables, get_student_queryset_from_query_params, get_date_from_path_variables, get_date_from_query_params
+from .utils import get_student_object_from_path_variables, get_student_queryset_from_query_params, get_date_from_path_variables, get_date_from_query_params, get_date_from_month_in_path_variables
 
-class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin):
-    http_method_names = ["post", "get", "put", "patch", "delete"]
+class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, UpdateModelMixin):
+    http_method_names = ["post", "get", "put", "patch"] # patch is for multiple deletion
     permission_classes = [IsAuthenticated]
     serializer_class = StudentAuthSerializer
     queryset = Student.objects.all()
@@ -66,6 +66,7 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
     
+    # Multiple delete
     @extend_schema(
         request=inline_serializer(
             name="DeleteStudentSerializer",
@@ -75,9 +76,6 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
         ),
     )
     def patch(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
-    
-    def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     
     # Multiple update
@@ -217,7 +215,7 @@ class StudentAttendanceAPIView(ListAPIView):
     # Create dynamic query according to parameters
     def get_queryset(self):
         student_queryset = get_student_queryset_from_query_params(self.request.query_params)
-        start_date, end_date = get_date_from_path_variables(self.kwargs)
+        start_date, end_date = get_date_from_month_in_path_variables(self.kwargs)
         return student_queryset.prefetch_related(Prefetch('attendance_set', queryset=Attendance.objects.filter(date_attended__gte=start_date, date_attended__lte=end_date)))
 
 
