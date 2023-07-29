@@ -12,6 +12,7 @@ import AdmMainView from '@/views/admin/AdmMainView.vue';
 import AdmStudentView from '@/views/admin/AdmStudentView.vue';
 import AdmStudentCreateView from '@/views/admin/AdmStudentCreateView.vue';
 import AdmStudentDeleteView from '@/views/admin/AdmStudentDeleteView.vue';
+import AdmStudentUpdateView from '@/views/admin/AdmStudentUpdateView.vue';
 import AdmAttendView from '@/views/admin/AdmAttendView.vue';
 import AdmInbodyView from '@/views/admin/AdmInbodyView.vue';
 
@@ -70,6 +71,11 @@ const router = createRouter({
                     path: 'student/create',
                     name: 'admin-student-create',
                     component: AdmStudentCreateView,
+                },
+                {
+                    path: 'student/update',
+                    name: 'admin-student-update',
+                    component: AdmStudentUpdateView,
                 },
                 {
                     path: 'student/delete',

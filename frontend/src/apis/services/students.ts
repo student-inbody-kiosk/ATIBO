@@ -24,3 +24,7 @@ export async function createStudents(students: Student[]) {
 export async function deleteStudents(ids: string[]) {
     return await apiRequest.patch('/students/', { ids: ids });
 }
+
+export async function updateStudents(students: Student[]) {
+    return await apiRequest.put('/students/', students);
+}
