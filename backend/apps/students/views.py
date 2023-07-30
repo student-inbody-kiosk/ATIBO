@@ -216,7 +216,7 @@ class StudentAttendanceAPIView(ListAPIView):
     def get_queryset(self):
         student_queryset = get_student_queryset_from_query_params(self.request.query_params)
         start_date, end_date = get_date_from_month_in_path_variables(self.kwargs)
-        return student_queryset.prefetch_related(Prefetch('attendance_set', queryset=Attendance.objects.filter(date_attended__gte=start_date, date_attended__lte=end_date)))
+        return student_queryset.prefetch_related(Prefetch('attendance_set', queryset=Attendance.objects.filter(date_attended__gte=start_date, date_attended__lt=end_date)))
 
 
 class InbodyStudentAPIView(ListCreateAPIView):
@@ -228,7 +228,7 @@ class InbodyStudentAPIView(ListCreateAPIView):
     def get_queryset(self):
         student = get_student_object_from_path_variables(self.kwargs)
         start_date, end_date = get_date_from_query_params(self.request.query_params)
-        return Inbody.objects.filter(student=student, test_date__gte=start_date, test_date__lte=end_date)
+        return Inbody.objects.filter(student=student, test_date__gte=start_date, test_date__lt=end_date)
     
     @extend_schema(
         parameters=[
@@ -273,7 +273,7 @@ class StudentInbodyAPIView(ListAPIView):
     def get_queryset(self):
         student_queryset = get_student_queryset_from_query_params(self.request.query_params)
         start_date, end_date = get_date_from_path_variables(self.kwargs)
-        return student_queryset.prefetch_related(Prefetch('inbody_set', queryset=Inbody.objects.filter(test_date__gte=start_date, test_date__lte=end_date)))
+        return student_queryset.prefetch_related(Prefetch('inbody_set', queryset=Inbody.objects.filter(test_date__gte=start_date, test_date__lt=end_date)))
 
 
 class InbodyListAPIView(GenericAPIView, UpdateModelMixin):

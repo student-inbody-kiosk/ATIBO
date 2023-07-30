@@ -77,7 +77,7 @@ def get_date_from_path_variables(variables, limit_period_days = 62):
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
     start_date = timezone.make_aware(start_date, timezone=tz)
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
-    end_date = timezone.make_aware(end_date, timezone=tz) + timedelta(days=1)
+    end_date = timezone.make_aware(end_date, timezone=tz) + timedelta(days=1) # Add one day because the default time is 00:00:00 
 
     # Limit the period
     if end_date - start_date > timedelta(days=limit_period_days):
@@ -96,7 +96,7 @@ def get_date_from_month_in_path_variables(variables):
     start_date = timezone.make_aware(start_date, timezone=tz)
 
     next_month = current_month + timedelta(days=31)
-    end_date = next_month.replace(day=1) - timedelta(days=1)
+    end_date = next_month.replace(day=1)    # Add one day because the default time is 00:00:00 
     end_date = timezone.make_aware(end_date, timezone=tz)
 
     return start_date, end_date
@@ -114,7 +114,7 @@ def get_date_from_query_params(query_params, limit_period_days = 730):
     start_date = datetime.strptime(start_date, "%Y-%m-%d")
     start_date = timezone.make_aware(start_date, timezone=tz)
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
-    end_date = timezone.make_aware(end_date, timezone=tz)
+    end_date = timezone.make_aware(end_date, timezone=tz) + timedelta(days=1)   # Add one day because the default time is 00:00:00 
 
     # # Limit the search time period
     # if end_date - start_date > timedelta(days=limit_period_days):
