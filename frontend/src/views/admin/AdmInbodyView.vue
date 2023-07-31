@@ -98,7 +98,11 @@ const handleSubmit = function searchAttendance() {
     });
 };
 
-const handleInbodyClick = (i: number, j: number) => {
+const handleStudentClick = function goStudentInbodyList(student: any) {
+    console.log(student);
+};
+
+const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
     console.log(students.value[i].inbodySet[j]);
 };
 </script>
@@ -167,7 +171,8 @@ const handleInbodyClick = (i: number, j: number) => {
                             :grade="student.grade"
                             :room="student.room"
                             :number="student.number"
-                            :name="student.name" />
+                            :name="student.name"
+                            @click="() => handleStudentClick(student)" />
                     </tbody>
                 </table>
             </div>
