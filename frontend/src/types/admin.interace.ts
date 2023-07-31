@@ -16,3 +16,15 @@ export interface Account {
     email: string;
     role: string;
 }
+
+export interface AttendanceInfo {
+    id: number;
+    dateAttended: string;
+}
+
+export interface Attendance {
+    name: string;
+    grade: number;
+    room: number;
+    attendanceSet: AttendanceInfo[];
+}
