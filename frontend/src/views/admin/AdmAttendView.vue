@@ -87,9 +87,7 @@ const handleSubmit = function searchAttendance() {
         <section class="admin-attend-list">
             <div class="admin-attend-list__student">
                 <table>
-                    <AttendDataLabel
-                        class="admin-attend-list__student__head"
-                        :dates="30" />
+                    <AttendDataLabel class="admin-attend-list__student__head" />
                     <tbody>
                         <AttendData
                             v-for="(student, index) in students"
