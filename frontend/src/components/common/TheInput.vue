@@ -2,7 +2,7 @@
 withDefaults(
     defineProps<{
         label?: string;
-        type?: 'text' | 'number' | 'password' | 'date' | 'checkbox';
+        type?: 'text' | 'number' | 'password' | 'month' | 'checkbox';
         refer: string;
         value?: number | string;
         min?: number;
