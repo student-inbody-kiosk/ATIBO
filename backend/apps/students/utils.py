@@ -44,21 +44,30 @@ def get_student_queryset_from_query_params(query_params):
     query_filter = Q()
     params_valid = False
     if grade and grade.isdigit():
-        if  0 < int(grade) < 10:
+        grade = int(grade)
+        if grade == 0:
+            pass
+        elif 1 < grade < 10:
             params_valid = True
-            query_filter &= Q(grade=int(grade))
+            query_filter &= Q(grade=grade)
         else:
             raise DetailException(status.HTTP_400_BAD_REQUEST, _('The grade must be a numeric value from 1 to 9'), 'invalid_grade')
     if room and room.isdigit():
-        if 0 < int(room) < 100:
+        room = int(room)
+        if room == 0:
+            pass
+        elif 1 < room < 10:
             params_valid = True
-            query_filter &= Q(room=int(room))
+            query_filter &= Q(room=room)
         else:
             raise DetailException(status.HTTP_400_BAD_REQUEST, _('The room must be a numeric value from 1 to 99'), 'invalid_room')
     if number and number.isdigit():
-        if 0 < int(number) < 101:
+        number = int(number)
+        if number == 0:
+            pass
+        elif 1 < number < 10:
             params_valid = True
-            query_filter &= Q(number=int(number))
+            query_filter &= Q(number=number)
         else:
             raise DetailException(status.HTTP_400_BAD_REQUEST, _('The number must be a numeric value from 1 to 100'), 'invalid_number')
     if name: 
