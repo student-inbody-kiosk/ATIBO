@@ -1,24 +1,28 @@
 <script setup lang="ts">
-import IconButton from '@/components/common/IconButton.vue';
+import VIconButton from '@/components/common/VIconButton.vue';
+
+defineEmits<{
+    (e: 'close-modal'): void;
+}>();
 </script>
 
 <template>
-    <div class="modal">
-        <div class="modal__content">
-            <IconButton
-                class="modal__icon"
-                emitMessage="close"
-                text="닫기"
-                @close="$emit('close-modal')">
-                <template #icon> </template>
-            </IconButton>
-            <slot name="modal-content" />
+    <teleport to="#modal">
+        <div class="the-modal" @click="$emit('close-modal')">
+            <div class="the-modal__content" @click.stop>
+                <div class="the-modal__button">
+                    <VIconButton @click="$emit('close-modal')">
+                        <font-awesome-icon icon="xmark" size="xl" />
+                    </VIconButton>
+                </div>
+                <slot />
+            </div>
         </div>
-    </div>
+    </teleport>
 </template>
 
 <style lang="scss">
-.modal {
+.the-modal {
     @include z-index(modal);
     display: flex;
     align-items: center;
@@ -28,12 +32,24 @@ import IconButton from '@/components/common/IconButton.vue';
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: $gray-opacity;
+    background-color: rgba(0, 0, 0, 0.463);
 }
 
-.modal__content {
-    width: 80%;
-    height: 80%;
+.the-modal__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    position: relative;
+    max-width: 80vh;
+    max-height: 80vh;
+    padding: 2.5rem 3rem 2rem;
     background-color: $white;
+    border-radius: 1em;
+}
+
+.the-modal__button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
 }
 </style>
