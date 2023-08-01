@@ -27,7 +27,7 @@ defineEmits<{
 .keypad {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: minmax(5rem, auto);
+    grid-auto-rows: minmax(8vh, 10vh);
     grid-gap: 1rem;
     width: 100%;
 }

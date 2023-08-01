@@ -17,3 +17,18 @@ export async function getAttendances(
         },
     });
 }
+
+export async function createAttendacne(
+    grade: number,
+    room: number,
+    number: number
+) {
+    return await apiRequest
+        .post(`/students/attendance/${grade}/${room}/${number}/`)
+        .then((res) => {
+            return res.data;
+        })
+        .catch((err) => {
+            return err.response.data;
+        });
+}

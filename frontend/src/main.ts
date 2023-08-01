@@ -15,22 +15,10 @@ import {
     faHouse,
     faCircleMinus,
     faXmark,
-    faCircleCheck,
-    faCircleXmark,
-    faCircleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import ToastManager from '@/plugins/ToastManager';
 
-library.add(
-    faCircleArrowLeft,
-    faUserLock,
-    faHouse,
-    faCircleMinus,
-    faXmark,
-    faCircleCheck,
-    faCircleXmark,
-    faCircleExclamation
-);
+library.add(faCircleArrowLeft, faUserLock, faHouse, faCircleMinus, faXmark);
 
 const app = createApp(App);
 const pinia = createPinia();

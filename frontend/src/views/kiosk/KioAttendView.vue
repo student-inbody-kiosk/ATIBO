@@ -1,40 +1,50 @@
 <script setup lang="ts">
-import { onBeforeMount, ref, inject } from 'vue';
-import ToastManager from '@/utils/ToastManager';
+import KioCheckStudent from '@/components/kiosk/KioCheckStudent.vue';
+import KioInputGuide from '@/components/kiosk/KioInputGuide.vue';
+import TheModal from '@/components/common/TheModal.vue';
+import type { StudentSimple } from '@/types/students.interface';
+import { onBeforeMount, ref } from 'vue';
+import KioAttendModal from '@/components/kiosk/attendance/KioAttendModal.vue';
+import type { Header } from '@/types/app.interface';
 
-const emit = defineEmits(['update-header']);
-const studentInfo = ref('');
-const isModalOpen = ref(false);
+const emit = defineEmits<{
+    (e: 'update-header', info: Header): void;
+}>();
 
 onBeforeMount(() => {
     emit('update-header', { title: '출석 확인', routeName: 'kiosk-index' });
 });
 
-const deleteInput = function deleteStudentInfo() {
-    if (studentInfo.value.length == 0) return;
-    studentInfo.value = studentInfo.value.slice(0, -1);
+const studentInfo = ref<StudentSimple | null>(null);
+
+const handleStudentInfo = function (value: StudentSimple) {
+    studentInfo.value = value;
 };
 
-const handleModal = function closeModal() {
-    isModalOpen.value = false;
-    studentInfo.value = '';
-};
-
-const handleSubmit = function checkAttendance() {
-    // Todo 정규식 검사
-    isModalOpen.value = true;
-};
-
-const toast = inject('toast');
-
-const handleClick = () => {
-    toast('Hello, this is a toast message!', 'success', 100000);
+const handleCloseModal = function () {
+    studentInfo.value = null;
 };
 </script>
 
 <template>
-    <div @click="handleClick">빵</div>
+    <div class="kiosk-attend-view">
+        <KioInputGuide />
+        <KioCheckStudent @student-info="handleStudentInfo" />
+        <!-- modal -->
+        <TheModal v-if="studentInfo" @close-modal="handleCloseModal">
+            <KioAttendModal
+                :studentInfo="studentInfo"
+                @close-modal="handleCloseModal" />
+        </TheModal>
+    </div>
 </template>
 
-<style lang="scss"></style>
-@/plugins/ToastManager
+<style lang="scss">
+.kiosk-attend-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    height: 100%;
+}
+</style>
