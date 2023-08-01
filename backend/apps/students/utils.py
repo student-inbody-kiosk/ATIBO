@@ -43,22 +43,30 @@ def get_student_queryset_from_query_params(query_params):
     # Make dynamic query filter
     query_filter = Q()
     params_valid = False
-    if grade and grade.isdigit() and 0 < int(grade) < 10:
-        params_valid = True
-        query_filter &= Q(grade=int(grade))
-        # raise DetailException(status.HTTP_400_BAD_REQUEST, _('The grade must be a numeric value from 1 to 9'), 'invalid_grade')
-    if room and room.isdigit() and 0 < int(room) < 100:
-        params_valid = True
-        query_filter &= Q(room=int(room))
-        # raise DetailException(status.HTTP_400_BAD_REQUEST, _('The room must be a numeric value from 1 to 99'), 'invalid_room')
-    if number and number.isdigit() and 0 < int(number) < 101:
-        params_valid = True
-        query_filter &= Q(number=int(number))
-        # raise DetailException(status.HTTP_400_BAD_REQUEST, _('The number must be a numeric value from 1 to 100'), 'invalid_number')
-    if name and re.compile(KOREAN_NAME_REGEX).match(name):
-        params_valid = True
-        query_filter &= Q(name=name)
-        # raise DetailException(status.HTTP_400_BAD_REQUEST, _('The name must be written in 2-5 Korean characters'), 'invalid_name')
+    if grade and grade.isdigit():
+        if  0 < int(grade) < 10:
+            params_valid = True
+            query_filter &= Q(grade=int(grade))
+        else:
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('The grade must be a numeric value from 1 to 9'), 'invalid_grade')
+    if room and room.isdigit():
+        if 0 < int(room) < 100:
+            params_valid = True
+            query_filter &= Q(room=int(room))
+        else:
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('The room must be a numeric value from 1 to 99'), 'invalid_room')
+    if number and number.isdigit():
+        if 0 < int(number) < 101:
+            params_valid = True
+            query_filter &= Q(number=int(number))
+        else:
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('The number must be a numeric value from 1 to 100'), 'invalid_number')
+    if name: 
+        if re.compile(KOREAN_NAME_REGEX).match(name):
+            params_valid = True
+            query_filter &= Q(name=name)
+        else:
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('The name must be written in 2-5 Korean characters'), 'invalid_name')
 
     # For prevent large data transferring, constrain the params
     if not params_valid:
