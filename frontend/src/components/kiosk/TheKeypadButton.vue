@@ -1,9 +1,9 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
     text: string;
 }>();
 
-const emit = defineEmits<{
+defineEmits<{
     (e: 'click'): void;
 }>();
 </script>

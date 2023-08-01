@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import IconButton from '@/components/common/IconButton.vue';
+import VIconButton from '@/components/common/VIconButton.vue';
 
 defineProps<{
     title: string;
@@ -9,21 +9,21 @@ defineProps<{
 
 <template lang="">
     <div class="kiosk-header">
-        <IconButton
+        <VIconButton
             class="kiosk-header__icon--left"
             text="뒤로가기"
             @click="$router.push({ name: routeName })">
             <font-awesome-icon icon="circle-arrow-left" />
-        </IconButton>
+        </VIconButton>
 
         <span class="kiosk-header__title">{{ title }} </span>
 
-        <IconButton
+        <VIconButton
             class="kiosk-header__icon--right"
             text="처음으로"
             @click="$router.push({ name: 'kiosk-index' })">
             <font-awesome-icon icon="house" />
-        </IconButton>
+        </VIconButton>
     </div>
 </template>
 

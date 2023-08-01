@@ -1,30 +1,28 @@
 <script setup lang="ts">
-import AppIcon from '@/components/common/IconButton.vue';
+import VIconButton from '@/components/common/VIconButton.vue';
 
-const emit = defineEmits<{
+defineEmits<{
     (e: 'close-modal'): void;
 }>();
 </script>
 
 <template>
     <teleport to="#modal">
-        <div class="app-modal" @click="$emit('close-modal')">
-            <div class="app-modal__content" @click.stop>
-                <div class="app-modal__button">
-                    <AppIcon @click="$emit('close-modal')">
+        <div class="the-modal" @click="$emit('close-modal')">
+            <div class="the-modal__content" @click.stop>
+                <div class="the-modal__button">
+                    <VIconButton @click="$emit('close-modal')">
                         <font-awesome-icon icon="fa-xmark" size="2xl" />
-                    </AppIcon>
+                    </VIconButton>
                 </div>
-                <Transition name="app-modal">
-                    <slot />
-                </Transition>
+                <slot />
             </div>
         </div>
     </teleport>
 </template>
 
 <style lang="scss">
-.app-modal {
+.the-modal {
     @include z-index(modal);
     display: flex;
     align-items: center;
@@ -37,7 +35,7 @@ const emit = defineEmits<{
     background-color: rgba(0, 0, 0, 0.463);
 }
 
-.app-modal__content {
+.the-modal__content {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -49,7 +47,7 @@ const emit = defineEmits<{
     border-radius: 1em;
 }
 
-.app-modal__button {
+.the-modal__button {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
