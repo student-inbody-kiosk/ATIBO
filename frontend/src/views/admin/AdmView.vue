@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router';
 import AdmLayout from '@/components/admin/AdmLayout.vue';
 import AdmHeader from '@/components/admin/AdmHeader.vue';
-import IconButton from '@/components/common/IconButton.vue';
+import VIconButton from '@/components/common/VIconButton.vue';
 import TheModal from '@/components/common/TheModal.vue';
 
 import { useRoute } from 'vue-router';
@@ -39,15 +39,12 @@ const handleModalClose = function closeModal() {
 <template>
     <AdmLayout>
         <template #admin-header>
-            <IconButton
+            <VIconButton
                 v-show="isIndexPage"
                 text="키오스크"
-                emitMessage="routing"
-                @routing="$router.push({ name: 'kiosk-index' })">
-                <template #icon>
-                    <font-awesome-icon icon="house" />
-                </template>
-            </IconButton>
+                @click="$router.push({ name: 'kiosk-index' })">
+                <font-awesome-icon icon="house" />
+            </VIconButton>
             <AdmHeader v-show="!isIndexPage" @open-modal="handleModalOpen" />
         </template>
 

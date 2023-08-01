@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TheButton from '@/components/common/TheButton.vue';
+import VButton from '@/components/common/VButton.vue';
 import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
 import StudentDataInput from '@/components/admin/StudentDataInput.vue';
 import type { Student } from '@/types/admin.interface';
@@ -64,18 +64,16 @@ const handleUpdateClick = function updateStudent() {
     <div class="admin-student-create">
         <div class="admin-student__header">학생 수정</div>
         <section class="admin-student-create">
-            <TheButton
+            <VButton
                 text="완료"
                 color="green"
                 size="md"
-                emitMessage="submit"
-                @submit="handleUpdateClick" />
-            <TheButton
+                @click="handleUpdateClick" />
+            <VButton
                 text="취소"
                 color="red"
                 size="md"
-                emitMessage="cancel"
-                @cancel="() => router.push({ name: 'admin-student' })" />
+                @click="() => router.push({ name: 'admin-student' })" />
         </section>
 
         <section class="admin-student-create-list">

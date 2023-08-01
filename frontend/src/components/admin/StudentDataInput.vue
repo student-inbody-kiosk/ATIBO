@@ -16,8 +16,8 @@ const props = withDefaults(
     { isCreate: false }
 );
 
-import TheInput from '@/components/common/TheInput.vue';
-import IconButton from '../common/IconButton.vue';
+import VInput from '@/components/common/VInput.vue';
+import VIconButton from '../common/VIconButton.vue';
 
 import { ref } from 'vue';
 
@@ -28,51 +28,43 @@ const sexData = ref(props.student.sex);
     <tr>
         <td class="student-data-input__content">
             <span v-if="!isCreate">{{ index + 1 }}</span>
-            <IconButton
+            <VIconButton
                 v-if="isCreate"
-                emitMessage="delete"
-                @delete="() => $emit('delete-student', index)">
-                <template #icon>
-                    <font-awesome-icon icon="circle-minus" color="red" />
-                </template>
-            </IconButton>
+                @click="$emit('delete-student', index)">
+                <font-awesome-icon icon="circle-minus" color="red" />
+            </VIconButton>
         </td>
         <td class="student-data-input__content">
-            <TheInput
-                type="text"
+            <VInput
+                id="grade"
                 refer="grade"
                 :value="student.grade"
                 @input="
-                    (e) => $emit('update-input', index, 'grade', e.target.value)
+                    (grade) => $emit('update-input', index, 'grade', grade)
                 " />
         </td>
         <td class="student-data-input__content">
-            <TheInput
-                type="text"
+            <VInput
+                id="room"
                 refer="room"
                 :value="student.room"
-                @input="
-                    (e) => $emit('update-input', index, 'room', e.target.value)
-                " />
+                @input="(room) => $emit('update-input', index, 'room', room)" />
         </td>
         <td class="student-data-input__content">
-            <TheInput
-                type="text"
+            <VInput
+                id="number"
                 refer="number"
                 :value="student.number"
                 @input="
-                    (e) =>
-                        $emit('update-input', index, 'number', e.target.value)
+                    (number) => $emit('update-input', index, 'number', number)
                 " />
         </td>
         <td class="student-data-input__content">
-            <TheInput
-                type="text"
+            <VInput
+                id="name"
                 refer="name"
                 :value="student.name"
-                @input="
-                    (e) => $emit('update-input', index, 'name', e.target.value)
-                " />
+                @input="(name) => $emit('update-input', index, 'name', name)" />
         </td>
         <td class="student-data-input__content">
             <select
@@ -86,28 +78,23 @@ const sexData = ref(props.student.sex);
             </select>
         </td>
         <td class="student-data-input__content">
-            <TheInput
+            <VInput
+                id="date"
                 type="date"
                 refer="birthDate"
                 :value="student.birthDate"
                 @input="
-                    (e) =>
-                        $emit(
-                            'update-input',
-                            index,
-                            'birthDate',
-                            e.target.value
-                        )
+                    (date) => $emit('update-input', index, 'birthDate', date)
                 " />
         </td>
         <td class="student-data-input__content">
-            <TheInput
-                type="text"
+            <VInput
+                id="password"
                 refer="password"
                 :value="student.password"
                 @input="
-                    (e) =>
-                        $emit('update-input', index, 'password', e.target.value)
+                    (password) =>
+                        $emit('update-input', index, 'password', password)
                 " />
         </td>
     </tr>

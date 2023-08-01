@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TheInput from '@/components/common/TheInput.vue';
-import TheButton from '@/components/common/TheButton.vue';
+import VInput from '@/components/common/VInput.vue';
+import VButton from '@/components/common/VButton.vue';
 import AttendDataLabel from '@/components/admin/AttendDataLabel.vue';
 import AttendData from '@/components/admin/AttendData.vue';
 
@@ -112,50 +112,51 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
         <div>인바디 관리</div>
         <section class="admin-inbody__searchbar">
             <div class="admin-inbody__searchbar-date">
-                <TheInput
+                <VInput
+                    id="startDate"
                     label="시작"
                     type="date"
                     refer="startDate"
                     :value="startDate"
-                    @update-input="(value) => (startDate = value)" />
-                <TheInput
+                    @input="(value) => (startDate = value)" />
+                <VInput
+                    id="endDate"
                     label="끝"
                     type="date"
                     refer="endDate"
                     :value="endDate"
-                    @update-input="(value) => (endDate = value)" />
+                    @input="(value) => (endDate = value)" />
             </div>
             <div class="admin-inbody__searchbar-student">
-                <TheInput
+                <VInput
+                    id="grade"
                     label="학년"
-                    type="text"
                     refer="grade"
                     :value="grade"
-                    @update-input="(value) => (grade = value)" />
-                <TheInput
+                    @input="(value) => (grade = value)" />
+                <VInput
+                    id="room"
                     label="반"
-                    type="text"
                     refer="room"
                     :value="room"
-                    @update-input="(value) => (room = value)" />
-                <TheInput
+                    @input="(value) => (room = value)" />
+                <VInput
+                    id="number"
                     label="번호"
-                    type="text"
                     refer="number"
                     :value="number"
-                    @update-input="(value) => (number = value)" />
-                <TheInput
+                    @input="(value) => (number = value)" />
+                <VInput
+                    id="name"
                     label="이름"
-                    type="text"
                     refer="name"
                     :value="name"
-                    @update-input="(value) => (name = value)" />
-                <TheButton
+                    @input="(value) => (name = value)" />
+                <VButton
                     text="조회"
                     color="admin-primary"
                     size="md"
-                    emitMessage="submit"
-                    @submit="handleSubmit" />
+                    @click="handleSubmit" />
             </div>
         </section>
         <section class="admin-inbody-list">

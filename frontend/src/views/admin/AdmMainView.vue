@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TheButton from '@/components/common/TheButton.vue';
+import VButton from '@/components/common/VButton.vue';
 
 import { useAccountsStore } from '@/stores/accounts.store';
 
@@ -12,24 +12,21 @@ const { username } = useAccountsStore();
             <span> 반갑습니다, {{ username }} 님! </span>
         </div>
         <section class="admin-main__buttons">
-            <TheButton
+            <VButton
                 text="학생 관리"
                 color="admin-primary"
                 size="lg"
-                emitMessage="student"
-                @student="$router.push({ name: 'admin-student' })" />
-            <TheButton
+                @click="$router.push({ name: 'admin-student' })" />
+            <VButton
                 text="출결 관리"
                 color="admin-primary"
                 size="lg"
-                emitMessage="attend"
-                @attend="$router.push({ name: 'admin-attend' })" />
-            <TheButton
+                @click="$router.push({ name: 'admin-attend' })" />
+            <VButton
                 text="인바디 관리"
                 color="admin-primary"
                 size="lg"
-                emitMessage="inbody"
-                @inbody="$router.push({ name: 'admin-inbody' })" />
+                @click="$router.push({ name: 'admin-inbody' })" />
         </section>
     </div>
 </template>

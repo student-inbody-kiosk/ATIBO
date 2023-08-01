@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TheInput from '@/components/common/TheInput.vue';
-import TheButton from '@/components/common/TheButton.vue';
+import VInput from '@/components/common/VInput.vue';
+import VButton from '@/components/common/VButton.vue';
 
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
@@ -29,26 +29,26 @@ const handleLoginSubmit = function submitLogin() {
 
 <template>
     <div>
-        <TheInput
-            type="text"
+        <VInput
             refer="id"
+            id="id"
             :value="username"
             label="아이디"
-            @update-input="(value) => (username = value)"
-            @submit="handleLoginSubmit" />
-        <TheInput
+            @input="(value) => (username = value)"
+            @enter="handleLoginSubmit" />
+        <VInput
+            id="password"
             type="password"
             refer="password"
             :value="password"
             label="비밀번호"
-            @update-input="(value) => (password = value)"
-            @submit="handleLoginSubmit" />
-        <TheButton
+            @input="(value) => (password = value)"
+            @enter="handleLoginSubmit" />
+        <VButton
             text="로그인"
             color="admin-primary"
             size="md"
-            emitMessage="login"
-            @login="handleLoginSubmit" />
+            @click="handleLoginSubmit" />
     </div>
 </template>
 

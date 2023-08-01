@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TheButton from '@/components/common/TheButton.vue';
+import VButton from '@/components/common/VButton.vue';
 import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
 import StudentDataInput from '@/components/admin/StudentDataInput.vue';
 import { createStudents } from '@/apis/services/students';
@@ -59,18 +59,16 @@ const handleCreateClick = function createStudent() {
     <div class="admin-student-create">
         <div class="admin-student__header">학생 등록</div>
         <section class="admin-student-create">
-            <TheButton
+            <VButton
                 text="+ 추가"
                 color="green"
                 size="md"
-                emitMessage="submit"
-                @submit="handleAddClick" />
-            <TheButton
+                @click="handleAddClick" />
+            <VButton
                 text="등록"
                 color="admin-primary"
                 size="md"
-                emitMessage="submit"
-                @submit="handleCreateClick" />
+                @click="handleCreateClick" />
         </section>
 
         <section class="admin-student-create-list">

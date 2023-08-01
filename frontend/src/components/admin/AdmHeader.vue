@@ -1,53 +1,34 @@
 <script setup lang="ts">
-import IconButton from '@/components/common/IconButton.vue';
+import VIconButton from '@/components/common/VIconButton.vue';
 import { logout } from '@/apis/services/auth';
 </script>
 
 <template lang="">
     <div class="admin-header">
-        <IconButton
+        <VIconButton
             class="admin-header__icon"
             text="홈"
-            emitMessage="routing"
-            @routing="$router.push({ name: 'admin-index' })"
-            >>
-            <template #icon>
-                <font-awesome-icon icon="house" />
-            </template>
-        </IconButton>
+            @click="$router.push({ name: 'admin-index' })">
+            <font-awesome-icon icon="house" />
+        </VIconButton>
 
-        <IconButton
+        <VIconButton
             class="admin-header__icon"
             text="이메일 변경"
-            emitMessage="modal"
-            @modal="$emit('open-modal', 'email')"
-            >>
-            <template #icon>
-                <font-awesome-icon icon="house" />
-            </template>
-        </IconButton>
+            @click="$emit('open-modal', 'email')">
+            <font-awesome-icon icon="house" />
+        </VIconButton>
 
-        <IconButton
+        <VIconButton
             class="admin-header__icon"
             text="password"
-            emitMessage="modal"
-            @modal="$emit('open-modal', 'password')"
-            >>
-            <template #icon>
-                <font-awesome-icon icon="house" />
-            </template>
-        </IconButton>
+            @click="$emit('open-modal', 'password')">
+            <font-awesome-icon icon="house" />
+        </VIconButton>
 
-        <IconButton
-            class="admin-header__icon"
-            text="로그아웃"
-            emitMessage="logout"
-            @logout="logout"
-            >>
-            <template #icon>
-                <font-awesome-icon icon="house" />
-            </template>
-        </IconButton>
+        <VIconButton class="admin-header__icon" text="로그아웃" @cilck="logout">
+            <font-awesome-icon icon="house" />
+        </VIconButton>
     </div>
 </template>
 

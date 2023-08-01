@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TheInput from '@/components/common/TheInput.vue';
-import TheButton from '@/components/common/TheButton.vue';
+import VInput from '@/components/common/VInput.vue';
+import VButton from '@/components/common/VButton.vue';
 import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
 import StudentData from '@/components/admin/StudentData.vue';
 
@@ -9,7 +9,7 @@ import { ref, computed } from 'vue';
 import { getStudents } from '@/apis/services/students';
 
 import type { Ref } from 'vue';
-import type { Student } from '@/types/students.interface';
+// import type { Student } from '@/types/students.interface';
 
 const grade = ref('');
 const room = ref('');
@@ -42,58 +42,54 @@ const handleSubmit = function searchStudents() {
     <div class="admin-student">
         <div class="admin-student__header">학생 관리</div>
         <section class="admin-student__searchbar">
-            <TheInput
+            <VInput
+                id="grade"
                 label="학년"
-                type="text"
                 refer="grade"
                 :value="grade"
-                @update-input="(value) => (grade = value)" />
-            <TheInput
+                @input="(value) => (grade = value)" />
+            <VInput
+                id="room"
                 label="반"
-                type="text"
                 refer="room"
                 :value="room"
-                @update-input="(value) => (room = value)" />
-            <TheInput
+                @input="(value) => (room = value)" />
+            <VInput
+                id="number"
                 label="번호"
-                type="text"
                 refer="number"
                 :value="number"
-                @update-input="(value) => (number = value)" />
-            <TheInput
+                @input="(value) => (number = value)" />
+            <VInput
+                id="name"
                 label="이름"
-                type="text"
                 refer="name"
                 :value="name"
-                @update-input="(value) => (name = value)" />
-            <TheButton
+                @input="(value) => (name = value)" />
+            <VButton
                 text="조회"
                 color="admin-primary"
                 size="md"
-                emitMessage="submit"
-                @submit="handleSubmit" />
-            <TheButton
+                @click="handleSubmit" />
+            <VButton
                 text="학생 추가"
                 color="green"
                 size="md"
-                emitMessage="create"
-                @create="$router.push({ name: 'admin-student-create' })" />
-            <TheButton
+                @click="$router.push({ name: 'admin-student-create' })" />
+            <VButton
                 v-if="students.length"
                 text="학생 수정"
                 color="admin-primary"
                 size="md"
-                emitMessage="update"
-                @update="
+                @click="
                     $router.push({ name: 'admin-student-update', query })
                 " />
-            <TheButton
+            <VButton
                 v-if="students.length"
                 text="학생 삭제"
                 color="red"
                 size="md"
-                emitMessage="delete"
-                @delete="
+                @click="
                     $router.push({ name: 'admin-student-delete', query })
                 " />
         </section>

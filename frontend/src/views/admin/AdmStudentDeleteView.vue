@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TheButton from '@/components/common/TheButton.vue';
+import VButton from '@/components/common/VButton.vue';
 import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
 import StudentData from '@/components/admin/StudentData.vue';
 
@@ -43,12 +43,11 @@ const handleDeleteClick = function deleteStudent() {
     <div class="admin-student-delete">
         <section class="admin-student__header">
             <div>학생 삭제</div>
-            <TheButton
+            <VButton
                 text="삭제"
                 color="red"
                 size="md"
-                emitMessage="delete"
-                @delete="handleDeleteClick" />
+                @click="handleDeleteClick" />
         </section>
 
         <section class="admin-student-list">
