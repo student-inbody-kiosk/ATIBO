@@ -3,16 +3,15 @@ import { RouterView } from 'vue-router';
 import KioLayout from '@/components/kiosk/KioLayout.vue';
 import KioHeader from '@/components/kiosk/KioHeader.vue';
 import IconButton from '@/components/common/IconButton.vue';
-
+import { onErrorCaptured } from 'vue';
 import { useRoute } from 'vue-router';
 import { ref, watchEffect } from 'vue';
 
 const route = useRoute();
-const isIndexPage = ref(false);
 const title = ref('');
 const routeName = ref('');
 
-const handleBeforeMount = function allocateTitleAndRouteName(data: {
+const handleUpdateHeader = function allocateTitleAndRouteName(data: {
     title: string;
     routeName: string;
 }) {
@@ -20,13 +19,10 @@ const handleBeforeMount = function allocateTitleAndRouteName(data: {
     routeName.value = data.routeName;
 };
 
-// show different components based on the route name
-watchEffect(() => {
-    if (route.name === 'kiosk-index') {
-        isIndexPage.value = true;
-    } else {
-        isIndexPage.value = false;
-    }
+onErrorCaptured((e: Error) => {
+    console.log('error', e);
+    // alert(e.response.data.detail);
+    return false;
 });
 </script>
 
@@ -34,23 +30,44 @@ watchEffect(() => {
     <KioLayout>
         <template #kiosk-header>
             <IconButton
-                v-show="isIndexPage"
+                v-if="route.name === 'kiosk-index'"
                 text="관리자"
-                emitMessage="admin"
-                @admin="$router.push({ name: 'admin-index' })">
-                <template #icon>
-                    <font-awesome-icon icon="user-lock" />
-                </template>
+                @click="$router.push({ name: 'admin-index' })">
+                <font-awesome-icon icon="user-lock" />
             </IconButton>
-            <KioHeader
-                v-show="!isIndexPage"
-                :title="title"
-                :routeName="routeName" />
+            <KioHeader v-else :title="title" :routeName="routeName" />
         </template>
         <template #kiosk-main>
-            <router-view @before-mount="handleBeforeMount" />
+            <RouterView v-slot="{ Component }">
+                <template v-if="Component">
+                    <Transition mode="out-in" name="kiosk">
+                        <Suspense>
+                            <!-- main content -->
+                            <component
+                                :is="Component"
+                                @update-header="handleUpdateHeader"></component>
+
+                            <!-- loading state -->
+                            <template #fallback> Loading... </template>
+                        </Suspense>
+                    </Transition>
+                </template>
+            </RouterView>
         </template>
     </KioLayout>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.kiosk-enter-active,
+.kiosk-leave-active {
+    transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
+}
+
+.kiosk-enter-from,
+.kiosk-leave-to {
+    transform: translateY(20px);
+    opacity: 0;
+}
+</style>

@@ -1,29 +1,21 @@
 <script setup lang="ts">
-import TheButton from '@/components/common/TheButton.vue';
+import KioSchoolInfo from '@/components/kiosk/index/KioSchoolInfo.vue';
+import KioIndexButtons from '@/components/kiosk/index/KioIndexButtons.vue';
 </script>
 
 <template>
-    <div class="kiosk-main_buttons">
-        <TheButton
-            text="출석 확인"
-            color="kiosk-primary"
-            size="lg"
-            emitMessage="attend"
-            @attend="$router.push({ name: 'kiosk-attend' })" />
-        <TheButton
-            text="인바디"
-            color="kiosk-primary"
-            size="lg"
-            emitMessage="attend"
-            @attend="$router.push({ name: 'kiosk-inbody' })" />
-
-        <TheButton
-            text="운동기구"
-            color="kiosk-primary"
-            size="lg"
-            emitMessage="attend"
-            @attend="$router.push({ name: 'kiosk-gym' })" />
+    <div class="kiosk-index">
+        <KioSchoolInfo />
+        <KioIndexButtons />
     </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+.kiosk-index {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    padding-top: 8vh;
+    height: 100%;
+}
+</style>
