@@ -26,7 +26,8 @@ defineEmits<{
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-weight: 600;
+    gap: 0.2rem;
+    font-weight: 700;
 }
 
 // size

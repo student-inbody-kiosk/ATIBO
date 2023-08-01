@@ -5,7 +5,7 @@ import services from '@/apis/services';
 import VButton from '@/components/common/VButton.vue';
 
 const props = defineProps<{
-    studentInfo: StudentSimple;
+    student: StudentSimple;
 }>();
 
 const emit = defineEmits<{
@@ -14,23 +14,22 @@ const emit = defineEmits<{
 
 const toast = inject('toast');
 
-const handleClickAttend = function () {
+const handleClick = function createAttendance() {
     services
         .createAttendacne(
-            props.studentInfo.grade,
-            props.studentInfo.room,
-            props.studentInfo.number
+            props.student.grade,
+            props.student.room,
+            props.student.number
         )
         .then(() => {
-            toast('출석되었습니다', 'success', 2500);
+            toast('출석되었습니다', 'success', 2500, 'center', 'lg');
             emit('close-modal');
         })
         .catch((err) => {
-            toast(
-                `${err.detail ? err.detail : '출석에 실패했습니다'}`,
-                'error',
-                2500
-            );
+            const message = err.response.data.detail
+                ? err.response.data.detail
+                : '출석에 실패했습니다';
+            toast(message, 'error', 2500, 'center', 'lg');
             emit('close-modal');
         });
 };
@@ -38,17 +37,11 @@ const handleClickAttend = function () {
 
 <template>
     <div class="kiosk-attend-modal">
-        <div>
-            <p class="kiosk-attend-modal__text">
-                {{ studentInfo.grade }} 학년 {{ studentInfo.room }} 학년
-                {{ studentInfo.number }} 번 <br />{{ studentInfo.name }}
-            </p>
-            <VButton
-                text="출석하기"
-                color="green"
-                size="md"
-                @click="handleClickAttend" />
-        </div>
+        <p class="kiosk-attend-modal__text">
+            {{ student.grade }}학년 {{ student.room }}학년
+            {{ student.number }}번 <br />{{ student.name }}
+        </p>
+        <VButton text="출석하기" color="green" size="md" @click="handleClick" />
     </div>
 </template>
 
@@ -59,6 +52,7 @@ const handleClickAttend = function () {
     align-items: center;
     flex-direction: column;
     gap: 1rem;
+    margin: 0 2rem;
 }
 
 .kiosk-attend-modal__text {

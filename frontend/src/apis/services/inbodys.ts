@@ -17,3 +17,22 @@ export async function getInbodys(
         },
     });
 }
+
+export async function getTheStudentInbodys(
+    grade: number,
+    room: number,
+    number: number,
+    startDate?: string,
+    endDate?: string
+) {
+    return await apiRequest
+        .get(`/students/inbody/${grade}/${room}/${number}/`, {
+            params: {
+                startDate,
+                endDate,
+            },
+        })
+        .then((res) => {
+            return res.data;
+        });
+}

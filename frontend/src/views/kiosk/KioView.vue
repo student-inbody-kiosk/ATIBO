@@ -31,8 +31,9 @@ onErrorCaptured((e: Error) => {
             <VIconButton
                 v-if="route.name === 'kiosk-index'"
                 text="관리자"
+                size="lg"
                 @click="$router.push({ name: 'admin-index' })">
-                <font-awesome-icon icon="user-lock" />
+                <font-awesome-icon icon="user-lock" size="2x" />
             </VIconButton>
             <KioHeader v-else :title="title" :routeName="routeName" />
         </template>
@@ -62,8 +63,8 @@ onErrorCaptured((e: Error) => {
 .kiosk-enter-active,
 .kiosk-leave-active {
     transition:
-        opacity 0.5s ease,
-        transform 0.5s ease;
+        opacity 0.3s ease,
+        transform 0.3s ease;
 }
 
 .kiosk-enter-from,

@@ -9,19 +9,13 @@ defineProps<{
 
 <template lang="">
     <div class="kiosk-header">
-        <VIconButton
-            text="뒤로가기"
-            size="lg"
-            @click="$router.push({ name: routeName })">
+        <VIconButton size="lg" @click="$router.push({ name: routeName })">
             <font-awesome-icon icon="circle-arrow-left" size="2x" />
         </VIconButton>
 
         <h1 class="kiosk-header__title">{{ title }}</h1>
 
-        <VIconButton
-            text="처음으로"
-            size="lg"
-            @click="$router.push({ name: 'kiosk-index' })">
+        <VIconButton size="lg" @click="$router.push({ name: 'kiosk-index' })">
             <font-awesome-icon icon="house" size="2x" />
         </VIconButton>
     </div>
@@ -31,11 +25,12 @@ defineProps<{
 .kiosk-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 1rem 2rem;
 }
 
 .kiosk-header__title {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 600;
 }
 </style>

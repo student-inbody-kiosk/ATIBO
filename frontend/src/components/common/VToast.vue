@@ -33,6 +33,7 @@ withDefaults(
 
 <style lang="scss">
 .v-toast {
+    @include z-index(toast);
     font-weight: 600;
     animation: toast 0.5s ease-in-out;
 }
@@ -51,9 +52,11 @@ withDefaults(
 .v-toast__content {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5em;
     background-color: $white;
     border-radius: 1em;
+    text-align: center;
 }
 
 // position
@@ -66,6 +69,11 @@ withDefaults(
     left: 0;
     width: 100vw;
     height: 100vh;
+
+    .v-toast__content {
+        max-width: 90vw;
+        max-height: 90vh;
+    }
 }
 
 // color

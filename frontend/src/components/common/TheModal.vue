@@ -12,7 +12,7 @@ defineEmits<{
             <div class="the-modal__content" @click.stop>
                 <div class="the-modal__button">
                     <VIconButton @click="$emit('close-modal')">
-                        <font-awesome-icon icon="xmark" size="xl" />
+                        <font-awesome-icon icon="xmark" size="2x" />
                     </VIconButton>
                 </div>
                 <slot />
