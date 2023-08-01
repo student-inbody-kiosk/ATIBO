@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router';
 import KioLayout from '@/components/kiosk/KioLayout.vue';
 import KioHeader from '@/components/kiosk/KioHeader.vue';
-import IconButton from '@/components/common/IconButton.vue';
+import VIconButton from '@/components/common/VIconButton.vue';
 import { onErrorCaptured } from 'vue';
 import { useRoute } from 'vue-router';
 import { ref, watchEffect } from 'vue';
@@ -29,12 +29,12 @@ onErrorCaptured((e: Error) => {
 <template>
     <KioLayout>
         <template #kiosk-header>
-            <IconButton
+            <VIconButton
                 v-if="route.name === 'kiosk-index'"
                 text="관리자"
                 @click="$router.push({ name: 'admin-index' })">
                 <font-awesome-icon icon="user-lock" />
-            </IconButton>
+            </VIconButton>
             <KioHeader v-else :title="title" :routeName="routeName" />
         </template>
         <template #kiosk-main>

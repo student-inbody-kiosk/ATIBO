@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import type { Ref } from 'vue';
 
 const props = withDefaults(
     defineProps<{
@@ -16,6 +16,7 @@ const props = withDefaults(
         isError?: boolean;
         color?: 'kiosk-primary' | 'admin-primary';
         size?: 'sm' | 'md' | 'lg';
+        inputRef?: Ref;
     }>(),
     {
         type: 'text',
@@ -29,27 +30,18 @@ const props = withDefaults(
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
+    (e: 'enter', value: string): void;
 }>();
-
-// Method for focusing on input element
-const inputRef = ref<HTMLInputElement | null>(null);
-const inputFocus = function appInputFocus() {
-    inputRef.value?.focus();
-};
 
 // Emit input event when it's not readonly
 const handleInput = function handleAppInput(event: Event) {
     if (props.readonly) return;
     emit('input', (event.target as HTMLInputElement).value);
 };
-
-defineExpose({
-    inputFocus,
-});
 </script>
 
 <template>
-    <div :class="['the-input', color, size, isError ? 'error' : '']">
+    <div :class="['v-input', color, size, isError ? 'error' : '']">
         <label :for="id">{{ label }}</label>
         <input
             :id="id"
@@ -68,31 +60,31 @@ defineExpose({
 </template>
 
 <style lang="scss">
-.the-input {
+.v-input {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-.the-input label {
+.v-input label {
     font-weight: 600;
 }
 
 //color
-.the-input.kiosk-primary {
+.v-input.kiosk-primary {
     input:focus {
         outline: $kiosk-deep-primary 3px solid;
     }
 }
 
-.the-input.admin-primary {
+.v-input.admin-primary {
     input:focus {
         outline: $admin-deep-primary 3px solid;
     }
 }
 
 //size
-.the-input.sm {
+.v-input.sm {
     font-size: 1rem;
 
     input {
@@ -101,18 +93,18 @@ defineExpose({
     }
 }
 
-.the-input.md {
+.v-input.md {
     font-size: 1.2rem;
     padding: 0.5rem;
 }
 
-.the-input.lg {
+.v-input.lg {
     font-size: 1.2rem;
     padding: 0.5rem;
 }
 
 //error
-.the-input.error {
+.v-input.error {
     outline: $red 3px solid;
 }
 </style>

@@ -14,14 +14,14 @@ withDefaults(
     { isDelete: false }
 );
 
-import TheInput from '../common/TheInput.vue';
+import VInput from '@/components/common/VInput.vue';
 </script>
 
 <template>
     <tr class="student-data">
         <td v-if="!isDelete" class="student-data__content">{{ id + 1 }}</td>
         <td v-if="isDelete" class="student-data__content">
-            <TheInput
+            <VInput
                 type="checkbox"
                 refer="del"
                 @update-input="$emit('update-input', id)" />

@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import TheButton from '@/components/common/TheButton.vue';
+import VButton from '@/components/common/VButton.vue';
 </script>
 
 <template>
     <div class="kiosk-index__buttons">
-        <TheButton
+        <VButton
             text="출석 확인"
             color="kiosk-primary"
             size="lg"
             @click="$router.push({ name: 'kiosk-attend' })" />
-        <TheButton
+        <VButton
             text="인바디"
             color="kiosk-primary"
             size="lg"
             emitMessage="attend"
             @click="$router.push({ name: 'kiosk-inbody' })" />
 
-        <TheButton
+        <VButton
             text="운동기구"
             color="kiosk-primary"
             size="lg"

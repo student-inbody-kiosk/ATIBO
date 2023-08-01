@@ -40,24 +40,22 @@ const handleModalClose = function closeModal() {
     <AdmLayout>
         <template #admin-header>
             <VIconButton
-                v-show="isIndexPage"
+                v-if="isIndexPage"
                 text="키오스크"
                 @click="$router.push({ name: 'kiosk-index' })">
                 <font-awesome-icon icon="house" />
             </VIconButton>
-            <AdmHeader v-show="!isIndexPage" @open-modal="handleModalOpen" />
+            <AdmHeader v-else @open-modal="handleModalOpen" />
         </template>
 
         <template #admin-main>
             <RouterView />
-            <teleport to="#teleport">
+            <teleport to="#modal">
                 <TheModal
-                    v-show="isEmailModalOpen || isPasswordModalOpen"
+                    v-if="isEmailModalOpen || isPasswordModalOpen"
                     @close-modal="handleModalClose">
-                    <template #modal-content>
-                        <div v-show="isEmailModalOpen">Email Form</div>
-                        <div v-show="isPasswordModalOpen">passwordform</div>
-                    </template>
+                    <div v-if="isEmailModalOpen">Email Form</div>
+                    <div v-if="isPasswordModalOpen">passwordform</div>
                 </TheModal>
             </teleport>
         </template>

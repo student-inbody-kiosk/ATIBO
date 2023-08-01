@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TheKeypadButton from '@/components/kiosk/TheKeypadButton.vue';
 
-const emit = defineEmits<{
+defineEmits<{
     (e: 'click', value: string): void;
 }>();
 </script>

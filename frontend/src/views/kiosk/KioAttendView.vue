@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import InputGuide from '@/components/kiosk/InputGuide.vue';
-import TheInput from '@/components/common/TheInput.vue';
-import TheKeypad from '@/components/kiosk/TheKeypad.vue';
-import TheModal from '@/components/common/TheModal.vue';
-
 import { onBeforeMount, ref } from 'vue';
 
 const emit = defineEmits(['update-header']);
