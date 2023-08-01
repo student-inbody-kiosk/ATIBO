@@ -14,6 +14,7 @@ $gray: #cccccc;
 $gray-dark: #797979;
 $gray-opacity: #43434333;
 $green: #6da31c;
+$yellow: #ffe565;
 $red: #c1202a;
 
 // breakpoints
@@ -23,6 +24,7 @@ $breakpoint-kiosk: 1024px;
 // z-index
 $z-index: (
     base: 0,
+    toast: 1000,
     modal: 999,
     label: 1,
 );

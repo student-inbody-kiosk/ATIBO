@@ -1,7 +1,89 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import LoadingSvg from '@/assets/loading.svg';
+
+withDefaults(
+    defineProps<{
+        color: 'kiosk-primary' | 'admin-primary';
+        size: 'sm' | 'md' | 'lg';
+    }>(),
+    {
+        size: 'md',
+    }
+);
+
+defineEmits<{
+    (e: 'click'): void;
+}>();
+</script>
 
 <template>
-    <div>Loading....</div>
+    <div :class="['v-loading', color, size]">
+        <LoadingSvg />
+        <!-- <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 24 24">
+            <path
+                fill="currentColor"
+                d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z"
+                opacity=".5" />
+            <path
+                fill="currentColor"
+                d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z">
+                <animateTransform
+                    attributeName="transform"
+                    dur="1s"
+                    from="0 12 12"
+                    repeatCount="indefinite"
+                    to="360 12 12"
+                    type="rotate" />
+            </path>
+        </svg> -->
+    </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.v-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+// color
+.v-loading.kiosk-primary {
+    path {
+        fill: $kiosk-primary;
+    }
+}
+
+.v-loading.admin-primary {
+    path {
+        fill: $admin-primary;
+    }
+}
+
+// size
+.v-loading.sm {
+    svg {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+.v-loading.md {
+    svg {
+        width: 7rem;
+        height: 7rem;
+    }
+}
+
+.v-loading.lg {
+    svg {
+        width: 10rem;
+        height: 10rem;
+    }
+}
+</style>

@@ -15,14 +15,28 @@ import {
     faHouse,
     faCircleMinus,
     faXmark,
+    faCircleCheck,
+    faCircleXmark,
+    faCircleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
+import ToastManager from '@/plugins/ToastManager';
 
-library.add(faCircleArrowLeft, faUserLock, faHouse, faCircleMinus, faXmark);
+library.add(
+    faCircleArrowLeft,
+    faUserLock,
+    faHouse,
+    faCircleMinus,
+    faXmark,
+    faCircleCheck,
+    faCircleXmark,
+    faCircleExclamation
+);
 
 const app = createApp(App);
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 app.use(pinia);
 app.use(router);
+app.use(ToastManager);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.mount('#app');

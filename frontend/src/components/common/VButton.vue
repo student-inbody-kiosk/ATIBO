@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import throttle from '@/utils/throttle';
+
 withDefaults(
     defineProps<{
         text: string;
@@ -10,13 +12,18 @@ withDefaults(
     }
 );
 
-defineEmits<{
+const emit = defineEmits<{
     (e: 'click'): void;
 }>();
+
+// throttle the click event
+const handleClick = function () {
+    throttle(emit('click'), 500);
+};
 </script>
 
 <template>
-    <button :class="['v-button', color, size]" @click="$emit('click')">
+    <button :class="['v-button', color, size]" @click="handleClick">
         {{ text }}
     </button>
 </template>
@@ -26,7 +33,7 @@ defineEmits<{
     min-width: max-content;
     border-radius: 0.5em;
     color: $white;
-    font-weight: 600;
+    font-weight: 700;
     white-space: nowrap;
 }
 

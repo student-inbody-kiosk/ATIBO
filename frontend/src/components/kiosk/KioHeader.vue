@@ -10,40 +10,32 @@ defineProps<{
 <template lang="">
     <div class="kiosk-header">
         <VIconButton
-            class="kiosk-header__icon--left"
             text="뒤로가기"
+            size="lg"
             @click="$router.push({ name: routeName })">
-            <font-awesome-icon icon="circle-arrow-left" />
+            <font-awesome-icon icon="circle-arrow-left" size="2x" />
         </VIconButton>
 
-        <span class="kiosk-header__title">{{ title }} </span>
+        <h1 class="kiosk-header__title">{{ title }}</h1>
 
         <VIconButton
-            class="kiosk-header__icon--right"
             text="처음으로"
+            size="lg"
             @click="$router.push({ name: 'kiosk-index' })">
-            <font-awesome-icon icon="house" />
+            <font-awesome-icon icon="house" size="2x" />
         </VIconButton>
     </div>
 </template>
 
 <style lang="scss">
 .kiosk-header {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-areas: 'a b b b c';
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 2rem;
 }
 
 .kiosk-header__title {
-    grid-area: b;
-    text-align: center;
-}
-
-.kiosk-header__icon--left {
-    grid-area: a;
-}
-
-.kiosk-header__icon--right {
-    grid-area: c;
+    font-size: 2rem;
+    font-weight: 600;
 }
 </style>
