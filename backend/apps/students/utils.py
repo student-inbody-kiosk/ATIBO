@@ -13,6 +13,7 @@ from atibo.exceptions import DetailException
 from atibo.regexes import KOREAN_NAME_REGEX, DATE_REGEX
 from .models import Student
 
+
 def get_student_object_from_path_variables(variables):
     # Extract values from path variables
     grade = variables['grade']
@@ -47,7 +48,7 @@ def get_student_queryset_from_query_params(query_params):
         grade = int(grade)
         if grade == 0:
             pass
-        elif 1 < grade < 10:
+        elif 0 < grade < 10:
             params_valid = True
             query_filter &= Q(grade=grade)
         else:
@@ -56,7 +57,7 @@ def get_student_queryset_from_query_params(query_params):
         room = int(room)
         if room == 0:
             pass
-        elif 1 < room < 10:
+        elif 0 < room < 100:
             params_valid = True
             query_filter &= Q(room=room)
         else:
@@ -65,7 +66,7 @@ def get_student_queryset_from_query_params(query_params):
         number = int(number)
         if number == 0:
             pass
-        elif 1 < number < 10:
+        elif 0 < number < 101:
             params_valid = True
             query_filter &= Q(number=number)
         else:
