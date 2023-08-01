@@ -12,11 +12,8 @@ defineProps<{
         <IconButton
             class="kiosk-header__icon--left"
             text="뒤로가기"
-            emitMessage="routing"
-            @routing="$router.push({ name: routeName })">
-            <template #icon>
-                <font-awesome-icon icon="circle-arrow-left" />
-            </template>
+            @click="$router.push({ name: routeName })">
+            <font-awesome-icon icon="circle-arrow-left" />
         </IconButton>
 
         <span class="kiosk-header__title">{{ title }} </span>
@@ -24,11 +21,8 @@ defineProps<{
         <IconButton
             class="kiosk-header__icon--right"
             text="처음으로"
-            emitMessage="routing"
-            @routing="$router.push({ name: 'kiosk-index' })">
-            <template #icon>
-                <font-awesome-icon icon="house" />
-            </template>
+            @click="$router.push({ name: 'kiosk-index' })">
+            <font-awesome-icon icon="house" />
         </IconButton>
     </div>
 </template>

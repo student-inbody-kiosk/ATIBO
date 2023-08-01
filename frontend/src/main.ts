@@ -14,9 +14,10 @@ import {
     faUserLock,
     faHouse,
     faCircleMinus,
+    faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faCircleArrowLeft, faUserLock, faHouse, faCircleMinus);
+library.add(faCircleArrowLeft, faUserLock, faHouse, faCircleMinus, faXmark);
 
 const app = createApp(App);
 const pinia = createPinia();
