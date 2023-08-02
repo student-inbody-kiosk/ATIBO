@@ -1,12 +1,16 @@
 <script setup lang="ts">
 defineProps<{
-    buttonValue: string;
+    text: string;
+}>();
+
+defineEmits<{
+    (e: 'click'): void;
 }>();
 </script>
 
 <template lang="">
-    <button class="keypad__button" @click="$emit('input', buttonValue)">
-        {{ buttonValue }}
+    <button class="keypad__button" @click="$emit('click')">
+        {{ text }}
     </button>
 </template>
 
@@ -15,9 +19,10 @@ defineProps<{
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 0.2rem solid $kiosk-primary;
+    background-color: $kiosk-primary;
     border-radius: 1rem;
-    text-align: center;
-    color: $kiosk-primary;
+    color: $white;
+    font-size: 2.5rem;
+    font-weight: 700;
 }
 </style>

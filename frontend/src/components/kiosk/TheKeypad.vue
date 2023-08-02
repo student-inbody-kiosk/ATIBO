@@ -1,43 +1,25 @@
 <script setup lang="ts">
-import TheKeypadButton from './TheKeypadButton.vue';
+import TheKeypadButton from '@/components/kiosk/TheKeypadButton.vue';
+
+defineEmits<{
+    (e: 'click', value: string): void;
+}>();
 </script>
 
 <template lang="">
     <div class="keypad">
-        <TheKeypadButton
-            buttonValue="1"
-            @input="(buttonValue) => $emit('input', buttonValue)" />
-        <TheKeypadButton
-            buttonValue="2"
-            @input="(buttonValue) => $emit('input', buttonValue)" />
-        <TheKeypadButton
-            buttonValue="3"
-            @input="(buttonValue) => $emit('input', buttonValue)" />
-        <TheKeypadButton
-            buttonValue="4"
-            @input="(buttonValue) => $emit('input', buttonValue)" />
-        <TheKeypadButton
-            buttonValue="5"
-            @input="(buttonValue) => $emit('input', buttonValue)" />
-        <TheKeypadButton
-            buttonValue="6"
-            @input="(buttonValue) => $emit('input', buttonValue)" />
-        <TheKeypadButton
-            buttonValue="7"
-            @input="(buttonValue) => $emit('input', buttonValue)" />
-        <TheKeypadButton
-            buttonValue="8"
-            @input="(buttonValue) => $emit('input', buttonValue)" />
-        <TheKeypadButton
-            buttonValue="9"
-            @input="(buttonValue) => $emit('input', buttonValue)" />
-        <TheKeypadButton
-            buttonValue="."
-            @input="(buttonValue) => $emit('input', buttonValue)" />
-        <TheKeypadButton
-            buttonValue=""
-            @input="(buttonValue) => $emit('input', buttonValue)" />
-        <TheKeypadButton buttonValue="&larr;" @input="$emit('delete')" />
+        <TheKeypadButton text="1" @click="$emit('click', '1')" />
+        <TheKeypadButton text="2" @click="$emit('click', '2')" />
+        <TheKeypadButton text="3" @click="$emit('click', '3')" />
+        <TheKeypadButton text="4" @click="$emit('click', '4')" />
+        <TheKeypadButton text="5" @click="$emit('click', '5')" />
+        <TheKeypadButton text="6" @click="$emit('click', '6')" />
+        <TheKeypadButton text="7" @click="$emit('click', '7')" />
+        <TheKeypadButton text="8" @click="$emit('click', '8')" />
+        <TheKeypadButton text="9" @click="$emit('click', '9')" />
+        <TheKeypadButton text="cancel" @click="$emit('click', 'cancel')" />
+        <TheKeypadButton text="0" @click="$emit('click', '0')" />
+        <TheKeypadButton text="&larr;" @click="$emit('click', 'delete')" />
     </div>
 </template>
 
@@ -48,15 +30,5 @@ import TheKeypadButton from './TheKeypadButton.vue';
     grid-auto-rows: minmax(5rem, auto);
     grid-gap: 1rem;
     width: 100%;
-}
-
-.keypad__button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 0.2rem solid $kiosk-primary;
-    border-radius: 1rem;
-    text-align: center;
-    color: $kiosk-primary;
 }
 </style>

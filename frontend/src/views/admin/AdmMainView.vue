@@ -1,77 +1,51 @@
 <script setup lang="ts">
-import AdmLayout from '@/components/admin/AdmLayout.vue';
-import AdmHeader from '@/components/admin/AdmHeader.vue';
-import TheModal from '@/components/common/TheModal.vue';
-import TheButton from '@/components/common/TheButton.vue';
+import VButton from '@/components/common/VButton.vue';
 
-import { ref } from 'vue';
+import { useAccountsStore } from '@/stores/accounts.store';
 
-const isEmailModalOpen = ref(false);
-const isPasswordModalOpen = ref(false);
-
-const handleModalOpen = function openModal(message: string) {
-    if (message === 'email') {
-        isEmailModalOpen.value = true;
-        return;
-    }
-    isPasswordModalOpen.value = true;
-};
-
-const handleModalClose = function closeModal() {
-    isEmailModalOpen.value = false;
-    isPasswordModalOpen.value = false;
-};
+const { username } = useAccountsStore();
 </script>
 
 <template>
-    <AdmLayout>
-        <template #admin-header>
-            <AdmHeader @open-modal="handleModalOpen" />
-        </template>
-
-        <template #admin-main>
-            <div class="admin-main__buttons">
-                <TheButton
-                    text="학생 관리"
-                    color="admin-primary"
-                    size="lg"
-                    emitMessage="student"
-                    @student="$router.push({ name: 'admin-student' })" />
-                <TheButton
-                    text="출결 관리"
-                    color="admin-primary"
-                    size="lg"
-                    emitMessage="attend"
-                    @attend="$router.push({ name: 'admin-attend' })" />
-                <TheButton
-                    text="인바디 관리"
-                    color="admin-primary"
-                    size="lg"
-                    emitMessage="inbody"
-                    @inbody="$router.push({ name: 'admin-inbody' })" />
-            </div>
-
-            <teleport to="#teleport">
-                <TheModal
-                    v-show="isEmailModalOpen || isPasswordModalOpen"
-                    @close-modal="handleModalClose">
-                    <template #modal-content>
-                        <div v-show="isEmailModalOpen">Email Form</div>
-                        <div v-show="isPasswordModalOpen">passwordform</div>
-                    </template>
-                </TheModal>
-            </teleport>
-        </template>
-    </AdmLayout>
+    <div class="admin-main">
+        <div class="admin-main__account">
+            <span> 반갑습니다, {{ username }} 님! </span>
+        </div>
+        <section class="admin-main__buttons">
+            <VButton
+                text="학생 관리"
+                color="admin-primary"
+                size="lg"
+                @click="$router.push({ name: 'admin-student' })" />
+            <VButton
+                text="출결 관리"
+                color="admin-primary"
+                size="lg"
+                @click="$router.push({ name: 'admin-attend' })" />
+            <VButton
+                text="인바디 관리"
+                color="admin-primary"
+                size="lg"
+                @click="$router.push({ name: 'admin-inbody' })" />
+        </section>
+    </div>
 </template>
 
 <style lang="scss">
-body {
-    background-color: $white;
+.admin-main {
+    width: 100%;
+    height: 100%;
+}
+.admin-main__account {
+    text-align: right;
 }
 
 .admin-main__buttons {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 2rem;
 }
 </style>

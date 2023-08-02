@@ -1,35 +1,29 @@
 <script setup lang="ts">
-import IconButton from '@/components/common/IconButton.vue';
+import VIconButton from '@/components/common/VIconButton.vue';
 
 defineProps<{
     title: string;
-    backUrl: string;
+    routeName: string;
 }>();
 </script>
 
 <template lang="">
     <div class="kiosk-header">
-        <IconButton
+        <VIconButton
             class="kiosk-header__icon--left"
             text="뒤로가기"
-            emitMessage="routing"
-            @routing="$router.push({ name: backUrl })">
-            <template #icon>
-                <font-awesome-icon icon="circle-arrow-left" />
-            </template>
-        </IconButton>
+            @click="$router.push({ name: routeName })">
+            <font-awesome-icon icon="circle-arrow-left" />
+        </VIconButton>
 
         <span class="kiosk-header__title">{{ title }} </span>
 
-        <IconButton
+        <VIconButton
             class="kiosk-header__icon--right"
             text="처음으로"
-            emitMessage="routing"
-            @routing="$router.push({ name: 'kiosk' })">
-            <template #icon>
-                <font-awesome-icon icon="house" />
-            </template>
-        </IconButton>
+            @click="$router.push({ name: 'kiosk-index' })">
+            <font-awesome-icon icon="house" />
+        </VIconButton>
     </div>
 </template>
 

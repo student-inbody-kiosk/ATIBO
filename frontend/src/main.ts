@@ -3,6 +3,7 @@ import { createPinia } from 'pinia';
 
 import App from './App.vue';
 import router from './router';
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 import '@/styles/main.scss';
 
@@ -12,12 +13,16 @@ import {
     faCircleArrowLeft,
     faUserLock,
     faHouse,
+    faCircleMinus,
+    faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faCircleArrowLeft, faUserLock, faHouse);
+library.add(faCircleArrowLeft, faUserLock, faHouse, faCircleMinus, faXmark);
 
 const app = createApp(App);
-app.use(createPinia());
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
+app.use(pinia);
 app.use(router);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.mount('#app');

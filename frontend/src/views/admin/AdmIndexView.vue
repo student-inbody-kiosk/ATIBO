@@ -1,69 +1,55 @@
 <script setup lang="ts">
-import AdmLayout from '@/components/admin/AdmLayout.vue';
-import IconButton from '@/components/common/IconButton.vue';
-import TheInput from '@/components/common/TheInput.vue';
-import TheButton from '@/components/common/TheButton.vue';
+import VInput from '@/components/common/VInput.vue';
+import VButton from '@/components/common/VButton.vue';
 
 import { useRouter } from 'vue-router';
-
 import { ref } from 'vue';
 
+import type { Account } from '@/types/admin.interace';
+import type { AxiosResponse } from 'axios';
+
+import { login } from '@/apis/services/auth';
+import { getAccountInfo } from '@/apis/services/accounts';
+import { useAccountsStore } from '@/stores/accounts.store';
+
 const router = useRouter();
-const userId = ref('');
-const userPassword = ref('');
+const username = ref('');
+const password = ref('');
+const { updateAccounts } = useAccountsStore();
 
-const handleIdInput = function updateUserId(value: string) {
-    userId.value = value;
-};
-
-const handlePasswordInput = function updateUserPassword(value: string) {
-    userPassword.value = value;
-};
-
-const handleLoginSubmit = function login() {
-    console.log(userId.value, userPassword.value);
-    router.push({ name: 'admin-main' });
+const handleLoginSubmit = function submitLogin() {
+    login(username.value, password.value).then(() => {
+        getAccountInfo().then((res: AxiosResponse<Account>) => {
+            updateAccounts(res?.data);
+            router.push({ name: 'admin-main' });
+        });
+    });
 };
 </script>
 
 <template>
-    <AdmLayout>
-        <template #admin-header>
-            <IconButton
-                text="키오스크"
-                emitMessage="routing"
-                @routing="$router.push({ name: 'kiosk' })">
-                <template #icon>
-                    <font-awesome-icon icon="house" />
-                </template>
-            </IconButton>
-        </template>
-
-        <template #admin-main>
-            <div>
-                <TheInput
-                    type="text"
-                    refer="id"
-                    :value="userId"
-                    label="아이디"
-                    @update-input="handleIdInput"
-                    @submit="handleLoginSubmit" />
-                <TheInput
-                    type="password"
-                    refer="password"
-                    :value="userPassword"
-                    label="비밀번호"
-                    @update-input="handlePasswordInput"
-                    @submit="handleLoginSubmit" />
-                <TheButton
-                    text="로그인"
-                    color="admin-primary"
-                    size="md"
-                    emitMessage="login"
-                    @login="handleLoginSubmit" />
-            </div>
-        </template>
-    </AdmLayout>
+    <div>
+        <VInput
+            refer="id"
+            id="id"
+            :value="username"
+            label="아이디"
+            @input="(value) => (username = value)"
+            @enter="handleLoginSubmit" />
+        <VInput
+            id="password"
+            type="password"
+            refer="password"
+            :value="password"
+            label="비밀번호"
+            @input="(value) => (password = value)"
+            @enter="handleLoginSubmit" />
+        <VButton
+            text="로그인"
+            color="admin-primary"
+            size="md"
+            @click="handleLoginSubmit" />
+    </div>
 </template>
 
 <style lang="scss" scoped></style>
