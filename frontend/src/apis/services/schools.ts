@@ -6,3 +6,10 @@ export function getSchoolInfo() {
         return res.data;
     });
 }
+
+export function updateSchoolInfo(name: string, file: FormData) {
+    return apiRequest.put('/school/', {
+        name,
+        logo_image: file,
+    });
+}
