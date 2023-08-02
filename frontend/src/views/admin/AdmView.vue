@@ -50,14 +50,12 @@ const handleModalClose = function closeModal() {
 
         <template #admin-main>
             <RouterView />
-            <teleport to="#modal">
-                <TheModal
-                    v-if="isEmailModalOpen || isPasswordModalOpen"
-                    @close-modal="handleModalClose">
-                    <div v-if="isEmailModalOpen">Email Form</div>
-                    <div v-if="isPasswordModalOpen">passwordform</div>
-                </TheModal>
-            </teleport>
+            <TheModal
+                v-if="isEmailModalOpen || isPasswordModalOpen"
+                @close-modal="handleModalClose">
+                <div v-if="isEmailModalOpen">Email Form</div>
+                <div v-if="isPasswordModalOpen">passwordform</div>
+            </TheModal>
         </template>
     </AdmLayout>
 </template>
