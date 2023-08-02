@@ -22,11 +22,19 @@ export default {
         toastRoot.style.right = '0';
 
         // Create toastMessage
-        const toast = (message, type = 'info', duration = 2500) => {
+        const toast = (
+            message,
+            type = 'info',
+            duration = 2500,
+            position = 'top',
+            size = 'sm'
+        ) => {
             // Make Vue Node
             const toastVNode = h(VToast, {
                 message,
                 type,
+                position,
+                size,
                 onClick: deleteToast,
             });
 

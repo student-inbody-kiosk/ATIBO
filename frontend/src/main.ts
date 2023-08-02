@@ -15,9 +15,7 @@ import {
     faHouse,
     faCircleMinus,
     faXmark,
-    faCircleCheck,
-    faCircleXmark,
-    faCircleExclamation,
+    faShare,
 } from '@fortawesome/free-solid-svg-icons';
 import ToastManager from '@/plugins/ToastManager';
 
@@ -27,9 +25,7 @@ library.add(
     faHouse,
     faCircleMinus,
     faXmark,
-    faCircleCheck,
-    faCircleXmark,
-    faCircleExclamation
+    faShare
 );
 
 const app = createApp(App);

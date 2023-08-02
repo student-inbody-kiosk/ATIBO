@@ -1,30 +1,55 @@
 <script setup lang="ts">
-import TheKeypad from '@/components/kiosk/TheKeypad.vue';
-
+import KioInputGuide from '@/components/kiosk/KioInputGuide.vue';
+import KioStudentForm from '@/components/kiosk/KioStudentForm.vue';
+import KioLoginForm from '@/components/kiosk/inbody/KioLoginForm.vue';
+import type { StudentSimple } from '@/types/students.interface';
 import { onBeforeMount, ref } from 'vue';
+import type { Header } from '@/types/app.interface';
 
-const emit = defineEmits(['before-mount']);
-let attendData = ref('');
+const emit = defineEmits<{
+    (e: 'update-header', info: Header): void;
+}>();
+
+const student = ref<StudentSimple | null>(null);
+
+const handleUpdateStudent = function (value: StudentSimple | null) {
+    student.value = value;
+};
 
 onBeforeMount(() => {
-    emit('before-mount', { title: '인바디', routeName: 'kiosk-index' });
+    emit('update-header', { title: '출석 확인', routeName: 'kiosk-index' });
 });
-
-const handleInput = function updateAttendData(value: string) {
-    attendData.value += value;
-};
-
-const deleteInput = function deleteAttendData() {
-    if (attendData.value.length == 0) return;
-    attendData.value = attendData.value.slice(0, -1);
-};
 </script>
 
 <template>
-    <div>
-        <div>{{ attendData }}</div>
-        <TheKeypad @input="handleInput" @delete="deleteInput" />
+    <div class="kiosk-inbody-view">
+        <KioInputGuide>
+            <p v-if="!student">
+                학년, 반, 번호를 입력해주세요 <br />
+                예시 1학년 1반 1번 -> 10101
+            </p>
+            <p v-else>
+                {{ student.grade }}학년 {{ student.room }}반
+                {{ student.number }}번 {{ student.name }}
+                <br />
+                비밀번호를 입력해주세요
+            </p>
+        </KioInputGuide>
+        <KioStudentForm v-if="!student" @update-student="handleUpdateStudent" />
+        <KioLoginForm
+            v-else
+            :student="student"
+            @update-student="handleUpdateStudent" />
     </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.kiosk-inbody-view {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr fit-content;
+    gap: 5rem;
+    padding: 1rem 2rem;
+    height: 100%;
+}
+</style>

@@ -1,5 +1,6 @@
 import apiRequest from '@/apis/axiosInterceptors';
-import type { Student } from '@/types/admin.interface';
+import type { Student } from '@/types/students.interface';
+import { useAuthStore } from '@/stores/auth.store';
 
 export async function getStudents(
     grade?: number | null,
@@ -27,4 +28,31 @@ export async function deleteStudents(ids: string[]) {
 
 export async function updateStudents(students: Student[]) {
     return await apiRequest.put('/students/', students);
+}
+
+export async function checkStudent(
+    grade: number,
+    room: number,
+    number: number
+) {
+    return await apiRequest
+        .get(`/students/${grade}/${room}/${number}/check/`)
+        .then((res): SimpleStudent => {
+            return res.data;
+        });
+}
+
+export async function loginStudent(
+    grade: number,
+    room: number,
+    number: number,
+    password: string
+) {
+    return await apiRequest
+        .post(`/students/${grade}/${room}/${number}/login/`, { password })
+        .then((res) => {
+            const { updateAccessToken, updateRefreshToken } = useAuthStore();
+            updateAccessToken(res.data.accessToken);
+            updateRefreshToken(res.data.refreshToken);
+        });
 }

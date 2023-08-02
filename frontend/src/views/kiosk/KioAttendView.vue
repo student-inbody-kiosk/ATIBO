@@ -1,40 +1,56 @@
 <script setup lang="ts">
-import { onBeforeMount, ref, inject } from 'vue';
-import ToastManager from '@/utils/ToastManager';
+import KioStudentForm from '@/components/kiosk/KioStudentForm.vue';
+import KioInputGuide from '@/components/kiosk/KioInputGuide.vue';
+import TheModal from '@/components/common/TheModal.vue';
+import type { StudentSimple } from '@/types/students.interface';
+import { onBeforeMount, ref } from 'vue';
+import KioAttendModal from '@/components/kiosk/attendance/KioAttendModal.vue';
+import type { Header } from '@/types/app.interface';
 
-const emit = defineEmits(['update-header']);
-const studentInfo = ref('');
-const isModalOpen = ref(false);
+const emit = defineEmits<{
+    (e: 'update-header', info: Header): void;
+}>();
+
+const student = ref<StudentSimple | null>(null);
+
+const handleUpdateStudent = function (value: StudentSimple) {
+    student.value = value;
+};
+
+const handleCloseModal = function () {
+    student.value = null;
+};
 
 onBeforeMount(() => {
     emit('update-header', { title: '출석 확인', routeName: 'kiosk-index' });
 });
-
-const deleteInput = function deleteStudentInfo() {
-    if (studentInfo.value.length == 0) return;
-    studentInfo.value = studentInfo.value.slice(0, -1);
-};
-
-const handleModal = function closeModal() {
-    isModalOpen.value = false;
-    studentInfo.value = '';
-};
-
-const handleSubmit = function checkAttendance() {
-    // Todo 정규식 검사
-    isModalOpen.value = true;
-};
-
-const toast = inject('toast');
-
-const handleClick = () => {
-    toast('Hello, this is a toast message!', 'success', 100000);
-};
 </script>
 
 <template>
-    <div @click="handleClick">빵</div>
+    <div class="kiosk-attend-view">
+        <KioInputGuide>
+            <p>
+                학년, 반, 번호를 입력해주세요 <br />
+                예시 1학년 1반 1번 -> 10101
+            </p></KioInputGuide
+        >
+        <KioStudentForm @update-student="handleUpdateStudent" />
+        <!-- modal -->
+        <TheModal v-if="student" @close-modal="handleCloseModal">
+            <KioAttendModal
+                :student="student"
+                @close-modal="handleCloseModal" />
+        </TheModal>
+    </div>
 </template>
 
-<style lang="scss"></style>
-@/plugins/ToastManager
+<style lang="scss">
+.kiosk-attend-view {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr fit-content;
+    gap: 5rem;
+    padding: 1rem 2rem;
+    height: 100%;
+}
+</style>

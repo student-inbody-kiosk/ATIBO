@@ -2,16 +2,23 @@
 
 <template lang="">
     <div class="kiosk-input-guide">
-        학년, 반, 번호를 입력해주세요. <br />
-        예시 1학년 1반 <br />
-        -> 10101
+        <slot />
     </div>
 </template>
 
 <style lang="scss">
 .kiosk-input-guide {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    background-color: $white;
+    padding: 2rem;
+    background-color: #ffffffc7;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    font-weight: 600;
     text-align: center;
+    line-height: 200%;
 }
 </style>

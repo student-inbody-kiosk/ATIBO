@@ -45,7 +45,7 @@ const handleInput = function handleAppInput(event: Event) {
         <label :for="id">{{ label }}</label>
         <input
             :id="id"
-            ref="inputRef"
+            :ref="inputRef"
             :type="type"
             :value="value"
             :readonly="readonly"
@@ -88,19 +88,29 @@ const handleInput = function handleAppInput(event: Event) {
     font-size: 1rem;
 
     input {
-        padding: 0.3rem;
+        padding: 0.2rem;
         font-size: 1rem;
     }
 }
 
 .v-input.md {
     font-size: 1.2rem;
-    padding: 0.5rem;
+
+    input {
+        padding: 0.5rem;
+        border-radius: 0.5em;
+        font-size: 1.2rem;
+    }
 }
 
 .v-input.lg {
-    font-size: 1.2rem;
-    padding: 0.5rem;
+    font-size: 2rem;
+
+    input {
+        padding: 1rem;
+        border-radius: 0.5em;
+        font-size: 2rem;
+    }
 }
 
 //error

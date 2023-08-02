@@ -1,25 +1,44 @@
 <script setup lang="ts">
 import TheKeypadButton from '@/components/kiosk/TheKeypadButton.vue';
 
-defineEmits<{
-    (e: 'click', value: string): void;
+const props = defineProps<{
+    value: string;
 }>();
+
+const emit = defineEmits<{
+    (e: 'input', value: string): void;
+}>();
+
+const handleClick = function keypadClick(value: string) {
+    let newValue = '';
+    switch (value) {
+        case 'cancel':
+            newValue = '';
+            break;
+        case 'delete':
+            newValue = props.value.slice(0, -1);
+            break;
+        default:
+            newValue = props.value + value;
+    }
+    emit('input', newValue);
+};
 </script>
 
 <template lang="">
     <div class="keypad">
-        <TheKeypadButton text="1" @click="$emit('click', '1')" />
-        <TheKeypadButton text="2" @click="$emit('click', '2')" />
-        <TheKeypadButton text="3" @click="$emit('click', '3')" />
-        <TheKeypadButton text="4" @click="$emit('click', '4')" />
-        <TheKeypadButton text="5" @click="$emit('click', '5')" />
-        <TheKeypadButton text="6" @click="$emit('click', '6')" />
-        <TheKeypadButton text="7" @click="$emit('click', '7')" />
-        <TheKeypadButton text="8" @click="$emit('click', '8')" />
-        <TheKeypadButton text="9" @click="$emit('click', '9')" />
-        <TheKeypadButton text="cancel" @click="$emit('click', 'cancel')" />
-        <TheKeypadButton text="0" @click="$emit('click', '0')" />
-        <TheKeypadButton text="&larr;" @click="$emit('click', 'delete')" />
+        <TheKeypadButton text="1" @click="handleClick('1')" />
+        <TheKeypadButton text="2" @click="handleClick('2')" />
+        <TheKeypadButton text="3" @click="handleClick('3')" />
+        <TheKeypadButton text="4" @click="handleClick('4')" />
+        <TheKeypadButton text="5" @click="handleClick('5')" />
+        <TheKeypadButton text="6" @click="handleClick('6')" />
+        <TheKeypadButton text="7" @click="handleClick('7')" />
+        <TheKeypadButton text="8" @click="handleClick('8')" />
+        <TheKeypadButton text="9" @click="handleClick('9')" />
+        <TheKeypadButton text="취소" @click="handleClick('cancel')" />
+        <TheKeypadButton text="0" @click="handleClick('0')" />
+        <TheKeypadButton text="&larr;" @click="handleClick('delete')" />
     </div>
 </template>
 
@@ -27,7 +46,7 @@ defineEmits<{
 .keypad {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: minmax(5rem, auto);
+    grid-auto-rows: minmax(8vh, 10vh);
     grid-gap: 1rem;
     width: 100%;
 }
