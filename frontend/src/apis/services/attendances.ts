@@ -27,8 +27,5 @@ export async function createAttendacne(
         .post(`/students/attendance/${grade}/${room}/${number}/`)
         .then((res) => {
             return res.data;
-        })
-        .catch((err) => {
-            return err.response.data;
         });
 }

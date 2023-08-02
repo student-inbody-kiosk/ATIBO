@@ -89,6 +89,7 @@ const handleInput = function handleAppInput(event: Event) {
 
     input {
         padding: 0.2rem;
+        font-size: 1rem;
     }
 }
 
@@ -96,8 +97,9 @@ const handleInput = function handleAppInput(event: Event) {
     font-size: 1.2rem;
 
     input {
-        border-radius: 0.5em;
         padding: 0.5rem;
+        border-radius: 0.5em;
+        font-size: 1.2rem;
     }
 }
 
@@ -105,8 +107,9 @@ const handleInput = function handleAppInput(event: Event) {
     font-size: 2rem;
 
     input {
-        border-radius: 0.5em;
         padding: 1rem;
+        border-radius: 0.5em;
+        font-size: 2rem;
     }
 }
 

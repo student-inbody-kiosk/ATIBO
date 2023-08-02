@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import KioCheckStudent from '@/components/kiosk/KioCheckStudent.vue';
+import KioStudentForm from '@/components/kiosk/KioStudentForm.vue';
 import KioInputGuide from '@/components/kiosk/KioInputGuide.vue';
 import TheModal from '@/components/common/TheModal.vue';
 import type { StudentSimple } from '@/types/students.interface';
@@ -11,29 +11,34 @@ const emit = defineEmits<{
     (e: 'update-header', info: Header): void;
 }>();
 
-onBeforeMount(() => {
-    emit('update-header', { title: '출석 확인', routeName: 'kiosk-index' });
-});
+const student = ref<StudentSimple | null>(null);
 
-const studentInfo = ref<StudentSimple | null>(null);
-
-const handleStudentInfo = function (value: StudentSimple) {
-    studentInfo.value = value;
+const handleUpdateStudent = function (value: StudentSimple) {
+    student.value = value;
 };
 
 const handleCloseModal = function () {
-    studentInfo.value = null;
+    student.value = null;
 };
+
+onBeforeMount(() => {
+    emit('update-header', { title: '출석 확인', routeName: 'kiosk-index' });
+});
 </script>
 
 <template>
     <div class="kiosk-attend-view">
-        <KioInputGuide />
-        <KioCheckStudent @student-info="handleStudentInfo" />
+        <KioInputGuide>
+            <p>
+                학년, 반, 번호를 입력해주세요 <br />
+                예시 1학년 1반 1번 -> 10101
+            </p></KioInputGuide
+        >
+        <KioStudentForm @update-student="handleUpdateStudent" />
         <!-- modal -->
-        <TheModal v-if="studentInfo" @close-modal="handleCloseModal">
+        <TheModal v-if="student" @close-modal="handleCloseModal">
             <KioAttendModal
-                :studentInfo="studentInfo"
+                :student="student"
                 @close-modal="handleCloseModal" />
         </TheModal>
     </div>
@@ -41,9 +46,10 @@ const handleCloseModal = function () {
 
 <style lang="scss">
 .kiosk-attend-view {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr fit-content;
+    gap: 5rem;
     padding: 1rem 2rem;
     height: 100%;
 }
