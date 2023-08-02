@@ -199,6 +199,15 @@ class InbodySerializer(serializers.ModelSerializer):
         if value > date.today():
             raise serializers.ValidationError(_('The date of birth cannot be later than today'), 'invalid_birth_date')
         return value
+    
+    # Round to second decimal place
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        for key, value in  ret.items():
+            if key not in  {'id', 'student', 'test_date', 'score'}:
+                ret[key] = round(value,2)
+        return ret
+
 
 
 class StudentInbodySerializer(serializers.ModelSerializer):

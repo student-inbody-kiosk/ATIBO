@@ -13,7 +13,6 @@ class SchoolAPIView(RetrieveUpdateAPIView):
     serializer_class = SchoolSerializer
 
     def get_object(self):
-
         return School.objects.get(id=1)
     
     def get_authenticators(self):

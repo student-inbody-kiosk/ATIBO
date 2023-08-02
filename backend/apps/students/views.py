@@ -163,9 +163,8 @@ class StudentDetailAPIView(RetrieveAPIView):
     serializer_class = StudentDetailSerializer
 
     def get_object(self):
-        student = get_student_object_from_path_variables(self.kwargs)
+        raise DetailException(status=status.HTTP_400_BAD_REQUEST)
 
-        return student
 
 @extend_schema(
     responses=inline_serializer(
