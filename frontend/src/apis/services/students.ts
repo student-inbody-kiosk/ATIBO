@@ -1,5 +1,5 @@
 import apiRequest from '@/apis/axiosInterceptors';
-import type { Student } from '@/types/admin.interface';
+import type { Student } from '@/types/students.interface';
 
 export async function getStudents(
     grade?: number | null,
@@ -27,4 +27,19 @@ export async function deleteStudents(ids: string[]) {
 
 export async function updateStudents(students: Student[]) {
     return await apiRequest.put('/students/', students);
+}
+
+export async function checkStudent(
+    grade: number,
+    room: number,
+    number: number
+) {
+    return await apiRequest
+        .get(`/students/${grade}/${room}/${number}/check/`)
+        .then((res): SimpleStudent => {
+            return res.data;
+        })
+        .catch((err) => {
+            return err.response.data;
+        });
 }
