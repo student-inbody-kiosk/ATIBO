@@ -6,6 +6,7 @@ import VIconButton from '@/components/common/VIconButton.vue';
 import { onErrorCaptured } from 'vue';
 import { useRoute } from 'vue-router';
 import { ref, watchEffect } from 'vue';
+import VLoading from '@/components/common/VLoading.vue';
 
 const route = useRoute();
 const title = ref('');
@@ -20,8 +21,6 @@ const handleUpdateHeader = function allocateTitleAndRouteName(data: {
 };
 
 onErrorCaptured((e: Error) => {
-    console.log('error', e);
-    // alert(e.response.data.detail);
     return false;
 });
 </script>
@@ -40,7 +39,7 @@ onErrorCaptured((e: Error) => {
         <template #kiosk-main>
             <RouterView v-slot="{ Component }">
                 <template v-if="Component">
-                    <Transition mode="out-in" name="kiosk">
+                    <Transition name="kiosk">
                         <Suspense>
                             <!-- main content -->
                             <component
@@ -48,7 +47,9 @@ onErrorCaptured((e: Error) => {
                                 @update-header="handleUpdateHeader"></component>
 
                             <!-- loading state -->
-                            <template #fallback> Loading... </template>
+                            <template #fallback>
+                                <VLoading color="kiosk-primary" size="lg" />
+                            </template>
                         </Suspense>
                     </Transition>
                 </template>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, inject } from 'vue';
+import ToastManager from '@/utils/ToastManager';
 
 const emit = defineEmits(['update-header']);
 const studentInfo = ref('');
@@ -23,10 +24,17 @@ const handleSubmit = function checkAttendance() {
     // Todo 정규식 검사
     isModalOpen.value = true;
 };
+
+const toast = inject('toast');
+
+const handleClick = () => {
+    toast('Hello, this is a toast message!', 'success', 100000);
+};
 </script>
 
 <template>
-    <div>빵</div>
+    <div @click="handleClick">빵</div>
 </template>
 
 <style lang="scss"></style>
+@/plugins/ToastManager
