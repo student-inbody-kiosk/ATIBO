@@ -8,7 +8,7 @@ defineEmits<{
 
 <template>
     <teleport to="#modal">
-        <div class="the-modal" @click="$emit('close-modal')">
+        <div class="the-modal" @click.stop="$emit('close-modal')">
             <div class="the-modal__content" @click.stop>
                 <div class="the-modal__button">
                     <VIconButton @click="$emit('close-modal')">

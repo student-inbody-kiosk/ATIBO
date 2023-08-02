@@ -26,18 +26,19 @@ defineEmits<{
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-weight: 600;
 }
 
 // size
 .v-icon-button.sm {
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .v-icon-button.md {
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .v-icon-button.lg {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
 }
 </style>
