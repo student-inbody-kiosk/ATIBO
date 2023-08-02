@@ -11,11 +11,11 @@ class StudentJWTAuthentication(BaseAuthentication):
         # Follow the JWT Authentication procedures
         jwtAuthentication = JWTAuthentication()
         header = jwtAuthentication.get_header(request)
-        raw_token = jwtAuthentication.get_raw_token(header)
 
         # Don't raise Error
         # The follow-up authentications should be performed
         try:
+            raw_token = jwtAuthentication.get_raw_token(header)
             student = decode(raw_token)
             student = Student.objects.get(id=student['id'])
         except:
