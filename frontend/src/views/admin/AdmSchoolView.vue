@@ -226,6 +226,9 @@ const dummy = {
 .admin-school {
     width: 100%;
     height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr);
 }
 
 .admin-school-header {
@@ -242,7 +245,6 @@ const dummy = {
 .admin-school-content {
     display: flex;
     justify-content: space-between;
-    height: 100%;
 }
 
 .school-logo {
@@ -252,6 +254,7 @@ const dummy = {
 .admin-school-info,
 .admin-school-accounts {
     width: 100%;
+    height: 100%;
 }
 
 .admin-school-info {
@@ -268,10 +271,9 @@ const dummy = {
 
 .admin-school-accounts {
     height: 100%;
-    overflow: hidden;
-
-    div {
-        height: 50%;
-    }
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0.5rem;
 }
 </style>

@@ -37,14 +37,18 @@ defineProps<{
 </template>
 
 <style lang="scss" scoped>
+.account-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+}
 .account-container__title {
     background-color: $admin-tertiary;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     padding: 0.7rem;
 }
 
 .account-list {
-    height: 100%;
     overflow-y: auto;
 }
 
