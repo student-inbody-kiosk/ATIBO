@@ -14,8 +14,9 @@
 <style lang="scss" scoped>
 .kiosk-container {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
     height: 100vh;
     background-color: $kiosk-secondary;
 }

@@ -33,7 +33,6 @@ const handleUpdateHeader = function allocateTitleAndRouteName(
     if (data.routeParams) {
         header.value.routeParams = data.routeParams;
     }
-    console.log('header', header.value);
 };
 
 // Handle <Suspense> error
