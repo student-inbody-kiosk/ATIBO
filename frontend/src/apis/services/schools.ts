@@ -14,7 +14,7 @@ export function getSchoolInfo() {
         });
 }
 
-export function updateSchoolInfo(name, logoImage) {
+export function updateSchoolInfo(name: string, logoImage: File) {
     return apiRequest
         .put(
             '/school/',
@@ -24,3 +24,4 @@ export function updateSchoolInfo(name, logoImage) {
         .then((res): School => {
             return res.data;
         });
+}
