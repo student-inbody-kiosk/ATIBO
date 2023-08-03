@@ -33,14 +33,13 @@ const handleLogoInput = function updateLogoFile(e: any) {
 };
 
 const handleUpdateClick = function updateSchoolInfo() {
-    const formData = new FormData();
+    let logoFile = { 'logo-image': null };
     if (fileInput.value.files.length) {
-        const logoFile = fileInput.value.files[0];
-        formData.append('logo_image', logoFile);
+        logoFile = { 'logo-image': fileInput.value.files[0] };
     }
 
     services
-        .updateSchoolInfo(schoolName.value, formData)
+        .updateSchoolInfo(schoolName.value, logoFile)
         .then(() => console.log('성공'));
 };
 </script>

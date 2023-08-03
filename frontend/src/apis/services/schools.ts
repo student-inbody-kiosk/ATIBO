@@ -7,9 +7,10 @@ export function getSchoolInfo() {
     });
 }
 
-export function updateSchoolInfo(name: string, file: FormData) {
-    return apiRequest.put('/school/', {
-        name,
-        logo_image: file,
-    });
+export function updateSchoolInfo(name: string, logoImage: any) {
+    return apiRequest.put(
+        '/school/',
+        { name, logoImage },
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+    );
 }
