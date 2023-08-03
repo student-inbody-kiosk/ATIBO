@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import services from '@/apis/services';
 
-let schoolInfo = await services.getSchoolInfo();
+const schoolInfo = await services.getSchoolInfo();
 </script>
 
 <template>

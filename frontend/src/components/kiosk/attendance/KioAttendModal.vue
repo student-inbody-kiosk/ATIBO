@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { inject } from 'vue';
-import type { StudentSimple } from '@/types/students.interface';
 import services from '@/apis/services';
 import VButton from '@/components/common/VButton.vue';
+import type { StudentSimple } from '@/types/students.interface';
 
 const props = defineProps<{
     student: StudentSimple;
@@ -12,8 +11,6 @@ const emit = defineEmits<{
     (e: 'close-modal'): void;
 }>();
 
-const toast = inject('toast');
-
 const handleClick = function createAttendance() {
     services
         .createAttendacne(
@@ -22,14 +19,9 @@ const handleClick = function createAttendance() {
             props.student.number
         )
         .then(() => {
-            toast('출석되었습니다', 'success', 2500, 'center', 'lg');
             emit('close-modal');
         })
-        .catch((err) => {
-            const message = err.response.data.detail
-                ? err.response.data.detail
-                : '출석에 실패했습니다';
-            toast(message, 'error', 2500, 'center', 'lg');
+        .catch(() => {
             emit('close-modal');
         });
 };

@@ -7,12 +7,15 @@ defineProps<{
 </script>
 
 <template lang="">
-    <div class="kiosk-inbody-list-item">
-        <p>{{ inbody.testDate }}</p>
-        <p>{{ inbody.weight }}kg</p>
-        <p>{{ inbody.percentBodyFat }}%</p>
-        <p>{{ inbody.skeletalMuscleMass }}kg</p>
-    </div>
+    <RouterLink
+        :to="{ name: 'kiosk-inbody-detail', params: { inbodyId: inbody.id } }">
+        <div class="kiosk-inbody-list-item" @click="handleClick">
+            <p>{{ inbody.testDate }}</p>
+            <p>{{ inbody.weight }}kg</p>
+            <p>{{ inbody.percentBodyFat }}%</p>
+            <p>{{ inbody.skeletalMuscleMass }}kg</p>
+        </div>
+    </RouterLink>
 </template>
 
 <style lang="scss">

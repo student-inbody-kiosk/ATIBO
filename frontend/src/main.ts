@@ -18,7 +18,6 @@ import {
     faShare,
     faLock,
 } from '@fortawesome/free-solid-svg-icons';
-import ToastManager from '@/plugins/ToastManager';
 
 library.add(
     faCircleArrowLeft,
@@ -35,6 +34,5 @@ const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 app.use(pinia);
 app.use(router);
-app.use(ToastManager);
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.mount('#app');

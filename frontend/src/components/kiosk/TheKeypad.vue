@@ -9,7 +9,7 @@ const emit = defineEmits<{
     (e: 'input', value: string): void;
 }>();
 
-const handleClick = function keypadClick(value: string) {
+const handleClick = function handleKeypadClick(value: string) {
     let newValue = '';
     switch (value) {
         case 'cancel':

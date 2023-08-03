@@ -5,6 +5,8 @@ import KioIndexView from '@/views/kiosk/KioIndexView.vue';
 import KioAttendView from '@/views/kiosk/KioAttendView.vue';
 import KioInbodyView from '@/views/kiosk/KioInbodyView.vue';
 import KioInbodyListView from '@/views/kiosk/KioInbodyListView.vue';
+import KioInbodyDetailView from '@/views/kiosk/KioInbodyDetailView.vue';
+import KioInbodyPwView from '@/views/kiosk/KioInbodyPwView.vue';
 import KioGymView from '@/views/kiosk/KioGymView.vue';
 
 import AdmView from '@/views/admin/AdmView.vue';
@@ -44,6 +46,16 @@ const router = createRouter({
                     path: 'inbody/:grade/:room/:number',
                     name: 'kiosk-inbody-list',
                     component: KioInbodyListView,
+                },
+                {
+                    path: 'inbody/:grade/:room/:number/detail/:inbodyId',
+                    name: 'kiosk-inbody-detail',
+                    component: KioInbodyDetailView,
+                },
+                {
+                    path: 'inbody/:grade/:room/:number/pw',
+                    name: 'kiosk-inbody-pw',
+                    component: KioInbodyPwView,
                 },
                 {
                     path: 'gym',
