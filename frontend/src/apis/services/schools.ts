@@ -18,4 +18,3 @@ export function updateSchoolInfo(name, logoImage) {
         .then((res): School => {
             return res.data;
         });
-}

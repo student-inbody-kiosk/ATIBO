@@ -16,6 +16,8 @@ import AdmStudentDeleteView from '@/views/admin/AdmStudentDeleteView.vue';
 import AdmStudentUpdateView from '@/views/admin/AdmStudentUpdateView.vue';
 import AdmAttendView from '@/views/admin/AdmAttendView.vue';
 import AdmInbodyView from '@/views/admin/AdmInbodyView.vue';
+import AdmGymView from '@/views/admin/AdmGymView.vue';
+import AdmSchoolView from '@/views/admin/AdmSchoolView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -97,6 +99,16 @@ const router = createRouter({
                     path: 'inbody',
                     name: 'admin-inbody',
                     component: AdmInbodyView,
+                },
+                {
+                    path: 'gym',
+                    name: 'admin-gym',
+                    component: AdmGymView,
+                },
+                {
+                    path: 'school',
+                    name: 'admin-school',
+                    component: AdmSchoolView,
                 },
             ],
         },
