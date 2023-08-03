@@ -11,13 +11,13 @@ from rest_framework import status, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.mixins import CreateModelMixin,ListModelMixin, UpdateModelMixin, DestroyModelMixin
+from rest_framework.mixins import CreateModelMixin,ListModelMixin, UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from atibo.authentications import StudentJWTAuthentication
 from atibo.exceptions import DetailException
-from atibo.permissions import IsUser, IsTheStudent, IsOwner
+from atibo.permissions import  IsTheStudent, IsOwner
 from atibo.utils.custom_token import encode
 from atibo.utils.dummy_data import generateStudentDummyData
 from .models import Student, Attendance, Inbody
@@ -177,7 +177,7 @@ class StudentDetailAPIView(RetrieveAPIView):
 class StudentPasswordChangeAPIView(UpdateAPIView):
     http_method_names = ["put"]
     authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
-    permission_classes = [IsUser | IsTheStudent]
+    permission_classes = [IsTheStudent | IsAuthenticated]
     serializer_class = StudentPasswordChangeSerializer
 
     def get_object(self):
@@ -219,7 +219,7 @@ class StudentAttendanceAPIView(ListAPIView):
 
 class InbodyStudentAPIView(ListCreateAPIView):
     authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
-    permission_classes = [IsUser | IsTheStudent]
+    permission_classes = [IsTheStudent | IsAuthenticated]
     serializer_class = InbodySerializer
 
     # Create dynamic query according to parameters
@@ -246,7 +246,7 @@ class InbodyStudentAPIView(ListCreateAPIView):
 class InbodyDetailAPIView(RetrieveUpdateDestroyAPIView):
     http_method_names = ['get', 'put', 'delete',]
     authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
-    permission_classes = [IsUser | IsOwner]
+    permission_classes = [IsOwner | IsAuthenticated]
     serializer_class = InbodySerializer
     queryset = Inbody.objects.all()
     
