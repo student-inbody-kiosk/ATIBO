@@ -8,6 +8,7 @@ import KioInbodyListView from '@/views/kiosk/KioInbodyListView.vue';
 import KioInbodyDetailView from '@/views/kiosk/KioInbodyDetailView.vue';
 import KioInbodyPwView from '@/views/kiosk/KioInbodyPwView.vue';
 import KioGymView from '@/views/kiosk/KioGymView.vue';
+import KioGymDetailView from '@/views/kiosk/KioGymDetailView.vue';
 
 import AdmView from '@/views/admin/AdmView.vue';
 import AdmIndexView from '@/views/admin/AdmIndexView.vue';
@@ -63,6 +64,11 @@ const router = createRouter({
                     path: 'gym',
                     name: 'kiosk-gym',
                     component: KioGymView,
+                },
+                {
+                    path: 'gym/:gymId',
+                    name: 'kiosk-gym-detail',
+                    component: KioGymDetailView,
                 },
             ],
         },
