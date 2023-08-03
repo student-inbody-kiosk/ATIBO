@@ -27,6 +27,16 @@ const { username } = useAccountsStore();
                 color="admin-primary"
                 size="lg"
                 @click="$router.push({ name: 'admin-inbody' })" />
+            <VButton
+                text="운동기구 관리"
+                color="admin-primary"
+                size="lg"
+                @click="$router.push({ name: 'admin-gym' })" />
+            <VButton
+                text="학교정보 관리"
+                color="admin-primary"
+                size="lg"
+                @click="$router.push({ name: 'admin-school' })" />
         </section>
     </div>
 </template>
