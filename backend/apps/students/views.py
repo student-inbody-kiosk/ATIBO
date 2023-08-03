@@ -112,7 +112,6 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
     def destroy(self, request, *args, **kwargs):
         student_ids = request.data.get('ids')
         Student.objects.filter(id__in=student_ids).delete()
-
         return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
 
 
@@ -158,12 +157,13 @@ class StudentLoginAPIView(APIView):
 
 
 class StudentDetailAPIView(RetrieveAPIView):
-    authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
-    permission_classes = [IsUser | IsTheStudent]
+    authentication_classes = [StudentJWTAuthentication]
+    permission_classes = [IsTheStudent | IsAuthenticated]
     serializer_class = StudentDetailSerializer
 
     def get_object(self):
-        raise DetailException(status=status.HTTP_400_BAD_REQUEST)
+        student = get_student_object_from_path_variables(self.kwargs)
+        return student
 
 
 @extend_schema(
@@ -195,7 +195,6 @@ class AttendanceCheckAPIView(CreateAPIView):
 
     def perform_create(self, serializer):
         student = get_student_object_from_path_variables(self.kwargs)
-
         serializer.save(student = student)  # It's converted as validated_data in the serialzer.save()
 
 

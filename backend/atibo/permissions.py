@@ -17,7 +17,9 @@ class CreateOnly(BasePermission):
 class IsAdminUser(BasePermission):
      def has_permission(self, request, view):
         user = request.user
-        if user.role == 'admin' or user.is_staff:
+        if not user.is_authenticated:
+            return False
+        if  user.role == 'admin' or user.is_staff:
             return True
         return False
 
@@ -34,13 +36,12 @@ class IsUser(BasePermission):
 # Allow authenticated user or "the student"
 # The student is specified by {'grade', 'room', 'number'} which are in URL or Query Params
 class IsTheStudent(BasePermission):
-     def has_permission(self, request, view):
+     def has_permission(self, request, view):        
         if request.auth != 'student':   # User
             return False
                
         # Check the permision of the student
         student = request.user
-        print('student', student.grade, student.room, student.number)
 
         # Path variable
         grade = int(view.kwargs.get('grade'))
