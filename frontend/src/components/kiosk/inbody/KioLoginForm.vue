@@ -51,7 +51,7 @@ const handleSubmit = function loginStudent() {
             });
         })
         .catch((err) => {
-            const message = err.response.data.detail
+            const message = err.response?.data?.detail
                 ? err.response.data.detail
                 : '로그인에 실패했습니다';
             toast(message, 'error', 2500, 'center', 'lg');

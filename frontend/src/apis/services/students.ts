@@ -56,3 +56,15 @@ export async function loginStudent(
             updateRefreshToken(res.data.refreshToken);
         });
 }
+
+export async function getTheStudent(
+    grade: number,
+    room: number,
+    number: number
+) {
+    return await apiRequest
+        .get(`/students/${grade}/${room}/${number}/`)
+        .then((res) => {
+            return res.data;
+        });
+}

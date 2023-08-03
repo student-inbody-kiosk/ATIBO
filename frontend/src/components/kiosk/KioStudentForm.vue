@@ -37,7 +37,7 @@ const handleSubmit = function checkStudent() {
             emit('update-student', { id, grade, room, number, name });
         })
         .catch((err) => {
-            const message = err.response.data.detail
+            const message = err.response?.data?.detail
                 ? err.response.data.detail
                 : '학생 조회에 실패했습니다';
             toast(message, 'error', 2500, 'center', 'lg');

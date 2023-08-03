@@ -17,7 +17,7 @@ const handleUpdateStudent = function (value: StudentSimple | null) {
 };
 
 onBeforeMount(() => {
-    emit('update-header', { title: '출석 확인', routeName: 'kiosk-index' });
+    emit('update-header', { title: '인바디 로그인', routeName: 'kiosk-index' });
 });
 </script>
 

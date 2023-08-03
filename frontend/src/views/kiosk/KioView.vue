@@ -5,22 +5,23 @@ import KioHeader from '@/components/kiosk/KioHeader.vue';
 import VIconButton from '@/components/common/VIconButton.vue';
 import { onErrorCaptured } from 'vue';
 import { useRoute } from 'vue-router';
-import { ref, watchEffect } from 'vue';
+import { ref, inject } from 'vue';
+import type { Header } from '@/types/app.interface';
 import VLoading from '@/components/common/VLoading.vue';
 
 const route = useRoute();
-const title = ref('');
-const routeName = ref('');
+const toast = inject('toast');
 
-const handleUpdateHeader = function allocateTitleAndRouteName(data: {
-    title: string;
-    routeName: string;
-}) {
-    title.value = data.title;
-    routeName.value = data.routeName;
+const header = ref<Header>({
+    title: '',
+    routeName: '',
+});
+
+const handleUpdateHeader = function allocateTitleAndRouteName(data: Header) {
+    header.value = data;
 };
 
-onErrorCaptured((e: Error) => {
+onErrorCaptured((err: Error) => {
     return false;
 });
 </script>
@@ -35,7 +36,10 @@ onErrorCaptured((e: Error) => {
                 @click="$router.push({ name: 'admin-index' })">
                 <font-awesome-icon icon="user-lock" size="2x" />
             </VIconButton>
-            <KioHeader v-else :title="title" :routeName="routeName" />
+            <KioHeader
+                v-else
+                :title="header.title"
+                :routeName="header.routeName" />
         </template>
         <template #kiosk-main>
             <RouterView v-slot="{ Component }">

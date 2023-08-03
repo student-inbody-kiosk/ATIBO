@@ -19,8 +19,11 @@ defineProps<{
 .kiosk-inbody-list-item {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
     padding: 1rem;
     background-color: $white;
     border-radius: 0.5em;
+    font-size: 1.2rem;
+    font-weight: 500;
 }
 </style>
