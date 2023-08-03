@@ -24,15 +24,6 @@ class IsAdminUser(BasePermission):
         return False
 
 
-# IsUser(BasePermission):
-class IsUser(BasePermission):
-     def has_permission(self, request, view):
-        user = request.user
-        if user.is_authenticated:
-            return True
-        return False
-
-
 # Allow authenticated user or "the student"
 # The student is specified by {'grade', 'room', 'number'} which are in URL or Query Params
 class IsTheStudent(BasePermission):
@@ -59,8 +50,7 @@ class IsTheStudent(BasePermission):
         
         return False
 
-
+# The owner(student) of the inbody
 class IsOwner(BasePermission):
     def has_object_permission(self, request, view, obj):
-        # Write permissions are only allowed to the owner of the snippet.
         return obj.student == request.user

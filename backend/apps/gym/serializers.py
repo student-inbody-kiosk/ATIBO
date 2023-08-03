@@ -13,12 +13,12 @@ class ImageListSerializer(serializers.ListSerializer):
 
         ret = []
         # Perform creations and updates.
-        for inbody_id, data in data_mapping.items():
-            image = image_mapping.get(inbody_id, None)
+        for image_id, data in data_mapping.items():
+            image = image_mapping.get(image_id, None)
             if image is None:
                 ret.append(self.child.create(data))
-            else:
-                ret.append(self.child.update(image, data))
+            else:   # pass the image
+                ret.append(image) 
 
         # Perform deletions.
         for image_id, image in image_mapping.items():
