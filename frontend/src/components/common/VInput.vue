@@ -13,24 +13,27 @@ const props = withDefaults(
         min?: number;
         max?: number;
         textAlign?: 'left' | 'right' | 'center' | 'justify';
-        isError?: boolean;
         color?: 'kiosk-primary' | 'admin-primary';
         size?: 'sm' | 'md' | 'lg';
         inputRef?: Ref;
+        isError?: boolean;
+        isFocus?: boolean;
     }>(),
     {
         type: 'text',
         value: '',
         readonly: false,
+        size: 'sm',
         textAlign: 'left',
         isError: false,
-        size: 'sm',
+        isFocus: false,
     }
 );
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
-    (e: 'enter', value: string): void;
+    (e: 'enter'): void;
+    (e: 'focus'): void;
 }>();
 
 // Emit input event when it's not readonly
@@ -41,7 +44,14 @@ const handleInput = function handleAppInput(event: Event) {
 </script>
 
 <template>
-    <div :class="['v-input', color, size, isError ? 'error' : '']">
+    <div
+        :class="[
+            'v-input',
+            color,
+            size,
+            isError ? 'error' : '',
+            isFocus ? 'focus' : '',
+        ]">
         <label :for="id">{{ label }}</label>
         <input
             :id="id"
@@ -55,7 +65,8 @@ const handleInput = function handleAppInput(event: Event) {
             :max="max"
             :style="{ textAlign }"
             @input="handleInput"
-            @keyup.enter="$emit('enter')" />
+            @keyup.enter="$emit('enter')"
+            @focus="$emit('focus')" />
     </div>
 </template>
 
@@ -77,8 +88,20 @@ const handleInput = function handleAppInput(event: Event) {
     }
 }
 
+.v-input.kiosk-primary.focus {
+    input {
+        outline: $kiosk-deep-primary 3px solid;
+    }
+}
+
 .v-input.admin-primary {
     input:focus {
+        outline: $admin-deep-primary 3px solid;
+    }
+}
+
+.v-input.admin-primary.focus {
+    input {
         outline: $admin-deep-primary 3px solid;
     }
 }

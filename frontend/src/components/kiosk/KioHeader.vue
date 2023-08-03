@@ -4,29 +4,42 @@ import VIconButton from '@/components/common/VIconButton.vue';
 defineProps<{
     title: string;
     routeName: string;
+    routeParams?: object;
+    routeQuery?: object;
 }>();
 </script>
 
 <template lang="">
     <div class="kiosk-header">
-        <VIconButton size="lg" @click="$router.push({ name: routeName })">
-            <font-awesome-icon icon="circle-arrow-left" size="2x" />
-        </VIconButton>
-
         <h1 class="kiosk-header__title">{{ title }}</h1>
-
-        <VIconButton size="lg" @click="$router.push({ name: 'kiosk-index' })">
-            <font-awesome-icon icon="house" size="2x" />
-        </VIconButton>
+        <div class="kiosk-header__button">
+            <RouterLink
+                :to="{
+                    name: routeName,
+                    params: routeParams,
+                    query: routeQuery,
+                }">
+                <VIconButton>
+                    <font-awesome-icon icon="circle-arrow-left" size="3x" />
+                </VIconButton>
+            </RouterLink>
+        </div>
     </div>
 </template>
 
 <style lang="scss">
 .kiosk-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    position: relative;
     margin: 1rem 2rem;
+}
+
+.kiosk-header__button {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .kiosk-header__title {

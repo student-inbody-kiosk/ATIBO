@@ -15,7 +15,7 @@
 .kiosk-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(min-content, auto) minmax(0, auto);
+    grid-template-rows: auto minmax(0, 1fr);
     height: 100vh;
     background-color: $kiosk-secondary;
 }

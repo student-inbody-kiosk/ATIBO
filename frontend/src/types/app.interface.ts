@@ -1,4 +1,13 @@
 export interface Header {
     title: string;
-    routeName: routeName;
+    routeName: string;
+    routeParams?: object;
+    routeQuery?: object;
+}
+
+export interface HeaderUpdate {
+    title?: string;
+    routeName?: string;
+    routeParams?: object;
+    routeQuery?: object;
 }
