@@ -1,6 +1,7 @@
 import apiRequest from '@/apis/axiosInterceptors';
 import toastManager, { toastCenterErrorMessage } from '@/utils/toastManager';
 import type { School } from '@/types/school.interface';
+import type { AccountList } from '@/types/accounts.interface';
 
 export function getSchoolInfo() {
     return apiRequest
@@ -24,4 +25,10 @@ export function updateSchoolInfo(name: string, logoImage: File) {
         .then((res): School => {
             return res.data;
         });
+}
+
+export function getSchoolAccounts() {
+    return apiRequest.get('accounts/admin/').then((res): AccountList => {
+        return res.data;
+    });
 }

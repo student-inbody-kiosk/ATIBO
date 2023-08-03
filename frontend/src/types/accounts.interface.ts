@@ -3,5 +3,15 @@ export interface Account {
     username: string;
     name: string;
     email: string;
-    role: string;
+    role?: string;
+}
+
+export interface SchoolAccount extends Account {
+    comment: string;
+    isActive: boolean;
+}
+
+export interface AccountList {
+    inactiveUsers: SchoolAccount[];
+    activeUsers: SchoolAccount[];
 }
