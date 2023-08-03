@@ -1,26 +1,30 @@
 <script setup lang="ts">
-import KioStudentForm from '@/components/kiosk/KioStudentForm.vue';
-import KioInputGuide from '@/components/kiosk/KioInputGuide.vue';
-import TheModal from '@/components/common/TheModal.vue';
-import type { StudentSimple } from '@/types/students.interface';
 import { onBeforeMount, ref } from 'vue';
+import TheModal from '@/components/common/TheModal.vue';
+import KioInputGuide from '@/components/kiosk/KioInputGuide.vue';
+import KioStudentForm from '@/components/kiosk/KioStudentForm.vue';
 import KioAttendModal from '@/components/kiosk/attendance/KioAttendModal.vue';
-import type { Header } from '@/types/app.interface';
+import type { HeaderUpdate } from '@/types/app.interface';
+import type { StudentSimple } from '@/types/students.interface';
 
 const emit = defineEmits<{
-    (e: 'update-header', info: Header): void;
+    (e: 'update-header', info: HeaderUpdate): void;
 }>();
 
+// student info
 const student = ref<StudentSimple | null>(null);
 
+// udpate student info
 const handleUpdateStudent = function (value: StudentSimple) {
     student.value = value;
 };
 
+// close modal
 const handleCloseModal = function () {
     student.value = null;
 };
 
+// update kio-header
 onBeforeMount(() => {
     emit('update-header', { title: '출석 확인', routeName: 'kiosk-index' });
 });
