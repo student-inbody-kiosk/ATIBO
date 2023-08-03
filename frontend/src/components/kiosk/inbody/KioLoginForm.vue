@@ -1,61 +1,53 @@
 <script setup lang="ts">
-import { ref, inject } from 'vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import services from '@/apis/services';
+import regexes from '@/constants/regexes';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
-import { useRouter } from 'vue-router';
 import TheKeypad from '@/components/kiosk/TheKeypad.vue';
-import regexes from '@/constants/regexes';
-import services from '@/apis/services';
 import type { StudentSimple } from '@/types/students.interface';
+import { toastCenterErrorMessage } from '@/utils/toastManager';
 
 const props = defineProps<{
     student: StudentSimple;
 }>();
 
 const emit = defineEmits<{
-    (e: 'update-student', value: null): void;
+    (e: 'update-student', value: null): void; // delete student
 }>();
 
 const router = useRouter();
-const toast = inject('toast');
+
 const studentPw = ref<string>('');
 
+// handle studentPw input
 const handleInput = function inputStudentPw(value: string) {
     studentPw.value = value;
 };
 
+// student login
 const handleSubmit = function loginStudent() {
     if (!regexes.studentPw.test(studentPw.value)) {
-        toast(
-            '비밀번호는 4자리 숫자로 입력해주세요',
-            'error',
-            2500,
-            'center',
-            'lg'
-        );
+        toastCenterErrorMessage('비밀번호는 4자리 숫자로 입력해주세요');
         return;
     }
+
     const grade = props.student.grade;
     const room = props.student.room;
     const number = props.student.number;
     const password = studentPw.value;
 
+    console.log(grade, room, number);
+
     studentPw.value = '';
 
-    services
-        .loginStudent(grade, room, number, password)
-        .then((res) => {
-            router.push({
-                name: 'kiosk-inbody-list',
-                params: { grade, room, number },
-            });
-        })
-        .catch((err) => {
-            const message = err.response.data.detail
-                ? err.response.data.detail
-                : '로그인에 실패했습니다';
-            toast(message, 'error', 2500, 'center', 'lg');
+    services.loginStudent(grade, room, number, password).then(() => {
+        router.push({
+            name: 'kiosk-inbody-list',
+            params: { grade, room, number },
         });
+    });
 };
 </script>
 
@@ -65,6 +57,7 @@ const handleSubmit = function loginStudent() {
             <VInput
                 id="kio-studentPw"
                 type="password"
+                :maxlength="4"
                 label="비밀번호"
                 textAlign="center"
                 size="lg"

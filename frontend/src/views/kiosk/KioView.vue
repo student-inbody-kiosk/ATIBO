@@ -1,26 +1,42 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
-import KioLayout from '@/components/kiosk/KioLayout.vue';
+import { ref, onErrorCaptured } from 'vue';
+import { useRoute, RouterView } from 'vue-router';
+import VLoading from '@/components/common/VLoading.vue';
 import KioHeader from '@/components/kiosk/KioHeader.vue';
 import VIconButton from '@/components/common/VIconButton.vue';
-import { onErrorCaptured } from 'vue';
-import { useRoute } from 'vue-router';
-import { ref, watchEffect } from 'vue';
-import VLoading from '@/components/common/VLoading.vue';
+import KioLayout from '@/layouts/KioLayout.vue';
+import type { Header, HeaderUpdate } from '@/types/app.interface';
 
 const route = useRoute();
-const title = ref('');
-const routeName = ref('');
 
-const handleUpdateHeader = function allocateTitleAndRouteName(data: {
-    title: string;
-    routeName: string;
-}) {
-    title.value = data.title;
-    routeName.value = data.routeName;
+// data for KioHeader
+const header = ref<Header>({
+    title: '',
+    routeName: '',
+    routeQuery: {},
+    routeParams: {},
+});
+
+// update KioHeader data
+const handleUpdateHeader = function allocateTitleAndRouteName(
+    data: HeaderUpdate
+) {
+    if (data.title) {
+        header.value.title = data.title;
+    }
+    if (data.routeName) {
+        header.value.routeName = data.routeName;
+    }
+    if (data.routeQuery) {
+        header.value.routeQuery = data.routeQuery;
+    }
+    if (data.routeParams) {
+        header.value.routeParams = data.routeParams;
+    }
 };
 
-onErrorCaptured((e: Error) => {
+// Handle <Suspense> error
+onErrorCaptured(() => {
     return false;
 });
 </script>
@@ -35,7 +51,12 @@ onErrorCaptured((e: Error) => {
                 @click="$router.push({ name: 'admin-index' })">
                 <font-awesome-icon icon="user-lock" size="2x" />
             </VIconButton>
-            <KioHeader v-else :title="title" :routeName="routeName" />
+            <KioHeader
+                v-else
+                :title="header.title"
+                :route-name="header.routeName"
+                :route-params="header.routeParams"
+                :route-query="header.routeQuery" />
         </template>
         <template #kiosk-main>
             <RouterView v-slot="{ Component }">

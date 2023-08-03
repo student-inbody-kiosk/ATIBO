@@ -9,7 +9,7 @@ defineEmits<{
 </script>
 
 <template lang="">
-    <button class="keypad__button" @click="$emit('click')" @mousedown.prevent>
+    <button class="keypad__button" @click="$emit('click')">
         {{ text }}
     </button>
 </template>

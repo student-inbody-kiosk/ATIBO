@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import VIconButton from '@/components/common/VIconButton.vue';
 
+withDefaults(
+    defineProps<{
+        color: 'kiosk-secondary' | 'admin-secondary' | 'white';
+    }>(),
+    {
+        color: 'white',
+    }
+);
+
 defineEmits<{
     (e: 'close-modal'): void;
 }>();
@@ -9,7 +18,7 @@ defineEmits<{
 <template>
     <teleport to="#modal">
         <div class="the-modal" @click.stop="$emit('close-modal')">
-            <div class="the-modal__content" @click.stop>
+            <div :class="['the-modal__content', color]" @click.stop>
                 <div class="the-modal__button">
                     <VIconButton @click="$emit('close-modal')">
                         <font-awesome-icon icon="xmark" size="2x" />
@@ -51,5 +60,18 @@ defineEmits<{
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
+}
+
+// color
+.the-modal__content.kiosk-secondary {
+    background-color: $kiosk-secondary;
+}
+
+.the-modal__content.admin-secondary {
+    background-color: $admin-secondary;
+}
+
+.the-modal__content.white {
+    background-color: $white;
 }
 </style>

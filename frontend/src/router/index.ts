@@ -5,7 +5,10 @@ import KioIndexView from '@/views/kiosk/KioIndexView.vue';
 import KioAttendView from '@/views/kiosk/KioAttendView.vue';
 import KioInbodyView from '@/views/kiosk/KioInbodyView.vue';
 import KioInbodyListView from '@/views/kiosk/KioInbodyListView.vue';
+import KioInbodyDetailView from '@/views/kiosk/KioInbodyDetailView.vue';
+import KioInbodyPwView from '@/views/kiosk/KioInbodyPwView.vue';
 import KioGymView from '@/views/kiosk/KioGymView.vue';
+import KioGymDetailView from '@/views/kiosk/KioGymDetailView.vue';
 
 import AdmView from '@/views/admin/AdmView.vue';
 import AdmIndexView from '@/views/admin/AdmIndexView.vue';
@@ -16,6 +19,8 @@ import AdmStudentDeleteView from '@/views/admin/AdmStudentDeleteView.vue';
 import AdmStudentUpdateView from '@/views/admin/AdmStudentUpdateView.vue';
 import AdmAttendView from '@/views/admin/AdmAttendView.vue';
 import AdmInbodyView from '@/views/admin/AdmInbodyView.vue';
+import AdmGymView from '@/views/admin/AdmGymView.vue';
+import AdmSchoolView from '@/views/admin/AdmSchoolView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,9 +51,24 @@ const router = createRouter({
                     component: KioInbodyListView,
                 },
                 {
+                    path: 'inbody/:grade/:room/:number/detail/:inbodyId',
+                    name: 'kiosk-inbody-detail',
+                    component: KioInbodyDetailView,
+                },
+                {
+                    path: 'inbody/:grade/:room/:number/pw',
+                    name: 'kiosk-inbody-pw',
+                    component: KioInbodyPwView,
+                },
+                {
                     path: 'gym',
                     name: 'kiosk-gym',
                     component: KioGymView,
+                },
+                {
+                    path: 'gym/:gymId',
+                    name: 'kiosk-gym-detail',
+                    component: KioGymDetailView,
                 },
             ],
         },
@@ -97,6 +117,16 @@ const router = createRouter({
                     path: 'inbody',
                     name: 'admin-inbody',
                     component: AdmInbodyView,
+                },
+                {
+                    path: 'gym',
+                    name: 'admin-gym',
+                    component: AdmGymView,
+                },
+                {
+                    path: 'school',
+                    name: 'admin-school',
+                    component: AdmSchoolView,
                 },
             ],
         },

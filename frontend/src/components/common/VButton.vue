@@ -5,10 +5,12 @@ withDefaults(
     defineProps<{
         text: string;
         color: 'kiosk-primary' | 'admin-primary' | 'green' | 'red' | 'gray';
-        size: 'sm' | 'md' | 'lg';
+        size?: 'sm' | 'md' | 'lg';
+        type?: 'button' | 'submit' | 'reset';
     }>(),
     {
         size: 'sm',
+        type: 'button',
     }
 );
 
@@ -23,7 +25,10 @@ const handleClick = function () {
 </script>
 
 <template>
-    <button :class="['v-button', color, size]" @click="handleClick">
+    <button
+        :class="['v-button', color, size]"
+        :type="type"
+        @click="handleClick">
         {{ text }}
     </button>
 </template>

@@ -1,12 +1,15 @@
+import { useAccountsStore } from '@/stores/accounts.store';
 import axios from 'axios';
 import router from '@/router/index';
 import { useAuthStore } from '@/stores/auth.store';
 
+const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
+
 const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
+    baseURL: VITE_BASE_URL,
+    // headers: {
+    //     'Content-Type': 'application/json',
+    // },
 });
 
 axiosInstance.interceptors.request.use(
@@ -28,36 +31,31 @@ axiosInstance.interceptors.response.use(
         console.log(response);
         return response;
     },
-    function (error) {
+    async function (error) {
         console.log('ERROR >>>', error.response.data);
         const originalRequest = error.config;
         // Unauthorized : request a new accessToken
         const { refreshToken, updateAccessToken } = useAuthStore();
 
-        if (error.response.status === 401) {
-            if (refreshToken.length) {
-                return axios
-                    .post(
-                        `${
-                            import.meta.env.VITE_BASE_URL
-                        }accounts/token/refresh/`,
-                        {
-                            username: 'admin',
-                            refreshToken,
-                        }
-                    )
-                    .then((res) => {
-                        console.log(res);
-                        updateAccessToken(res.data?.accessToken);
-                        originalRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
-                        return axiosInstance(originalRequest);
-                    })
-                    .catch((error) => {
-                        alert('다시 로그인해주세요.');
-                        router.push({ name: 'admin-index' });
-                        return Promise.reject(error);
-                    });
+        if (error.response.status === 401 || error.response.status === 403) {
+            if (refreshToken) {
+                try {
+                    const { username } = useAccountsStore();
+                    const res = await axios.post(
+                        `${VITE_BASE_URL}accounts/token/refresh/`,
+                        { username, refreshToken }
+                    );
+                    const accessToken = res.data?.accessToken;
+                    updateAccessToken(accessToken);
+                    originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                    return axiosInstance(originalRequest);
+                } catch (error) {
+                    alert('다시 로그인해주세요.');
+                    router.push({ name: 'admin-index' });
+                    return Promise.reject(error);
+                }
             } else {
+                console.log(2);
                 router.push({ name: 'kiosk-index' });
             }
         }
