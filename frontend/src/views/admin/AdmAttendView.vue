@@ -1,21 +1,19 @@
 <script setup lang="ts">
-import VInput from '@/components/common/VInput.vue';
-import VButton from '@/components/common/VButton.vue';
-import AttendDataLabel from '@/components/admin/AttendDataLabel.vue';
-import AttendData from '@/components/admin/AttendData.vue';
-
+import AttendSearchBar from '@/components/admin/attendance/AttendSearchBar.vue';
+import StudentTable from '@/components/admin/student/StudentTable.vue';
+import AttendTable from '@/components/admin/attendance/AttendTable.vue';
 import { getAttendances } from '@/apis/services/attendances';
 import { ref, computed } from 'vue';
 
 import type { Ref } from 'vue';
-import type { Attendance, AttendanceInfo } from '@/types/admin.interface';
+import type { Attendance } from '@/types/attendance.interface';
 
 const grade = ref('');
 const room = ref('');
 const name = ref('');
 const number = ref('');
-const month = ref('');
-const students: Ref<AttendanceInfo> = ref([]);
+const date = ref('');
+const students: Ref<Attendance[]> = ref([]);
 const query = computed(() => {
     return {
         grade: grade.value,
@@ -27,13 +25,13 @@ const query = computed(() => {
 
 const handleSubmit = function searchAttendance() {
     getAttendances(
-        month.value,
+        date.value,
         Number(grade.value),
         Number(room.value),
         Number(number.value),
         name.value
     ).then((res) => {
-        students.value = res?.data;
+        students.value = res;
     });
 };
 </script>
@@ -41,133 +39,42 @@ const handleSubmit = function searchAttendance() {
 <template>
     <div class="admin-attend">
         <div class="admin-attend__header">출결 관리</div>
-        <section class="admin-attend__searchbar">
-            <div class="admin-attend__searchbar-date">
-                <VInput
-                    id="month"
-                    label="월별 검색"
-                    type="month"
-                    refer="month"
-                    :value="month"
-                    @input="(value) => (month = value)" />
-            </div>
-            <div class="admin-attend__searchbar-student">
-                <VInput
-                    id="grade"
-                    label="학년"
-                    refer="grade"
-                    :value="grade"
-                    @input="(value) => (grade = value)" />
-                <VInput
-                    id="room"
-                    label="반"
-                    refer="room"
-                    :value="room"
-                    @input="(value) => (room = value)" />
-                <VInput
-                    id="number"
-                    label="번호"
-                    refer="number"
-                    :value="number"
-                    @input="(value) => (number = value)" />
-                <VInput
-                    id="name"
-                    label="이름"
-                    refer="name"
-                    :value="name"
-                    @input="(value) => (name = value)" />
-                <VButton
-                    text="조회"
-                    color="admin-primary"
-                    size="md"
-                    @click="handleSubmit" />
-            </div>
-        </section>
+        <AttendSearchBar
+            :date="date"
+            :grade="grade"
+            :room="room"
+            :number="number"
+            :name="name"
+            @date="(value: string) => (date = value)"
+            @grade="(value: string) => (grade = value)"
+            @room="(value: string) => (room = value)"
+            @number="(value: string) => (number = value)"
+            @name="(value: string) => (name = value)"
+            @search="handleSubmit" />
 
-        <section class="admin-attend-list">
-            <div class="admin-attend-list__student">
-                <table>
-                    <AttendDataLabel class="admin-attend-list__student__head" />
-                    <tbody>
-                        <AttendData
-                            v-for="(student, index) in students"
-                            :key="student.name"
-                            :index="index"
-                            :grade="student.grade"
-                            :room="student.room"
-                            :number="student.room"
-                            :name="student.name" />
-                    </tbody>
-                </table>
-            </div>
-            <div class="admin-attend-list__attend">
-                <table>
-                    <thead class="admin-attend-list__attend__head">
-                        <tr>
-                            <th
-                                class="student-attend-list__attend__label"
-                                v-for="index in 31"
-                                :key="index">
-                                {{ index }}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="hi">
-                        <tr v-for="(student, index) in students" :key="index">
-                            <td
-                                class="student-attend-list__attend__content"
-                                v-for="index in 31"
-                                :key="index">
-                                -
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+        <section class="admin-attend-content">
+            <StudentTable :students="students" />
+            <div class="admin-attend-attendance">
+                <AttendTable :students="students" />
             </div>
         </section>
     </div>
 </template>
 
-<style lang="scss">
-.admin-attend__searchbar-date,
-.admin-attend__searchbar-student {
-    display: flex;
+<style lang="scss" scoped>
+.admin-attend {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr);
 }
-.admin-attend-list {
+
+.admin-attend-content {
     display: flex;
-    width: 100%;
-    height: 36rem;
     overflow-y: auto;
 }
 
-.admin-attend-list__student__head {
-    tr,
-    th {
-        @include z-index(label);
-        position: sticky;
-        top: 0;
-    }
-}
-
-.admin-attend-list__attend {
-    width: 40rem;
+.admin-attend-attendance {
     height: fit-content;
     overflow-x: auto;
-}
-
-.student-attend-list__attend__label,
-.student-attend-list__attend__content {
-    min-width: 3rem;
-    margin-top: 0.2rem;
-    padding: 0.2rem;
-    border: 0.1rem solid $admin-secondary;
-    text-align: center;
-}
-
-.student-attend-list__attend__label {
-    background-color: $admin-tertiary;
-}
-.student-attend-list__attend__content {
-    background-color: $white;
 }
 </style>

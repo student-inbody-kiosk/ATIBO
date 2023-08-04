@@ -14,14 +14,16 @@
 
 <style lang="scss" scoped>
 thead {
-    overflow: auto;
+    @include z-index(label);
+    position: sticky;
+    top: 0;
 }
 .student-attend-label {
     background-color: $admin-tertiary;
 }
 
 .student-attend-label__content {
-    min-width: 3rem;
+    min-width: 3.5rem;
     padding: 0.2rem;
     border: 0.1rem solid $admin-secondary;
 }

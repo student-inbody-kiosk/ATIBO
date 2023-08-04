@@ -12,14 +12,18 @@ export async function getAttendances(
     number?: number | null,
     name?: string | null
 ) {
-    return await apiRequest.get(`/students/attendance/${month}/`, {
-        params: {
-            grade,
-            room,
-            number,
-            name,
-        },
-    });
+    return await apiRequest
+        .get(`/students/attendance/${month}/`, {
+            params: {
+                grade,
+                room,
+                number,
+                name,
+            },
+        })
+        .then((res) => {
+            return res.data;
+        });
 }
 
 export async function createAttendacne(
