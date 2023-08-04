@@ -2,25 +2,26 @@
 
 <template>
     <thead>
-        <tr class="student-data-label">
-            <th class="student-data-label__content"></th>
-            <th class="student-data-label__content">학년</th>
-            <th class="student-data-label__content">반</th>
-            <th class="student-data-label__content">번호</th>
-            <th class="student-data-label__content">이름</th>
-            <th class="student-data-label__content">성별</th>
-            <th class="student-data-label__content">생년월일</th>
-            <th class="student-data-label__content">비밀번호</th>
+        <tr class="student-attend-label">
+            <th class="student-attend-label__content"></th>
+            <th class="student-attend-label__content">학년</th>
+            <th class="student-attend-label__content">반</th>
+            <th class="student-attend-label__content">번호</th>
+            <th class="student-attend-label__content">이름</th>
         </tr>
     </thead>
 </template>
 
 <style lang="scss" scoped>
-.student-data-label {
+thead {
+    overflow: auto;
+}
+.student-attend-label {
     background-color: $admin-tertiary;
 }
 
-.student-data-label__content {
+.student-attend-label__content {
+    min-width: 3.5rem;
     padding: 0.2rem;
     border: 0.1rem solid $admin-secondary;
 }

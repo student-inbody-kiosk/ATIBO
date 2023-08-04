@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import VButton from '@/components/common/VButton.vue';
-import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
-import StudentDataInput from '@/components/admin/StudentDataInput.vue';
+import StudentDetailDataLabel from '@/components/admin/StudentDetailDataLabel.vue';
+import StudentDetailInput from '@/components/admin/StudentDetailInput.vue';
 import type { Student } from '@/types/admin.interface';
 
 import { getStudents, updateStudents } from '@/apis/services/students';
@@ -78,10 +78,10 @@ const handleUpdateClick = function updateStudent() {
 
         <section class="admin-student-create-list">
             <table class="admin-student-create-list__table">
-                <StudentDataLabel
+                <StudentDetailDataLabel
                     class="admin-student-create-list__table__head" />
                 <tbody>
-                    <StudentDataInput
+                    <StudentDetailInput
                         v-for="(student, index) in students"
                         :key="index"
                         :index="index"

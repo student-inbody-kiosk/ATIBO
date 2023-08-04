@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
-import AttendDataLabel from '@/components/admin/AttendDataLabel.vue';
-import AttendData from '@/components/admin/AttendData.vue';
+import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
+import StudentData from '@/components/admin/StudentData.vue';
 
 import { getAttendances } from '@/apis/services/attendances';
 import { ref, computed } from 'vue';
@@ -87,9 +87,10 @@ const handleSubmit = function searchAttendance() {
         <section class="admin-attend-list">
             <div class="admin-attend-list__student">
                 <table>
-                    <AttendDataLabel class="admin-attend-list__student__head" />
+                    <StudentDataLabel
+                        class="admin-attend-list__student__head" />
                     <tbody>
-                        <AttendData
+                        <StudentData
                             v-for="(student, index) in students"
                             :key="student.name"
                             :index="index"

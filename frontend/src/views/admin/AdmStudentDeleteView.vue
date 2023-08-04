@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import VButton from '@/components/common/VButton.vue';
-import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
-import StudentData from '@/components/admin/StudentData.vue';
+import StudentDetailDataLabel from '@/components/admin/StudentDetailDataLabel.vue';
+import StudentDetailData from '@/components/admin/StudentDetailData.vue';
 
 import { useRoute } from 'vue-router';
 import { ref, onBeforeMount } from 'vue';
@@ -52,9 +52,10 @@ const handleDeleteClick = function deleteStudent() {
 
         <section class="admin-student-list">
             <table class="admin-student-list__table">
-                <StudentDataLabel class="admin-student-list__table__head" />
+                <StudentDetailDataLabel
+                    class="admin-student-list__table__head" />
                 <tbody class="admin-student-list__table__body">
-                    <StudentData
+                    <StudentDetailData
                         v-for="(data, index) in students"
                         :isDelete="true"
                         :key="data.id"

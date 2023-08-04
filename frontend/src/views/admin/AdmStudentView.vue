@@ -1,21 +1,21 @@
 <script setup lang="ts">
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
-import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
-import StudentData from '@/components/admin/StudentData.vue';
+import StudentDetailDataLabel from '@/components/admin/StudentDetailDataLabel.vue';
+import StudentDetailData from '@/components/admin/StudentDetailData.vue';
 
 import { ref, computed } from 'vue';
 
 import { getStudents } from '@/apis/services/students';
 
 import type { Ref } from 'vue';
-// import type { Student } from '@/types/students.interface';
+import type { StudentDetail } from '@/types/students.interface';
 
 const grade = ref('');
 const room = ref('');
 const name = ref('');
 const number = ref('');
-const students: Ref<Student[]> = ref([]);
+const students: Ref<StudentDetail[]> = ref([]);
 const query = computed(() => {
     return {
         grade: grade.value,
@@ -95,9 +95,10 @@ const handleSubmit = function searchStudents() {
         </section>
         <section class="admin-student-list">
             <table class="admin-student-list__table">
-                <StudentDataLabel class="admin-student-list__table__head" />
+                <StudentDetailDataLabel
+                    class="admin-student-list__table__head" />
                 <tbody>
-                    <StudentData
+                    <StudentDetailData
                         v-for="(data, index) in students"
                         :key="data.id"
                         :id="index"
