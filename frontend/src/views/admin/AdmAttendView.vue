@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import VInput from '@/components/common/VInput.vue';
-import VButton from '@/components/common/VButton.vue';
-import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
-import StudentData from '@/components/admin/StudentData.vue';
+import AttendSearchbar from '@/components/admin/AttendSearchbar.vue';
+import StudentDataLabel from '@/components/admin/student/StudentDataLabel.vue';
+import StudentData from '@/components/admin/student/StudentData.vue';
 
 import { getAttendances } from '@/apis/services/attendances';
 import { ref, computed } from 'vue';
 
 import type { Ref } from 'vue';
-import type { Attendance, AttendanceInfo } from '@/types/admin.interface';
+import type { AttendanceInfo } from '@/types/admin.interface';
 
 const grade = ref('');
 const room = ref('');
 const name = ref('');
 const number = ref('');
-const month = ref('');
+const date = ref('');
 const students: Ref<AttendanceInfo> = ref([]);
 const query = computed(() => {
     return {
@@ -27,7 +26,7 @@ const query = computed(() => {
 
 const handleSubmit = function searchAttendance() {
     getAttendances(
-        month.value,
+        date.value,
         Number(grade.value),
         Number(room.value),
         Number(number.value),
@@ -41,47 +40,18 @@ const handleSubmit = function searchAttendance() {
 <template>
     <div class="admin-attend">
         <div class="admin-attend__header">출결 관리</div>
-        <section class="admin-attend__searchbar">
-            <div class="admin-attend__searchbar-date">
-                <VInput
-                    id="month"
-                    label="월별 검색"
-                    type="month"
-                    refer="month"
-                    :value="month"
-                    @input="(value) => (month = value)" />
-            </div>
-            <div class="admin-attend__searchbar-student">
-                <VInput
-                    id="grade"
-                    label="학년"
-                    refer="grade"
-                    :value="grade"
-                    @input="(value) => (grade = value)" />
-                <VInput
-                    id="room"
-                    label="반"
-                    refer="room"
-                    :value="room"
-                    @input="(value) => (room = value)" />
-                <VInput
-                    id="number"
-                    label="번호"
-                    refer="number"
-                    :value="number"
-                    @input="(value) => (number = value)" />
-                <VInput
-                    id="name"
-                    label="이름"
-                    refer="name"
-                    :value="name"
-                    @input="(value) => (name = value)" />
-                <VButton
-                    text="조회"
-                    color="admin-primary"
-                    @click="handleSubmit" />
-            </div>
-        </section>
+        <AttendSearchbar
+            :date="date"
+            :grade="grade"
+            :room="room"
+            :number="number"
+            :name="name"
+            @date="(value) => (date = value)"
+            @grade="(value) => (grade = value)"
+            @room="(value) => (room = value)"
+            @number="(value) => (number = value)"
+            @name="(value) => (name = value)"
+            @search="handleSubmit" />
 
         <section class="admin-attend-list">
             <div class="admin-attend-list__student">

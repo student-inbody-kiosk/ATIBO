@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
-import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
-import StudentData from '@/components/admin/StudentData.vue';
+import StudentDataLabel from '@/components/admin/student/StudentDataLabel.vue';
+import StudentData from '@/components/admin/student/StudentData.vue';
 import InbodyDateTable from '@/components/admin/InbodyDateTable.vue';
 
 import { ref, computed } from 'vue';

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import VButton from '@/components/common/VButton.vue';
-import StudentDetailDataLabel from '@/components/admin/StudentDetailDataLabel.vue';
-import StudentDetailInput from '@/components/admin/StudentDetailInput.vue';
+import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
+import StudentDetailInput from '@/components/admin/student/StudentDetailInput.vue';
 import type { Student } from '@/types/admin.interface';
 
 import { getStudents, updateStudents } from '@/apis/services/students';

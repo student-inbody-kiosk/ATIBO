@@ -17,7 +17,7 @@ const props = withDefaults(
 );
 
 import VInput from '@/components/common/VInput.vue';
-import VIconButton from '../common/VIconButton.vue';
+import VIconButton from '@/components/common/VIconButton.vue';
 
 import { ref } from 'vue';
 

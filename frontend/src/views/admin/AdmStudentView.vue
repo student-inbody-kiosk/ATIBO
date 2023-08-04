@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import StudentSearchbar from '@/components/admin/StudentSearchbar.vue';
-import StudentDetailDataLabel from '@/components/admin/StudentDetailDataLabel.vue';
-import StudentDetailData from '@/components/admin/StudentDetailData.vue';
+import StudentSearchbar from '@/components/admin/student/StudentSearchbar.vue';
+import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
+import StudentDetailData from '@/components/admin/student/StudentDetailData.vue';
 import { ref, computed } from 'vue';
 import { getStudents } from '@/apis/services/students';
 import type { Ref } from 'vue';

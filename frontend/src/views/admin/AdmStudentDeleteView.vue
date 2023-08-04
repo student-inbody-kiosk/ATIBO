@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import VButton from '@/components/common/VButton.vue';
-import StudentDetailDataLabel from '@/components/admin/StudentDetailDataLabel.vue';
-import StudentDetailData from '@/components/admin/StudentDetailData.vue';
+import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
+import StudentDetailData from '@/components/admin/student/StudentDetailData.vue';
 
 import { useRoute } from 'vue-router';
 import { ref, onBeforeMount } from 'vue';
