@@ -205,7 +205,6 @@ const dummy = {
                     <VButton
                         text="수정"
                         color="admin-primary"
-                        size="sm"
                         @click="handleUpdateClick" />
                 </div>
             </section>

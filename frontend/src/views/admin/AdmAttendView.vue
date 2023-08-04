@@ -79,7 +79,6 @@ const handleSubmit = function searchAttendance() {
                 <VButton
                     text="조회"
                     color="admin-primary"
-                    size="md"
                     @click="handleSubmit" />
             </div>
         </section>

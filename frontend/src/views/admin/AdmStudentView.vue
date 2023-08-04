@@ -51,9 +51,8 @@ const handleSubmit = function searchStudents() {
             @search="handleSubmit" />
 
         <section class="admin-student-list">
-            <table class="admin-student-list__table">
-                <StudentDetailDataLabel
-                    class="admin-student-list__table__head" />
+            <table>
+                <StudentDetailDataLabel />
                 <tbody>
                     <StudentDetailData
                         v-for="(data, index) in students"
@@ -76,23 +75,14 @@ const handleSubmit = function searchStudents() {
 .admin-student {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
 }
 
 .admin-student-list {
-    height: 36rem;
     overflow: auto;
 }
 
-.admin-student-list__table {
+table {
     width: 100%;
-}
-.admin-student-list__table__head {
-    tr,
-    th {
-        @include z-index(label);
-        position: sticky;
-        top: 0;
-    }
 }
 </style>

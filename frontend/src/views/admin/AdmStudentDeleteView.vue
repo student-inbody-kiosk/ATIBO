@@ -41,20 +41,14 @@ const handleDeleteClick = function deleteStudent() {
 
 <template>
     <div class="admin-student-delete">
-        <section class="admin-student__header">
-            <div>학생 삭제</div>
-            <VButton
-                text="삭제"
-                color="red"
-                size="md"
-                @click="handleDeleteClick" />
-        </section>
+        <div>학생 삭제</div>
+
+        <VButton text="삭제" color="red" @click="handleDeleteClick" />
 
         <section class="admin-student-list">
-            <table class="admin-student-list__table">
-                <StudentDetailDataLabel
-                    class="admin-student-list__table__head" />
-                <tbody class="admin-student-list__table__body">
+            <table>
+                <StudentDetailDataLabel />
+                <tbody>
                     <StudentDetailData
                         v-for="(data, index) in students"
                         :isDelete="true"
@@ -74,29 +68,18 @@ const handleDeleteClick = function deleteStudent() {
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .admin-student-delete {
-    width: 100%;
-}
-
-.admin-student__header {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr);
 }
 
 .admin-student-list {
-    height: 40rem;
     overflow: auto;
 }
 
-.admin-student-list__table {
+table {
     width: 100%;
-}
-.admin-student-list__table__head {
-    tr,
-    th {
-        @include z-index(label);
-        position: sticky;
-        top: 0;
-    }
 }
 </style>

@@ -57,17 +57,12 @@ const handleCreateClick = function createStudent() {
 
 <template>
     <div class="admin-student-create">
-        <div class="admin-student__header">학생 등록</div>
-        <section class="admin-student-create">
-            <VButton
-                text="+ 추가"
-                color="green"
-                size="md"
-                @click="handleAddClick" />
+        <div>학생 등록</div>
+        <section class="admin-student-create__buttons">
+            <VButton text="+ 추가" color="green" @click="handleAddClick" />
             <VButton
                 text="등록"
                 color="admin-primary"
-                size="md"
                 @click="handleCreateClick" />
         </section>
 
@@ -81,6 +76,7 @@ const handleCreateClick = function createStudent() {
                         :key="index"
                         :index="index"
                         :student="student"
+                        :isCreate="true"
                         @update-input="handleInput"
                         @delete-student="handleDeleteClick" />
                 </tbody>
@@ -90,20 +86,21 @@ const handleCreateClick = function createStudent() {
 </template>
 
 <style lang="scss" scoped>
+.admin-student-create {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.admin-student-create__buttons {
+    display: flex;
+    justify-content: flex-end;
+}
 .admin-student-create-list {
-    height: 36rem;
     overflow: auto;
 }
 
 .admin-student-create-list__table {
     width: 100%;
-}
-.admin-student-create-list__table__head {
-    tr,
-    th {
-        @include z-index(label);
-        position: sticky;
-        top: 0;
-    }
 }
 </style>

@@ -32,7 +32,7 @@ body {
 
 .admin-container__main {
     display: flex;
-    align-items: center;
+    // align-items: center;
     justify-content: center;
     padding: 2rem;
     background-color: $admin-secondary;
