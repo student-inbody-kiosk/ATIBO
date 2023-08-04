@@ -28,7 +28,7 @@ const handleLoginSubmit = function submitLogin() {
 </script>
 
 <template>
-    <div>
+    <div class="login-container">
         <VInput
             refer="id"
             id="id"
@@ -47,9 +47,27 @@ const handleLoginSubmit = function submitLogin() {
         <VButton
             text="로그인"
             color="admin-primary"
-            size="md"
+            size="sm"
             @click="handleLoginSubmit" />
     </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.login-container {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 50%;
+    height: 40%;
+    padding: 0.5rem 2rem 0 0;
+    border-radius: 1rem;
+    background-color: $admin-tertiary;
+}
+
+button {
+    align-self: flex-end;
+}
+</style>
