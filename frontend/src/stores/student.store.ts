@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import services from '@/apis/services';
 import type { Student } from '@/types/students.interface';
 
-export const useStudentStore = defineStore('stduent', {
+export const useStudentStore = defineStore('student', {
     state: () => {
         // reset student
         function $reset() {
@@ -20,7 +20,11 @@ export const useStudentStore = defineStore('stduent', {
         // update student asynchronously
         async getStudent(grade: number, room: number, number: number) {
             try {
-                await services.getTheStudent(grade, room, number);
+                this.student = await services.getTheStudent(
+                    grade,
+                    room,
+                    number
+                );
             } catch (err) {
                 return err;
             }
