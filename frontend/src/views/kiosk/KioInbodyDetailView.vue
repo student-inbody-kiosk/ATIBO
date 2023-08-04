@@ -32,18 +32,14 @@ onBeforeMount(() => {
 </script>
 
 <template lang="">
-    <KioInbodyDetail class="kiosk-inbody-detail-view" :inbody="inbody" />
+    <div class="kiosk-inbody-detail-view">
+        <KioInbodyDetail :inbody="inbody" />
+    </div>
 </template>
 
 <style lang="scss">
 .kiosk-inbody-detail-view {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    justify-items: center;
-    padding: 1rem;
-    background-color: $white;
-    border-radius: 0.5em;
-    font-size: 1.2rem;
-    font-weight: 500;
+    height: 100%;
+    padding: 1rem 2rem;
 }
 </style>
