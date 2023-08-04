@@ -5,8 +5,10 @@ import { useRoute } from 'vue-router';
 import services from '@/apis/services';
 import regexes from '@/constants/regexes';
 import VIconButton from '@/components/common/VIconButton.vue';
-import KioInbodyList from '@/components/kiosk/inbody/KioInbodyList.vue';
+import KioInbodyTable from '@/components/kiosk/inbody/KioInbodyTable.vue';
+import KioInbodyGraph from '@/components/kiosk/inbody/KioInbodyGraph.vue';
 import KioInbodySearchForm from '@/components/kiosk/inbody/KioInbodySearchForm.vue';
+import KioInbodyButtons from '@/components/kiosk/inbody/KioInbodyButtons.vue';
 import { useStudentStore } from '@/stores/student.store';
 import { getToday, getAYearAgo } from '@/utils/date';
 import type { HeaderUpdate } from '@/types/app.interface';
@@ -37,6 +39,12 @@ const endDate = ref(
 // student from pinia store
 const studentStore = useStudentStore();
 const { student } = storeToRefs(useStudentStore());
+
+const isGraph = ref(false);
+
+const handleUpdateIsGraph = function updateIsTable(value: boolean) {
+    isGraph.value = value;
+};
 
 // get the intial inbody data
 const inbodys = ref<InbodyDetail[]>(
@@ -83,6 +91,7 @@ watch([startDate, endDate], async () => {
 
 // update kio-header
 watch(student, () => {
+    if (!studentStore.student?.name) return;
     emit('update-header', {
         title: `${studentStore.student?.name} 님의 인바디`,
     });
@@ -90,19 +99,31 @@ watch(student, () => {
 
 // update kio-header
 onBeforeMount(() => {
-    emit('update-header', { routeName: 'kiosk-inbody' });
+    emit('update-header', {
+        routeName: 'kiosk-inbody',
+    });
+    if (!studentStore.student?.name) return;
+    emit('update-header', {
+        title: `${studentStore.student?.name} 님의 인바디`,
+    });
 });
 </script>
 
 <template>
     <div class="kiosk-inbody-list-view">
-        <KioInbodySearchForm
-            :grade="grade"
-            :room="room"
-            :number="number"
-            :startDate="startDate"
-            :endDate="endDate" />
-        <KioInbodyList :inbodys="inbodys" />
+        <div class="kiosk-inbody-list-view__inputs">
+            <KioInbodyButtons
+                :is-graph="isGraph"
+                @update-is-graph="handleUpdateIsGraph" />
+            <KioInbodySearchForm
+                :grade="grade"
+                :room="room"
+                :number="number"
+                :startDate="startDate"
+                :endDate="endDate" />
+        </div>
+        <KioInbodyTable v-if="!isGraph" :inbodys="inbodys" />
+        <KioInbodyGraph v-else :inbodys="inbodys" />
         <div class="kiosk-inbody-list-view__password">
             <RouterLink :to="{ name: 'kiosk-inbody-pw' }">
                 <VIconButton>
@@ -120,6 +141,12 @@ onBeforeMount(() => {
     grid-template-rows: auto minmax(0, 1fr);
     height: 100%;
     padding: 1rem;
+}
+
+.kiosk-inbody-list-view__inputs {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0 1rem 0;
 }
 
 .kiosk-inbody-list-view__password {

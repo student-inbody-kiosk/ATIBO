@@ -84,7 +84,7 @@ export async function getTheStudent(
         .then((res) => {
             return res.data;
         })
-        .err((err) => {
+        .catch((err) => {
             toastCenterErrorMessage('학생 정볼를 불러오지 못했습니다', err);
             throw err;
         });

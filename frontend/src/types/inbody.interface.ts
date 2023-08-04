@@ -13,12 +13,12 @@ export interface InbodyDetail {
     weight: number;
     percentBodyFat: number;
     skeletalMuscleMass: number;
-    height: number;
-    age: number;
-    totalBodyWater: number;
-    protein: number;
-    minerals: number;
-    bodyFatMass: number;
-    bodyMassIndex: number;
-    score: number;
+    height?: number;
+    age?: number;
+    totalBodyWater?: number;
+    protein?: number;
+    minerals?: number;
+    bodyFatMass: ?number;
+    bodyMassIndex?: number;
+    score?: number;
 }
