@@ -3,7 +3,8 @@ import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 
 defineProps<{
-    date: string;
+    startDate: string;
+    endDate: string;
     grade: string;
     room: string;
     number: string;
@@ -12,17 +13,24 @@ defineProps<{
 </script>
 
 <template>
-    <div class="admin-attend">
-        <div class="admin-attend__searchbar-date">
+    <div class="inbody-searchbar">
+        <div class="inbody-searchbar-date">
             <VInput
-                id="date"
-                label="월별 검색"
-                type="month"
-                refer="month"
-                :value="date"
-                @input="(value) => $emit('date', value)" />
+                id="startDate"
+                label="시작"
+                type="date"
+                refer="startDate"
+                :value="startDate"
+                @input="(value) => $emit('start-date', value)" />
+            <VInput
+                id="endDate"
+                label="끝"
+                type="date"
+                refer="endDate"
+                :value="endDate"
+                @input="(value) => $emit('end-date', value)" />
         </div>
-        <div class="admin-attend__searchbar-student">
+        <div class="inbody-searchbar-student">
             <VInput
                 id="grade"
                 label="학년"
@@ -55,4 +63,11 @@ defineProps<{
     </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.inbody-searchbar-date,
+.inbody-searchbar-student {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+</style>

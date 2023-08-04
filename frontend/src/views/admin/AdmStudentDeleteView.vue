@@ -25,6 +25,7 @@ onBeforeMount(() => {
 });
 
 const handleCheckClick = function selectStudent(studentId: string) {
+    console.log(studentId);
     if (studentId in deleteList.value) {
         return delete deleteList.value[studentId];
     }
@@ -50,18 +51,18 @@ const handleDeleteClick = function deleteStudent() {
                 <StudentDetailDataLabel />
                 <tbody>
                     <StudentDetailData
-                        v-for="(data, index) in students"
+                        v-for="(student, index) in students"
                         :isDelete="true"
-                        :key="data.id"
+                        :key="student.id"
                         :id="index"
-                        :grade="data.grade"
-                        :room="data.room"
-                        :number="data.number"
-                        :name="data.name"
-                        :sex="data.sex"
-                        :birthDate="data.birthDate"
-                        :password="data.password"
-                        @update-input="(index) => handleCheckClick(data.id)" />
+                        :grade="student.grade"
+                        :room="student.room"
+                        :number="student.number"
+                        :name="student.name"
+                        :sex="student.sex"
+                        :birthDate="student.birthDate"
+                        :password="student.password"
+                        @input="() => handleCheckClick(student.id)" />
                 </tbody>
             </table>
         </section>

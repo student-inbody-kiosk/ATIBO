@@ -14,7 +14,9 @@
 
 <style lang="scss" scoped>
 thead {
-    overflow: auto;
+    @include z-index(label);
+    position: sticky;
+    top: 0;
 }
 .student-attend-label {
     background-color: $admin-tertiary;

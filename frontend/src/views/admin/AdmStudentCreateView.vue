@@ -68,8 +68,7 @@ const handleCreateClick = function createStudent() {
 
         <section class="admin-student-create-list">
             <table class="admin-student-create-list__table">
-                <StudentDetailDataLabel
-                    class="admin-student-create-list__table__head" />
+                <StudentDetailDataLabel />
                 <tbody>
                     <StudentDetailInput
                         v-for="(student, index) in students"

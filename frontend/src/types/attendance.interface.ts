@@ -8,5 +8,6 @@ export interface Attendance {
     name: string;
     grade: number;
     room: number;
+    number: number;
     attendanceSet: AttendanceInfo[];
 }

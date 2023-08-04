@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import StudentSearchbar from '@/components/admin/student/StudentSearchbar.vue';
+import StudentSearchBar from '@/components/admin/student/StudentSearchBar.vue';
 import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
 import StudentDetailData from '@/components/admin/student/StudentDetailData.vue';
 import { ref, computed } from 'vue';
@@ -37,7 +37,7 @@ const handleSubmit = function searchStudents() {
 <template>
     <div class="admin-student">
         <div class="admin-student__header">학생 관리</div>
-        <StudentSearchbar
+        <StudentSearchBar
             :grade="grade"
             :room="room"
             :number="number"

@@ -19,12 +19,9 @@ import VInput from '@/components/common/VInput.vue';
 
 <template>
     <tr class="student-data">
-        <td v-if="!isDelete" class="student-data__content">{{ id + 1 }}</td>
-        <td v-if="isDelete" class="student-data__content">
-            <VInput
-                type="checkbox"
-                refer="del"
-                @update-input="$emit('update-input', id)" />
+        <td class="student-data__content">
+            <VInput v-if="isDelete" id="delete" type="checkbox" refer="del" />
+            <span v-else>{{ id + 1 }}</span>
         </td>
         <td class="student-data__content">{{ grade }}</td>
         <td class="student-data__content">{{ room }}</td>

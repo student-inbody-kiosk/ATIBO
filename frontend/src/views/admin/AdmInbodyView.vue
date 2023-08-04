@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import VInput from '@/components/common/VInput.vue';
-import VButton from '@/components/common/VButton.vue';
+import InbodySearchBar from '@/components/admin/inbody/InbodySearchBar.vue';
 import StudentDataLabel from '@/components/admin/student/StudentDataLabel.vue';
 import StudentData from '@/components/admin/student/StudentData.vue';
+import StudentTable from '@/components/admin/student/StudentTable.vue';
 import InbodyDateTable from '@/components/admin/InbodyDateTable.vue';
 
 import { ref, computed } from 'vue';
@@ -51,7 +51,7 @@ const handleSubmit = function searchAttendance() {
     ).then((res) => {
         days.value = calculateDays(startDate.value, endDate.value);
         dateIndexTable.value = createIndexTable(startDate.value, endDate.value);
-        students.value = res?.data;
+        students.value = res;
 
         // inbodyList에 날짜 데이터 넣기
         for (let i = 0; i < students.value.length; i++) {
@@ -90,77 +90,31 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
 <template>
     <div class="admin-inbody">
         <div>인바디 관리</div>
-        <section class="admin-inbody__searchbar">
-            <div class="admin-inbody__searchbar-date">
-                <VInput
-                    id="startDate"
-                    label="시작"
-                    type="date"
-                    refer="startDate"
-                    :value="startDate"
-                    @input="(value) => (startDate = value)" />
-                <VInput
-                    id="endDate"
-                    label="끝"
-                    type="date"
-                    refer="endDate"
-                    :value="endDate"
-                    @input="(value) => (endDate = value)" />
-            </div>
-            <div class="admin-inbody__searchbar-student">
-                <VInput
-                    id="grade"
-                    label="학년"
-                    refer="grade"
-                    :value="grade"
-                    @input="(value) => (grade = value)" />
-                <VInput
-                    id="room"
-                    label="반"
-                    refer="room"
-                    :value="room"
-                    @input="(value) => (room = value)" />
-                <VInput
-                    id="number"
-                    label="번호"
-                    refer="number"
-                    :value="number"
-                    @input="(value) => (number = value)" />
-                <VInput
-                    id="name"
-                    label="이름"
-                    refer="name"
-                    :value="name"
-                    @input="(value) => (name = value)" />
-                <VButton
-                    text="조회"
-                    color="admin-primary"
-                    @click="handleSubmit" />
-            </div>
-        </section>
-        <section class="admin-inbody-list">
-            <div class="admin-inbody-list__student">
-                <table>
-                    <StudentDataLabel />
-                    <tbody>
-                        <StudentData
-                            v-for="(student, index) in students"
-                            :key="index"
-                            :index="index"
-                            :grade="student.grade"
-                            :room="student.room"
-                            :number="student.number"
-                            :name="student.name"
-                            @click="() => handleStudentClick(student)" />
-                    </tbody>
-                </table>
-            </div>
+        <InbodySearchBar
+            :startDate="startDate"
+            :endDate="endDate"
+            :grade="grade"
+            :room="room"
+            :number="number"
+            :name="name"
+            @start-date="(value) => (startDate = value)"
+            @end-date="(value) => (endDate = value)"
+            @grade="(value: string) => (grade = value)"
+            @room="(value: string) => (room = value)"
+            @number="(value: string) => (number = value)"
+            @name="(value: string) => (name = value)"
+            @search="handleSubmit" />
 
-            <InbodyDateTable
-                :days="days"
-                :students="students"
-                :inbodyList="inbodyList"
-                @click="handleInbodyClick" />
+        <section class="admin-inbody-content">
+            <StudentTable :students="students" />
+
+            <div class="admin-inbody-date">
+                <InbodyDateTable
+                    :days="days"
+                    :students="students"
+                    :inbodyList="inbodyList"
+                    @click="handleInbodyClick" />
+            </div>
         </section>
     </div>
 </template>
@@ -169,17 +123,16 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
 .admin-inbody {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
 }
 
-.admin-inbody__searchbar-date,
-.admin-inbody__searchbar-student {
+.admin-inbody-content {
     display: flex;
-}
-
-.admin-inbody-list {
-    display: flex;
-    height: 36rem;
     overflow-y: auto;
+}
+
+.admin-inbody-date {
+    height: fit-content;
+    overflow-x: auto;
 }
 </style>
