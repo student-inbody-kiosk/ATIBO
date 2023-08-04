@@ -42,25 +42,21 @@ withDefaults(
             <VInput
                 id="grade"
                 label="학년"
-                refer="grade"
                 :value="grade"
                 @input="(value: string) => $emit('grade', value)" />
             <VInput
                 id="room"
                 label="반"
-                refer="room"
                 :value="room"
                 @input="(value: string) => $emit('room', value)" />
             <VInput
                 id="number"
                 label="번호"
-                refer="number"
                 :value="number"
                 @input="(value: string) => $emit('number', value)" />
             <VInput
                 id="name"
                 label="이름"
-                refer="name"
                 :value="name"
                 @input="(value: string) => $emit('name', value)" />
             <VButton

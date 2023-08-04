@@ -30,7 +30,6 @@ const handleLoginSubmit = function submitLogin() {
 <template>
     <div class="login-container">
         <VInput
-            refer="id"
             id="id"
             :value="username"
             label="아이디"
@@ -39,7 +38,6 @@ const handleLoginSubmit = function submitLogin() {
         <VInput
             id="password"
             type="password"
-            refer="password"
             :value="password"
             label="비밀번호"
             @input="(value) => (password = value)"

@@ -14,13 +14,21 @@ withDefaults(
     { isDelete: false }
 );
 
+defineEmits<{
+    (e: 'input'): void;
+}>();
+
 import VInput from '@/components/common/VInput.vue';
 </script>
 
 <template>
     <tr class="student-data">
         <td class="student-data__content">
-            <VInput v-if="isDelete" id="delete" type="checkbox" refer="del" />
+            <VInput
+                v-if="isDelete"
+                id="delete"
+                type="checkbox"
+                @input="$emit('input')" />
             <span v-else>{{ id + 1 }}</span>
         </td>
         <td class="student-data__content">{{ grade }}</td>
