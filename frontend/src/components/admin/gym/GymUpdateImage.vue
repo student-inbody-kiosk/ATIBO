@@ -74,23 +74,33 @@ const handleClick = function updateGymImages() {
     <VLoading v-if="isLoading" color="admin-primary" />
     <VError v-else-if="isError" />
     <section class="gym-update-image">
-        <div class="gym-update-image__add-button">
-            <VButton text="사진 추가" color="green" />
-            <VInput
-                id="admin-gym-images"
-                name="images"
-                type="file"
-                accept="image/*"
-                :multiple="true"
-                @change="handleChangeAdd" />
+        <div class="gym-update-image__buttons">
+            <div class="gym-update-image__add-button">
+                <VButton text="사진 추가" color="green" />
+                <VInput
+                    id="admin-gym-images"
+                    name="images"
+                    type="file"
+                    accept="image/*"
+                    :multiple="true"
+                    @change="handleChangeAdd" />
+            </div>
+            <VButton
+                text="사진 저장"
+                color="admin-primary"
+                @click="handleClick" />
         </div>
-        <VButton text="사진 저장" color="admin-primary" @click="handleClick" />
         <ul class="gym-update-image__list">
-            <li v-for="(gymImageUrl, index) in gymImageUrls" :key="gymImageUrl">
-                <VIconButton @click="handleClickDelete(index)">
+            <li
+                class="gym-update-image__list__item"
+                v-for="(gymImageUrl, index) in gymImageUrls"
+                :key="gymImageUrl">
+                <VIconButton
+                    class="gym-update-image__list__delete-button"
+                    @click="handleClickDelete(index)">
                     <FontAwesomeIcon
                         icon="circle-minus"
-                        size="lg"
+                        size="xl"
                         color="#ce0000" />
                 </VIconButton>
                 <img :src="gymImageUrl" />
@@ -103,6 +113,15 @@ const handleClick = function updateGymImages() {
 @import '@/styles/ckeditor.scss';
 
 .gym-update-image {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    row-gap: 1rem;
+}
+
+.gym-update-image__buttons {
+    display: flex;
+    justify-content: space-between;
 }
 
 // hide the <input type="file"/> behind the button
@@ -127,8 +146,18 @@ const handleClick = function updateGymImages() {
     gap: 1rem;
 }
 
-.gym-update-image img {
+.gym-update-image__list img {
     width: 100%;
     height: auto;
+}
+
+.gym-update-image__list__item {
+    position: relative;
+}
+
+.gym-update-image__list__delete-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
 }
 </style>

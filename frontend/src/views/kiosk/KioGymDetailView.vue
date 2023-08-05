@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import services from '@/apis/services';
 import KioGymDetail from '@/components/kiosk/gym/KioGymDetail.vue';
 import type { HeaderUpdate } from '@/types/app.interface';
 
@@ -9,26 +8,30 @@ const emit = defineEmits<{
     (e: 'update-header', info: HeaderUpdate): void;
 }>();
 
+// get gymId from URL
 const route = useRoute();
 const gymId = Number(route.params.gymId);
-
-// gym detail
-const gym = await services.getGym(gymId);
 
 // update kio-header
 onMounted(() => {
     emit('update-header', {
-        title: gym.name,
         routeName: 'kiosk-gym',
         routeParams: {},
         routeQuery: {},
     });
 });
+
+const handleGetGymName = function updateHeaderName(name: string) {
+    console.log(1);
+    emit('update-header', {
+        title: name,
+    });
+};
 </script>
 
 <template>
     <div class="kisok-gym-detail-view">
-        <KioGymDetail :gym="gym" />
+        <KioGymDetail :gymId="gymId" @get-gym-name="handleGetGymName" />
     </div>
 </template>
 

@@ -30,6 +30,18 @@ export function getGym(gymId: number) {
         });
 }
 
+export function createGym(gym: Gym | FormData) {
+    return apiRequest
+        .post('/gym/', gym)
+        .then((res): Gym => {
+            return res.data;
+        })
+        .catch((err) => {
+            toastCenterErrorMessage('운동기구 생성에 실패했습니다', err);
+            throw err;
+        });
+}
+
 export function updateGym(gymId: nmber, data: Gym | FormData) {
     return apiRequest
         .put(`/gym/${gymId}/`, data)

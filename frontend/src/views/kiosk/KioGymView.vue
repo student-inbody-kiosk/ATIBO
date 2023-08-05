@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import services from '@/apis/services';
 import { onBeforeMount } from 'vue';
-import type { HeaderUpdate } from '@/types/app.interface';
 import KioGymList from '@/components/kiosk/gym/KioGymList.vue';
+import type { HeaderUpdate } from '@/types/app.interface';
 
 const emit = defineEmits<{
     (e: 'update-header', info: HeaderUpdate): void;
 }>();
-
-// student info
-const gyms = await services.getGyms();
 
 // update kio-header
 onBeforeMount(() => {
@@ -23,9 +19,14 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <div>
-        <KioGymList :gyms="gyms" />
+    <div class="kiosk-gym-view">
+        <KioGymList />
     </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.kiosk-gym-view {
+    width: 100%;
+    height: 100%;
+}
+</style>

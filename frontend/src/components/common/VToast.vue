@@ -54,8 +54,9 @@ withDefaults(
     align-items: center;
     justify-content: center;
     gap: 0.5em;
-    background-color: $white;
     border-radius: 1em;
+    background-color: $white;
+    box-shadow: 0px 3px 5px 5px transparentize($black, 0.9);
     text-align: center;
 }
 

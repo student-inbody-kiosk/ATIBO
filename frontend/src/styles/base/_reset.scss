@@ -127,23 +127,3 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
-
-// Custom
-
-button {
-    border: none;
-    background: none;
-}
-
-button:hover {
-    cursor: pointer;
-}
-
-input {
-    border: none;
-    outline: none;
-}
-
-* {
-    box-sizing: border-box;
-}

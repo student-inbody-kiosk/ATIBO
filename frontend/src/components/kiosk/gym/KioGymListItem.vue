@@ -7,15 +7,42 @@ defineProps<{
 </script>
 
 <template>
-    <RouterLink :to="{ name: 'kiosk-gym-detail', params: { gymId: gym.id } }">
-        <div class="kiosk-gym-list-item">
-            {{ gym.name }}
-        </div>
+    <RouterLink
+        class="kiosk-gym-list-item--anchor"
+        :to="{ name: 'kiosk-gym-detail', params: { gymId: gym.id } }">
+        <article class="kiosk-gym-list-item">
+            <h2>
+                {{ gym.name }}
+            </h2>
+        </article>
     </RouterLink>
 </template>
 
 <style lang="scss">
-.kiosk-gym-item {
+.kiosk-gym-list-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 1em;
+    background-color: transparentize($white, 0.4);
+    box-shadow:
+        inset 0 3px 5px rgba(255, 255, 255, 0.3),
+        inset 0 -3px 5px rgba(0, 0, 0, 0.3),
+        0 1px 2px 2px transparentize($black, 0.9);
     font-size: 2rem;
+    font-weight: 600;
+    transition: transform 0.2s ease-in-out;
+}
+
+.kiosk-gym-list-item:hover {
+    transform: scale(1.02);
+}
+
+.kiosk-gym-list-item--anchor {
+    color: inherit;
+    text-decoration: none;
 }
 </style>
