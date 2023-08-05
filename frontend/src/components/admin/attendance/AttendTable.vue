@@ -22,10 +22,14 @@ defineEmits<{
         <tbody>
             <tr v-for="(student, index) in students" :key="index">
                 <td v-for="index in 31" :key="index">
-                    <span v-if="student.attendanceSet[index]">{{
-                        student.attendanceSet[index][0].time
-                    }}</span>
-                    <span v-else>-</span>
+                    <span>
+                        {{
+                            student.attendanceSet[index]
+                                ? student.attendanceSet[index][0].time
+                                : '-'
+                        }}
+                    </span>
+
                     <div class="tooltip" v-if="student.attendanceSet[index]">
                         <div
                             class="tooltip__content"
@@ -45,7 +49,7 @@ defineEmits<{
 <style lang="scss" scoped>
 th,
 td {
-    min-width: 3rem;
+    min-width: 5rem;
     margin-top: 0.2rem;
     padding: 0.2rem;
     border: 0.1rem solid $admin-secondary;

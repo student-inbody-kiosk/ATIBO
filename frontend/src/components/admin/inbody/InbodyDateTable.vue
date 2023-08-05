@@ -23,11 +23,17 @@ defineEmits<{
             <tr v-for="(student, i) in students" :key="i">
                 <td v-for="j in days" :key="j">
                     <span
-                        v-if="inbodyList[i][j - 1] != null"
-                        @click="$emit('click', i, j - 1)"
-                        >{{ inbodyList[i][j - 1]?.testDate }}</span
-                    >
-                    <span v-else>-</span>
+                        @click="
+                            if (inbodyList[i][j - 1] != null) {
+                                $emit('click', i, j - 1);
+                            }
+                        ">
+                        {{
+                            inbodyList[i][j - 1] != null
+                                ? inbodyList[i][j - 1].testDate
+                                : '-'
+                        }}
+                    </span>
                 </td>
             </tr>
         </tbody>
