@@ -30,7 +30,7 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
     serializer_class = StudentAuthSerializer
     queryset = Student.objects.all()
 
-    # Alsways list Serailzer
+    # Always list Serailzer
     def get_serializer(self, *args, **kwargs):
         serializer_class = self.get_serializer_class()
         kwargs.setdefault('context', self.get_serializer_context())
@@ -214,9 +214,10 @@ class StudentAttendanceAPIView(ListAPIView):
     def get_queryset(self):
         student_queryset = get_student_queryset_from_query_params(self.request.query_params)
         start_date, end_date = get_date_from_month_in_path_variables(self.kwargs)
-        return student_queryset.prefetch_related(Prefetch('attendance_set', queryset=Attendance.objects.filter(date_attended__gte=start_date, date_attended__lt=end_date)))
+        return student_queryset.prefetch_related(Prefetch('attendance_set', queryset=Attendance.objects.filter(date_attended__gte=start_date, date_attended__lt=end_date).order_by('date_attended')))
 
 
+# Inbody of a single student
 class InbodyStudentAPIView(ListCreateAPIView):
     authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
     permission_classes = [IsTheStudent | IsAuthenticated]
@@ -254,6 +255,7 @@ class InbodyDetailAPIView(RetrieveUpdateDestroyAPIView):
         return Response({'message': _('인바디가 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
     
 
+# Inbody of multiple students
 @extend_schema(
         parameters=[
             OpenApiParameter(name='grade', description=_('student grade'), type=int),
@@ -269,10 +271,11 @@ class StudentInbodyAPIView(ListAPIView):
     # Create dynamic query according to parameters
     def get_queryset(self):
         student_queryset = get_student_queryset_from_query_params(self.request.query_params)
-        start_date, end_date = get_date_from_path_variables(self.kwargs)
-        return student_queryset.prefetch_related(Prefetch('inbody_set', queryset=Inbody.objects.filter(test_date__gte=start_date, test_date__lt=end_date)))
+        start_date, end_date = get_date_from_path_variables(self.kwargs, 720)   # max available period: 2years
+        return student_queryset.prefetch_related(Prefetch('inbody_set', queryset=Inbody.objects.filter(test_date__gte=start_date, test_date__lt=end_date).order_by('test_date')))
 
 
+# Update(Create), Delete Multiple Inbody
 class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
     permission_classes = [IsAuthenticated]
     serializer_class = InbodySerializer
@@ -283,7 +286,7 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
         kwargs.setdefault('context', self.get_serializer_context())
         return serializer_class(many=True, *args, **kwargs)
         
-    # Multiple update
+    # Multiple update/create
     @transaction.atomic
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
