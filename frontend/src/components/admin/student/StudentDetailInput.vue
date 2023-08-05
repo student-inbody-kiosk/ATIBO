@@ -17,7 +17,7 @@ const props = withDefaults(
 );
 
 import VInput from '@/components/common/VInput.vue';
-import VIconButton from '../common/VIconButton.vue';
+import VIconButton from '@/components/common/VIconButton.vue';
 
 import { ref } from 'vue';
 
@@ -27,17 +27,16 @@ const sexData = ref(props.student.sex);
 <template>
     <tr>
         <td class="student-data-input__content">
-            <span v-if="!isCreate">{{ index + 1 }}</span>
             <VIconButton
                 v-if="isCreate"
                 @click="$emit('delete-student', index)">
                 <font-awesome-icon icon="circle-minus" color="red" />
             </VIconButton>
+            <span v-else>{{ index + 1 }}</span>
         </td>
         <td class="student-data-input__content">
             <VInput
                 id="grade"
-                refer="grade"
                 :value="student.grade"
                 @input="
                     (grade) => $emit('update-input', index, 'grade', grade)
@@ -46,14 +45,12 @@ const sexData = ref(props.student.sex);
         <td class="student-data-input__content">
             <VInput
                 id="room"
-                refer="room"
                 :value="student.room"
                 @input="(room) => $emit('update-input', index, 'room', room)" />
         </td>
         <td class="student-data-input__content">
             <VInput
                 id="number"
-                refer="number"
                 :value="student.number"
                 @input="
                     (number) => $emit('update-input', index, 'number', number)
@@ -62,7 +59,6 @@ const sexData = ref(props.student.sex);
         <td class="student-data-input__content">
             <VInput
                 id="name"
-                refer="name"
                 :value="student.name"
                 @input="(name) => $emit('update-input', index, 'name', name)" />
         </td>
@@ -81,7 +77,6 @@ const sexData = ref(props.student.sex);
             <VInput
                 id="date"
                 type="date"
-                refer="birthDate"
                 :value="student.birthDate"
                 @input="
                     (date) => $emit('update-input', index, 'birthDate', date)
@@ -90,7 +85,6 @@ const sexData = ref(props.student.sex);
         <td class="student-data-input__content">
             <VInput
                 id="password"
-                refer="password"
                 :value="student.password"
                 @input="
                     (password) =>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import VButton from '@/components/common/VButton.vue';
-import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
-import StudentDataInput from '@/components/admin/StudentDataInput.vue';
+import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
+import StudentDetailInput from '@/components/admin/student/StudentDetailInput.vue';
 import type { Student } from '@/types/admin.interface';
 
 import { getStudents, updateStudents } from '@/apis/services/students';
@@ -61,27 +61,21 @@ const handleUpdateClick = function updateStudent() {
 </script>
 
 <template>
-    <div class="admin-student-create">
-        <div class="admin-student__header">학생 수정</div>
-        <section class="admin-student-create">
-            <VButton
-                text="완료"
-                color="green"
-                size="md"
-                @click="handleUpdateClick" />
+    <div class="admin-student-update">
+        <div>학생 수정</div>
+        <section class="admin-student-update__buttons">
+            <VButton text="완료" color="green" @click="handleUpdateClick" />
             <VButton
                 text="취소"
                 color="red"
-                size="md"
                 @click="() => router.push({ name: 'admin-student' })" />
         </section>
 
-        <section class="admin-student-create-list">
-            <table class="admin-student-create-list__table">
-                <StudentDataLabel
-                    class="admin-student-create-list__table__head" />
+        <section class="admin-student-update-list">
+            <table>
+                <StudentDetailDataLabel />
                 <tbody>
-                    <StudentDataInput
+                    <StudentDetailInput
                         v-for="(student, index) in students"
                         :key="index"
                         :index="index"
@@ -94,20 +88,17 @@ const handleUpdateClick = function updateStudent() {
 </template>
 
 <style lang="scss" scoped>
-.admin-student-create-list {
-    height: 36rem;
-    overflow: auto;
+.admin-student-update {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr);
 }
 
-.admin-student-create-list__table {
-    width: 100%;
+.admin-student-update__buttons {
+    display: flex;
+    justify-content: flex-end;
 }
-.admin-student-create-list__table__head {
-    tr,
-    th {
-        @include z-index(label);
-        position: sticky;
-        top: 0;
-    }
+.admin-student-update-list {
+    overflow: auto;
 }
 </style>

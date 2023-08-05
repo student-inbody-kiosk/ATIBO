@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { InbodyDetail } from '@/types/inbody.interface';
-import KioInbodyListLabel from '@/components/kiosk/inbody/KioInbodyListLabel.vue';
-import KioInbodyListItem from '@/components/kiosk/inbody/KioInbodyListItem.vue';
+import KioInbodyTableLabel from '@/components/kiosk/inbody/KioInbodyTableLabel.vue';
+import KioInbodyTableItem from '@/components/kiosk/inbody/KioInbodyTableItem.vue';
 
 defineProps<{
     inbodys: InbodyDetail[];
@@ -9,22 +9,22 @@ defineProps<{
 </script>
 
 <template>
-    <div class="kiosk-inbody-list">
-        <KioInbodyListLabel />
-        <ul class="kiosk-inbody-list__container">
-            <li class="kiosk-inbody-list__list">
-                <KioInbodyListItem
+    <div class="kiosk-inbody-table">
+        <KioInbodyTableLabel />
+        <ul class="kiosk-inbody-table__container">
+            <li class="kiosk-inbody-table__list">
+                <KioInbodyTableItem
                     v-for="inbody in inbodys"
                     :key="inbody.id"
                     :inbody="inbody">
-                </KioInbodyListItem>
+                </KioInbodyTableItem>
             </li>
         </ul>
     </div>
 </template>
 
 <style lang="scss">
-.kiosk-inbody-list {
+.kiosk-inbody-table {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr);
@@ -33,11 +33,11 @@ defineProps<{
     border-radius: 1rem;
 }
 
-.kiosk-inbody-list__container {
+.kiosk-inbody-table__container {
     padding: 0 0.4rem 0 0;
 }
 
-.kiosk-inbody-list__list {
+.kiosk-inbody-table__list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;

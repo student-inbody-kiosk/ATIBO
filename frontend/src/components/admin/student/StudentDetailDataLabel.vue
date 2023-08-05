@@ -16,6 +16,11 @@
 </template>
 
 <style lang="scss" scoped>
+thead {
+    @include z-index(label);
+    position: sticky;
+    top: 0;
+}
 .student-data-label {
     background-color: $admin-tertiary;
 }

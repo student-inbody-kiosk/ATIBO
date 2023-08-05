@@ -38,8 +38,6 @@ const handleSubmit = function loginStudent() {
     const number = props.student.number;
     const password = studentPw.value;
 
-    console.log(grade, room, number);
-
     studentPw.value = '';
 
     services.loginStudent(grade, room, number, password).then(() => {

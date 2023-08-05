@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import VButton from '@/components/common/VButton.vue';
-import StudentDataLabel from '@/components/admin/StudentDataLabel.vue';
-import StudentData from '@/components/admin/StudentData.vue';
+import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
+import StudentDetailData from '@/components/admin/student/StudentDetailData.vue';
 
 import { useRoute } from 'vue-router';
 import { ref, onBeforeMount } from 'vue';
@@ -25,6 +25,7 @@ onBeforeMount(() => {
 });
 
 const handleCheckClick = function selectStudent(studentId: string) {
+    console.log(studentId);
     if (studentId in deleteList.value) {
         return delete deleteList.value[studentId];
     }
@@ -41,61 +42,45 @@ const handleDeleteClick = function deleteStudent() {
 
 <template>
     <div class="admin-student-delete">
-        <section class="admin-student__header">
-            <div>학생 삭제</div>
-            <VButton
-                text="삭제"
-                color="red"
-                size="md"
-                @click="handleDeleteClick" />
-        </section>
+        <div>학생 삭제</div>
+
+        <VButton text="삭제" color="red" @click="handleDeleteClick" />
 
         <section class="admin-student-list">
-            <table class="admin-student-list__table">
-                <StudentDataLabel class="admin-student-list__table__head" />
-                <tbody class="admin-student-list__table__body">
-                    <StudentData
-                        v-for="(data, index) in students"
+            <table>
+                <StudentDetailDataLabel />
+                <tbody>
+                    <StudentDetailData
+                        v-for="(student, index) in students"
                         :isDelete="true"
-                        :key="data.id"
+                        :key="student.id"
                         :id="index"
-                        :grade="data.grade"
-                        :room="data.room"
-                        :number="data.number"
-                        :name="data.name"
-                        :sex="data.sex"
-                        :birthDate="data.birthDate"
-                        :password="data.password"
-                        @update-input="(index) => handleCheckClick(data.id)" />
+                        :grade="student.grade"
+                        :room="student.room"
+                        :number="student.number"
+                        :name="student.name"
+                        :sex="student.sex"
+                        :birthDate="student.birthDate"
+                        :password="student.password"
+                        @input="() => handleCheckClick(student.id)" />
                 </tbody>
             </table>
         </section>
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .admin-student-delete {
-    width: 100%;
-}
-
-.admin-student__header {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr);
 }
 
 .admin-student-list {
-    height: 40rem;
     overflow: auto;
 }
 
-.admin-student-list__table {
+table {
     width: 100%;
-}
-.admin-student-list__table__head {
-    tr,
-    th {
-        @include z-index(label);
-        position: sticky;
-        top: 0;
-    }
 }
 </style>

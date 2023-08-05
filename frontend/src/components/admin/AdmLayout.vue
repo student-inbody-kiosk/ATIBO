@@ -23,16 +23,16 @@ body {
 .admin-container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: min-content 1fr min-content;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     justify-content: center;
-    min-height: 100vh;
+    height: 100vh;
     padding: 2rem;
     background-color: $white;
 }
 
 .admin-container__main {
     display: flex;
-    align-items: center;
+    // align-items: center;
     justify-content: center;
     padding: 2rem;
     background-color: $admin-secondary;

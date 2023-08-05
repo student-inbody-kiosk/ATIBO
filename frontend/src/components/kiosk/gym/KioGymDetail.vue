@@ -4,8 +4,6 @@ import type { GymDetail } from '@/types/gyms.interface';
 const props = defineProps<{
     gym: GymDetail;
 }>();
-
-console.log('상세', props.gym);
 </script>
 
 <template>
@@ -27,6 +25,10 @@ console.log('상세', props.gym);
     overflow-y: auto;
     height: 100%;
     font-size: 2rem;
+}
+
+.kiosk-gym-detail::-webkit-scrollbar {
+    display: none;
 }
 
 .kiosk-gym-detail__image {

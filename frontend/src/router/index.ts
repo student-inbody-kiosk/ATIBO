@@ -19,7 +19,11 @@ import AdmStudentDeleteView from '@/views/admin/AdmStudentDeleteView.vue';
 import AdmStudentUpdateView from '@/views/admin/AdmStudentUpdateView.vue';
 import AdmAttendView from '@/views/admin/AdmAttendView.vue';
 import AdmInbodyView from '@/views/admin/AdmInbodyView.vue';
+import AdmInbodyStudentView from '@/views/admin/AdmInbodyStudentView.vue';
+import AdmInbodyDetailView from '@/views/admin/AdmInbodyDetailView.vue';
 import AdmGymView from '@/views/admin/AdmGymView.vue';
+import AdmGymDetailView from '@/views/admin/AdmGymDetailView.vue';
+import AdmGymUpdateView from '@/views/admin/AdmGymUpdateView.vue';
 import AdmSchoolView from '@/views/admin/AdmSchoolView.vue';
 
 const router = createRouter({
@@ -119,9 +123,29 @@ const router = createRouter({
                     component: AdmInbodyView,
                 },
                 {
+                    path: 'inbody/student/:grade/:room/:number/:name',
+                    name: 'admin-inbody-student',
+                    component: AdmInbodyStudentView,
+                },
+                {
+                    path: 'inbody/detail/:grade/:room/:number/:name',
+                    name: 'admin-inbody-detail',
+                    component: AdmInbodyDetailView,
+                },
+                {
                     path: 'gym',
                     name: 'admin-gym',
                     component: AdmGymView,
+                },
+                {
+                    path: 'gym/:gymId',
+                    name: 'admin-gym-detail',
+                    component: AdmGymDetailView,
+                },
+                {
+                    path: 'gym/:gymId/update',
+                    name: 'admin-gym-update',
+                    component: AdmGymUpdateView,
                 },
                 {
                     path: 'school',
