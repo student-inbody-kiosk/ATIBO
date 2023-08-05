@@ -86,7 +86,7 @@ export function getMinValue(inbody: InbodyDetail, sex: number) {
     const bodyMassIndex = 10;
 
     return {
-        weight: 20,
+        weight,
         percentBodyFat,
         bodyFatMass,
         skeletalMuscleMass,
@@ -113,7 +113,7 @@ export function getMaxValue(inbody: InbodyDetail, sex: number) {
     const bodyMassIndex = 40;
 
     return {
-        weight: 40,
+        weight,
         percentBodyFat,
         bodyFatMass,
         skeletalMuscleMass,
@@ -152,5 +152,4 @@ export function createIndexTable(startDate: string, endDate: string) {
     }
 
     return indexTable;
-  
 }

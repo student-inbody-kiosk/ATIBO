@@ -15,8 +15,8 @@
     width: 100%;
     padding: 2rem;
     background-color: #ffffffc7;
-    border-radius: 5px;
-    font-size: 1.5rem;
+    border-radius: 1em;
+    font-size: 2rem;
     font-weight: 600;
     text-align: center;
     line-height: 200%;

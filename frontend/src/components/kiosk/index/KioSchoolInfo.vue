@@ -17,7 +17,7 @@ const schoolInfo = await services.getSchoolInfo();
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 2rem;
 }
 
 .kiosk-school-info__logo {
@@ -26,7 +26,7 @@ const schoolInfo = await services.getSchoolInfo();
 }
 
 .kiosk-school-info__name {
-    font-size: 4rem;
+    font-size: 3.5rem;
     font-weight: 700;
 }
 </style>

@@ -132,12 +132,12 @@ const handleInput = function handleAppInput(event: Event) {
 }
 
 .v-input.lg {
-    font-size: 1.7rem;
+    font-size: 2rem;
 
     input {
         padding: 1rem;
         border-radius: 0.5em;
-        font-size: 1.7rem;
+        font-size: 1.8rem;
     }
 }
 

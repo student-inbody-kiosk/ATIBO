@@ -43,13 +43,13 @@ const handleClick = function createAttendance() {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 1rem;
-    margin: 0 2rem;
+    gap: 1.5rem;
+    margin: 0 3rem;
 }
 
 .kiosk-attend-modal__text {
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 600;
     line-height: 180%;
 }

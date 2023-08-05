@@ -1,10 +1,8 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+import regexes from '@/constants/regexes';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
-import { onBeforeMount, ref, onMounted, watch, inject } from 'vue';
-import services from '@/apis/services';
-import { useRoute, useRouter } from 'vue-router';
-import type { InbodyDetail } from '@/types/inbody.interface';
 
 const props = defineProps<{
     grade: number;
@@ -14,25 +12,22 @@ const props = defineProps<{
     endDate: string;
 }>();
 
+/* Navigate according to the submitted date input value */
 const router = useRouter();
 
-// set the initail input data
-const startDate = ref(props.startDate);
-const endDate = ref(props.endDate);
+const handleSubmit = function getTheStudentInbodys(event: Event) {
+    const form = event.target as HTMLFormElement;
+    if (!form) return;
 
-const handleInputStartDate = function (data: string) {
-    startDate.value = data;
-};
+    const formData = new FormData(form);
+    const startDate = (formData.get('startDate') as string) || '';
+    const endDate = (formData.get('endDate') as string) || '';
+    if (!regexes.date.test(startDate) || !regexes.date.test(endDate)) return;
 
-const handleInputEndDate = function (data: string) {
-    endDate.value = data;
-};
-
-const handleSubmit = function getTheStudentInbodys() {
     router.replace({
         name: 'kiosk-inbody-list',
         params: { grade: props.grade, room: props.room, number: props.number },
-        query: { startDate: startDate.value, endDate: endDate.value },
+        query: { startDate: startDate, endDate: endDate },
     });
 };
 </script>
@@ -41,19 +36,21 @@ const handleSubmit = function getTheStudentInbodys() {
     <form class="kiosk-inbody-search-form" @submit.prevent="handleSubmit">
         <VInput
             id="kiosk-inbody-start-date"
-            label="시작일"
+            name="startDate"
+            label="시작"
             type="date"
             size="md"
             :value="startDate"
             @input="handleInputStartDate" />
         <VInput
             id="kiosk-inbody-end-date"
-            label="종료일"
+            name="endDate"
+            label="종료"
             type="date"
             size="md"
             :value="endDate"
             @input="handleInputEndDate" />
-        <VButton text="검색" type="submit" color="green" size="md" />
+        <VButton text="검 색" type="submit" color="green" size="md" />
     </form>
 </template>
 

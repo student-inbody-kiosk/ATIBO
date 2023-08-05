@@ -10,7 +10,7 @@ const props = defineProps<{
     gymId: number;
 }>();
 
-// Get gym data aysnchronously
+/* Get gym data aysnchronously */
 const isLoading = ref(false);
 const isError = ref(false);
 const gym = ref<Gym>();
@@ -32,7 +32,7 @@ onBeforeMount(() => {
     getGym(props.gymId);
 });
 
-// update gym data
+/* pdate gym data */
 const handleSubmit = function updateGym(event: Event) {
     const form = event.target as HTMLFormElement;
     if (!form) return;
@@ -66,8 +66,12 @@ const ckeditorConfig = {
                     label="기구 이름"
                     name="name"
                     :value="gym.name"
-                    size="md" />
-                <VButton text="글 저장" type="submit" color="admin-primary" />
+                    size="sm" />
+                <VButton
+                    text="글 저장"
+                    type="submit"
+                    color="admin-primary"
+                    size="xs" />
             </div>
             <div class="gym-update-description__ckeditor">
                 <ckeditor

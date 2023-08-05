@@ -21,19 +21,24 @@
     background-color: $kiosk-secondary;
 }
 
-/* 스크롤바 전체 기본 꾸미기 */
 .kiosk-container ::-webkit-scrollbar {
-    width: 13px; /* 스크롤바의 너비 */
+    width: 12px;
 }
 
-/* 스크롤바 막대 꾸미기 */
 .kiosk-container ::-webkit-scrollbar-thumb {
-    background: $kiosk-primary; /* 스크롤바의 색상 */
+    background: $kiosk-primary;
     border-radius: 10px;
 }
 
-/* 스크롤바 트랙 꾸미기 */
 .kiosk-container ::-webkit-scrollbar-track {
     background: transparent;
+}
+
+.kiosk-container__main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    width: 100%;
+    height: 100%;
 }
 </style>

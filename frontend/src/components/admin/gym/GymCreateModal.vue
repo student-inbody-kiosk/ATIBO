@@ -6,7 +6,7 @@ import VInput from '@/components/common/VInput.vue';
 
 const router = useRouter();
 
-// Create gym, if success navgiate to update page
+/* Create gym & if success navgiate to update page */
 const handleSubmit = function createGym(event: Event) {
     const form = event.target as HTMLFormElement;
     if (!form) return;

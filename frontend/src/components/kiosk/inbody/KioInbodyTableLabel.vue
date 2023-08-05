@@ -16,7 +16,7 @@
     justify-items: center;
     padding: 1.2rem 2rem;
     background-color: transparentize($kiosk-primary, 0.5);
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-weight: 600;
 }
 </style>

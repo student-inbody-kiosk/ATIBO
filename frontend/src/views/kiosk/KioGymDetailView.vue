@@ -8,11 +8,7 @@ const emit = defineEmits<{
     (e: 'update-header', info: HeaderUpdate): void;
 }>();
 
-// get gymId from URL
-const route = useRoute();
-const gymId = Number(route.params.gymId);
-
-// update kio-header
+// Update kio-header
 onMounted(() => {
     emit('update-header', {
         routeName: 'kiosk-gym',
@@ -22,11 +18,14 @@ onMounted(() => {
 });
 
 const handleGetGymName = function updateHeaderName(name: string) {
-    console.log(1);
     emit('update-header', {
         title: name,
     });
 };
+
+// Get gymId from URL
+const route = useRoute();
+const gymId = Number(route.params.gymId);
 </script>
 
 <template>
@@ -37,7 +36,10 @@ const handleGetGymName = function updateHeaderName(name: string) {
 
 <style lang="scss">
 .kisok-gym-detail-view {
-    padding: 1rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
     height: 100%;
+    padding: 1rem;
 }
 </style>

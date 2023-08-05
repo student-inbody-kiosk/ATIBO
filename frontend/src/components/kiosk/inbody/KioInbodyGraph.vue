@@ -17,6 +17,7 @@ const props = defineProps<{
     inbodys: InbodyDetail[];
 }>();
 
+/* chartJS config */
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -25,9 +26,9 @@ ChartJS.register(
     Tooltip,
     Title
 );
-
 ChartJS.defaults.font.size = 15;
 
+/* InbodyDeatil[] -> chartJS LineGraph Data */
 const graphData = computed(() => {
     return inbodyToLineData(props.inbodys);
 });
@@ -65,12 +66,14 @@ const graphData = computed(() => {
     border-radius: 1rem;
 }
 
+// the graph canvas
 .kiosk-inbody-graph canvas {
-    background-color: transparentize($white, 0.2);
+    background-color: $white;
     border-radius: 1em;
-    max-height: 30rem;
+    max-height: 25rem;
 }
 
+// the padding between scroll bar
 .kiosk-inbody-graph__container {
     padding: 0 0.4rem 0 0;
 }
@@ -87,9 +90,8 @@ const graphData = computed(() => {
 
 .kiosk-inbody-graph__title {
     align-self: center;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     font-size: 1.5rem;
     font-weight: 600;
 }
 </style>
-@/utils/chartjs
