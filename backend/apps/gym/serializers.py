@@ -52,8 +52,6 @@ class EquipmentListSerializer(serializers.ModelSerializer):
         exclude = ['description']
 
 class EquipmentSerializer(serializers.ModelSerializer):
-    image_set = ImageSerializer(many=True, read_only=True)
-
     class Meta:
         model = Equipment
         fields = '__all__'

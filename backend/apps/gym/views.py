@@ -36,14 +36,20 @@ class EquipmentViewSet(ModelViewSet):
     
     def destroy(self, request, *args, **kwargs):
         super().destroy(request, *args, **kwargs)
-        return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': _('운동기구가 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
 
 
 class ImageAPIView(GenericAPIView, ListModelMixin):
     http_method_names = ["put", "get"]
-    permission_classes = [IsAdminUser]
+    permission_classes = [ReadOnly | IsAdminUser]
     serializer_class = ImageSerializer
     queryset = Image.objects.all()
+
+    def get_authenticators(self):
+        if self.request and self.request.method.lower() == 'get':
+            return []  # Empty list for authentication on get  method
+        else:
+            return [auth() for auth in self.authentication_classes]
 
     def filter_queryset(self, queryset):
         equipment_id = self.kwargs['equipment_id']

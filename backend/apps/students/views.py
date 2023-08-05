@@ -90,7 +90,7 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
             room = student_data.get('room')
             number = student_data.get('number')
             name = student_data.get('name')
-            raise DetailException(status.HTTP_404_NOT_FOUND, _(f'Not found the student info of {grade}-{room}-{number} {name}'), 'student_not_found')
+            raise DetailException(status.HTTP_404_NOT_FOUND, _(f'제출한 {grade}학년 {room}반 {number}번호 {name} 학생의 기존 데이터가 없습니다'), 'student_not_found')
 
         """
         UpdateModelMixin.update()
@@ -112,7 +112,7 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
     def destroy(self, request, *args, **kwargs):
         student_ids = request.data.get('ids')
         Student.objects.filter(id__in=student_ids).delete()
-        return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': _('학생 정보가 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
 
 
 class StudentCheckAPIView(RetrieveAPIView):
@@ -140,7 +140,7 @@ class StudentLoginAPIView(APIView):
 
         password = request.data.get('password')
         if not student.password == password:
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _('The password is not correct'), 'invalid_student_password')
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('비밀번호가 일치하지 않습니다'), 'invalid_student_password')
 
         # Create Custom Token
         payload = {
@@ -186,7 +186,7 @@ class StudentPasswordChangeAPIView(UpdateAPIView):
     
     def update(self, request, *args, **kwargs):
         super().update(request, *args, **kwargs)
-        return Response({ 'message': _('The password is changed')}, status=status.HTTP_200_OK)
+        return Response({ 'message': _('비밀번호가 변경되었습니다')}, status=status.HTTP_200_OK)
     
 
 class AttendanceCheckAPIView(CreateAPIView):
@@ -239,7 +239,6 @@ class InbodyStudentAPIView(ListCreateAPIView):
 
     def perform_create(self, serializer):
         student = get_student_object_from_path_variables(self.kwargs)
-
         serializer.save(student = student)  # It's converted as validated_data in the serialzer.save()
         
     
@@ -252,7 +251,7 @@ class InbodyDetailAPIView(RetrieveUpdateDestroyAPIView):
     
     def destroy(self, request, *args, **kwargs):
         super().destroy(request, *args, **kwargs)
-        return Response({'message': _('The Inbody is successfully deleted')}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': _('인바디가 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
     
 
 @extend_schema(
@@ -315,7 +314,7 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
                 instance.append(get_object_or_404(Inbody, id=id))
         except Http404:
             test_date = inbody_data.get('test_date')
-            raise DetailException(status.HTTP_404_NOT_FOUND, _(f'Not found the inbody info of {test_date}'), 'inbody_not_found')
+            raise DetailException(status.HTTP_404_NOT_FOUND, _(f'{test_date} 날짜에 해당하는 기존 인바디 정보가 없습니다'), 'inbody_not_found')
 
         """
         UpdateModelMixin.update()
@@ -337,7 +336,7 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
     def destroy(self, request, *args, **kwargs):
         inbody_ids = request.data.get('ids')
         Inbody.objects.filter(id__in=inbody_ids).delete()
-        return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': _('인바디가 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
 
 """
 Create dummy data. Only for superuser

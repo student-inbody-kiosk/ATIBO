@@ -17,9 +17,9 @@ def default_exception_handler(exc, context):
     # to get the standard error response.
     response = exception_handler(exc, context)
 
-    # if response is None:
-    #     print('Error: ', exc, context)
-    #     return Response({'message': _('Service is not unavailable, try again or contact the developer')}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if response is None:
+        print('Error: ', exc, context)
+        return Response({'message': _('예상치 못한 서버 에러가 발생했습니다. 개발자에게 문의해주세요')}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return response
 
@@ -34,7 +34,7 @@ class DetailException(APIException):
     }
     """
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-    default_detail = _('Service temporarily unavailable, try again later.')
+    default_detail = _('서비스가 불안정 합니다. 잠시 후에 다시 시도해주세요')
     default_code = 'service_unavailable'
 
     def __init__(self, status=None, detail=None, code=None):
