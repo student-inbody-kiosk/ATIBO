@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import InbodySearchBar from '@/components/admin/inbody/InbodySearchBar.vue';
-import StudentDataLabel from '@/components/admin/student/StudentDataLabel.vue';
-import StudentData from '@/components/admin/student/StudentData.vue';
 import StudentTable from '@/components/admin/student/StudentTable.vue';
-import InbodyDateTable from '@/components/admin/InbodyDateTable.vue';
+import InbodyDateTable from '@/components/admin/inbody/InbodyDateTable.vue';
 
 import { ref, computed } from 'vue';
 import { getInbodys } from '@/apis/services/inbodys';

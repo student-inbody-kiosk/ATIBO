@@ -3,7 +3,7 @@ import VIconButton from '@/components/common/VIconButton.vue';
 
 withDefaults(
     defineProps<{
-        color: 'kiosk-secondary' | 'admin-secondary' | 'white';
+        color?: 'kiosk-secondary' | 'admin-secondary' | 'white';
     }>(),
     {
         color: 'white',
