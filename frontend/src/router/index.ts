@@ -128,7 +128,7 @@ const router = createRouter({
                     component: AdmInbodyStudentView,
                 },
                 {
-                    path: 'inbody/detail/:grade/:room/:number/:name',
+                    path: 'inbody/:grade/:room/:number/:name/detail/:inbodyId',
                     name: 'admin-inbody-detail',
                     component: AdmInbodyDetailView,
                 },

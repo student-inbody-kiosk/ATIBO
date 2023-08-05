@@ -47,7 +47,7 @@ export async function getTheStudentInbodys(
         });
 }
 
-export async function getInbody(inbodyId) {
+export async function getInbody(inbodyId: number) {
     return await apiRequest
         .get(`/students/inbody/${inbodyId}/`)
         .then((res): InbodyDetail => {

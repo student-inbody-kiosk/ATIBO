@@ -6,7 +6,7 @@ import InbodyDateTable from '@/components/admin/inbody/InbodyDateTable.vue';
 import { ref, computed } from 'vue';
 import { getInbodys } from '@/apis/services/inbodys';
 import type { Ref } from 'vue';
-import type { Inbody } from '@/types/inbody.interace';
+import type { Inbody, InbodyDetail } from '@/types/inbody.interace';
 import router from '@/router';
 import { calculateDays, createIndexTable } from '@/utils/inbody';
 
@@ -16,26 +16,17 @@ const grade = ref('');
 const room = ref('');
 const name = ref('');
 const number = ref('');
+
 const students: Ref<Inbody[]> = ref([]);
+
 const days = ref(0);
 const dateIndexTable: Ref<{ [date: string]: number }> = ref({});
 const inbodyList = computed(() => {
-    let arry = new Array(students.value.length);
-    for (let i = 0; i < arry.length; i++) {
-        arry[i] = new Array(days.value).fill('-');
-    }
+    const arry = Array.from(
+        Array(students.value.length),
+        () => new Array(days.value)
+    );
     return arry;
-});
-
-const query = computed(() => {
-    return {
-        startDate: startDate.value,
-        endDate: endDate.value,
-        grade: grade.value,
-        room: room.value,
-        number: number.value,
-        name: name.value,
-    };
 });
 
 const handleSubmit = function searchAttendance() {
@@ -51,28 +42,39 @@ const handleSubmit = function searchAttendance() {
         dateIndexTable.value = createIndexTable(startDate.value, endDate.value);
         students.value = res;
 
-        // inbodyList에 날짜 데이터 넣기
+        // inbodyList에 데이터 넣기
         for (let i = 0; i < students.value.length; i++) {
             for (let j = 0; j < students.value[i].inbodySet.length; j++) {
                 inbodyList.value[i][
                     dateIndexTable.value[
                         students.value[i].inbodySet[j].testDate
                     ]
-                ] = students.value[i].inbodySet[j].testDate;
+                ] = students.value[i].inbodySet[j];
+
+                console.log(
+                    dateIndexTable.value[
+                        students.value[i].inbodySet[j].testDate
+                    ],
+                    students.value[i].inbodySet[j].testDate,
+                    students.value[i].name
+                );
+                // inbodyList.value[i][
+                //     dateIndexTable.value[
+                //         students.value[i].inbodySet[j].testDate
+                //     ]
+                // ] = students.value[i].inbodySet[j];
             }
         }
+        console.log(inbodyList.value, 'INBODYLIST');
     });
 };
 
 const handleStudentClick = function goStudentInbodyList(student: any) {
+    const { grade, room, number, name } = student;
+
     router.push({
         name: 'admin-inbody-student',
-        params: {
-            grade: student.grade,
-            room: student.room,
-            number: student.number,
-            name: student.name,
-        },
+        params: { grade, room, number, name },
         query: {
             start: startDate.value,
             end: endDate.value,
@@ -81,7 +83,13 @@ const handleStudentClick = function goStudentInbodyList(student: any) {
 };
 
 const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
-    console.log(students.value[i]);
+    const { grade, room, number, name } = students.value[i];
+    const inbodyId = inbodyList.value[i][j].id;
+
+    router.push({
+        name: 'admin-inbody-detail',
+        params: { grade, room, number, name, inbodyId },
+    });
 };
 </script>
 
