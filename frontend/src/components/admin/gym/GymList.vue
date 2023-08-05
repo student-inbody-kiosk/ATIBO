@@ -20,6 +20,7 @@ const getGymList = function () {
             isLoading.value = false;
         })
         .catch(() => {
+            isLoading.value = false;
             isError.value = true;
         });
 };

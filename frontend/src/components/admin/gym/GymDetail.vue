@@ -24,6 +24,7 @@ const getGym = function () {
             isGymLoading.value = false;
         })
         .catch((err) => {
+            isGymLoading.value = false;
             isGymError.value = true;
         });
 };
@@ -46,6 +47,7 @@ const getGymImages = function () {
             isGymImagesLoading.value = false;
         })
         .catch((err) => {
+            isGymImagesLoading.value = false;
             isGymImagesError.value = true;
         });
 };
@@ -58,7 +60,7 @@ onBeforeMount(() => {
 <template>
     <VLoading v-if="isGymLoading || isGymImagesLoading" color="admin-primary" />
     <VError v-else-if="isGymError || isGymImagesError" />
-    <article v-else-if="gym" class="gym-detail">
+    <article v-else-if="gym && gymImages" class="gym-detail">
         <section class="gym-detail__content">
             <div class="gym-detail__title">[ {{ gym.name }} ]</div>
             <div

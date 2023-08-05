@@ -6,14 +6,15 @@ import { getAttendances } from '@/apis/services/attendances';
 import { ref, computed } from 'vue';
 
 import type { Ref } from 'vue';
-import type { Attendance } from '@/types/attendance.interface';
+import type { StudentAttendance } from '@/types/attendance.interface';
 
 const grade = ref('');
 const room = ref('');
 const name = ref('');
 const number = ref('');
 const date = ref('');
-const students: Ref<Attendance[]> = ref([]);
+const students: Ref<StudentAttendance[]> = ref([]);
+
 const query = computed(() => {
     return {
         grade: grade.value,

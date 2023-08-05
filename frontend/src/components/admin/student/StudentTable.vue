@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import StudentDataLabel from '@/components/admin/student/StudentDataLabel.vue';
 import StudentData from '@/components/admin/student/StudentData.vue';
-import type { Attendance } from '@/types/attendance.interface';
+import type { StudentAttendance } from '@/types/attendance.interface';
 
 defineProps<{
-    students: Attendance[];
+    students: StudentAttendance[];
 }>();
 </script>
 
@@ -24,4 +24,4 @@ defineProps<{
     </table>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss" scoped></style>
