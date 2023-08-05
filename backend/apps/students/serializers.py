@@ -61,7 +61,7 @@ class StudentAuthSerializer(serializers.ModelSerializer):
     
     def validate_birth_date(self, value):
         if value > date.today():
-            raise serializers.ValidationError(_('The date of birth cannot be later than today'), 'invalid_birth_date')
+            raise serializers.ValidationError(_('생일은 오늘을 기준으로 이전 이어야 합니다'), 'invalid_birth_date')
         return value
 
 
@@ -85,12 +85,12 @@ class StudentPasswordChangeSerializer(serializers.Serializer):
     def validate_old_password(self, value):
         user = self.context['request'].user
         if not user.password == value:
-            raise serializers.ValidationError(_('The existing password is incorrect'), 'invalid_old_password')
+            raise serializers.ValidationError(_('기존 비밀번호가 일치하지 않습니다'), 'invalid_old_password')
         return value
     
     def validate_new_password(self, value):
         if not re.compile(STUDENT_PASSWORD_REGEX).match(value):
-            raise serializers.ValidationError(_('Password must be a 4 digit number'), 'invalid_old_password')
+            raise serializers.ValidationError(_('비빌번호는 4자리 숫자로 입력해주세요'), 'invalid_old_password')
         return value
     
     def validate(self, data):
@@ -98,7 +98,7 @@ class StudentPasswordChangeSerializer(serializers.Serializer):
         confirm_password = data.get('confirm_password')
 
         if new_password != confirm_password:
-            raise serializers.ValidationError({"confirm_password": _('The new passwords do not match')}, 'invalid_student_confirm_password')
+            raise serializers.ValidationError({"confirm_password": _('새 비밀번호가 서로 일치하지 않습니다')}, 'invalid_student_confirm_password')
 
         return data
     
@@ -114,12 +114,6 @@ class AttendanceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = ['id', 'date_attended']
         read_only_fields = ['id', 'date_attended']
-
-    # def to_internal_value(self, data):
-    #     ret = super().to_internal_value(data)
-    #     tz = pytz.timezone(settings.TIME_ZONE)
-    #     ret['date_attended'] = datetime.now(tz = tz )
-    #     return ret
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
@@ -143,7 +137,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
             time_interval = now - attendance.date_attended
             if time_interval < timedelta(minutes=30):
                 time_interval_min = int(time_interval.total_seconds() / 60)
-                raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'Attendance already checked {time_interval_min} minutes ago. Attendance check is available every 30 minutes'), 'too_fast_attendance')
+                raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'이미 {time_interval_min} 분 전에 출석되었습니다. 출석은 최소 30분마다 가능합니다'), 'too_fast_attendance')
             validated_data['date_attended'] = now
 
         return super().create(validated_data)
@@ -155,6 +149,27 @@ class StudentAttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['name', 'grade', 'room', 'number', 'attendance_set']
+
+    # Group the attendnace data by date
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+
+        attendance_set = {}
+        for attendnace in ret['attendance_set']:
+            id, date_attended = attendnace['id'], attendnace['date_attended']
+            date, time = date_attended.split()
+            date = int(date[-2:])
+
+            if date not in attendance_set:
+                attendance_set[date] = []
+
+            attendance_set[date].append({
+                'id': id,
+                'time': time,
+            })
+
+        ret['attendance_set'] = attendance_set
+        return ret
 
 
 class InbodyListSerializer(serializers.ListSerializer):    
@@ -193,11 +208,11 @@ class InbodySerializer(serializers.ModelSerializer):
             return super().create(validated_data)
         except IntegrityError as e:
             code, message = e.args
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _('Inbody history for that date already exists.'), f'db_{code}')
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('해당 날짜에 인바디 기록이 이미 존재합니다'), f'db_{code}')
 
     def validate_test_date(self, value):
         if value > date.today():
-            raise serializers.ValidationError(_('The date of birth cannot be later than today'), 'invalid_birth_date')
+            raise serializers.ValidationError(_('테스트 날짜가 오늘 이후일 수 없습니다'), 'invalid_birth_date')
         return value
     
     # Round to second decimal place
