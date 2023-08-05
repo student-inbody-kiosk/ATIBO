@@ -12,12 +12,7 @@ export async function getInbodys(
 ) {
     return await apiRequest
         .get(`/students/inbody/${startDate}/${endDate}/`, {
-            params: {
-                grade,
-                room,
-                number,
-                name,
-            },
+            params: { grade, room, number, name },
         })
         .then((res) => {
             return res.data;
@@ -33,10 +28,7 @@ export async function getTheStudentInbodys(
 ) {
     return await apiRequest
         .get(`/students/inbody/${grade}/${room}/${number}/`, {
-            params: {
-                startDate,
-                endDate,
-            },
+            params: { startDate, endDate },
         })
         .then((res): InbodyDetail[] => {
             return res.data;

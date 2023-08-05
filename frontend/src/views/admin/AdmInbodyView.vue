@@ -6,7 +6,7 @@ import InbodyDateTable from '@/components/admin/inbody/InbodyDateTable.vue';
 import { ref, computed } from 'vue';
 import { getInbodys } from '@/apis/services/inbodys';
 import type { Ref } from 'vue';
-import type { Inbody, InbodyDetail } from '@/types/inbody.interace';
+import type { Inbody } from '@/types/inbody.interace';
 import router from '@/router';
 import { calculateDays, createIndexTable } from '@/utils/inbody';
 
@@ -50,22 +50,8 @@ const handleSubmit = function searchAttendance() {
                         students.value[i].inbodySet[j].testDate
                     ]
                 ] = students.value[i].inbodySet[j];
-
-                console.log(
-                    dateIndexTable.value[
-                        students.value[i].inbodySet[j].testDate
-                    ],
-                    students.value[i].inbodySet[j].testDate,
-                    students.value[i].name
-                );
-                // inbodyList.value[i][
-                //     dateIndexTable.value[
-                //         students.value[i].inbodySet[j].testDate
-                //     ]
-                // ] = students.value[i].inbodySet[j];
             }
         }
-        console.log(inbodyList.value, 'INBODYLIST');
     });
 };
 
@@ -112,7 +98,7 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
             @search="handleSubmit" />
 
         <section class="admin-inbody-content">
-            <StudentTable :students="students" />
+            <StudentTable :students="students" @click="handleStudentClick" />
 
             <div class="admin-inbody-date">
                 <InbodyDateTable
