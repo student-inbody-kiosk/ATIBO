@@ -82,7 +82,7 @@ def get_student_queryset_from_query_params(query_params):
     if not params_valid:
         raise DetailException(status.HTTP_400_BAD_REQUEST, _('학년, 반, 번호, 이름 중 적어도 하나의 값을 입력해주세요'), 'invalid_params')
 
-    return Student.objects.filter(query_filter)
+    return Student.objects.filter(query_filter).order_by('grade', 'room', 'number')
 
 
 def get_date_from_path_variables(variables, limit_period_days = 62):
