@@ -12,6 +12,7 @@ const emit = defineEmits<{
 
 // Get gym detail data asynchronously
 const gym = await services.getGym(props.gymId);
+const gymImages = await services.getGymImages(props.gymId);
 
 onMounted(() => {
     emit('get-gym-name', gym.name);
@@ -21,7 +22,7 @@ onMounted(() => {
 <template>
     <article class="kiosk-gym-detail">
         <ul class="kiosk-gym-detail__image">
-            <li v-for="image in gym.imageSet" :key="image.id">
+            <li v-for="image in gymImages" :key="image.id">
                 <img :src="image.image" />
             </li>
         </ul>
