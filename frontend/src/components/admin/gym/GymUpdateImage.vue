@@ -2,6 +2,8 @@
 import { ref, onBeforeMount } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import services from '@/apis/services';
+import VError from '@/components/common/VError.vue';
+import VLoading from '@/components/common/VLoading.vue';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import VIconButton from '@/components/common/VIconButton.vue';
@@ -31,6 +33,7 @@ const getGymImages = function (gymId: number) {
             isLoading.value = false;
         })
         .catch(() => {
+            isLoading.value = false;
             isError.value = true;
         });
 };
@@ -75,7 +78,7 @@ const handleClick = function updateGymImages() {
 <template>
     <VLoading v-if="isLoading" color="admin-primary" />
     <VError v-else-if="isError" />
-    <section class="gym-update-image">
+    <section v-else-if="gymImages" class="gym-update-image">
         <div class="gym-update-image__buttons">
             <div class="gym-update-image__add-button">
                 <VButton text="사진 추가" color="green" size="xs" />

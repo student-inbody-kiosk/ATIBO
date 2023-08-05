@@ -2,6 +2,8 @@
 import { ref, onBeforeMount } from 'vue';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import services from '@/apis/services';
+import VError from '@/components/common/VError.vue';
+import VLoading from '@/components/common/VLoading.vue';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import type { Gym } from '@/types/gyms.interface';
@@ -24,6 +26,7 @@ const getGym = function (gymId: number) {
             isLoading.value = false;
         })
         .catch(() => {
+            isLoading.value = false;
             isError.value = true;
         });
 };
