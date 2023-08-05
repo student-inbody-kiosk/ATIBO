@@ -45,23 +45,36 @@ const handleSubmit = function updateGym(event: Event) {
 
     services.updateGym(props.gymId, formData);
 };
+
+// ckeditor config
+const ckeditorConfig = {
+    default: {
+        width: '100%',
+        height: '100%',
+    },
+};
 </script>
 
 <template>
     <VLoading v-if="isLoading" color="admin-primary" />
     <VError v-else-if="isError" />
-    <section v-else-if="gym" class="gym-update-description">
-        <form @submit.prevent="handleSubmit">
-            <VButton text="글 저장" type="submit" color="admin-primary" />
-            <VInput
-                id="admin-gym-description"
-                name="name"
-                :value="gym.name"
-                size="md" />
-            <ckeditor
-                :editor="ClassicEditor"
-                v-model="gym.description"
-                :config="{}" />
+    <section v-else-if="gym">
+        <form class="gym-update-description" @submit.prevent="handleSubmit">
+            <div class="gym-update-description__header">
+                <VInput
+                    id="admin-gym-description"
+                    label="기구 이름"
+                    name="name"
+                    :value="gym.name"
+                    size="md" />
+                <VButton text="글 저장" type="submit" color="admin-primary" />
+            </div>
+            <div class="gym-update-description__ckeditor">
+                <ckeditor
+                    :editor="ClassicEditor"
+                    v-model="gym.description"
+                    :config="ckeditorConfig" />
+            </div>
         </form>
     </section>
 </template>
@@ -70,9 +83,21 @@ const handleSubmit = function updateGym(event: Event) {
 @import '@/styles/ckeditor.scss';
 
 .gym-update-description {
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
     gap: 1rem;
+    width: 100%;
+    height: 100%;
+}
+
+.gym-update-description__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.gym-update-description__ckeditor {
+    overflow: auto;
 }
 </style>

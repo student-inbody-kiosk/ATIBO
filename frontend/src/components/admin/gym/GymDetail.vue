@@ -10,6 +10,7 @@ const props = defineProps<{
     gymId: number;
 }>();
 
+// Get gym data asynchrnously
 const isGymLoading = ref(false);
 const isGymError = ref(false);
 const gym = ref<Gym>();
@@ -27,6 +28,11 @@ const getGym = function () {
         });
 };
 
+onBeforeMount(() => {
+    getGym();
+});
+
+// Get gym image data asynchrnously
 const isGymImagesLoading = ref(false);
 const isGymImagesError = ref(false);
 const gymImages = ref<GymImage[]>();
@@ -45,7 +51,6 @@ const getGymImages = function () {
 };
 
 onBeforeMount(() => {
-    getGym();
     getGymImages();
 });
 </script>
@@ -53,47 +58,61 @@ onBeforeMount(() => {
 <template>
     <VLoading v-if="isGymLoading || isGymImagesLoading" color="admin-primary" />
     <VError v-else-if="isGymError || isGymImagesError" />
-    <div v-else-if="gym">
-        <RouterLink
-            :to="{ name: 'admin-gym-update', params: { gymId: gym.id } }">
-            <VButton text="수정" color="admin-primary" />
-        </RouterLink>
-        <article class="gym-detail">
-            <section class="gym-detail__description">
-                <div>{{ gym.name }}</div>
-                <p v-html="gym.description" />
-            </section>
-            <section class="gym-detail__image">
-                <ul class="gym-detail__image__list">
-                    <li v-for="image in gymImages" :key="image.id">
-                        <img :src="image.image" />
-                    </li>
-                </ul>
-            </section>
-        </article>
-    </div>
+    <article v-else-if="gym" class="gym-detail">
+        <section class="gym-detail__content">
+            <div class="gym-detail__title">{{ gym.name }}</div>
+            <div
+                class="ck-editor gym-detail__description"
+                v-html="gym.description" />
+        </section>
+        <section class="gym-detail__image">
+            <ul class="gym-detail__image__list">
+                <li v-for="image in gymImages" :key="image.id">
+                    <img :src="image.image" />
+                </li>
+            </ul>
+        </section>
+    </article>
 </template>
 
 <style lang="scss">
+@import '@/styles/ckeditor.scss';
+
 .gym-detail {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 300px;
     grid-template-rows: minmax(0, 1fr);
+    column-gap: 1rem;
+    width: 100%;
     height: 100%;
 }
 
-.gym-detail::-webkit-scrollbar {
-    display: none;
+.gym-detail__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    background-color: $white;
+}
+
+.gym-detail__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
 }
 
 .gym-detail__description {
-    display: flex;
-    flex-direction: column;
     overflow-y: auto;
-    gap: 1rem;
 }
 
 .gym-detail__image {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr);
+    row-gap: 1rem;
 }
 
 .gym-detail__image__list {
@@ -103,7 +122,7 @@ onBeforeMount(() => {
     gap: 1rem;
 }
 
-.gym-detail__image img {
+.gym-detail__image__list img {
     width: 100%;
     height: auto;
 }
