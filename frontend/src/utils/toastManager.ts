@@ -54,10 +54,32 @@ export default toastManager;
 
 // toast error detail message at the center
 export function toastCenterErrorMessage(defaultMessage, err = null) {
-    const message = err?.response?.data?.detail
-        ? err.response.data.detail
-        : defaultMessage;
-    toastManager.toast(message, 'error', 2500, 'center', 'lg');
+    let message = defaultMessage;
+
+    // 1. If there's detail error reason
+    if (err?.response?.data?.detail) {
+        message = err.response.data.detail;
+        return toastManager.toast(message, 'error', 2500, 'center', 'lg');
+    }
+    try {
+        // 2. if the error is validation, get the first validation error reason
+        if (
+            (err?.response?.status === 400) &
+            Object.keys(err?.response?.data).length
+        ) {
+            const errObj = err.response.data;
+            const firstKey = Object.keys(errObj)[0];
+            const firstValue = errObj[firstKey];
+            if (Array.isArray(firstValue)) {
+                message = firstValue[0];
+            }
+        }
+    } catch {
+        // 3. return the default error message
+        return toastManager.toast(message, 'error', 2500, 'center', 'lg');
+    }
+
+    return toastManager.toast(message, 'error', 2500, 'center', 'lg');
 }
 
 // toast success message at the center
@@ -67,9 +89,31 @@ export function toastCenterSuccessMessage(message) {
 
 // toast error detail message at the top
 export function toastTopErrorMessage(defaultMessage, err = null) {
-    const message = err?.response?.data?.detail
-        ? err.response.data.detail
-        : defaultMessage;
+    let message = defaultMessage;
+
+    // 1. If there's detail error reason
+    if (err?.response?.data?.detail) {
+        message = err.response.data.detail;
+        return toastManager.toast(message, 'error', 2500);
+    }
+    try {
+        // 2. if the error is validation, get the first validation error reason
+        if (
+            (err?.response?.status === 400) &
+            Object.keys(err?.response?.data).length
+        ) {
+            const errObj = err.response.data;
+            const firstKey = Object.keys(errObj)[0];
+            const firstValue = errObj[firstKey];
+            if (Array.isArray(firstValue)) {
+                message = firstValue[0];
+            }
+        }
+    } catch {
+        // 3. return the default error message
+        return toastManager.toast(message, 'error', 2500);
+    }
+
     toastManager.toast(message, 'error', 2500);
 }
 
