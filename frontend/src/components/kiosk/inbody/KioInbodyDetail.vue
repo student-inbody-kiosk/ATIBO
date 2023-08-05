@@ -18,22 +18,23 @@ const props = defineProps<{
     inbody: InbodyDetail;
 }>();
 
-const studentStore = useStudentStore();
+// Get the Student data(name, sex) from pinia store
 const { student } = useStudentStore();
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
-
-// calculate data for bar graph
+/* InbodyDetail -> chartJS barGraph dataset */
 const barData = computed(() => {
     return inbodyToBarData(props.inbody);
 });
 
-// calculate avg, min, max data
+/* chartJS setting */
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
+
+// Calculate personal avg, min, max data
 const avgValue = getAverageValue(props.inbody, student?.sex ? student.sex : 1);
 const minValue = getMinValue(props.inbody, student?.sex ? student.sex : 1);
 const maxValue = getMaxValue(props.inbody, student?.sex ? student.sex : 1);
 
-// make bar graph options based on calculated data
+// Set the cacluated data to the graph
 const weightOptions = JSON.parse(JSON.stringify(barOptions));
 weightOptions.scales.x.suggestedMin = minValue.weight;
 weightOptions.scales.x.suggestedMax = maxValue.weight;
@@ -99,19 +100,28 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
             <div class="kiosk-inbody-detail__muscle-fat">
                 <h2 class="kiosk-inbody-detail__subtitle">골격근 지방 분석</h2>
                 <div class="kiosk-inbody-detail__muscle-fat--container">
-                    <p class="kiosk-inbody-detail__bar-label">체중(kg)</p>
+                    <p class="kiosk-inbody-detail__bar-label">
+                        체중<br />
+                        {{ inbody.weight }} kg
+                    </p>
                     <div>
                         <Bar
                             :data="barData.weightData"
                             :options="weightOptions" />
                     </div>
-                    <p class="kiosk-inbody-detail__bar-label">골격근량(kg)</p>
+                    <p class="kiosk-inbody-detail__bar-label">
+                        골격근량 <br />
+                        {{ inbody.skeletalMuscleMass }} kg
+                    </p>
                     <div>
                         <Bar
                             :data="barData.skeletalMuscleMassData"
                             :options="skeletalMuscleMassOptions" />
                     </div>
-                    <p class="kiosk-inbody-detail__bar-label">체지방량(kg)</p>
+                    <p class="kiosk-inbody-detail__bar-label">
+                        체지방량<br />
+                        {{ inbody.bodyFatMass }} kg
+                    </p>
                     <div>
                         <Bar
                             :data="barData.bodyFatMassData"
@@ -122,13 +132,19 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
             <div class="kiosk-inbody-detail__obesity">
                 <h2 class="kiosk-inbody-detail__subtitle">비만 분석</h2>
                 <div class="kiosk-inbody-detail__obesity--container">
-                    <p class="kiosk-inbody-detail__bar-label">BMI</p>
+                    <p class="kiosk-inbody-detail__bar-label">
+                        BMI<br />
+                        {{ inbody.bodyMassIndex }}
+                    </p>
                     <div>
                         <Bar
                             :data="barData.bodyMassIndexData"
                             :options="bodyMassIndexOptions" />
                     </div>
-                    <p class="kiosk-inbody-detail__bar-label">체지방률(%)</p>
+                    <p class="kiosk-inbody-detail__bar-label">
+                        체지방률<br />
+                        {{ inbody.percentBodyFat }} %
+                    </p>
                     <div>
                         <Bar
                             :data="barData.percentBodyFatData"
@@ -339,6 +355,8 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
 .kiosk-inbody-detail__bar-label {
     align-self: center;
     font-weight: 600;
+    text-align: center;
+    line-height: 130%;
 }
 
 .kiosk-inbody-detail__total {

@@ -35,7 +35,7 @@ const handleUpdateHeader = function allocateTitleAndRouteName(
     }
 };
 
-// Handle <Suspense> error
+// Handle <Suspense> error. Just ignore -> API Toast message will handle it
 onErrorCaptured(() => {
     return false;
 });
@@ -45,6 +45,7 @@ onErrorCaptured(() => {
     <KioLayout>
         <template #kiosk-header>
             <VIconButton
+                class="kiosk-to-admin-button"
                 v-if="route.name === 'kiosk-index'"
                 text="관리자"
                 size="lg"
@@ -81,6 +82,13 @@ onErrorCaptured(() => {
 </template>
 
 <style lang="scss">
+.kiosk-to-admin-button {
+    position: absolute;
+    top: 1.5rem;
+    left: 2rem;
+}
+
+// Transition
 .kiosk-enter-active,
 .kiosk-leave-active {
     transition:

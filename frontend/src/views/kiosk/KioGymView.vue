@@ -28,5 +28,6 @@ onBeforeMount(() => {
 .kiosk-gym-view {
     width: 100%;
     height: 100%;
+    padding: 1rem 2rem;
 }
 </style>

@@ -10,7 +10,7 @@ const props = defineProps<{
     gymId: number;
 }>();
 
-// Get gym data asynchrnously
+/* Get gym data asynchrnously */
 const isGymLoading = ref(false);
 const isGymError = ref(false);
 const gym = ref<Gym>();
@@ -32,7 +32,7 @@ onBeforeMount(() => {
     getGym();
 });
 
-// Get gym image data asynchrnously
+/* Get gym image data asynchrnously */
 const isGymImagesLoading = ref(false);
 const isGymImagesError = ref(false);
 const gymImages = ref<GymImage[]>();
@@ -60,7 +60,7 @@ onBeforeMount(() => {
     <VError v-else-if="isGymError || isGymImagesError" />
     <article v-else-if="gym" class="gym-detail">
         <section class="gym-detail__content">
-            <div class="gym-detail__title">{{ gym.name }}</div>
+            <div class="gym-detail__title">[ {{ gym.name }} ]</div>
             <div
                 class="ck-editor gym-detail__description"
                 v-html="gym.description" />

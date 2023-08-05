@@ -11,7 +11,7 @@ const props = defineProps<{
     gymId: number;
 }>();
 
-// Get gym data aysnchronously
+/* Get gym data aysnchronously */
 const isLoading = ref(false);
 const isError = ref(false);
 const gymImages = ref<GymImage[]>([]);
@@ -39,7 +39,9 @@ onBeforeMount(() => {
     getGymImages(props.gymId);
 });
 
-// add gym images
+/* Managing multiple image update */
+
+// Add gym images
 const handleChangeAdd = function appendNewImages() {
     const fileInput = event?.target as HTMLInputElement;
     if (!fileInput) return;
@@ -58,13 +60,13 @@ const handleChangeAdd = function appendNewImages() {
     fileInput.value = ''; // reset the input
 };
 
-// delte gym image
+// Delete gym image
 const handleClickDelete = function deleteImages(index: number) {
     gymImages.value.splice(index, 1);
     gymImageUrls.value.splice(index, 1);
 };
 
-// update gym images data
+// Update gym images data asynchronously
 const handleClick = function updateGymImages() {
     services.updateGymImages(props.gymId, gymImages.value);
 };
@@ -76,7 +78,7 @@ const handleClick = function updateGymImages() {
     <section class="gym-update-image">
         <div class="gym-update-image__buttons">
             <div class="gym-update-image__add-button">
-                <VButton text="사진 추가" color="green" />
+                <VButton text="사진 추가" color="green" size="xs" />
                 <VInput
                     id="admin-gym-images"
                     name="images"
@@ -88,6 +90,7 @@ const handleClick = function updateGymImages() {
             <VButton
                 text="사진 저장"
                 color="admin-primary"
+                size="xs"
                 @click="handleClick" />
         </div>
         <ul class="gym-update-image__list">

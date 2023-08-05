@@ -33,7 +33,7 @@ defineProps<{
     justify-content: center;
     align-items: center;
     position: relative;
-    margin: 1rem 2rem;
+    margin: 1.5rem 2rem 1rem;
 }
 
 .kiosk-header__button {
@@ -43,7 +43,7 @@ defineProps<{
 }
 
 .kiosk-header__title {
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: 600;
 }
 </style>

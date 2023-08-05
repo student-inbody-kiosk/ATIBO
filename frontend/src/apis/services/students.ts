@@ -4,7 +4,7 @@ import toastManager, {
     toastCenterErrorMessage,
     toastCenterSuccessMessage,
 } from '@/utils/toastManager';
-import type { Student } from '@/types/students.interface';
+import type { Student, StudentSimple } from '@/types/students.interface';
 import { useStudentStore } from '@/stores/student.store';
 
 export async function getStudents(
@@ -42,7 +42,7 @@ export async function checkStudent(
 ) {
     return await apiRequest
         .get(`/students/${grade}/${room}/${number}/check/`)
-        .then((res): SimpleStudent => {
+        .then((res): StudentSimple => {
             return res.data;
         })
         .catch((err) => {
@@ -81,11 +81,11 @@ export async function getTheStudent(
 ) {
     return await apiRequest
         .get(`/students/${grade}/${room}/${number}/`)
-        .then((res) => {
+        .then((res): Student => {
             return res.data;
         })
         .catch((err) => {
-            toastCenterErrorMessage('학생 정볼를 불러오지 못했습니다', err);
+            toastCenterErrorMessage('학생 정보를 불러오지 못했습니다', err);
             throw err;
         });
 }

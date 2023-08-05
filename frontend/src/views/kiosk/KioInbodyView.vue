@@ -10,18 +10,25 @@ const emit = defineEmits<{
     (e: 'update-header', info: HeaderUpdate): void;
 }>();
 
-// student info
+// Update kio-header
+onBeforeMount(() => {
+    emit('update-header', {
+        title: '인바디 로그인',
+        routeName: 'kiosk-index',
+        routeParams: {},
+        routeQuery: {},
+    });
+});
+
+/* Check student data and change the component */
 const student = ref<StudentSimple | null>(null);
 
-// update student info
-const handleUpdateStudent = function (value: StudentSimple | null) {
+// Update student info
+const handleUpdateStudent = function openKioLoginForm(
+    value: StudentSimple | null
+) {
     student.value = value;
 };
-
-// update kio-header
-onBeforeMount(() => {
-    emit('update-header', { title: '인바디 로그인', routeName: 'kiosk-index' });
-});
 </script>
 
 <template>
@@ -29,7 +36,7 @@ onBeforeMount(() => {
         <KioInputGuide>
             <p v-if="!student">
                 학년, 반, 번호를 입력해주세요 <br />
-                예시 1학년 1반 1번 -> 10101
+                (예시) 1학년 1반 1번 -> 10101
             </p>
             <p v-else>
                 {{ student.grade }}학년 {{ student.room }}반
@@ -50,9 +57,10 @@ onBeforeMount(() => {
 .kiosk-inbody-view {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr fit-content;
-    gap: 5rem;
-    padding: 1rem 2rem;
+    grid-template-rows: 1fr auto;
+    row-gap: 4rem;
     height: 100%;
+    width: 100%;
+    padding: 1rem 2rem;
 }
 </style>

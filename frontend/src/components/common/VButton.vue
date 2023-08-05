@@ -5,7 +5,7 @@ withDefaults(
     defineProps<{
         text: string;
         color: 'kiosk-primary' | 'admin-primary' | 'green' | 'red' | 'gray';
-        size?: 'sm' | 'md' | 'lg';
+        size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
         type?: 'button' | 'submit' | 'reset';
     }>(),
     {
@@ -64,21 +64,33 @@ const handleClick = function () {
 }
 
 // size
+.v-button.xs {
+    min-width: 2rem;
+    padding: 0.2rem 0.3rem;
+    font-size: 1rem;
+}
+
 .v-button.sm {
-    width: 2rem;
+    min-width: 3rem;
     padding: 0.3rem 0.5rem;
     font-size: 1.2rem;
 }
 
 .v-button.md {
-    width: 4rem;
-    padding: 0.5rem 0.8rem;
-    font-size: 1.5rem;
+    min-width: 4rem;
+    padding: 0.5rem 0.7rem;
+    font-size: 1.4rem;
 }
 
 .v-button.lg {
-    width: 15rem;
-    padding: 0.8rem 1rem;
+    min-width: 6rem;
+    padding: 0.7rem 0.9rem;
+    font-size: 1.6rem;
+}
+
+.v-button.xl {
+    min-width: 18rem;
+    padding: 1.1rem 1.3rem;
     font-size: 2rem;
 }
 </style>
