@@ -1,5 +1,5 @@
 export interface StudentSimple {
-    id: string;
+    id?: string;
     grade: number;
     room: number;
     number: number;
