@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import type { Ref } from 'vue';
-
 const props = withDefaults(
     defineProps<{
         id: string;
         type?: string;
+        accept?: string;
+        multiple?: boolean;
         label?: string;
+        name?: string;
         value?: string | number;
         readonly?: boolean;
         minlength?: number;
@@ -15,13 +16,13 @@ const props = withDefaults(
         textAlign?: 'left' | 'right' | 'center' | 'justify';
         color?: 'kiosk-primary' | 'admin-primary';
         size?: 'sm' | 'md' | 'lg';
-        inputRef?: Ref;
         isError?: boolean;
         isFocus?: boolean;
     }>(),
     {
         type: 'text',
         value: '',
+        multiple: false,
         readonly: false,
         size: 'sm',
         textAlign: 'left',
@@ -32,6 +33,7 @@ const props = withDefaults(
 
 const emit = defineEmits<{
     (e: 'input', value: string): void;
+    (e: 'change'): void;
     (e: 'enter'): void;
     (e: 'focus'): void;
 }>();
@@ -52,11 +54,12 @@ const handleInput = function handleAppInput(event: Event) {
             isError ? 'error' : '',
             isFocus ? 'focus' : '',
         ]">
-        <label :for="id">{{ label }}</label>
+        <label v-if="label" :for="id">{{ label }}</label>
         <input
             :id="id"
-            :ref="inputRef"
             :type="type"
+            :accept="accept"
+            :name="name"
             :value="value"
             :readonly="readonly"
             :minlength="minlength"
@@ -64,7 +67,9 @@ const handleInput = function handleAppInput(event: Event) {
             :min="min"
             :max="max"
             :style="{ textAlign }"
+            :multiple="multiple"
             @input="handleInput"
+            @change="$emit('change')"
             @keyup.enter="$emit('enter')"
             @focus="$emit('focus')" />
     </div>

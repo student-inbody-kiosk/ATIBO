@@ -20,6 +20,8 @@ import AdmStudentUpdateView from '@/views/admin/AdmStudentUpdateView.vue';
 import AdmAttendView from '@/views/admin/AdmAttendView.vue';
 import AdmInbodyView from '@/views/admin/AdmInbodyView.vue';
 import AdmGymView from '@/views/admin/AdmGymView.vue';
+import AdmGymDetailView from '@/views/admin/AdmGymDetailView.vue';
+import AdmGymUpdateView from '@/views/admin/AdmGymUpdateView.vue';
 import AdmSchoolView from '@/views/admin/AdmSchoolView.vue';
 
 const router = createRouter({
@@ -122,6 +124,16 @@ const router = createRouter({
                     path: 'gym',
                     name: 'admin-gym',
                     component: AdmGymView,
+                },
+                {
+                    path: 'gym/:gymId',
+                    name: 'admin-gym-detail',
+                    component: AdmGymDetailView,
+                },
+                {
+                    path: 'gym/:gymId/update',
+                    name: 'admin-gym-update',
+                    component: AdmGymUpdateView,
                 },
                 {
                     path: 'school',
