@@ -1,7 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import GymList from '@/components/admin/gym/GymList.vue';
+</script>
 
 <template>
-    <div>운동기구정보</div>
+    <div class="gym-view">
+        <GymList />
+    </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss"></style>
