@@ -47,7 +47,7 @@ class ImageAPIView(GenericAPIView, ListModelMixin):
 
     def filter_queryset(self, queryset):
         equipment_id = self.kwargs['equipment_id']
-        queryset.filter(equipment_id=equipment_id)
+        queryset = queryset.filter(equipment_id=equipment_id)
         return queryset
 
     def get(self, request, *args, **kwargs):
