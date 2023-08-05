@@ -14,19 +14,19 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (e: 'update-student', value: null): void; // delete student
+    (e: 'update-student', value: null): void; // delete student info & go back to student form component
 }>();
 
+/* Student login logic */
 const router = useRouter();
+const studentPw = ref('');
 
-const studentPw = ref<string>('');
-
-// handle studentPw input
+// Handle studentPw input
 const handleInput = function inputStudentPw(value: string) {
     studentPw.value = value;
 };
 
-// student login
+// Student login asynchronously
 const handleSubmit = function loginStudent() {
     if (!regexes.studentPw.test(studentPw.value)) {
         toastCenterErrorMessage('비밀번호는 4자리 숫자로 입력해주세요');
@@ -62,11 +62,11 @@ const handleSubmit = function loginStudent() {
                 color="kiosk-primary"
                 :value="studentPw"
                 @input="handleInput" />
-            <VButton text="로그인" type="submit" color="green" size="md" />
+            <VButton text="로그인" type="submit" color="green" size="lg" />
             <VButton
                 text="취소"
                 color="gray"
-                size="md"
+                size="lg"
                 @click="$emit('update-student', null)" />
         </form>
         <TheKeypad :value="studentPw" @input="handleInput" />
@@ -77,8 +77,8 @@ const handleSubmit = function loginStudent() {
 .kiosk-login-form {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
+    gap: 4rem;
 }
 
 .kiosk-login-form__form {

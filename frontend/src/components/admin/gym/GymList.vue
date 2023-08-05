@@ -6,7 +6,7 @@ import VLoading from '@/components/common/VLoading.vue';
 import GymListItem from '@/components/admin/gym/GymListItem.vue';
 import type { GymSimple } from '@/types/gyms.interface';
 
-// get gym list data
+/* Get gym list data */
 const isLoading = ref(false);
 const isError = ref(false);
 const gyms = ref<GymSimple[]>([]);
@@ -42,8 +42,8 @@ onBeforeMount(() => {
 <style lang="scss">
 .gym-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
     grid-auto-rows: auto;
     justify-items: center;
     align-items: center;

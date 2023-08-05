@@ -14,26 +14,32 @@ const props = defineProps<{
     number: number;
 }>();
 
+/* Student change password logic with keypad */
 const oldPassword = ref('');
 const newPassword = ref('');
 const confirmPassword = ref('');
 
-const currentFocusedInput = ref('kiosk-student-old-password'); // change focused input border color
-const currentFocusedValue = reactive({ value: oldPassword }); // switch the value linked to the keypad
+const OLD_PASSWORD_INPUT_ID = 'kiosk-student-old-password';
+const NEW_PASSWORD_INPUT_ID = 'kiosk-student-new-password';
+const CONFIRM_PASSWORD_INPUT_ID = 'kiosk-student-confirm-password';
+
+// Focued input -> hand over to keypad
+const currentFocusedInput = ref(OLD_PASSWORD_INPUT_ID); // input border color
+const currentFocusedValue = reactive({ value: oldPassword }); // the value linked to the keypad
 
 const handleFocus = function changeCurrentFocused() {
     const id = event?.target?.id as string;
     switch (id) {
-        case 'kiosk-student-old-password':
-            currentFocusedInput.value = 'kiosk-student-old-password';
+        case OLD_PASSWORD_INPUT_ID:
+            currentFocusedInput.value = OLD_PASSWORD_INPUT_ID;
             currentFocusedValue.value = oldPassword;
             break;
-        case 'kiosk-student-new-password':
-            currentFocusedInput.value = 'kiosk-student-new-password';
+        case NEW_PASSWORD_INPUT_ID:
+            currentFocusedInput.value = NEW_PASSWORD_INPUT_ID;
             currentFocusedValue.value = newPassword;
             break;
-        case 'kiosk-student-confirm-password':
-            currentFocusedInput.value = 'kiosk-student-confirm-password';
+        case CONFIRM_PASSWORD_INPUT_ID:
+            currentFocusedInput.value;
             currentFocusedValue.value = confirmPassword;
             break;
     }
@@ -42,19 +48,19 @@ const handleFocus = function changeCurrentFocused() {
 const handleInput = function handleKeypadInput(value: string) {
     const id = currentFocusedInput;
     switch (id.value) {
-        case 'kiosk-student-old-password':
+        case OLD_PASSWORD_INPUT_ID:
             oldPassword.value = value;
             break;
-        case 'kiosk-student-new-password':
+        case NEW_PASSWORD_INPUT_ID:
             newPassword.value = value;
             break;
-        case 'kiosk-student-confirm-password':
+        case CONFIRM_PASSWORD_INPUT_ID:
             confirmPassword.value = value;
             break;
     }
 };
 
-// handle input
+// Handle I/O input
 const handleInputOldPassword = function (value: string) {
     oldPassword.value = value;
 };
@@ -65,7 +71,7 @@ const handleInputConfirmPassword = function (value: string) {
     confirmPassword.value = value;
 };
 
-// change the student pw
+// Change the student password asynchronously
 const handleSubmit = function updateStudentPw() {
     if (!regexes.studentPw.test(oldPassword.value)) {
         toastCenterErrorMessage('기존 비밀번호는 4자리 숫자입니다');
@@ -101,10 +107,11 @@ const handleSubmit = function updateStudentPw() {
             <VInput
                 id="kiosk-student-old-password"
                 label="현재 비밀번호"
+                name="oldPassword"
                 type="password"
-                size="md"
+                size="lg"
                 color="kiosk-primary"
-                :isFocus="currentFocusedInput === 'kiosk-student-old-password'"
+                :isFocus="currentFocusedInput === OLD_PASSWORD_INPUT_ID"
                 :value="oldPassword"
                 :maxlength="4"
                 @input="handleInputOldPassword"
@@ -112,10 +119,11 @@ const handleSubmit = function updateStudentPw() {
             <VInput
                 id="kiosk-student-new-password"
                 label="새 비밀번호"
+                name="newPassword"
                 type="password"
-                size="md"
+                size="lg"
                 color="kiosk-primary"
-                :isFocus="currentFocusedInput === 'kiosk-student-new-password'"
+                :isFocus="currentFocusedInput === NEW_PASSWORD_INPUT_ID"
                 :value="newPassword"
                 :maxlength="4"
                 @input="handleInputNewPassword"
@@ -123,17 +131,16 @@ const handleSubmit = function updateStudentPw() {
             <VInput
                 id="kiosk-student-confirm-password"
                 label="비밀번호 확인"
+                name="confirmPassword"
                 type="password"
-                size="md"
+                size="lg"
                 color="kiosk-primary"
-                :isFocus="
-                    currentFocusedInput === 'kiosk-student-confirm-password'
-                "
+                :isFocus="currentFocusedInput === CONFIRM_PASSWORD_INPUT_ID"
                 :value="confirmPassword"
                 :maxlength="4"
                 @input="handleInputConfirmPassword"
                 @focus="handleFocus" />
-            <VButton text="변경하기" type="submit" color="green" size="md" />
+            <VButton text="변경하기" type="submit" color="green" size="lg" />
         </form>
         <TheKeypad :value="currentFocusedValue.value" @input="handleInput" />
     </div>
@@ -141,18 +148,19 @@ const handleSubmit = function updateStudentPw() {
 
 <style lang="scss">
 .kiosk-pw-change-form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
     gap: 1rem;
 }
 
 .kiosk-pw-change-form__form {
+    justify-self: center;
+    align-self: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-end;
-    gap: 1rem;
+    gap: 2rem;
 }
 </style>

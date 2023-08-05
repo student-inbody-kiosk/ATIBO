@@ -25,6 +25,7 @@ const handleCloseModal = function closeGymCreateModal() {
                 class="gym-view__header__button"
                 text="추가"
                 color="green"
+                size="xs"
                 @click="handleOpenModal" />
         </div>
         <GymList />
@@ -60,10 +61,10 @@ const handleCloseModal = function closeGymCreateModal() {
 }
 
 .gym-view__header__title {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 600;
     text-align: center;
-    margin: 0 0 1rem 0;
+    margin: 0 0 1.5rem 0;
 }
 
 .gym-view__header__button {

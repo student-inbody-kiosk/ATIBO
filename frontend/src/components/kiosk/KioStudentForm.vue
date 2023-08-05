@@ -12,14 +12,15 @@ const emit = defineEmits<{
     (e: 'update-student', value: StudentSimple): void;
 }>();
 
+/* Student check with studentNum */
 const studentNum = ref<string>('');
 
-// handle studentNum input
+// Handle studentNum input
 const handleInput = function inputStudentNum(value: string) {
     studentNum.value = value;
 };
 
-// search the student based on studentNum
+// Asynchronously the student info based on studentNum
 const handleSubmit = function checkStudent() {
     if (!regexes.studentNum.test(studentNum.value)) {
         toastCenterErrorMessage('학번 형식을 다시 확인해주세요');
@@ -32,9 +33,7 @@ const handleSubmit = function checkStudent() {
     studentNum.value = '';
 
     services.checkStudent(grade, room, number).then((res) => {
-        const id = res.id;
-        const name = res.name;
-        emit('update-student', { id, name, grade, room, number });
+        emit('update-student', res);
     });
 };
 </script>
@@ -46,13 +45,13 @@ const handleSubmit = function checkStudent() {
                 id="kio-student-num"
                 type="text"
                 label="학번"
+                :value="studentNum"
                 :maxlength="6"
                 textAlign="center"
                 size="lg"
                 color="kiosk-primary"
-                :value="studentNum"
                 @input="handleInput" />
-            <VButton text="검색하기" type="submit" color="green" size="md" />
+            <VButton text="검색하기" type="submit" color="green" size="lg" />
         </form>
         <TheKeypad :value="studentNum" @input="handleInput" />
     </div>
@@ -62,8 +61,8 @@ const handleSubmit = function checkStudent() {
 .kiosk-student-form {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
+    gap: 4rem;
 }
 
 .kiosk-student-form__form {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import TheModal from '@/components/common/TheModal.vue';
 import KioInputGuide from '@/components/kiosk/KioInputGuide.vue';
 import KioStudentForm from '@/components/kiosk/KioStudentForm.vue';
@@ -11,23 +11,28 @@ const emit = defineEmits<{
     (e: 'update-header', info: HeaderUpdate): void;
 }>();
 
-// student info
+// Update kio-header
+onBeforeMount(() => {
+    emit('update-header', {
+        title: '출석 확인',
+        routeName: 'kiosk-index',
+        routeParams: {},
+        routeQuery: {},
+    });
+});
+
+/* Handle modal with student data */
 const student = ref<StudentSimple | null>(null);
 
-// udpate student info
-const handleUpdateStudent = function (value: StudentSimple) {
+// Update student & Open modal
+const handleUpdateStudent = function openKioAttendModal(value: StudentSimple) {
     student.value = value;
 };
 
-// close modal
-const handleCloseModal = function () {
+// Delete student & Close modal
+const handleCloseModal = function closeKioAttendModal() {
     student.value = null;
 };
-
-// update kio-header
-onBeforeMount(() => {
-    emit('update-header', { title: '출석 확인', routeName: 'kiosk-index' });
-});
 </script>
 
 <template>
@@ -39,22 +44,21 @@ onBeforeMount(() => {
             </p></KioInputGuide
         >
         <KioStudentForm @update-student="handleUpdateStudent" />
-        <!-- modal -->
-        <TheModal v-if="student" @close-modal="handleCloseModal">
-            <KioAttendModal
-                :student="student"
-                @close-modal="handleCloseModal" />
-        </TheModal>
     </div>
+    <!-- modal -->
+    <TheModal v-if="student" @close-modal="handleCloseModal">
+        <KioAttendModal :student="student" @close-modal="handleCloseModal" />
+    </TheModal>
 </template>
 
 <style lang="scss">
 .kiosk-attend-view {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr fit-content;
-    gap: 5rem;
-    padding: 1rem 2rem;
+    grid-template-rows: 1fr auto;
+    row-gap: 4rem;
     height: 100%;
+    width: 100%;
+    padding: 1rem 2rem;
 }
 </style>

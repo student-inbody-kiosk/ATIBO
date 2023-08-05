@@ -10,13 +10,14 @@ const emit = defineEmits<{
     (e: 'get-gym-name', name: string): void;
 }>();
 
-// Get gym detail data asynchronously
-const gym = await services.getGym(props.gymId);
-const gymImages = await services.getGymImages(props.gymId);
-
+// Update Kio Header
 onMounted(() => {
     emit('get-gym-name', gym.name);
 });
+
+// Get gym detail data asynchronously
+const gym = await services.getGym(props.gymId);
+const gymImages = await services.getGymImages(props.gymId);
 </script>
 
 <template>
@@ -26,9 +27,11 @@ onMounted(() => {
                 <img :src="image.image" />
             </li>
         </ul>
-        <div
-            class="ck-editor kiosk-gym-detail__description"
-            v-html="gym.description" />
+        <div>
+            <div
+                class="ck-editor kiosk-gym-detail__description"
+                v-html="gym.description" />
+        </div>
     </article>
 </template>
 
@@ -43,7 +46,6 @@ onMounted(() => {
     overflow-y: auto;
     height: 100%;
     padding: 1rem;
-    font-size: 2rem;
 }
 
 .kiosk-gym-detail::-webkit-scrollbar {

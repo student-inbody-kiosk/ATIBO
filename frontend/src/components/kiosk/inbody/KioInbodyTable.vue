@@ -11,15 +11,13 @@ defineProps<{
 <template>
     <div class="kiosk-inbody-table">
         <KioInbodyTableLabel />
-        <ul class="kiosk-inbody-table__container">
-            <li class="kiosk-inbody-table__list">
-                <KioInbodyTableItem
-                    v-for="inbody in inbodys"
-                    :key="inbody.id"
-                    :inbody="inbody">
-                </KioInbodyTableItem>
-            </li>
-        </ul>
+        <div class="kiosk-inbody-table__container">
+            <ul class="kiosk-inbody-table__list">
+                <li v-for="inbody in inbodys" :key="inbody.id">
+                    <KioInbodyTableItem :inbody="inbody" />
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -33,6 +31,7 @@ defineProps<{
     border-radius: 1rem;
 }
 
+// the padding between scroll bar
 .kiosk-inbody-table__container {
     padding: 0 0.4rem 0 0;
 }

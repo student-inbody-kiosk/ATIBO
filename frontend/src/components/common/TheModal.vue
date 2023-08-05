@@ -42,6 +42,16 @@ defineEmits<{
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.463);
+    animation: modal 0.2s ease-in-out;
+}
+
+@keyframes modal {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .the-modal__content {
@@ -54,6 +64,18 @@ defineEmits<{
     padding: 2.5rem 3rem 2rem;
     background-color: $white;
     border-radius: 1em;
+    animation: modal-content 0.5s ease-in-out;
+}
+
+@keyframes modal-content {
+    from {
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .the-modal__button {

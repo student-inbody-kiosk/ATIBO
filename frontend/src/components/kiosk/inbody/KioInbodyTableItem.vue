@@ -10,12 +10,12 @@ defineProps<{
     <RouterLink
         class="kiosk-inbody-table-item--anchor"
         :to="{ name: 'kiosk-inbody-detail', params: { inbodyId: inbody.id } }">
-        <div class="kiosk-inbody-table-item" @click="handleClick">
+        <article class="kiosk-inbody-table-item" @click="handleClick">
             <p>{{ inbody.testDate }}</p>
             <p>{{ inbody.weight }}kg</p>
             <p>{{ inbody.percentBodyFat }}%</p>
             <p>{{ inbody.skeletalMuscleMass }}kg</p>
-        </div>
+        </article>
     </RouterLink>
 </template>
 
@@ -24,11 +24,11 @@ defineProps<{
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     justify-items: center;
-    padding: 1rem;
+    padding: 1.2rem 1rem;
     background-color: $white;
     border-radius: 0.5em;
     color: inherit;
-    font-size: 1.3rem;
+    font-size: 1.35rem;
 
     p:nth-child(1) {
         font-weight: 600;
