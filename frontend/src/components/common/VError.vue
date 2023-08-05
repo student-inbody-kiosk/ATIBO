@@ -26,12 +26,13 @@ const props = withDefaults(
     align-items: center;
     width: 100%;
     height: 100%;
-    color: $gray;
+    color: transparentize($black, 0.7);
+    font-weight: 600;
     text-align: center;
 }
 
 .v-error.sm {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
 }
 
 .v-error.md {
