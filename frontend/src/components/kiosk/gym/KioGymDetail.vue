@@ -1,9 +1,21 @@
 <script setup lang="ts">
-import type { GymDetail } from '@/types/gyms.interface';
+import { onMounted } from 'vue';
+import services from '@/apis/services';
 
 const props = defineProps<{
-    gym: GymDetail;
+    gymId: number;
 }>();
+
+const emit = defineEmits<{
+    (e: 'get-gym-name', name: string): void;
+}>();
+
+// Get gym detail data asynchronously
+const gym = await services.getGym(props.gymId);
+
+onMounted(() => {
+    emit('get-gym-name', gym.name);
+});
 </script>
 
 <template>
@@ -13,17 +25,23 @@ const props = defineProps<{
                 <img :src="image.image" />
             </li>
         </ul>
-        <p v-html="gym.description" />
+        <div
+            class="ck-editor kiosk-gym-detail__description"
+            v-html="gym.description" />
     </article>
 </template>
 
 <style lang="scss">
+@import '@/styles/ckeditor.scss';
+
 .kiosk-gym-detail {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 20rem 1fr;
+    row-gap: 1rem;
     overflow-y: auto;
     height: 100%;
+    padding: 1rem;
     font-size: 2rem;
 }
 
@@ -40,5 +58,11 @@ const props = defineProps<{
 
 .kiosk-gym-detail__image img {
     height: 18rem;
+}
+
+.kiosk-gym-detail__description {
+    padding: 1rem;
+    border-radius: 0.5em;
+    background-color: white;
 }
 </style>
