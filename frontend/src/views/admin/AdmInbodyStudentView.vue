@@ -17,6 +17,8 @@ const startDate = ref('');
 const endDate = ref('');
 const inbodyList: Ref<InbodyDetail[]> = ref([]);
 onBeforeMount(() => {
+    startDate.value = start;
+    endDate.value = end;
     getTheStudentInbodys(
         Number(grade),
         Number(room),
@@ -25,6 +27,16 @@ onBeforeMount(() => {
         end
     ).then((res) => (inbodyList.value = res));
 });
+
+const handleSearchClick = function searchInbodyList() {
+    getTheStudentInbodys(
+        Number(grade),
+        Number(room),
+        Number(number),
+        start,
+        end
+    ).then((res) => (inbodyList.value = res));
+};
 </script>
 
 <template>
@@ -47,7 +59,7 @@ onBeforeMount(() => {
                 <VButton
                     text="조회"
                     color="admin-primary"
-                    @click="$emit('search')" />
+                    @click="handleSearchClick" />
             </div>
             <VButton
                 text="인바디 추가"

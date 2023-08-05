@@ -8,42 +8,64 @@ defineProps<{
 
 <template>
     <tbody>
-        <tr class="inbody-data-label">
-            <td class="inbody-data-label__content">{{ index + 1 }}</td>
-            <td class="inbody-data-label__content">{{ inbody.score }}</td>
-            <td class="inbody-data-label__content">{{ inbody.age }}</td>
-            <td class="inbody-data-label__content">{{ inbody.height }}</td>
-            <td class="inbody-data-label__content">{{ inbody.weight }}</td>
-            <td class="inbody-data-label__content">
-                {{ inbody.percentBodyFat }}
+        <tr>
+            <td>{{ index + 1 }}</td>
+            <td>
+                {{ inbody.testDate }}
+            </td>
+            <td>
+                <span>{{ inbody.score }} </span> 점
+            </td>
+            <td>
+                <span>{{ inbody.age }} </span> 세
+            </td>
+            <td>
+                <span>{{ inbody.height }}</span> cm
+            </td>
+            <td>
+                <span> {{ inbody.weight }} </span> g
+            </td>
+            <td>
+                <span>{{ inbody.percentBodyFat }} </span> %
+            </td>
+            <td>
+                <span> {{ inbody.skeletalMuscleMass }}</span> kg
             </td>
             <td class="inbody-data-label__content">
-                {{ inbody.skeletalMuscleMass }}
+                <span>{{ inbody.bodyFatMass }}</span>
             </td>
-            <td class="inbody-data-label__content">{{ inbody.bodyFatMass }}</td>
-            <td class="inbody-data-label__content">
-                {{ inbody.bodyMassIndex }}
+            <td>
+                <span> {{ inbody.bodyMassIndex }}</span> kg
             </td>
-            <td class="inbody-data-label__content">
-                {{ inbody.totalBodyWater }}
+            <td>
+                <span>{{ inbody.totalBodyWater }}</span> L
             </td>
-            <td class="inbody-data-label__content">{{ inbody.protein }}</td>
-            <td class="inbody-data-label__content">{{ inbody.minerals }}</td>
+            <td>
+                <span>{{ inbody.protein }}</span> kg
+            </td>
+            <td>
+                <span>{{ inbody.minerals }}</span> kg
+            </td>
         </tr>
     </tbody>
 </template>
 
 <style lang="scss" scoped>
-.inbody-data-label {
+tr {
     background-color: $white;
 }
 
-.inbody-data-label__content {
+td {
     display: block;
-    min-width: 8rem;
+    min-width: 9rem;
     padding: 0.6rem;
     border: 0.1rem solid $admin-secondary;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     text-align: center;
+}
+
+span {
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 </style>
