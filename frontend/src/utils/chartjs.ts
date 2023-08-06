@@ -135,7 +135,7 @@ export const lineOptions = {
     },
 };
 
-// vue-cahrt.js Bar Graph
+// vue-chart.js Bar Graph
 // https://stackblitz.com/edit/github-6fyf6f?file=src%2FApp.vue,src%2FchartConfig.ts
 export function inbodyToBarData(inbody: InbodyDetail) {
     const weightData = {
