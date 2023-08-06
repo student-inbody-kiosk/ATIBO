@@ -12,7 +12,6 @@ defineEmits<{
 
 <template>
     <tr @click="$emit('click', inbody.id)">
-        <td>{{ index + 1 }}</td>
         <td>
             {{ inbody.testDate }}
         </td>

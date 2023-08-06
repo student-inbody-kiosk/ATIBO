@@ -1,7 +1,6 @@
 import apiRequest from '@/apis/axiosInterceptors';
-import type { Inbody, InbodyDetail } from '@/types/inbody.interface';
-
 import { toastCenterErrorMessage } from '@/utils/toastManager';
+import type { Inbody, InbodyDetail } from '@/types/inbody.interface';
 
 export async function getInbodys(
     startDate: string,
@@ -56,6 +55,10 @@ export async function createInbody(inbodyList: InbodyDetail[]) {
     return await apiRequest.put('students/inbody/list/', inbodyList);
 }
 
-// export async function deleteInbody(inbodyList: InbodyDetail[]) {
-//     return await apiRequest.patch('students/inbody/list/', inbodyList);
-// }
+export async function updateInbody(inbodyId: number, inbody: InbodyDetail) {
+    return await apiRequest.put(`students/inbody/${inbodyId}/`, inbody);
+}
+
+export async function deleteInbody(inbodyId: number) {
+    return await apiRequest.delete(`students/inbody/${inbodyId}/`);
+}
