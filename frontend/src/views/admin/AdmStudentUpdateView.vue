@@ -23,7 +23,8 @@ const students: Ref<Student[]> = ref([
         password: '',
     },
 ]);
-const updateList: Ref<Student[]> = ref([]);
+
+const updateIndexSet: Ref<Set<number>> = ref(new Set<number>());
 
 onBeforeMount(() => {
     const { grade, room, number, name } = route.query;
@@ -39,22 +40,19 @@ const handleInput = function updateStudentData<T extends keyof Student>(
 ) {
     students.value[index][item] = data;
 
-    // 수정된 학생의 인덱스 updateList에 반영
-    if (index in updateList.value) return;
-    updateList.value.push(index);
+    // 수정된 학생의 인덱스 updateIndexSet에 반영
+    updateIndexSet.value.add(index);
 };
 
 const handleUpdateClick = function updateStudent() {
-    let studentList = [];
+    const updateStudentList = [];
 
     // updateList의 인덱스 기준으로 수정된 학생 리스트 생성
-    for (let i = 0; i < updateList.value.length; i++) {
-        studentList.push(students.value[i]);
+    for (const index of updateIndexSet.value) {
+        updateStudentList.push(students.value[index]);
     }
 
-    console.log(studentList);
-
-    updateStudents(studentList).then(() => {
+    updateStudents(updateStudentList).then(() => {
         router.push({ name: 'admin-student', query: route.query });
     });
 };

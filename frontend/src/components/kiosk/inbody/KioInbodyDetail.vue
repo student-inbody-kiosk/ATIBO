@@ -12,14 +12,12 @@ import type { InbodyDetail } from '@/types/inbody.interface';
 import { inbodyToBarData, barOptions } from '@/utils/chartjs';
 import { getAverageValue, getMaxValue, getMinValue } from '@/utils/inbody';
 import { computed } from 'vue';
-import { useStudentStore } from '@/stores/student.store';
 
 const props = defineProps<{
+    name: string;
+    sex: number;
     inbody: InbodyDetail;
 }>();
-
-// Get the Student data(name, sex) from pinia store
-const { student } = useStudentStore();
 
 /* InbodyDetail -> chartJS barGraph dataset */
 const barData = computed(() => {
@@ -30,11 +28,11 @@ const barData = computed(() => {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
 // Calculate personal avg, min, max data
-const avgValue = getAverageValue(props.inbody, student?.sex ? student.sex : 1);
-const minValue = getMinValue(props.inbody, student?.sex ? student.sex : 1);
-const maxValue = getMaxValue(props.inbody, student?.sex ? student.sex : 1);
+const avgValue = getAverageValue(props.inbody, props.sex ? props.sex : 1);
+const minValue = getMinValue(props.inbody, props.sex ? props.sex : 1);
+const maxValue = getMaxValue(props.inbody, props.sex ? props.sex : 1);
 
-// Set the cacluated data to the graph
+// Set the caculated data to the graph
 const weightOptions = JSON.parse(JSON.stringify(barOptions));
 weightOptions.scales.x.suggestedMin = minValue.weight;
 weightOptions.scales.x.suggestedMax = maxValue.weight;
@@ -59,15 +57,17 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
 <template lang="">
     <div class="kiosk-inbody-detail">
         <div class="kiosk-inbody-detail__personal">
-            <p>이름: {{ student.name }}</p>
+            <p>이름: {{ name }}</p>
             <p>나이: {{ inbody.age }}</p>
             <p>키: {{ inbody.height }}cm</p>
+            <p>성별: {{ sex === 1 ? '남' : '여' }}</p>
             <p>날짜: {{ inbody.testDate }}</p>
         </div>
         <div class="kiosk-inbody-detail__comment">
             <p>* 본 결과지는 간이 결과지입니다.</p>
             <p>
-                * '키' 값을 임력하지 않은 경우, 청소년 평균 키 값으로 계산됩니다
+                * 키를 임력하지 않은 경우 평균 키로 계산됩니다. (남: 173.7cm,
+                여: 160.9cm)
             </p>
         </div>
         <div class="kiosk-inbody-detail--container">
