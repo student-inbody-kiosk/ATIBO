@@ -18,10 +18,11 @@ class Student(models.Model):
     password = models.CharField(default='0000', max_length=4, validators=[MinLengthValidator(4, _('비밀번호의 길이는 4자여야 합니다')), RegexValidator(STUDENT_PASSWORD_REGEX, _('비밀번호는 숫자로만 이뤄져야 합니다'), 'student_password_invalid')])
     birth_date = models.DateField()
     is_authenticated = models.BooleanField(default=False, editable=False)   # Just for the 'is_authenticated' property, which is required by 'rest_framework.throttling.UserRateThrottle.get_cache_key()'
+    is_constraint_activated = models.BooleanField(default=True) # The additional field to control (grade, room, number) constraint for supporting multiple update
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['grade', 'room', 'number'], name='unique_grade_room_number'),   
+            models.UniqueConstraint(fields=['grade', 'room', 'number', 'is_constraint_activated'], name='unique_grade_room_number_activated'),   
             models.CheckConstraint(check=models.Q(sex__in=[0, 1, 2, 9]), name='valid_sex_values'),  # https://en.wikipedia.org/wiki/ISO/IEC_5218
         ]
         # Django Model Index
@@ -55,10 +56,11 @@ class Inbody(models.Model):
     body_fat_mass = models.FloatField(null=True)
     body_mass_index = models.FloatField(null=True)
     score = TinyIntegerField(null=True, validators=[MinValueValidator(1, _('인바디 점수는 0보다 커야 합니다')), MaxValueValidator(100,  _('인바디 점수는 100이하여야 합니다'))])
+    is_constraint_activated = models.BooleanField(default=True) # The additional field to control (student, test_date) constraint for supporting multiple update
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['student', 'test_date'], name='test_per_day'),   
+            models.UniqueConstraint(fields=['student', 'test_date', 'is_constraint_activated'], name='unique_student_test_date_activated_constraint'),   
         ]
         indexes = [
             models.Index(fields=['student', 'test_date'], name='student_test_date_idx'),

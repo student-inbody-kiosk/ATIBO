@@ -84,7 +84,16 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
         instance = []
         try:
             for student_data in request.data:
-                instance.append(get_object_or_404(Student, id=student_data.get('id')))
+                student = get_object_or_404(Student, id=student_data.get('id'))
+
+                """
+                Temporarily Deactivate (grade, room, number) constraint for multiple update.
+                It will be reactivated in the serializer
+                """
+                student.is_constraint_activated = False
+                student.save()
+
+                instance.append(student)
         except Http404:
             grade = student_data.get('grade')
             room = student_data.get('room')
@@ -312,9 +321,19 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
         try:
             for inbody_data in request.data:
                 id = inbody_data.get('id')
-                if not id:
+                if not id:  # Data for creation
                     pass
-                instance.append(get_object_or_404(Inbody, id=id))
+
+                inbody = get_object_or_404(Inbody, id=id)
+
+                """
+                Temporarily Deactivate (student, test_date) constraint for multiple update.
+                It will be reactivated in the serializer
+                """
+                inbody.is_constraint_activated = False
+                inbody.save()
+
+                instance.append(inbody)
         except Http404:
             test_date = inbody_data.get('test_date')
             raise DetailException(status.HTTP_404_NOT_FOUND, _(f'{test_date} 날짜에 해당하는 기존 인바디 정보가 없습니다'), 'inbody_not_found')
