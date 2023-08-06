@@ -7,47 +7,45 @@ defineProps<{
 </script>
 
 <template>
-    <tbody>
-        <tr>
-            <td>{{ index + 1 }}</td>
-            <td>
-                {{ inbody.testDate }}
-            </td>
-            <td>
-                <span>{{ inbody.score }} </span> 점
-            </td>
-            <td>
-                <span>{{ inbody.age }} </span> 세
-            </td>
-            <td>
-                <span>{{ inbody.height }}</span> cm
-            </td>
-            <td>
-                <span> {{ inbody.weight }} </span> g
-            </td>
-            <td>
-                <span>{{ inbody.percentBodyFat }} </span> %
-            </td>
-            <td>
-                <span> {{ inbody.skeletalMuscleMass }}</span> kg
-            </td>
-            <td class="inbody-data-label__content">
-                <span>{{ inbody.bodyFatMass }}</span>
-            </td>
-            <td>
-                <span> {{ inbody.bodyMassIndex }}</span> kg
-            </td>
-            <td>
-                <span>{{ inbody.totalBodyWater }}</span> L
-            </td>
-            <td>
-                <span>{{ inbody.protein }}</span> kg
-            </td>
-            <td>
-                <span>{{ inbody.minerals }}</span> kg
-            </td>
-        </tr>
-    </tbody>
+    <tr>
+        <td>{{ index + 1 }}</td>
+        <td>
+            {{ inbody.testDate }}
+        </td>
+        <td>
+            <span>{{ inbody.score }} </span> 점
+        </td>
+        <td>
+            <span>{{ inbody.age }} </span> 세
+        </td>
+        <td>
+            <span>{{ inbody.height }}</span> cm
+        </td>
+        <td>
+            <span> {{ inbody.weight }} </span> g
+        </td>
+        <td>
+            <span>{{ inbody.percentBodyFat }} </span> %
+        </td>
+        <td>
+            <span> {{ inbody.skeletalMuscleMass }}</span> kg
+        </td>
+        <td class="inbody-data-label__content">
+            <span>{{ inbody.bodyFatMass }}</span>
+        </td>
+        <td>
+            <span> {{ inbody.bodyMassIndex }}</span> kg
+        </td>
+        <td>
+            <span>{{ inbody.totalBodyWater }}</span> L
+        </td>
+        <td>
+            <span>{{ inbody.protein }}</span> kg
+        </td>
+        <td>
+            <span>{{ inbody.minerals }}</span> kg
+        </td>
+    </tr>
 </template>
 
 <style lang="scss" scoped>

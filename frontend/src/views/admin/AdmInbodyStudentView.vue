@@ -11,7 +11,7 @@ import type { Ref } from 'vue';
 
 const route = useRoute();
 
-const { grade, room, number } = route.params;
+const { grade, room, number, name } = route.params;
 const { start, end } = route.query as { start: string; end: string };
 const startDate = ref('');
 const endDate = ref('');
@@ -61,19 +61,29 @@ const handleSearchClick = function searchInbodyList() {
                     color="admin-primary"
                     @click="handleSearchClick" />
             </div>
-            <VButton
-                text="인바디 추가"
-                color="green"
-                @click="$router.push({ name: 'admin-student-create' })" />
+            <div class="admin-inbody-container__buttons">
+                <VButton
+                    text="수정 및 추가"
+                    color="green"
+                    @click="
+                        $router.push({
+                            name: 'admin-inbody-update',
+                            params: { grade, room, number, name },
+                            query: { start: startDate, end: endDate },
+                        })
+                    " />
+            </div>
         </div>
         <div class="admin-inbody-student-table-container">
             <table>
                 <InbodyDataLabel />
-                <InbodyData
-                    v-for="(inbody, index) in inbodyList"
-                    :key="inbody.id"
-                    :inbody="inbody"
-                    :index="index" />
+                <tbody>
+                    <InbodyData
+                        v-for="(inbody, index) in inbodyList"
+                        :key="inbody.id"
+                        :inbody="inbody"
+                        :index="index" />
+                </tbody>
             </table>
         </div>
     </div>
@@ -92,18 +102,20 @@ const handleSearchClick = function searchInbodyList() {
     justify-content: space-between;
 }
 
-.admin-inbody-container__searchbar {
-    min-width: 55%;
+.admin-inbody-container__searchbar,
+.admin-inbody-container__buttons {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    gap: 0.5rem;
 }
+
 .admin-inbody-student-table-container {
     width: 100%;
     overflow-x: auto;
 }
 
-table {
+table,
+tbody {
     display: flex;
 }
 </style>

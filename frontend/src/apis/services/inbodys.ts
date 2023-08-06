@@ -1,5 +1,6 @@
 import apiRequest from '@/apis/axiosInterceptors';
-import type { InbodyDetail } from '@/types/inbody.interface';
+import type { Inbody, InbodyDetail } from '@/types/inbody.interface';
+
 import { toastCenterErrorMessage } from '@/utils/toastManager';
 
 export async function getInbodys(
@@ -49,4 +50,8 @@ export async function getInbody(inbodyId: number) {
             toastCenterErrorMessage('인바디 정보를 불러오지 못했습니다', err);
             throw err;
         });
+}
+
+export async function createTheStudentInbody(inbodyList: InbodyDetail[]) {
+    return await apiRequest.put('students/inbody/list/', inbodyList);
 }
