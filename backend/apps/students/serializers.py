@@ -238,4 +238,4 @@ class StudentInbodySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ['name', 'grade', 'room', 'number', 'inbody_set']
+        fields = ['name', 'grade', 'room', 'number', 'sex', 'inbody_set']
