@@ -1,5 +1,6 @@
 import apiRequest from '@/apis/axiosInterceptors';
-import type { InbodyDetail } from '@/types/inbody.interface';
+import type { Inbody, InbodyDetail } from '@/types/inbody.interface';
+
 import { toastCenterErrorMessage } from '@/utils/toastManager';
 
 export async function getInbodys(
@@ -12,12 +13,7 @@ export async function getInbodys(
 ) {
     return await apiRequest
         .get(`/students/inbody/${startDate}/${endDate}/`, {
-            params: {
-                grade,
-                room,
-                number,
-                name,
-            },
+            params: { grade, room, number, name },
         })
         .then((res) => {
             return res.data;
@@ -33,10 +29,7 @@ export async function getTheStudentInbodys(
 ) {
     return await apiRequest
         .get(`/students/inbody/${grade}/${room}/${number}/`, {
-            params: {
-                startDate,
-                endDate,
-            },
+            params: { startDate, endDate },
         })
         .then((res): InbodyDetail[] => {
             return res.data;
@@ -47,7 +40,7 @@ export async function getTheStudentInbodys(
         });
 }
 
-export async function getInbody(inbodyId) {
+export async function getInbody(inbodyId: number) {
     return await apiRequest
         .get(`/students/inbody/${inbodyId}/`)
         .then((res): InbodyDetail => {
@@ -58,3 +51,11 @@ export async function getInbody(inbodyId) {
             throw err;
         });
 }
+
+export async function createInbody(inbodyList: InbodyDetail[]) {
+    return await apiRequest.put('students/inbody/list/', inbodyList);
+}
+
+// export async function deleteInbody(inbodyList: InbodyDetail[]) {
+//     return await apiRequest.patch('students/inbody/list/', inbodyList);
+// }

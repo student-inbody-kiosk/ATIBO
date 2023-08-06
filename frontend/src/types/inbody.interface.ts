@@ -6,9 +6,8 @@ export interface Inbody {
     inbodySet: InbodyDetail[];
 }
 
-// TODO: Student Type 따로 분리
 export interface InbodyDetail {
-    id: number;
+    id?: number;
     testDate: string;
     weight: number;
     percentBodyFat: number;
@@ -18,7 +17,7 @@ export interface InbodyDetail {
     totalBodyWater?: number;
     protein?: number;
     minerals?: number;
-    bodyFatMass: ?number;
+    bodyFatMass?: number;
     bodyMassIndex?: number;
     score?: number;
 }
