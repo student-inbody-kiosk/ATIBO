@@ -141,8 +141,8 @@ class GenerateStudentDummyData():
                 room = 1
                 grade += 1
 
-            sex = random.choice([0, 1])
-            name = random.choice(GenerateStudentDummyData.MALE_NAMES) if sex else random.choice(GenerateStudentDummyData.FEMALE_NAMES)
+            sex = random.choice([1, 2])
+            name = random.choice(GenerateStudentDummyData.MALE_NAMES) if sex == 1 else random.choice(GenerateStudentDummyData.FEMALE_NAMES)
 
             random_num_days = random.randint(0, self.birth_num_days)
             birth_date_date = self.birth_start_date + timedelta(days=random_num_days)
