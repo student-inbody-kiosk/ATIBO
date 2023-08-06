@@ -82,24 +82,24 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
     def update(self, request, *args, **kwargs):
         # Get mutilple instance
         instance = []
-        try:
-            for student_data in request.data:
-                student = get_object_or_404(Student, id=student_data.get('id'))
+        for student_data in request.data:
+            student = Student.objects.select_for_update().get(id=student_data.get('id'))    # lock the records for multiple update
 
-                """
-                Temporarily Deactivate (grade, room, number) constraint for multiple update.
-                It will be reactivated in the serializer
-                """
-                student.is_constraint_activated = False
-                student.save()
+            if not student:
+                grade = student_data.get('grade')
+                room = student_data.get('room')
+                number = student_data.get('number')
+                name = student_data.get('name')
+                raise DetailException(status.HTTP_404_NOT_FOUND, _(f'제출한 {grade}학년 {room}반 {number}번호 {name} 학생의 기존 데이터가 없습니다'), 'student_not_found')
 
-                instance.append(student)
-        except Http404:
-            grade = student_data.get('grade')
-            room = student_data.get('room')
-            number = student_data.get('number')
-            name = student_data.get('name')
-            raise DetailException(status.HTTP_404_NOT_FOUND, _(f'제출한 {grade}학년 {room}반 {number}번호 {name} 학생의 기존 데이터가 없습니다'), 'student_not_found')
+            """
+            Temporarily Deactivate (grade, room, number) constraint for multiple update.
+            It will be reactivated in the serializer
+            """
+            student.is_constraint_activated = False
+            student.save()
+
+            instance.append(student)
 
         """
         UpdateModelMixin.update()
@@ -318,25 +318,26 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
     def update(self, request, *args, **kwargs):
         # Get mutilple instance
         instance = []
-        try:
-            for inbody_data in request.data:
-                id = inbody_data.get('id')
-                if not id:  # Data for creation
-                    pass
 
-                inbody = get_object_or_404(Inbody, id=id)
+        for inbody_data in request.data:
+            id = inbody_data.get('id')
+            if not id:  # Data for creation
+                pass
 
-                """
-                Temporarily Deactivate (student, test_date) constraint for multiple update.
-                It will be reactivated in the serializer
-                """
-                inbody.is_constraint_activated = False
-                inbody.save()
+            inbody = Inbody.objects.select_for_update().get(id=id)    # lock the records for multiple update
 
-                instance.append(inbody)
-        except Http404:
-            test_date = inbody_data.get('test_date')
-            raise DetailException(status.HTTP_404_NOT_FOUND, _(f'{test_date} 날짜에 해당하는 기존 인바디 정보가 없습니다'), 'inbody_not_found')
+            if not inbody:
+                test_date = inbody_data.get('test_date')
+                raise DetailException(status.HTTP_404_NOT_FOUND, _(f'{test_date} 날짜에 해당하는 기존 인바디 정보가 없습니다'), 'inbody_not_found')
+
+            """
+            Temporarily Deactivate (student, test_date) constraint for multiple update.
+            It will be reactivated in the serializer
+            """
+            inbody.is_constraint_activated = False
+            inbody.save()
+
+            instance.append(inbody)
 
         """
         UpdateModelMixin.update()
