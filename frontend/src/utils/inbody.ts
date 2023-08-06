@@ -67,7 +67,7 @@ export function getAverageValue(inbody: InbodyDetail, sex: number) {
     };
 }
 
-// 그래프 상 인바디 최솟t값
+// 그래프 상 인바디 최솟값
 export function getMinValue(inbody: InbodyDetail, sex: number) {
     const height = inbody.height
         ? inbody.height / 100
