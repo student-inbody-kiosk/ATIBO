@@ -280,7 +280,7 @@ class StudentInbodyAPIView(ListAPIView):
     # Create dynamic query according to parameters
     def get_queryset(self):
         student_queryset = get_student_queryset_from_query_params(self.request.query_params)
-        start_date, end_date = get_date_from_path_variables(self.kwargs, 720)   # max available period: 2years
+        start_date, end_date = get_date_from_path_variables(self.kwargs, 730)   # max available period: 2years
         return student_queryset.prefetch_related(Prefetch('inbody_set', queryset=Inbody.objects.filter(test_date__gte=start_date, test_date__lt=end_date).order_by('test_date')))
 
 
