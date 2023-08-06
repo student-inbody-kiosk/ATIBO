@@ -52,6 +52,10 @@ export async function getInbody(inbodyId: number) {
         });
 }
 
-export async function createTheStudentInbody(inbodyList: InbodyDetail[]) {
+export async function createInbody(inbodyList: InbodyDetail[]) {
     return await apiRequest.put('students/inbody/list/', inbodyList);
 }
+
+// export async function deleteInbody(inbodyList: InbodyDetail[]) {
+//     return await apiRequest.patch('students/inbody/list/', inbodyList);
+// }

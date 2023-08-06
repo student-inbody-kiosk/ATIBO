@@ -8,6 +8,7 @@ import { useRoute } from 'vue-router';
 import { getTheStudentInbodys } from '@/apis/services/inbodys';
 import type { InbodyDetail } from '@/types/inbody.interface';
 import type { Ref } from 'vue';
+import router from '@/router';
 
 const route = useRoute();
 
@@ -16,6 +17,7 @@ const { start, end } = route.query as { start: string; end: string };
 const startDate = ref('');
 const endDate = ref('');
 const inbodyList: Ref<InbodyDetail[]> = ref([]);
+
 onBeforeMount(() => {
     startDate.value = start;
     endDate.value = end;
@@ -33,15 +35,24 @@ const handleSearchClick = function searchInbodyList() {
         Number(grade),
         Number(room),
         Number(number),
-        start,
-        end
+        startDate.value,
+        endDate.value
     ).then((res) => (inbodyList.value = res));
+};
+
+const handleDataClick = function routeToInbodyDetail(inbodyId: number) {
+    router.push({
+        name: 'admin-inbody-detail',
+        params: { grade, room, number, name, inbodyId },
+    });
 };
 </script>
 
 <template>
     <div class="admin-inbody-student">
-        <h1>학생 인바디</h1>
+        <div class="admin-inbody-student-info">
+            {{ `${grade} 학년 ${room} 반 ${number} 번 ${name}` }}
+        </div>
         <div class="admin-inbody-container">
             <div class="admin-inbody-container__searchbar">
                 <VInput
@@ -61,18 +72,6 @@ const handleSearchClick = function searchInbodyList() {
                     color="admin-primary"
                     @click="handleSearchClick" />
             </div>
-            <div class="admin-inbody-container__buttons">
-                <VButton
-                    text="수정 및 추가"
-                    color="green"
-                    @click="
-                        $router.push({
-                            name: 'admin-inbody-update',
-                            params: { grade, room, number, name },
-                            query: { start: startDate, end: endDate },
-                        })
-                    " />
-            </div>
         </div>
         <div class="admin-inbody-student-table-container">
             <table>
@@ -82,7 +81,8 @@ const handleSearchClick = function searchInbodyList() {
                         v-for="(inbody, index) in inbodyList"
                         :key="inbody.id"
                         :inbody="inbody"
-                        :index="index" />
+                        :index="index"
+                        @click="handleDataClick" />
                 </tbody>
             </table>
         </div>
@@ -90,10 +90,14 @@ const handleSearchClick = function searchInbodyList() {
 </template>
 
 <style lang="scss" scoped>
+.admin-inbody-student-info {
+    font-size: 1.5rem;
+    text-align: center;
+}
 .admin-inbody-student {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
 }
 
 .admin-inbody-container {
@@ -102,8 +106,7 @@ const handleSearchClick = function searchInbodyList() {
     justify-content: space-between;
 }
 
-.admin-inbody-container__searchbar,
-.admin-inbody-container__buttons {
+.admin-inbody-container__searchbar {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -111,6 +114,7 @@ const handleSearchClick = function searchInbodyList() {
 
 .admin-inbody-student-table-container {
     width: 100%;
+
     overflow-x: auto;
 }
 

@@ -7,7 +7,7 @@ export interface Inbody {
 }
 
 export interface InbodyDetail {
-    id?: number | null;
+    id?: number;
     testDate: string;
     weight: number;
     percentBodyFat: number;

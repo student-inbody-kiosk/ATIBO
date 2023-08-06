@@ -4,10 +4,14 @@ defineProps<{
     index: number;
     inbody: InbodyDetail;
 }>();
+
+defineEmits<{
+    (e: 'click', inbodyId: number): void;
+}>();
 </script>
 
 <template>
-    <tr>
+    <tr @click="$emit('click', inbody.id)">
         <td>{{ index + 1 }}</td>
         <td>
             {{ inbody.testDate }}
@@ -51,6 +55,11 @@ defineProps<{
 <style lang="scss" scoped>
 tr {
     background-color: $white;
+}
+
+tr:hover {
+    cursor: pointer;
+    background-color: $admin-tertiary;
 }
 
 td {

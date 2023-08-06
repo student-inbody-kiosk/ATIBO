@@ -21,7 +21,7 @@ import AdmAttendView from '@/views/admin/AdmAttendView.vue';
 import AdmInbodyView from '@/views/admin/AdmInbodyView.vue';
 import AdmInbodyStudentView from '@/views/admin/AdmInbodyStudentView.vue';
 import AdmInbodyDetailView from '@/views/admin/AdmInbodyDetailView.vue';
-import AdmInbodyStudentUpdateView from '@/views/admin/AdmInbodyStudentUpdateView.vue';
+import AdmInbodyUpdateView from '@/views/admin/AdmInbodyUpdateView.vue';
 import AdmGymView from '@/views/admin/AdmGymView.vue';
 import AdmGymDetailView from '@/views/admin/AdmGymDetailView.vue';
 import AdmGymUpdateView from '@/views/admin/AdmGymUpdateView.vue';
@@ -134,9 +134,9 @@ const router = createRouter({
                     component: AdmInbodyDetailView,
                 },
                 {
-                    path: 'inbody/create/:grade/:room/:number/:name',
+                    path: 'inbody/:grade/:room/:number/:name/update/:inbodyId',
                     name: 'admin-inbody-update',
-                    component: AdmInbodyStudentUpdateView,
+                    component: AdmInbodyUpdateView,
                 },
                 {
                     path: 'gym',

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import VInput from '@/components/common/VInput.vue';
-import VIconButton from '@/components/common/VIconButton.vue';
 import type { InbodyDetail } from '@/types/inbody.interface';
 
 withDefaults(
@@ -14,17 +13,13 @@ withDefaults(
 
 defineEmits<{
     (e: 'input', index: number, item: string, value: string): void;
-    (e: 'delete', index: number): void;
 }>();
 </script>
 
 <template>
     <tr>
         <td>
-            <VIconButton v-if="isCreate" @click="$emit('delete', index)">
-                <font-awesome-icon icon="circle-minus" color="red" size="lg" />
-            </VIconButton>
-            <span v-else>{{ index + 1 }}</span>
+            {{ index + 1 }}
         </td>
         <td>
             <VInput
