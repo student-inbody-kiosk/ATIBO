@@ -25,24 +25,29 @@ class StudentListAuthSerializer(serializers.ListSerializer):
         except IntegrityError as e:
             code, message = e.args
             raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{message}'), f'db_{code}')
+        
         return instance
     
     # Multiple Update
     def update(self, instance, validated_data):
-        student_mapping = {student.id: student for student in instance}
-        data_mapping = {item['id']: item for item in validated_data}
+        students =[]
+        for item in validated_data:
+            student = Student(**item)
+            """
+            Restore the (grade, room, number) constraint, which is deactivated in the serializer
+            """
+            student.is_constraint_activated = True
+            students.append(student)
 
-        ret = []
         # Handle DB integrity error
         try:
-            for student_id, data in data_mapping.items():
-                student = student_mapping.get(student_id, None)
-                ret.append(self.child.update(student, data))
+            # Bulk update
+            Student.objects.bulk_update(students, ['name', 'grade', 'room', 'number', 'sex', 'password', 'birth_date', 'is_constraint_activated'])
         except IntegrityError as e:
             code, message = e.args
             raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{message}'), f'db_{code}')
             
-        return ret
+        return students
 
 
 class StudentAuthSerializer(serializers.ModelSerializer):
@@ -171,7 +176,6 @@ class StudentAttendanceSerializer(serializers.ModelSerializer):
         ret['attendance_set'] = attendance_set
         return ret
 
-
 class InbodyListSerializer(serializers.ListSerializer):    
     # Multiple Create/Update
     def update(self, instance, validated_data):
@@ -183,9 +187,13 @@ class InbodyListSerializer(serializers.ListSerializer):
         try:
             for inbody_id, data in data_mapping.items():
                 student = inbody_mapping.get(inbody_id, None)
-                if student is None:
+                if student is None: # Create
                     ret.append(self.child.create(data))
-                else:
+                else:   # Update
+                    """
+                    Restore the (grade, room, number) constraint, which is deactivated in the serializer
+                    """
+                    data['is_constraint_activated'] = True
                     ret.append(self.child.update(student, data))
                     
         except IntegrityError as e:
