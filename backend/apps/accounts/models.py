@@ -17,7 +17,7 @@ class User(AbstractUser):
     # password : password validators are set in the settings.py
     # is_active : is_active field is inherited from AbstractUser
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = models.CharField(unique=True, editable=False, max_length=20, validators=[RegexValidator(USERNAME_REGEX, _('아이디는 영어와 숫자를 조합하여 5~20 자로 작성해주세요'), 'username_invalid')])
+    username = models.CharField(unique=True, max_length=20, validators=[RegexValidator(USERNAME_REGEX, _('아이디는 영어와 숫자를 조합하여 5~20 자로 작성해주세요'), 'username_invalid')])
     name = models.CharField(max_length=5, validators=[RegexValidator(KOREAN_NAME_REGEX, _('이름은 2~5자의 한글로 작성해주세요'), 'name_invalid')])
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=5, editable=False, choices=Role.choices, default=Role.USER)  # enum
