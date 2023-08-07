@@ -1,6 +1,7 @@
 import apiRequest from '@/apis/axiosInterceptors';
 import router from '@/router/index';
 import { useAuthStore } from '@/stores/auth.store';
+import type { AccountSignup } from '@/types/accounts.interface';
 
 export async function login(username: string, password: string) {
     return await apiRequest
@@ -22,4 +23,8 @@ export async function logout() {
         updateRefreshToken('');
         router.push({ name: 'admin-index' });
     });
+}
+
+export async function signup(account: AccountSignup) {
+    return await apiRequest.post('/accounts/', account);
 }

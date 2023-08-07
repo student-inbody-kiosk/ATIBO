@@ -1,5 +1,5 @@
 export interface Account {
-    id: string;
+    id?: string;
     username: string;
     name: string;
     email: string;
@@ -14,4 +14,9 @@ export interface SchoolAccount extends Account {
 export interface AccountList {
     inactiveUsers: SchoolAccount[];
     activeUsers: SchoolAccount[];
+}
+
+export interface AccountSignup extends Account {
+    password: string;
+    comment: string;
 }

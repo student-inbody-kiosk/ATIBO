@@ -3,7 +3,8 @@ import VButton from '@/components/common/VButton.vue';
 import VInput from '@/components/common/VInput.vue';
 import InbodyDataLabel from '@/components/admin/inbody/InbodyDataLabel.vue';
 import InbodyData from '@/components/admin/inbody/InbodyData.vue';
-import { onBeforeMount, ref } from 'vue';
+import InbodyCreateModal from '@/components/admin/inbody/InbodyCreateModal.vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { getTheStudentInbodys } from '@/apis/services/inbodys';
 import type { InbodyDetail } from '@/types/inbody.interface';
@@ -18,9 +19,10 @@ const { grade, room, number, name } = route.params;
 const { start, end } = route.query as { start: string; end: string };
 const startDate = ref('');
 const endDate = ref('');
+const isCreateModalOpen = ref(false);
 const inbodyList: Ref<InbodyDetail[]> = ref([]);
 
-onBeforeMount(() => {
+onMounted(() => {
     startDate.value = start;
     endDate.value = end;
     getTheStudentInbodys(
@@ -51,6 +53,17 @@ const handleDataClick = function routeToInbodyDetail(inbodyId: number) {
         params: { grade, room, number, name, inbodyId },
     });
 };
+
+const handleCreateClick = function updateTheStudentInbodys() {
+    getTheStudentInbodys(
+        Number(grade),
+        Number(room),
+        Number(number),
+        start,
+        end
+    ).then((res) => (inbodyList.value = res));
+    isCreateModalOpen.value = false;
+};
 </script>
 
 <template>
@@ -63,23 +76,29 @@ const handleDataClick = function routeToInbodyDetail(inbodyId: number) {
             }}
         </div>
         <div class="admin-inbody-container">
-            <div class="admin-inbody-container__searchbar">
-                <VInput
-                    id="startDate"
-                    label="시작"
-                    type="date"
-                    :value="startDate"
-                    @input="(value) => (startDate = value)" />
-                <VInput
-                    id="endDate"
-                    label="끝"
-                    type="date"
-                    :value="endDate"
-                    @input="(value) => (endDate = value)" />
+            <div class="admin-inbody-container__header">
+                <div class="admin-inbody-container__header__searchbar">
+                    <VInput
+                        id="startDate"
+                        label="시작"
+                        type="date"
+                        :value="startDate"
+                        @input="(value) => (startDate = value)" />
+                    <VInput
+                        id="endDate"
+                        label="끝"
+                        type="date"
+                        :value="endDate"
+                        @input="(value) => (endDate = value)" />
+                    <VButton
+                        text="조회"
+                        color="admin-primary"
+                        @click="handleSearchClick" />
+                </div>
                 <VButton
-                    text="조회"
-                    color="admin-primary"
-                    @click="handleSearchClick" />
+                    text="기록 추가"
+                    color="green"
+                    @click="() => (isCreateModalOpen = true)" />
             </div>
         </div>
         <div class="admin-inbody-student-table-container">
@@ -95,27 +114,38 @@ const handleDataClick = function routeToInbodyDetail(inbodyId: number) {
                 </tbody>
             </table>
         </div>
+        <InbodyCreateModal
+            v-if="isCreateModalOpen"
+            @create="handleCreateClick" />
     </div>
 </template>
 
 <style lang="scss" scoped>
-.admin-inbody-student-info {
-    font-size: 1.5rem;
-    text-align: center;
-}
 .admin-inbody-student {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr);
 }
 
+.admin-inbody-student-info {
+    font-size: 1.5rem;
+    text-align: center;
+}
 .admin-inbody-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.admin-inbody-container__searchbar {
+.admin-inbody-container__header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-inbody-container__header__searchbar {
     display: flex;
     align-items: center;
     gap: 0.5rem;
