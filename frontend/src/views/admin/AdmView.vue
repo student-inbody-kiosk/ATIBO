@@ -4,7 +4,7 @@ import AdmLayout from '@/components/admin/AdmLayout.vue';
 import AdmHeader from '@/components/admin/AdmHeader.vue';
 import VIconButton from '@/components/common/VIconButton.vue';
 import TheModal from '@/components/common/TheModal.vue';
-
+import SignupForm from '@/components/admin/SignupForm.vue';
 import { useRoute } from 'vue-router';
 import { ref, watchEffect } from 'vue';
 
@@ -52,11 +52,14 @@ const handleModalClose = function closeModal() {
         <template #admin-main>
             <RouterView />
             <TheModal
+                color="admin-secondary"
                 v-if="
                     isSignupModalOpen || isEmailModalOpen || isPasswordModalOpen
                 "
                 @close-modal="handleModalClose">
-                <div v-if="isSignupModalOpen">signup</div>
+                <SignupForm
+                    v-if="isSignupModalOpen"
+                    @signup="isSignupModalOpen = false" />
                 <div v-if="isEmailModalOpen">Email Form</div>
                 <div v-if="isPasswordModalOpen">passwordform</div>
             </TheModal>

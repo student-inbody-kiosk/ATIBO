@@ -18,6 +18,7 @@ const props = withDefaults(
         size?: 'sm' | 'md' | 'lg';
         isError?: boolean;
         isFocus?: boolean;
+        placeholder?: string;
     }>(),
     {
         type: 'text',
@@ -28,6 +29,7 @@ const props = withDefaults(
         textAlign: 'left',
         isError: false,
         isFocus: false,
+        placeholder: '',
     }
 );
 
@@ -68,6 +70,7 @@ const handleInput = function handleAppInput(event: Event) {
             :max="max"
             :style="{ textAlign }"
             :multiple="multiple"
+            :placeholder="placeholder"
             @input="handleInput"
             @change="$emit('change')"
             @keyup.enter="$emit('enter')"
