@@ -8,35 +8,23 @@ import { getInbody, deleteInbody } from '@/apis/services/inbodys';
 import router from '@/router';
 import type { InbodyDetail } from '@/types/inbody.interface';
 import { useStudentStore } from '@/stores/student.store';
+import { storeToRefs } from 'pinia';
 
-const studentStore = useStudentStore();
+const { getStudent } = useStudentStore();
+const { student } = storeToRefs(useStudentStore());
 const route = useRoute();
 const { grade, room, number, name, inbodyId } = route.params;
-const inbody = ref<InbodyDetail>({
-    id: undefined,
-    testDate: 'YYYY-MM-DD',
-    weight: 0,
-    percentBodyFat: 0,
-    skeletalMuscleMass: 0,
-    height: 0,
-    age: 0,
-    totalBodyWater: 0,
-    protein: 0,
-    minerals: 0,
-    bodyFatMass: 0,
-    bodyMassIndex: 0,
-    score: 0,
-});
+const inbody = ref<InbodyDetail>();
 const isUpdateModalOpen = ref(false);
 
 // 인바디 데이터 조회 API
 const getInbodyAPI = () => {
     getInbody(Number(inbodyId)).then((res) => (inbody.value = res));
-    console.log(inbody.value, 'HERE');
 };
 
 onBeforeMount(() => {
     getInbodyAPI();
+    getStudent(Number(grade), Number(room), Number(number)); // pinia 학생 정보 저장
 });
 
 // 수정 전 인바디 최신 데이터 한 번 더 불러오기
@@ -66,16 +54,20 @@ const handleDeleteClick = function deleteInbodyData() {
 <template>
     <div class="admin-inbody-detail">
         <!-- TODO: Inbody Graph -->
-        <!-- <h1 class="student-info">
-            {{
-                `${grade} 학년 ${room} 반 ${number} 번 ${name} (${studentStore?.student?.sex})`
-            }}
-        </h1> -->
-        <VButton text="수정" color="admin-primary" @click="handleUpdateClick" />
-        <VButton text="삭제" color="red" @click="handleDeleteClick" />
-        <InbodyDetailData :name="name" :inbody="inbody" :sex="0" />
+        <div>
+            <VButton
+                text="수정"
+                color="admin-primary"
+                @click="handleUpdateClick" />
+            <VButton text="삭제" color="red" @click="handleDeleteClick" />
+        </div>
+        <InbodyDetailData
+            v-if="student && inbody"
+            :name="student.name"
+            :inbody="inbody"
+            :sex="student.sex" />
         <InbodyUpdateModal
-            v-if="isUpdateModalOpen"
+            v-if="isUpdateModalOpen && inbody"
             @close-modal="isUpdateModalOpen = false"
             :inbodyId="Number(inbodyId)"
             :inbody="inbody"
@@ -85,11 +77,10 @@ const handleDeleteClick = function deleteInbodyData() {
 
 <style lang="scss" scoped>
 .admin-inbody-detail {
-    .admin-inbody-student {
-        display: grid;
-        grid-template-columns: 1fr;
-        grid-template-rows: auto minmax(0, 1fr);
-    }
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
 }
 .student-info {
     font-size: 1.5rem;

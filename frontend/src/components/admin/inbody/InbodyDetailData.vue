@@ -248,7 +248,7 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr);
     min-width: 45rem;
-    // width: 100%;
+    width: 100%;
     padding: 1rem;
     background-color: white;
     border-radius: 0.5rem;

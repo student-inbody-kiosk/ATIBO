@@ -12,17 +12,6 @@ export const useStudentStore = defineStore('student', {
         // state
         return { student: null as Student | null, $reset };
     },
-    // getters: {
-    //     studentSex(state) {
-    //         const sexList = {
-    //             0: '불확실',
-    //             1: '남자',
-    //             2: '여자',
-    //             3: '그 외',
-    //         };
-    //         return sexList[state?.sex];
-    //     },
-    // },
     actions: {
         // update student synchronously
         updateStudent(payload: Student) {
@@ -31,6 +20,7 @@ export const useStudentStore = defineStore('student', {
         // update student asynchronously
         async getStudent(grade: number, room: number, number: number) {
             try {
+                console.log('TRY');
                 this.student = await services.getTheStudent(
                     grade,
                     room,
