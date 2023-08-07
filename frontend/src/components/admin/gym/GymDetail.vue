@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue';
+import { onMounted } from 'vue';
 import services from '@/apis/services';
 import VError from '@/components/common/VError.vue';
-import VButton from '@/components/common/VButton.vue';
 import VLoading from '@/components/common/VLoading.vue';
+import { useAxios } from '@/hooks/useAxios';
 import type { Gym, GymImage } from '@/types/gyms.interface';
 
 const props = defineProps<{
@@ -11,48 +11,26 @@ const props = defineProps<{
 }>();
 
 /* Get gym data asynchrnously */
-const isGymLoading = ref(false);
-const isGymError = ref(false);
-const gym = ref<Gym>();
+const {
+    fetchData: getGym,
+    isLoading: isGymLoading,
+    isError: isGymError,
+    response: gym,
+} = useAxios<Gym>({}, () => services.getGym(props.gymId));
 
-const getGym = function () {
-    isGymLoading.value = true;
-    services
-        .getGym(props.gymId)
-        .then((res) => {
-            gym.value = res;
-            isGymLoading.value = false;
-        })
-        .catch((err) => {
-            isGymLoading.value = false;
-            isGymError.value = true;
-        });
-};
-
-onBeforeMount(() => {
+onMounted(() => {
     getGym();
 });
 
 /* Get gym image data asynchrnously */
-const isGymImagesLoading = ref(false);
-const isGymImagesError = ref(false);
-const gymImages = ref<GymImage[]>();
+const {
+    fetchData: getGymImages,
+    isLoading: isGymImagesLoading,
+    isError: isGymImagesError,
+    response: gymImages,
+} = useAxios<GymImage[]>([], () => services.getGymImages(props.gymId));
 
-const getGymImages = function () {
-    isGymImagesLoading.value = true;
-    services
-        .getGymImages(props.gymId)
-        .then((res) => {
-            gymImages.value = res;
-            isGymImagesLoading.value = false;
-        })
-        .catch((err) => {
-            isGymImagesLoading.value = false;
-            isGymImagesError.value = true;
-        });
-};
-
-onBeforeMount(() => {
+onMounted(() => {
     getGymImages();
 });
 </script>
