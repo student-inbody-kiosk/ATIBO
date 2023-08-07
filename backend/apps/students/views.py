@@ -166,7 +166,7 @@ class StudentLoginAPIView(APIView):
 
 
 class StudentDetailAPIView(RetrieveAPIView):
-    authentication_classes = [StudentJWTAuthentication]
+    authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
     permission_classes = [IsTheStudent | IsAuthenticated]
     serializer_class = StudentDetailSerializer
 
