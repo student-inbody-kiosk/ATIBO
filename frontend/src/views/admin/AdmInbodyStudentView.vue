@@ -9,7 +9,10 @@ import { getTheStudentInbodys } from '@/apis/services/inbodys';
 import type { InbodyDetail } from '@/types/inbody.interface';
 import type { Ref } from 'vue';
 import router from '@/router';
+import { useStudentStore } from '@/stores/student.store';
+import { getTheStudent } from '@/apis/services/students';
 
+const studentStore = useStudentStore();
 const route = useRoute();
 
 const { grade, room, number, name } = route.params;
@@ -28,6 +31,8 @@ onBeforeMount(() => {
         start,
         end
     ).then((res) => (inbodyList.value = res));
+    // 학생 정보 pinia에 저장
+    // studentStore.getStudent(Number(grade), Number(room), Number(number)); // pinia 학생 정보 저장
 });
 
 const handleSearchClick = function searchInbodyList() {
@@ -51,7 +56,9 @@ const handleDataClick = function routeToInbodyDetail(inbodyId: number) {
 <template>
     <div class="admin-inbody-student">
         <div class="admin-inbody-student-info">
-            {{ `${grade} 학년 ${room} 반 ${number} 번 ${name}` }}
+            {{
+                `${grade} 학년 ${room} 반 ${number} 번 ${name} (${studentStore?.student?.sex})`
+            }}
         </div>
         <div class="admin-inbody-container">
             <div class="admin-inbody-container__searchbar">

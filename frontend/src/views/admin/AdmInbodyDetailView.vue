@@ -6,7 +6,9 @@ import { useRoute } from 'vue-router';
 import { getInbody, deleteInbody } from '@/apis/services/inbodys';
 import router from '@/router';
 import type { InbodyDetail } from '@/types/inbody.interface';
+import { useStudentStore } from '@/stores/student.store';
 
+const studentStore = useStudentStore();
 const route = useRoute();
 const { grade, room, number, name, inbodyId } = route.params;
 const inbody = ref<InbodyDetail>();
@@ -49,7 +51,9 @@ const handleDeleteClick = function deleteInbodyData() {
     <div>
         <!-- TODO: Inbody Graph -->
         <h1 class="student-info">
-            {{ `${grade} 학년 ${room} 반 ${number} 번 ${name}` }}
+            {{
+                `${grade} 학년 ${room} 반 ${number} 번 ${name} (${studentStore?.student?.sex})`
+            }}
         </h1>
         <VButton text="수정" color="admin-primary" @click="handleUpdateClick" />
         <VButton text="삭제" color="red" @click="handleDeleteClick" />
