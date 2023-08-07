@@ -10,6 +10,7 @@ import { ref, watchEffect } from 'vue';
 
 const route = useRoute();
 const isIndexPage = ref(false);
+const isSignupModalOpen = ref(false);
 const isEmailModalOpen = ref(false);
 const isPasswordModalOpen = ref(false);
 
@@ -22,37 +23,40 @@ watchEffect(() => {
     }
 });
 
-const handleModalOpen = function openModal(message: string) {
-    if (message === 'email') {
-        isEmailModalOpen.value = true;
-        return;
-    }
-    isPasswordModalOpen.value = true;
-};
-
 const handleModalClose = function closeModal() {
     isEmailModalOpen.value = false;
     isPasswordModalOpen.value = false;
+    isSignupModalOpen.value = false;
 };
 </script>
 
 <template>
     <AdmLayout>
         <template #admin-header>
-            <VIconButton
-                v-if="isIndexPage"
-                text="키오스크"
-                @click="$router.push({ name: 'kiosk-index' })">
-                <font-awesome-icon icon="house" />
-            </VIconButton>
-            <AdmHeader v-else @open-modal="handleModalOpen" />
+            <div v-if="isIndexPage" class="admin-index-header">
+                <VIconButton
+                    text="키오스크"
+                    @click="$router.push({ name: 'kiosk-index' })">
+                    <font-awesome-icon icon="house" />
+                </VIconButton>
+                <VIconButton text="회원가입" @click="isSignupModalOpen = true">
+                    <font-awesome-icon icon="user-plus" />
+                </VIconButton>
+            </div>
+            <AdmHeader
+                v-else
+                @email="isEmailModalOpen = true"
+                @password="isPasswordModalOpen = true" />
         </template>
 
         <template #admin-main>
             <RouterView />
             <TheModal
-                v-if="isEmailModalOpen || isPasswordModalOpen"
+                v-if="
+                    isSignupModalOpen || isEmailModalOpen || isPasswordModalOpen
+                "
                 @close-modal="handleModalClose">
+                <div v-if="isSignupModalOpen">signup</div>
                 <div v-if="isEmailModalOpen">Email Form</div>
                 <div v-if="isPasswordModalOpen">passwordform</div>
             </TheModal>
@@ -60,4 +64,10 @@ const handleModalClose = function closeModal() {
     </AdmLayout>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.admin-index-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+</style>
