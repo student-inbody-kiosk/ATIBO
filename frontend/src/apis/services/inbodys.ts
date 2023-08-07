@@ -51,8 +51,16 @@ export async function getInbody(inbodyId: number) {
         });
 }
 
-export async function createInbody(inbodyList: InbodyDetail[]) {
-    return await apiRequest.put('students/inbody/list/', inbodyList);
+export async function createInbody(
+    grade: number,
+    room: number,
+    number: number,
+    inbody: InbodyDetail
+) {
+    return await apiRequest.post(
+        `students/inbody/${grade}/${room}/${number}/`,
+        inbody
+    );
 }
 
 export async function updateInbody(inbodyId: number, inbody: InbodyDetail) {
