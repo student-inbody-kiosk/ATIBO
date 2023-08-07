@@ -2,63 +2,47 @@
 import VInput from '@/components/common/VInput.vue';
 import type { InbodyDetail } from '@/types/inbody.interface';
 
-withDefaults(
-    defineProps<{
-        index: number;
-        inbody: InbodyDetail;
-        isCreate?: boolean;
-    }>(),
-    { isCreate: false }
-);
+defineProps<{
+    inbody: InbodyDetail;
+}>();
 
 defineEmits<{
-    (e: 'input', index: number, item: string, value: string): void;
+    (e: 'input', key: string, value: string): void;
 }>();
 </script>
 
 <template>
     <tr>
         <td>
-            {{ index + 1 }}
-        </td>
-        <td>
             <VInput
                 id="testDate"
                 type="date"
                 :value="inbody.testDate"
-                @input="
-                    (testDate) => $emit('input', index, 'testDate', testDate)
-                " />
+                @input="(testDate) => $emit('input', 'testDate', testDate)" />
         </td>
         <td>
             <VInput
                 id="score"
                 :value="inbody.score"
-                @input="
-                    (score) => $emit('input', index, 'score', Number(score))
-                " />
+                @input="(score) => $emit('input', 'score', Number(score))" />
         </td>
         <td>
             <VInput
                 id="age"
                 :value="inbody.age"
-                @input="(age) => $emit('input', index, 'age', Number(age))" />
+                @input="(age) => $emit('input', 'age', Number(age))" />
         </td>
         <td>
             <VInput
                 id="height"
                 :value="inbody.height"
-                @input="
-                    (height) => $emit('input', index, 'height', Number(height))
-                " />
+                @input="(height) => $emit('input', 'height', Number(height))" />
         </td>
         <td>
             <VInput
                 id="weight"
                 :value="inbody.weight"
-                @input="
-                    (weight) => $emit('input', index, 'weight', Number(weight))
-                " />
+                @input="(weight) => $emit('input', 'weight', Number(weight))" />
         </td>
         <td>
             <VInput
@@ -66,12 +50,7 @@ defineEmits<{
                 :value="inbody.percentBodyFat"
                 @input="
                     (percentBodyFat) =>
-                        $emit(
-                            'input',
-                            index,
-                            'percentBodyFat',
-                            Number(percentBodyFat)
-                        )
+                        $emit('input', 'percentBodyFat', Number(percentBodyFat))
                 " />
         </td>
         <td>
@@ -82,7 +61,6 @@ defineEmits<{
                     (skeletalMuscleMass) =>
                         $emit(
                             'input',
-                            index,
                             'skeletalMuscleMass',
                             Number(skeletalMuscleMass)
                         )
@@ -94,12 +72,7 @@ defineEmits<{
                 :value="inbody.bodyFatMass"
                 @input="
                     (bodyFatMass) =>
-                        $emit(
-                            'input',
-                            index,
-                            'bodyFatMass',
-                            Number(bodyFatMass)
-                        )
+                        $emit('input', 'bodyFatMass', Number(bodyFatMass))
                 " />
         </td>
         <td>
@@ -108,12 +81,7 @@ defineEmits<{
                 :value="inbody.bodyMassIndex"
                 @input="
                     (bodyMassIndex) =>
-                        $emit(
-                            'input',
-                            index,
-                            'bodyMassIndex',
-                            Number(bodyMassIndex)
-                        )
+                        $emit('input', 'bodyMassIndex', Number(bodyMassIndex))
                 " />
         </td>
         <td>
@@ -122,12 +90,7 @@ defineEmits<{
                 :value="inbody.totalBodyWater"
                 @input="
                     (totalBodyWater) =>
-                        $emit(
-                            'input',
-                            index,
-                            'totalBodyWater',
-                            Number(totalBodyWater)
-                        )
+                        $emit('input', 'totalBodyWater', Number(totalBodyWater))
                 " />
         </td>
         <td>
@@ -135,8 +98,7 @@ defineEmits<{
                 id="protein"
                 :value="inbody.protein"
                 @input="
-                    (protein) =>
-                        $emit('input', index, 'protein', Number(protein))
+                    (protein) => $emit('input', 'protein', Number(protein))
                 " />
         </td>
         <td>
@@ -144,8 +106,7 @@ defineEmits<{
                 id="minerals"
                 :value="inbody.minerals"
                 @input="
-                    (minerals) =>
-                        $emit('input', index, 'minerals', Number(minerals))
+                    (minerals) => $emit('input', 'minerals', Number(minerals))
                 " />
         </td>
     </tr>
@@ -158,7 +119,7 @@ tr {
 
 td {
     display: block;
-    min-height: 2.425rem;
+    min-height: 2.49rem;
     padding: 0.3rem;
     border: 0.1rem solid $admin-secondary;
     font-size: 1.1rem;

@@ -20,6 +20,7 @@ export const useStudentStore = defineStore('student', {
         // update student asynchronously
         async getStudent(grade: number, room: number, number: number) {
             try {
+                console.log('TRY');
                 this.student = await services.getTheStudent(
                     grade,
                     room,

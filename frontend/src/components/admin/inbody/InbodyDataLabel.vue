@@ -3,7 +3,6 @@
 <template>
     <thead>
         <tr class="inbody-data-label">
-            <th class="inbody-data-label__content">-</th>
             <th class="inbody-data-label__content">날짜</th>
             <th class="inbody-data-label__content">인바디 점수 (점)</th>
             <th class="inbody-data-label__content">나이 (세)</th>
