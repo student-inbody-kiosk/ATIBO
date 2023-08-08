@@ -1,3 +1,4 @@
+import { Account } from './accounts.interface';
 export interface Account {
     id?: string;
     username: string;
@@ -23,4 +24,10 @@ export interface AccountSignup extends Account {
 export interface AccountPwReset {
     username: string;
     email: string;
+}
+
+export interface AccountPwChange {
+    oldPassword: string;
+    newPassword: string;
+    confirmPassword: string;
 }

@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import VIconButton from '@/components/common/VIconButton.vue';
+import TheModal from '@/components/common/TheModal.vue';
+import EmailChangeForm from '@/components/admin/accounts/EmailChangeForm.vue';
+import PwChangeForm from '@/components/admin/accounts/PwChangeForm.vue';
+
 import { ref } from 'vue';
 import { logout } from '@/apis/services/auth';
-import VIconButton from '@/components/common/VIconButton.vue';
-
 defineEmits<{
     (e: 'email'): void;
     (e: 'password'): void;
@@ -29,14 +32,14 @@ const handleModalClose = function closeModal() {
             <VIconButton
                 class="admin-header__icon"
                 text="이메일 변경"
-                @click="$emit('email')">
+                @click="isEmailModalOpen = true">
                 <font-awesome-icon icon="envelope" size="2x" />
             </VIconButton>
 
             <VIconButton
                 class="admin-header__icon"
                 text="비밀번호 변경"
-                @click="$emit('password')">
+                @click="isPasswordModalOpen = true">
                 <font-awesome-icon icon="lock" size="2x" />
             </VIconButton>
 
@@ -51,11 +54,16 @@ const handleModalClose = function closeModal() {
 
     <!-- modal -->
     <TheModal
+        v-if="isEmailModalOpen"
         color="admin-secondary"
-        v-if="isEmailModalOpen || isPasswordModalOpen"
         @close-modal="handleModalClose">
-        <div v-if="isEmailModalOpen">Email Form</div>
-        <div v-else>passwordform</div>
+        <EmailChangeForm @success="isEmailModalOpen = false" />
+    </TheModal>
+    <TheModal
+        v-if="isPasswordModalOpen"
+        color="admin-secondary"
+        @close-modal="handleModalClose">
+        <PwChangeForm @success="isPasswordModalOpen = false" />
     </TheModal>
 </template>
 
