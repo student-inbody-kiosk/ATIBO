@@ -9,7 +9,7 @@ withDefaults(
         type?: 'button' | 'submit' | 'reset';
     }>(),
     {
-        size: 'sm',
+        size: 'xs',
         type: 'button',
     }
 );
@@ -66,31 +66,31 @@ const handleClick = function () {
 // size
 .v-button.xs {
     min-width: 2rem;
-    padding: 0.2rem 0.3rem;
+    padding: 0.3rem 0.6rem;
     font-size: 1rem;
 }
 
 .v-button.sm {
     min-width: 3rem;
-    padding: 0.3rem 0.5rem;
+    padding: 0.4rem 0.7rem;
     font-size: 1.2rem;
 }
 
 .v-button.md {
     min-width: 4rem;
-    padding: 0.5rem 0.7rem;
+    padding: 0.5rem 0.8rem;
     font-size: 1.4rem;
 }
 
 .v-button.lg {
     min-width: 6rem;
-    padding: 0.7rem 0.9rem;
+    padding: 0.7rem 1rem;
     font-size: 1.6rem;
 }
 
 .v-button.xl {
     min-width: 18rem;
-    padding: 1.1rem 1.3rem;
+    padding: 1.1rem 1.4rem;
     font-size: 2rem;
 }
 </style>

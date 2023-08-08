@@ -21,28 +21,32 @@ const handleModalClose = function closeModal() {
     <div class="admin-header">
         <VIconButton
             class="admin-header__icon"
-            text="홈"
+            text="메인 화면"
             @click="$router.push({ name: 'admin-main' })">
-            <font-awesome-icon icon="house" />
+            <font-awesome-icon icon="house" size="2x" />
         </VIconButton>
+        <div class="admin-header__buttons">
+            <VIconButton
+                class="admin-header__icon"
+                text="이메일 변경"
+                @click="$emit('email')">
+                <font-awesome-icon icon="envelope" size="2x" />
+            </VIconButton>
 
-        <VIconButton
-            class="admin-header__icon"
-            text="이메일 변경"
-            @click="$emit('email')">
-            <font-awesome-icon icon="house" />
-        </VIconButton>
+            <VIconButton
+                class="admin-header__icon"
+                text="비밀번호 변경"
+                @click="$emit('password')">
+                <font-awesome-icon icon="lock" size="2x" />
+            </VIconButton>
 
-        <VIconButton
-            class="admin-header__icon"
-            text="password"
-            @click="$emit('password')">
-            <font-awesome-icon icon="house" />
-        </VIconButton>
-
-        <VIconButton class="admin-header__icon" text="로그아웃" @click="logout">
-            <font-awesome-icon icon="house" />
-        </VIconButton>
+            <VIconButton
+                class="admin-header__icon"
+                text="로그아웃"
+                @click="logout">
+                <font-awesome-icon icon="user" size="2x" />
+            </VIconButton>
+        </div>
     </div>
 
     <!-- modal -->
@@ -58,5 +62,13 @@ const handleModalClose = function closeModal() {
 <style lang="scss">
 .admin-header {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-header__buttons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 </style>

@@ -28,44 +28,42 @@ const handleLoginSubmit = function submitLogin() {
 </script>
 
 <template>
-    <div class="login-container">
+    <form class="login-form">
         <VInput
-            id="id"
+            id="login-username"
+            name="username"
             :value="username"
             label="아이디"
+            size="md"
             @input="(value) => (username = value)"
             @enter="handleLoginSubmit" />
         <VInput
-            id="password"
+            id="login-password"
+            name="password"
             type="password"
             :value="password"
             label="비밀번호"
+            size="md"
             @input="(value) => (password = value)"
             @enter="handleLoginSubmit" />
         <VButton
             text="로그인"
             color="admin-primary"
-            size="sm"
+            size="md"
             @click="handleLoginSubmit" />
-    </div>
+    </form>
 </template>
 
 <style lang="scss" scoped>
-.login-container {
+.login-form {
     align-self: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     gap: 1rem;
-    width: 50%;
-    height: 40%;
-    padding: 0.5rem 2rem 0 0;
+    padding: 3rem 3rem 2rem 3rem;
     border-radius: 1rem;
     background-color: $admin-tertiary;
-}
-
-button {
-    align-self: flex-end;
 }
 </style>
