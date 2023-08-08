@@ -66,14 +66,14 @@ const handleClick = function () {
 // size
 .v-button.sm {
     min-width: 2rem;
-    padding: 0.3rem 0.6rem;
+    padding: 0.4rem 0.7rem;
     font-size: 1rem;
 }
 
 .v-button.md {
     min-width: 4rem;
     padding: 0.5rem 0.8rem;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
 }
 
 .v-button.lg {

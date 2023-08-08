@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import regexes from '@/constants/regexes';
+import { regexes } from '@/constants/regexes';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
+import { toastCenterErrorMessage } from '@/utils/toastManager';
 
 const props = defineProps<{
     grade: number;
@@ -22,7 +23,13 @@ const handleSubmit = function getTheStudentInbodys(event: Event) {
     const formData = new FormData(form);
     const startDate = (formData.get('startDate') as string) || '';
     const endDate = (formData.get('endDate') as string) || '';
-    if (!regexes.date.test(startDate) || !regexes.date.test(endDate)) return;
+
+    if (!regexes.startDate.reg.test(startDate)) {
+        toastCenterErrorMessage(regexes.startDate.condition);
+    }
+    if (!regexes.startDate.reg.test(endDate)) {
+        toastCenterErrorMessage(regexes.endDate.condition);
+    }
 
     router.replace({
         name: 'kiosk-inbody-list',
@@ -37,17 +44,16 @@ const handleSubmit = function getTheStudentInbodys(event: Event) {
         <VInput
             id="kiosk-inbody-start-date"
             name="startDate"
-            label="시작"
             type="date"
-            size="md"
+            size="lg"
             :value="startDate"
             @input="handleInputStartDate" />
         <VInput
             id="kiosk-inbody-end-date"
             name="endDate"
-            label="종료"
+            label="~"
             type="date"
-            size="md"
+            size="lg"
             :value="endDate"
             @input="handleInputEndDate" />
         <VButton text="검 색" type="submit" color="green" size="md" />

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import services from '@/apis/services';
-import regexes from '@/constants/regexes';
+import { regexes, studentRegexes } from '@/constants/regexes';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import TheKeypad from '@/components/kiosk/TheKeypad.vue';
@@ -22,8 +22,8 @@ const handleInput = function inputStudentNum(value: string) {
 
 // Asynchronously the student info based on studentNum
 const handleSubmit = function checkStudent() {
-    if (!regexes.studentNum.test(studentNum.value)) {
-        toastCenterErrorMessage('학번 형식을 다시 확인해주세요');
+    if (!regexes.studentNum.reg.test(studentNum.value)) {
+        toastCenterErrorMessage(regexes.studentNum.condition);
         return;
     }
     const grade = parseInt(studentNum.value.slice(0, 1));
@@ -48,7 +48,7 @@ const handleSubmit = function checkStudent() {
                 :value="studentNum"
                 :maxlength="6"
                 textAlign="center"
-                size="lg"
+                size="xl"
                 color="kiosk-primary"
                 @input="handleInput" />
             <VButton text="검색하기" type="submit" color="green" size="lg" />
