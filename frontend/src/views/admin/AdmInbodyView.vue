@@ -125,17 +125,20 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
 
 <style lang="scss" scoped>
 .admin-inbody {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(0, 1fr);
 }
 
 .admin-inbody-content {
+    width: 100%;
     display: flex;
     overflow-y: auto;
 }
 
 .admin-inbody-date {
+    width: 80%;
     height: fit-content;
     overflow-x: auto;
 }

@@ -54,7 +54,7 @@ const handleDeleteClick = function deleteInbodyData() {
 <template>
     <div class="admin-inbody-detail">
         <!-- TODO: Inbody Graph -->
-        <div>
+        <div class="admin-inbody-detail__buttons">
             <VButton
                 text="수정"
                 color="admin-primary"
@@ -81,6 +81,14 @@ const handleDeleteClick = function deleteInbodyData() {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr);
+}
+
+.admin-inbody-detail__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
 }
 .student-info {
     font-size: 1.5rem;

@@ -72,5 +72,6 @@ const handleCreateClick = function updateInbodyData() {
 table {
     display: flex;
     align-items: center;
+    padding: 0.5rem;
 }
 </style>
