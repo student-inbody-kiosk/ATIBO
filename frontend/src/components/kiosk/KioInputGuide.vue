@@ -16,9 +16,9 @@
     padding: 2rem;
     background-color: #ffffffc7;
     border-radius: 1em;
-    font-size: 2rem;
+    font-size: 3vh;
     font-weight: 600;
     text-align: center;
-    line-height: 200%;
+    line-height: 6vh;
 }
 </style>

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { useAuthStore } from '@/stores/auth.store';
 
 import KioView from '@/views/kiosk/KioView.vue';
 import KioIndexView from '@/views/kiosk/KioIndexView.vue';
@@ -25,6 +26,10 @@ import AdmGymView from '@/views/admin/AdmGymView.vue';
 import AdmGymDetailView from '@/views/admin/AdmGymDetailView.vue';
 import AdmGymUpdateView from '@/views/admin/AdmGymUpdateView.vue';
 import AdmSchoolView from '@/views/admin/AdmSchoolView.vue';
+import {
+    toastCenterErrorMessage,
+    toastTopErrorMessage,
+} from '@/utils/toastManager';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,17 +55,17 @@ const router = createRouter({
                     component: KioInbodyView,
                 },
                 {
-                    path: 'inbody/:grade/:room/:number',
+                    path: 'inbody/:grade(\\d+)/:room(\\d+)/:number(\\d+)',
                     name: 'kiosk-inbody-list',
                     component: KioInbodyListView,
                 },
                 {
-                    path: 'inbody/:grade/:room/:number/detail/:inbodyId',
+                    path: 'inbody/:grade(\\d+)/:room(\\d+)/:number(\\d+)/detail/:inbodyId(\\d+)',
                     name: 'kiosk-inbody-detail',
                     component: KioInbodyDetailView,
                 },
                 {
-                    path: 'inbody/:grade/:room/:number/pw',
+                    path: 'inbody/:grade(\\d+)/:room(\\d+)/:number(\\d+)/pw',
                     name: 'kiosk-inbody-pw',
                     component: KioInbodyPwView,
                 },
@@ -74,9 +79,12 @@ const router = createRouter({
                     name: 'kiosk-gym-detail',
                     component: KioGymDetailView,
                 },
+                {
+                    path: ':catchAll(.*)*',
+                    redirect: { name: 'kiosk-index' },
+                },
             ],
         },
-
         {
             path: '/admin',
             name: 'admin',
@@ -123,12 +131,12 @@ const router = createRouter({
                     component: AdmInbodyView,
                 },
                 {
-                    path: 'inbody/student/:grade/:room/:number/:name',
+                    path: 'inbody/student/:grade(\\d+)/:room(\\d+)/:number(\\d+)/:name',
                     name: 'admin-inbody-student',
                     component: AdmInbodyStudentView,
                 },
                 {
-                    path: 'inbody/:grade/:room/:number/:name/detail/:inbodyId',
+                    path: 'inbody/:grade(\\d+)/:room(\\d+)/:number(\\d+)/:name/detail/:inbodyId(\\d+)',
                     name: 'admin-inbody-detail',
                     component: AdmInbodyDetailView,
                 },
@@ -138,12 +146,12 @@ const router = createRouter({
                     component: AdmGymView,
                 },
                 {
-                    path: 'gym/:gymId',
+                    path: 'gym/:gymId(\\d+)',
                     name: 'admin-gym-detail',
                     component: AdmGymDetailView,
                 },
                 {
-                    path: 'gym/:gymId/update',
+                    path: 'gym/:gymId(\\d+)/update',
                     name: 'admin-gym-update',
                     component: AdmGymUpdateView,
                 },
@@ -152,9 +160,51 @@ const router = createRouter({
                     name: 'admin-school',
                     component: AdmSchoolView,
                 },
+                {
+                    path: ':catchAll(.*)*',
+                    redirect: { name: 'admin-index' },
+                },
             ],
         },
     ],
+});
+
+// refreshToken is needed
+const ADMIN_PRIVATE_ROUTES = [
+    'admin-main',
+    'admin-student',
+    'admin-student-create',
+    'admin-student-update',
+    'admin-student-delete',
+    'admin-attend',
+    'admin-inbody',
+    'admin-inbody-student',
+    'admin-inbody-detail',
+    'admin-gym',
+    'admin-gym-detail',
+    'admin-gym-update',
+    'admin-school',
+];
+
+// accessToken is needed
+const KIOSK_PRIVATE_ROUTES = [
+    'kiosk-inbody-list',
+    'kiosk-inbody-detail',
+    'kiosk-inbody-pw',
+];
+
+// global navigation guard
+router.beforeEach(async (to, from) => {
+    const name = to.name;
+    const { accessToken, refreshToken } = useAuthStore();
+
+    if (ADMIN_PRIVATE_ROUTES.includes(name) && !refreshToken) {
+        toastTopErrorMessage('다시 로그인 해주세요');
+        return { name: 'admin-index' };
+    } else if (KIOSK_PRIVATE_ROUTES.includes(name) && !accessToken) {
+        toastCenterErrorMessage('다시 로그인 해주세요');
+        return { name: 'kiosk-inbody' };
+    }
 });
 
 export default router;

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue';
+import { onMounted } from 'vue';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import services from '@/apis/services';
 import VError from '@/components/common/VError.vue';
 import VLoading from '@/components/common/VLoading.vue';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
+import { useAxios } from '@/hooks/useAxios';
 import type { Gym } from '@/types/gyms.interface';
 
 const props = defineProps<{
@@ -13,29 +14,18 @@ const props = defineProps<{
 }>();
 
 /* Get gym data aysnchronously */
-const isLoading = ref(false);
-const isError = ref(false);
-const gym = ref<Gym>();
+const {
+    fetchData: getGym,
+    isLoading,
+    isError,
+    response: gym,
+} = useAxios<Gym>({}, () => services.getGym(props.gymId));
 
-const getGym = function (gymId: number) {
-    isLoading.value = true;
-    services
-        .getGym(gymId)
-        .then((res) => {
-            gym.value = res;
-            isLoading.value = false;
-        })
-        .catch(() => {
-            isLoading.value = false;
-            isError.value = true;
-        });
-};
-
-onBeforeMount(() => {
-    getGym(props.gymId);
+onMounted(() => {
+    getGym();
 });
 
-/* pdate gym data */
+/* Update gym data */
 const handleSubmit = function updateGym(event: Event) {
     const form = event.target as HTMLFormElement;
     if (!form) return;

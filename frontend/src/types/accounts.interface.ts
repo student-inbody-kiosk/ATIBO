@@ -4,10 +4,10 @@ export interface Account {
     name: string;
     email: string;
     role?: string;
+    comment: string;
 }
 
 export interface SchoolAccount extends Account {
-    comment: string;
     isActive: boolean;
 }
 
@@ -18,5 +18,9 @@ export interface AccountList {
 
 export interface AccountSignup extends Account {
     password: string;
-    comment: string;
+}
+
+export interface AccountPwReset {
+    username: string;
+    email: string;
 }

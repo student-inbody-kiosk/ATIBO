@@ -5,7 +5,7 @@ import services from '@/apis/services';
 import VButton from '@/components/common/VButton.vue';
 import VInput from '@/components/common/VInput.vue';
 import TheKeypad from '@/components/kiosk/TheKeypad.vue';
-import regexes from '@/constants/regexes';
+import { studentRegexes } from '@/constants/regexes';
 import { toastCenterErrorMessage } from '@/utils/toastManager';
 
 const props = defineProps<{
@@ -39,7 +39,7 @@ const handleFocus = function changeCurrentFocused() {
             currentFocusedValue.value = newPassword;
             break;
         case CONFIRM_PASSWORD_INPUT_ID:
-            currentFocusedInput.value;
+            currentFocusedInput.value = CONFIRM_PASSWORD_INPUT_ID;
             currentFocusedValue.value = confirmPassword;
             break;
     }
@@ -73,11 +73,11 @@ const handleInputConfirmPassword = function (value: string) {
 
 // Change the student password asynchronously
 const handleSubmit = function updateStudentPw() {
-    if (!regexes.studentPw.test(oldPassword.value)) {
+    if (!studentRegexes.password.reg.test(oldPassword.value)) {
         toastCenterErrorMessage('기존 비밀번호는 4자리 숫자입니다');
         return;
     }
-    if (!regexes.studentPw.test(newPassword.value)) {
+    if (!studentRegexes.password.reg.test(newPassword.value)) {
         toastCenterErrorMessage('새 비밀번호를 4자리 숫자로 입력해주세요');
         return;
     }
@@ -109,7 +109,7 @@ const handleSubmit = function updateStudentPw() {
                 label="현재 비밀번호"
                 name="oldPassword"
                 type="password"
-                size="lg"
+                size="xl"
                 color="kiosk-primary"
                 :isFocus="currentFocusedInput === OLD_PASSWORD_INPUT_ID"
                 :value="oldPassword"
@@ -121,7 +121,7 @@ const handleSubmit = function updateStudentPw() {
                 label="새 비밀번호"
                 name="newPassword"
                 type="password"
-                size="lg"
+                size="xl"
                 color="kiosk-primary"
                 :isFocus="currentFocusedInput === NEW_PASSWORD_INPUT_ID"
                 :value="newPassword"
@@ -133,7 +133,7 @@ const handleSubmit = function updateStudentPw() {
                 label="비밀번호 확인"
                 name="confirmPassword"
                 type="password"
-                size="lg"
+                size="xl"
                 color="kiosk-primary"
                 :isFocus="currentFocusedInput === CONFIRM_PASSWORD_INPUT_ID"
                 :value="confirmPassword"

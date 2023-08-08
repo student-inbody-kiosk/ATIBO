@@ -10,15 +10,17 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
+    faCircleMinus,
     faCircleArrowLeft,
+    faEnvelope,
+    faFileCircleMinus,
+    faHouse,
+    faUser,
     faUserLock,
     faUserPlus,
-    faHouse,
-    faCircleMinus,
-    faXmark,
-    faShare,
     faLock,
-    faFileCircleMinus,
+    faShare,
+    faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
 import CKEditor from '@ckeditor/ckeditor5-vue';
@@ -36,15 +38,17 @@ app.use(pinia);
 
 // font-awesmoe
 library.add(
+    faCircleMinus,
     faCircleArrowLeft,
+    faEnvelope,
+    faFileCircleMinus,
+    faHouse,
+    faUser,
     faUserLock,
     faUserPlus,
-    faHouse,
-    faCircleMinus,
-    faXmark,
-    faShare,
     faLock,
-    faFileCircleMinus
+    faShare,
+    faXmark
 );
 app.component('font-awesome-icon', FontAwesomeIcon);
 

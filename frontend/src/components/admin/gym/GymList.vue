@@ -1,31 +1,20 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue';
+import { onMounted } from 'vue';
 import services from '@/apis/services';
+import { useAxios } from '@/hooks/useAxios';
 import VError from '@/components/common/VError.vue';
 import VLoading from '@/components/common/VLoading.vue';
 import GymListItem from '@/components/admin/gym/GymListItem.vue';
 import type { GymSimple } from '@/types/gyms.interface';
 
-/* Get gym list data */
-const isLoading = ref(false);
-const isError = ref(false);
-const gyms = ref<GymSimple[]>([]);
+const {
+    fetchData: getGymList,
+    isLoading,
+    isError,
+    response: gyms,
+} = useAxios<GymSimple[]>([], () => services.getGyms());
 
-const getGymList = function () {
-    isLoading.value = true;
-    services
-        .getGyms()
-        .then((res) => {
-            gyms.value = res;
-            isLoading.value = false;
-        })
-        .catch(() => {
-            isLoading.value = false;
-            isError.value = true;
-        });
-};
-
-onBeforeMount(() => {
+onMounted(() => {
     getGymList();
 });
 </script>

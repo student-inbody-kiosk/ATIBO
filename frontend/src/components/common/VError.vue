@@ -15,7 +15,9 @@ const props = withDefaults(
 
 <template>
     <div :class="['v-error', size]">
-        {{ text }}
+        <p>
+            {{ text }}
+        </p>
     </div>
 </template>
 
