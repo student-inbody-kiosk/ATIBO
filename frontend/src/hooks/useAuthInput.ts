@@ -23,7 +23,7 @@ const usePasswordCheck = (password: any) => {
     const value = ref('');
     const result = ref(false);
 
-    const condition = '비밀번호와 일치된 값으르 입력해주세요';
+    const condition = '비밀번호와 일치된 값으로 입력해주세요';
 
     const handleInput = (data: string) => {
         value.value = data;

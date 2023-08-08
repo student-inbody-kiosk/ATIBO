@@ -17,6 +17,7 @@ class ToastManager {
         toastRoot.style.top = '0';
         toastRoot.style.left = '0';
         toastRoot.style.right = '0';
+        toastRoot.style.zIndex = 999;
 
         toastRoot.style.display = 'flex';
         toastRoot.style.flexDirection = 'column';
