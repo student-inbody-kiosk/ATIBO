@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import type { Inbody } from '@/types/inbody.interace';
+import type { Inbody, InbodyDetail } from '@/types/inbody.interace';
 
 defineProps<{
     days: number;
     students: Inbody[];
-    inbodyList: string[][];
+    inbodyList: InbodyDetail[];
+}>();
+
+defineEmits<{
+    (e: 'click', i: number, j: number): void;
 }>();
 </script>
 
@@ -17,11 +21,19 @@ defineProps<{
         </thead>
         <tbody>
             <tr v-for="(student, i) in students" :key="i">
-                <td
-                    v-for="j in days"
-                    :key="j"
-                    @click="$emit('click', i, j - 1)">
-                    {{ inbodyList[i][j - 1] }}
+                <td v-for="j in days" :key="j">
+                    <span
+                        @click="
+                            if (inbodyList[i][j - 1] != null) {
+                                $emit('click', i, j - 1);
+                            }
+                        ">
+                        {{
+                            inbodyList[i][j - 1] != null
+                                ? inbodyList[i][j - 1].testDate
+                                : '-'
+                        }}
+                    </span>
                 </td>
             </tr>
         </tbody>
@@ -44,7 +56,7 @@ th {
 }
 
 td {
-    min-width: 6rem;
+    min-width: 7rem;
     margin-top: 0.2rem;
     padding: 0.2rem;
     height: auto;

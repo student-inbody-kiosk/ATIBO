@@ -1,25 +1,16 @@
 <script setup lang="ts">
+import VInput from '@/components/common/VInput.vue';
+import VIconButton from '@/components/common/VIconButton.vue';
+import type { StudentDetail } from '@/types/students.interface';
+import { ref } from 'vue';
 const props = withDefaults(
     defineProps<{
         index: number;
-        student: {
-            grade: string;
-            room: string;
-            number: string;
-            name: string;
-            sex: number;
-            birthDate: string;
-            password: string;
-        };
+        student: StudentDetail;
         isCreate?: boolean;
     }>(),
     { isCreate: false }
 );
-
-import VInput from '@/components/common/VInput.vue';
-import VIconButton from '@/components/common/VIconButton.vue';
-
-import { ref } from 'vue';
 
 const sexData = ref(props.student.sex);
 </script>

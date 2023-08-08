@@ -1,45 +1,46 @@
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue';
+import { ref, onMounted } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import services from '@/apis/services';
+import { useAxios } from '@/hooks/useAxios';
 import VError from '@/components/common/VError.vue';
 import VLoading from '@/components/common/VLoading.vue';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import VIconButton from '@/components/common/VIconButton.vue';
 import type { GymImage } from '@/types/gyms.interface';
+import { watchEffect } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps<{
     gymId: number;
 }>();
 
 /* Get gym data aysnchronously */
-const isLoading = ref(false);
-const isError = ref(false);
-const gymImages = ref<GymImage[]>([]);
-const gymImageUrls = ref<string[]>([]);
+const {
+    fetchData: getGymImages,
+    isLoading,
+    isError,
+    response: gymImages,
+} = useAxios<GymImage[]>([], () => services.getGymImages(props.gymId));
 
-const getGymImages = function (gymId: number) {
-    isLoading.value = true;
-    services
-        .getGymImages(gymId)
-        .then((res) => {
-            gymImages.value = res;
-            for (const image of res) {
-                if (typeof image.image === 'string') {
-                    gymImageUrls.value.push(image.image);
-                }
-            }
-            isLoading.value = false;
-        })
-        .catch(() => {
-            isLoading.value = false;
-            isError.value = true;
-        });
-};
+onMounted(() => {
+    getGymImages();
+});
 
-onBeforeMount(() => {
-    getGymImages(props.gymId);
+/* Computed gymImageUrls based on gymIamges */
+
+const gymImageUrls = computed<string[]>(() => {
+    const imageUrls = [];
+    for (const image of gymImages.value) {
+        if (typeof image.image === 'string') {
+            imageUrls.push(image.image);
+        } else {
+            imageUrls.push(URL.createObjectURL(image.image));
+        }
+    }
+    console.log(imageUrls, gymImages.value);
+    return imageUrls;
 });
 
 /* Managing multiple image update */
@@ -57,7 +58,6 @@ const handleChangeAdd = function appendNewImages() {
             image: file,
         };
         gymImages.value.push(newImage);
-        gymImageUrls.value.push(URL.createObjectURL(file));
     }
 
     fileInput.value = ''; // reset the input
@@ -66,7 +66,6 @@ const handleChangeAdd = function appendNewImages() {
 // Delete gym image
 const handleClickDelete = function deleteImages(index: number) {
     gymImages.value.splice(index, 1);
-    gymImageUrls.value.splice(index, 1);
 };
 
 // Update gym images data asynchronously

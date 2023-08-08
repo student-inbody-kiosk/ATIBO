@@ -1,35 +1,58 @@
 <script setup lang="ts">
-import VIconButton from '@/components/common/VIconButton.vue';
+import { ref } from 'vue';
 import { logout } from '@/apis/services/auth';
+import VIconButton from '@/components/common/VIconButton.vue';
+
+defineEmits<{
+    (e: 'email'): void;
+    (e: 'password'): void;
+}>();
+
+const isEmailModalOpen = ref(false);
+const isPasswordModalOpen = ref(false);
+
+const handleModalClose = function closeModal() {
+    isEmailModalOpen.value = false;
+    isPasswordModalOpen.value = false;
+};
 </script>
 
-<template lang="">
+<template>
     <div class="admin-header">
         <VIconButton
             class="admin-header__icon"
             text="홈"
-            @click="$router.push({ name: 'admin-index' })">
+            @click="$router.push({ name: 'admin-main' })">
             <font-awesome-icon icon="house" />
         </VIconButton>
 
         <VIconButton
             class="admin-header__icon"
             text="이메일 변경"
-            @click="$emit('open-modal', 'email')">
+            @click="$emit('email')">
             <font-awesome-icon icon="house" />
         </VIconButton>
 
         <VIconButton
             class="admin-header__icon"
             text="password"
-            @click="$emit('open-modal', 'password')">
+            @click="$emit('password')">
             <font-awesome-icon icon="house" />
         </VIconButton>
 
-        <VIconButton class="admin-header__icon" text="로그아웃" @cilck="logout">
+        <VIconButton class="admin-header__icon" text="로그아웃" @click="logout">
             <font-awesome-icon icon="house" />
         </VIconButton>
     </div>
+
+    <!-- modal -->
+    <TheModal
+        color="admin-secondary"
+        v-if="isEmailModalOpen || isPasswordModalOpen"
+        @close-modal="handleModalClose">
+        <div v-if="isEmailModalOpen">Email Form</div>
+        <div v-else>passwordform</div>
+    </TheModal>
 </template>
 
 <style lang="scss">

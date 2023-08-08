@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
     faCircleArrowLeft,
     faUserLock,
+    faUserPlus,
     faHouse,
     faCircleMinus,
     faXmark,
@@ -37,6 +38,7 @@ app.use(pinia);
 library.add(
     faCircleArrowLeft,
     faUserLock,
+    faUserPlus,
     faHouse,
     faCircleMinus,
     faXmark,

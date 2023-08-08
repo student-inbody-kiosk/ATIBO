@@ -1,6 +1,6 @@
 import apiRequest from '@/apis/axiosInterceptors';
-import type { InbodyDetail } from '@/types/inbody.interface';
 import { toastCenterErrorMessage } from '@/utils/toastManager';
+import type { Inbody, InbodyDetail } from '@/types/inbody.interface';
 
 export async function getInbodys(
     startDate: string,
@@ -12,12 +12,7 @@ export async function getInbodys(
 ) {
     return await apiRequest
         .get(`/students/inbody/${startDate}/${endDate}/`, {
-            params: {
-                grade,
-                room,
-                number,
-                name,
-            },
+            params: { grade, room, number, name },
         })
         .then((res) => {
             return res.data;
@@ -33,10 +28,7 @@ export async function getTheStudentInbodys(
 ) {
     return await apiRequest
         .get(`/students/inbody/${grade}/${room}/${number}/`, {
-            params: {
-                startDate,
-                endDate,
-            },
+            params: { startDate, endDate },
         })
         .then((res): InbodyDetail[] => {
             return res.data;
@@ -47,7 +39,7 @@ export async function getTheStudentInbodys(
         });
 }
 
-export async function getInbody(inbodyId) {
+export async function getInbody(inbodyId: number) {
     return await apiRequest
         .get(`/students/inbody/${inbodyId}/`)
         .then((res): InbodyDetail => {
@@ -57,4 +49,24 @@ export async function getInbody(inbodyId) {
             toastCenterErrorMessage('인바디 정보를 불러오지 못했습니다', err);
             throw err;
         });
+}
+
+export async function createInbody(
+    grade: number,
+    room: number,
+    number: number,
+    inbody: InbodyDetail
+) {
+    return await apiRequest.post(
+        `students/inbody/${grade}/${room}/${number}/`,
+        inbody
+    );
+}
+
+export async function updateInbody(inbodyId: number, inbody: InbodyDetail) {
+    return await apiRequest.put(`students/inbody/${inbodyId}/`, inbody);
+}
+
+export async function deleteInbody(inbodyId: number) {
+    return await apiRequest.delete(`students/inbody/${inbodyId}/`);
 }

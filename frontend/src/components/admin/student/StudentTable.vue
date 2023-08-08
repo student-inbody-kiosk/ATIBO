@@ -2,9 +2,14 @@
 import StudentDataLabel from '@/components/admin/student/StudentDataLabel.vue';
 import StudentData from '@/components/admin/student/StudentData.vue';
 import type { StudentAttendance } from '@/types/attendance.interface';
+import type { StudentSimple } from '@/types/students.interface';
 
 defineProps<{
     students: StudentAttendance[];
+}>();
+
+defineEmits<{
+    (e: 'click', student: StudentSimple): void;
 }>();
 </script>
 
@@ -19,7 +24,8 @@ defineProps<{
                 :grade="student.grade"
                 :room="student.room"
                 :number="student.room"
-                :name="student.name" />
+                :name="student.name"
+                @click="$emit('click', student)" />
         </tbody>
     </table>
 </template>
