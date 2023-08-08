@@ -2,18 +2,19 @@
 import VButton from '@/components/common/VButton.vue';
 import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
 import StudentDetailInput from '@/components/admin/student/StudentDetailInput.vue';
-import type { Student } from '@/types/admin.interface';
 
 import { getStudents, updateStudents } from '@/apis/services/students';
 import { checkStudentInput } from '@/utils/checkInput';
 
 import { ref, onMounted } from 'vue';
-import type { Ref } from 'vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
 
+import type { Ref } from 'vue';
+import type { StudentDetail } from '@/types/students.interface';
+
 const route = useRoute();
-const students: Ref<Student[]> = ref([]);
+const students: Ref<StudentDetail[]> = ref([]);
 const updateIndexSet: Ref<Set<number>> = ref(new Set<number>());
 
 onMounted(() => {
@@ -23,10 +24,10 @@ onMounted(() => {
     );
 });
 
-const handleInput = function updateStudentData<T extends keyof Student>(
+const handleInput = function updateStudentData<T extends keyof StudentDetail>(
     index: number,
     item: T,
-    data: Student[T]
+    data: StudentDetail[T]
 ) {
     students.value[index][item] = data;
 
@@ -87,6 +88,7 @@ const handleUpdateClick = function updateStudent() {
 
 <style lang="scss" scoped>
 .admin-student-update {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(0, 1fr);
@@ -95,6 +97,8 @@ const handleUpdateClick = function updateStudent() {
 .admin-student-update__buttons {
     display: flex;
     justify-content: flex-end;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 .admin-student-update-list {
     overflow: auto;

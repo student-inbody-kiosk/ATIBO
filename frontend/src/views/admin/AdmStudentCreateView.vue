@@ -101,6 +101,7 @@ const handleCreateClick = function createStudent() {
 
 <style lang="scss" scoped>
 .admin-student-create {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(0, 1fr);
@@ -109,6 +110,8 @@ const handleCreateClick = function createStudent() {
 .admin-student-create__buttons {
     display: flex;
     justify-content: flex-end;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 .admin-student-create-list {
     overflow: auto;

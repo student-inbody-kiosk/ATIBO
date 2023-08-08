@@ -78,6 +78,7 @@ const handleSubmit = function searchStudents() {
 
 <style lang="scss" scoped>
 .admin-student {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(0, 1fr);
