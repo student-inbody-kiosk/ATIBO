@@ -17,6 +17,7 @@ const props = withDefaults(
         color?: 'kiosk-primary' | 'admin-primary';
         size?: 'sm' | 'md' | 'lg';
         isError?: boolean;
+        condition?: string;
         isFocus?: boolean;
         placeholder?: string;
     }>(),
@@ -56,60 +57,97 @@ const handleInput = function handleAppInput(event: Event) {
             isError ? 'error' : '',
             isFocus ? 'focus' : '',
         ]">
-        <label v-if="label" :for="id">{{ label }}</label>
-        <input
-            :id="id"
-            :type="type"
-            :accept="accept"
-            :name="name"
-            :value="value"
-            :readonly="readonly"
-            :minlength="minlength"
-            :maxlength="maxlength"
-            :min="min"
-            :max="max"
-            :style="{ textAlign }"
-            :multiple="multiple"
-            :placeholder="placeholder"
-            @input="handleInput"
-            @change="$emit('change')"
-            @keyup.enter="$emit('enter')"
-            @focus="$emit('focus')" />
+        <div class="v-input__label-input">
+            <label v-if="label" :for="id">{{ label }}</label>
+            <textarea
+                v-if="type === 'textarea'"
+                :id="id"
+                :name="name"
+                :value="value"
+                :readonly="readonly"
+                :minlength="minlength"
+                :maxlength="maxlength"
+                :min="min"
+                :max="max"
+                :style="{ textAlign }"
+                :multiple="multiple"
+                :placeholder="placeholder"
+                @input="handleInput"
+                @change="$emit('change')"
+                @keyup.enter="$emit('enter')"
+                @focus="$emit('focus')" />
+            <input
+                v-else
+                :id="id"
+                :type="type"
+                :accept="accept"
+                :name="name"
+                :value="value"
+                :readonly="readonly"
+                :minlength="minlength"
+                :maxlength="maxlength"
+                :min="min"
+                :max="max"
+                :style="{ textAlign }"
+                :multiple="multiple"
+                :placeholder="placeholder"
+                @input="handleInput"
+                @change="$emit('change')"
+                @keyup.enter="$emit('enter')"
+                @focus="$emit('focus')" />
+        </div>
+        <p class="v-input__condition" v-if="condition">{{ condition }}</p>
     </div>
 </template>
 
 <style lang="scss">
 .v-input {
     display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.2rem;
+}
+
+.v-input__label-input {
+    display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-.v-input label {
+.v-input__label-input label {
     font-weight: 600;
+}
+
+.v-input__condition {
+    color: transparentize($black, 0.7);
+    font-size: 0.8rem;
 }
 
 //color
 .v-input.kiosk-primary {
-    input:focus {
+    input,
+    textarea:focus {
         outline: $kiosk-deep-primary 3px solid;
     }
 }
 
 .v-input.kiosk-primary.focus {
-    input {
+    input,
+    textarea:focus {
         outline: $kiosk-deep-primary 3px solid;
     }
 }
 
 .v-input.admin-primary {
-    input:focus {
+    input,
+    textarea:focus {
         outline: $admin-deep-primary 3px solid;
     }
 }
 
 .v-input.admin-primary.focus {
-    input {
+    input,
+    textarea:focus {
         outline: $admin-deep-primary 3px solid;
     }
 }
@@ -118,7 +156,8 @@ const handleInput = function handleAppInput(event: Event) {
 .v-input.sm {
     font-size: 1rem;
 
-    input {
+    input,
+    textarea {
         padding: 0.2rem;
         font-size: 1rem;
     }
@@ -127,7 +166,8 @@ const handleInput = function handleAppInput(event: Event) {
 .v-input.md {
     font-size: 1.4rem;
 
-    input {
+    input,
+    textarea {
         padding: 0.5rem;
         border-radius: 0.5em;
         font-size: 1.4rem;
@@ -137,7 +177,8 @@ const handleInput = function handleAppInput(event: Event) {
 .v-input.lg {
     font-size: 2rem;
 
-    input {
+    input,
+    textarea {
         padding: 1rem;
         border-radius: 0.5em;
         font-size: 1.8rem;
@@ -146,6 +187,8 @@ const handleInput = function handleAppInput(event: Event) {
 
 //error
 .v-input.error {
-    outline: $red 3px solid;
+    .v-input__condition {
+        color: $red;
+    }
 }
 </style>

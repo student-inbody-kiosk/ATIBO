@@ -1,11 +1,20 @@
 <script setup lang="ts">
-import VIconButton from '@/components/common/VIconButton.vue';
+import { ref } from 'vue';
 import { logout } from '@/apis/services/auth';
+import VIconButton from '@/components/common/VIconButton.vue';
 
 defineEmits<{
     (e: 'email'): void;
     (e: 'password'): void;
 }>();
+
+const isEmailModalOpen = ref(false);
+const isPasswordModalOpen = ref(false);
+
+const handleModalClose = function closeModal() {
+    isEmailModalOpen.value = false;
+    isPasswordModalOpen.value = false;
+};
 </script>
 
 <template>
@@ -35,6 +44,15 @@ defineEmits<{
             <font-awesome-icon icon="house" />
         </VIconButton>
     </div>
+
+    <!-- modal -->
+    <TheModal
+        color="admin-secondary"
+        v-if="isEmailModalOpen || isPasswordModalOpen"
+        @close-modal="handleModalClose">
+        <div v-if="isEmailModalOpen">Email Form</div>
+        <div v-else>passwordform</div>
+    </TheModal>
 </template>
 
 <style lang="scss">
