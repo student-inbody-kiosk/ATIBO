@@ -1,4 +1,3 @@
-import { Account } from './accounts.interface';
 export interface Account {
     id?: string;
     username: string;

@@ -57,7 +57,7 @@ const handleCloseModal = function closeModal() {
                 @close-modal="handleCloseModal">
                 <SignupForm
                     v-if="isSignupModalOpen"
-                    @signup="handleCloseModal" />
+                    @success="handleCloseModal" />
                 <PwResetForm v-else @success="handleCloseModal" />
             </TheModal>
         </template>

@@ -77,6 +77,12 @@ const handleSubmit = function searchStudents() {
 </template>
 
 <style lang="scss" scoped>
+.admin-student__header {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 1rem;
+}
 .admin-student {
     width: 100%;
     display: grid;

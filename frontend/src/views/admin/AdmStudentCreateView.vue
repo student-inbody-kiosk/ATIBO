@@ -71,13 +71,22 @@ const handleCreateClick = function createStudent() {
 
 <template>
     <div class="admin-student-create">
-        <div>학생 등록</div>
+        <div class="admin-student-create__header">학생 등록</div>
         <section class="admin-student-create__buttons">
-            <VButton text="+ 추가" color="green" @click="handleAddClick" />
             <VButton
-                text="등록"
-                color="admin-primary"
-                @click="handleCreateClick" />
+                text="취소"
+                color="gray"
+                @click="() => router.push({ name: 'admin-student' })" />
+            <div>
+                <VButton
+                    text="+ 학생 추가"
+                    color="green"
+                    @click="handleAddClick" />
+                <VButton
+                    text="등록"
+                    color="admin-primary"
+                    @click="handleCreateClick" />
+            </div>
         </section>
 
         <section class="admin-student-create-list">
@@ -107,11 +116,23 @@ const handleCreateClick = function createStudent() {
     grid-template-rows: auto auto minmax(0, 1fr);
 }
 
+.admin-student-create__header {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 1rem;
+}
+
 .admin-student-create__buttons {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 0.5rem;
     padding-bottom: 0.5rem;
+
+    div {
+        display: flex;
+        gap: 0.5rem;
+    }
 }
 .admin-student-create-list {
     overflow: auto;

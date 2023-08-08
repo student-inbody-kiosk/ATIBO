@@ -93,7 +93,7 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
 
 <template>
     <div class="admin-inbody">
-        <div>인바디 관리</div>
+        <div class="admin-inbody__header">인바디 관리</div>
         <InbodySearchBar
             :startDate="startDate"
             :endDate="endDate"
@@ -129,6 +129,13 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.admin-inbody__header {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 1rem;
 }
 
 .admin-inbody-content {

@@ -60,13 +60,13 @@ const handleUpdateClick = function updateStudent() {
 
 <template>
     <div class="admin-student-update">
-        <div>학생 수정</div>
+        <div class="admin-student-update__header">학생 수정</div>
         <section class="admin-student-update__buttons">
-            <VButton text="완료" color="green" @click="handleUpdateClick" />
             <VButton
                 text="취소"
-                color="red"
+                color="gray"
                 @click="() => router.push({ name: 'admin-student' })" />
+            <VButton text="완료" color="green" @click="handleUpdateClick" />
         </section>
 
         <section class="admin-student-update-list">
@@ -94,13 +94,22 @@ const handleUpdateClick = function updateStudent() {
     grid-template-rows: auto auto minmax(0, 1fr);
 }
 
+.admin-student-update__header {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 1rem;
+}
+
 .admin-student-update__buttons {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     gap: 0.5rem;
     padding-bottom: 0.5rem;
 }
 .admin-student-update-list {
+    width: 100%;
     overflow: auto;
+    margin: 0 auto;
 }
 </style>

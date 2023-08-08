@@ -72,6 +72,12 @@ const handleSubmit = function searchAttendance() {
     grid-template-rows: auto auto minmax(0, 1fr);
 }
 
+.admin-attend__header {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 1rem;
+}
 .admin-attend-content {
     display: flex;
     overflow-y: auto;

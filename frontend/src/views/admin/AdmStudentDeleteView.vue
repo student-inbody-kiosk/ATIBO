@@ -41,12 +41,12 @@ const handleDeleteClick = function deleteStudent() {
 
 <template>
     <div class="admin-student-delete">
-        <div>학생 삭제</div>
+        <div class="admin-student-delete__header">학생 삭제</div>
 
         <div class="admin-student-delete__buttons">
             <VButton
                 text="취소"
-                color="admin-primary"
+                color="gray"
                 @click="
                     router.push({ name: 'admin-student', query: route.query })
                 " />
@@ -82,6 +82,13 @@ const handleDeleteClick = function deleteStudent() {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.admin-student-delete__header {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 1rem;
 }
 
 .admin-student-delete__buttons {
