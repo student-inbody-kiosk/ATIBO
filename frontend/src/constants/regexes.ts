@@ -1,11 +1,23 @@
 const regexes = {
-    studentNum: /^[1-9]\d{4,5}$/,
-    studentPw: /^\d{4}$/,
-    date: /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/,
-    username: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{5,20}$/,
-    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    password:
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,24}$/,
+    studentNum: {
+        reg: /^[1-9]\d{4,5}$/,
+        condition: '학번 형식에 맞춰 입력해주세요',
+    },
+    startDate: {
+        reg: /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/,
+        condition: '시작일 날짜 형식을 확인해주세요',
+    },
+    endDate: {
+        reg: /^\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$/,
+        condition: '종료일 날짜 형식을 확인해주세요',
+    },
+};
+
+const studentRegexes = {
+    password: {
+        reg: /^\d{4}$/,
+        condition: '비밀번호는 4자리 숫자로 입력해주세요',
+    },
 };
 
 const accountRegexes = {
@@ -27,6 +39,4 @@ const accountRegexes = {
     },
 };
 
-export default regexes;
-
-export { accountRegexes };
+export { regexes, studentRegexes, accountRegexes };

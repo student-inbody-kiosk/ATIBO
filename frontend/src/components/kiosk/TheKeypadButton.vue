@@ -22,7 +22,7 @@ defineEmits<{
     background-color: $kiosk-primary;
     border-radius: 1rem;
     color: $white;
-    font-size: 2.5rem;
+    font-size: 4vh;
     font-weight: 700;
 }
 </style>

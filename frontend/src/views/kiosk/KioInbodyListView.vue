@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRoute } from 'vue-router';
-import regexes from '@/constants/regexes';
+import { regexes } from '@/constants/regexes';
 import VIconButton from '@/components/common/VIconButton.vue';
 import KioInbodyList from '@/components/kiosk/inbody/KioInbodyList.vue';
 import KioInbodySearchForm from '@/components/kiosk/inbody/KioInbodySearchForm.vue';
@@ -25,12 +25,12 @@ const number = Number(route.params.number);
 
 // Default startDate, endDate
 const startDate = ref(
-    regexes.date.test(String(route.query.startDate))
+    regexes.startDate.reg.test(String(route.query.startDate))
         ? String(route.query.startDate)
         : getAYearAgo() // The default startDate: a year ago
 );
 const endDate = ref(
-    regexes.date.test(String(route.query.endDate))
+    regexes.endDate.reg.test(String(route.query.endDate))
         ? String(route.query.endDate)
         : getToday() // The default endDate: today
 );
@@ -42,10 +42,10 @@ watch(
     (newQuery) => {
         const newStartDate = String(newQuery.startDate);
         const newEndDate = String(newQuery.endDate);
-        if (regexes.date.test(newStartDate)) {
+        if (regexes.startDate.reg.test(newStartDate)) {
             startDate.value = newStartDate;
         }
-        if (regexes.date.test(newEndDate)) {
+        if (regexes.endDate.reg.test(newEndDate)) {
             endDate.value = newEndDate;
         }
         emit('update-header', {
