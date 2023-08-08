@@ -35,7 +35,8 @@ axiosInstance.interceptors.response.use(
         console.log('ERROR >>>', error.response.data);
         const originalRequest = error.config;
         // Unauthorized : request a new accessToken
-        const { refreshToken, updateAccessToken } = useAuthStore();
+        const { refreshToken, updateAccessToken, updateRefreshToken } =
+            useAuthStore();
 
         if (error.response.status === 401 || error.response.status === 403) {
             if (refreshToken) {
@@ -52,6 +53,8 @@ axiosInstance.interceptors.response.use(
                 } catch (error) {
                     alert('다시 로그인해주세요.');
                     router.push({ name: 'admin-index' });
+                    updateAccessToken(null);
+                    updateRefreshToken(null);
                     return Promise.reject(error);
                 }
             } else {
