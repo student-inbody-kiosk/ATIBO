@@ -11,12 +11,12 @@ const gymId = Number(route.params.gymId);
     <div class="gym-detail-view">
         <div class="gym-detail-view__header">
             <RouterLink :to="{ name: 'admin-gym' }">
-                <VButton text="돌아가기" color="gray" size="xs" />
+                <VButton text="돌아가기" color="gray" />
             </RouterLink>
             <h1 class="gym-detail-view__title">운동기구 상세</h1>
             <RouterLink
                 :to="{ name: 'admin-gym-update', params: { gymId: gymId } }">
-                <VButton text="수 정" color="admin-primary" size="xs" />
+                <VButton text="수 정" color="admin-primary" />
             </RouterLink>
         </div>
         <GymDetailVue :gymId="gymId" />

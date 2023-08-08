@@ -131,12 +131,12 @@ const router = createRouter({
                     component: AdmInbodyView,
                 },
                 {
-                    path: 'inbody/student/:grade(\\d+)/:room(\\d+)/:number(\\d+)/:name(\\d+)',
+                    path: 'inbody/student/:grade(\\d+)/:room(\\d+)/:number(\\d+)/:name',
                     name: 'admin-inbody-student',
                     component: AdmInbodyStudentView,
                 },
                 {
-                    path: 'inbody/:grade(\\d+)/:room(\\d+)/:number(\\d+)/:name(\\d+)/detail/:inbodyId(\\d+)',
+                    path: 'inbody/:grade(\\d+)/:room(\\d+)/:number(\\d+)/:name/detail/:inbodyId(\\d+)',
                     name: 'admin-inbody-detail',
                     component: AdmInbodyDetailView,
                 },
@@ -197,6 +197,8 @@ const KIOSK_PRIVATE_ROUTES = [
 router.beforeEach(async (to, from) => {
     const name = to.name;
     const { accessToken, refreshToken } = useAuthStore();
+
+    console.log(refreshToken);
 
     if (ADMIN_PRIVATE_ROUTES.includes(name) && !refreshToken) {
         toastTopErrorMessage('다시 로그인 해주세요');
