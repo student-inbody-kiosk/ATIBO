@@ -4,6 +4,7 @@ import StudentDetailDataLabel from '@/components/admin/student/StudentDetailData
 import StudentDetailData from '@/components/admin/student/StudentDetailData.vue';
 import { ref, computed } from 'vue';
 import { getStudents } from '@/apis/services/students';
+import { toastTopErrorMessage } from '@/utils/toastManager';
 import type { Ref } from 'vue';
 import type { StudentDetail } from '@/types/students.interface';
 
@@ -22,7 +23,11 @@ const query = computed(() => {
 });
 
 const handleSubmit = function searchStudents() {
-    // TODO: check regular expression
+    if (!grade.value && !room.value && !name.value && !number.value) {
+        toastTopErrorMessage('검색 조건을 입력해주세요.');
+        return;
+    }
+
     getStudents(
         parseInt(grade.value),
         parseInt(room.value),
@@ -73,6 +78,7 @@ const handleSubmit = function searchStudents() {
 
 <style lang="scss" scoped>
 .admin-student {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(0, 1fr);

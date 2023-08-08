@@ -3,10 +3,11 @@ import AttendSearchBar from '@/components/admin/attendance/AttendSearchBar.vue';
 import StudentTable from '@/components/admin/student/StudentTable.vue';
 import AttendTable from '@/components/admin/attendance/AttendTable.vue';
 import { getAttendances } from '@/apis/services/attendances';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 import type { Ref } from 'vue';
 import type { StudentAttendance } from '@/types/attendance.interface';
+import { toastTopErrorMessage } from '@/utils/toastManager';
 
 const grade = ref('');
 const room = ref('');
@@ -15,16 +16,17 @@ const number = ref('');
 const date = ref('');
 const students: Ref<StudentAttendance[]> = ref([]);
 
-const query = computed(() => {
-    return {
-        grade: grade.value,
-        room: room.value,
-        number: number.value,
-        name: name.value,
-    };
-});
-
 const handleSubmit = function searchAttendance() {
+    if (!date.value) {
+        toastTopErrorMessage('조회할 날짜를 입력해주세요');
+        return;
+    }
+
+    if (!grade.value && !room.value && !number.value && !name.value) {
+        toastTopErrorMessage('검색 조건을 입력해주세요');
+        return;
+    }
+
     getAttendances(
         date.value,
         Number(grade.value),
@@ -64,6 +66,7 @@ const handleSubmit = function searchAttendance() {
 
 <style lang="scss" scoped>
 .admin-attend {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(0, 1fr);

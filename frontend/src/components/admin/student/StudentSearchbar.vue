@@ -18,26 +18,6 @@ withDefaults(
 
 <template>
     <div class="student-search-bar">
-        <div class="student-search-bar__buttons">
-            <VButton
-                text="학생 추가"
-                color="green"
-                @click="$router.push({ name: 'admin-student-create' })" />
-            <VButton
-                v-if="isStudentData"
-                text="학생 수정"
-                color="admin-primary"
-                @click="
-                    $router.push({ name: 'admin-student-update', query })
-                " />
-            <VButton
-                v-if="isStudentData"
-                text="학생 삭제"
-                color="red"
-                @click="
-                    $router.push({ name: 'admin-student-delete', query })
-                " />
-        </div>
         <div class="student-search-bar__input">
             <VInput
                 id="grade"
@@ -64,19 +44,45 @@ withDefaults(
                 color="admin-primary"
                 @click="$emit('search')" />
         </div>
+        <div class="student-search-bar__buttons">
+            <VButton
+                text="추가"
+                color="green"
+                @click="$router.push({ name: 'admin-student-create' })" />
+            <VButton
+                v-if="isStudentData"
+                text="수정"
+                color="admin-primary"
+                @click="
+                    $router.push({ name: 'admin-student-update', query })
+                " />
+            <VButton
+                v-if="isStudentData"
+                text="삭제"
+                color="red"
+                @click="
+                    $router.push({ name: 'admin-student-delete', query })
+                " />
+        </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
 .student-search-bar {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 .student-search-bar__buttons {
-    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 .student-search-bar__input {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
 }
 </style>

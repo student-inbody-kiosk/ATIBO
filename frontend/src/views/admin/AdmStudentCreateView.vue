@@ -8,6 +8,7 @@ import type { Student } from '@/types/admin.interface';
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 import router from '@/router';
+import { checkStudentInput } from '@/utils/checkInput';
 
 const students: Ref<Student[]> = ref([
     {
@@ -48,7 +49,20 @@ const handleDeleteClick = function deleteStudent(index: number) {
     });
 };
 
+const errorIndex = ref();
 const handleCreateClick = function createStudent() {
+    // 정규식 검사
+    for (let idx in students.value) {
+        const errorStudentIndex = checkStudentInput(
+            students.value[idx],
+            Number(idx)
+        );
+        if (errorStudentIndex !== false) {
+            errorIndex.value = errorStudentIndex;
+            return;
+        }
+    }
+
     createStudents(students.value).then(() => {
         router.push({ name: 'admin-student' });
     });
@@ -76,6 +90,7 @@ const handleCreateClick = function createStudent() {
                         :index="index"
                         :student="student"
                         :isCreate="true"
+                        :errorIndex="errorIndex"
                         @update-input="handleInput"
                         @delete-student="handleDeleteClick" />
                 </tbody>
@@ -86,6 +101,7 @@ const handleCreateClick = function createStudent() {
 
 <style lang="scss" scoped>
 .admin-student-create {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(0, 1fr);
@@ -94,6 +110,8 @@ const handleCreateClick = function createStudent() {
 .admin-student-create__buttons {
     display: flex;
     justify-content: flex-end;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 .admin-student-create-list {
     overflow: auto;
