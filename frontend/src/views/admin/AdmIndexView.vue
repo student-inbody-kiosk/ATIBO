@@ -5,21 +5,33 @@ import VButton from '@/components/common/VButton.vue';
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 
-import type { Account } from '@/types/admin.interace';
-import type { AxiosResponse } from 'axios';
-
-import { login } from '@/apis/services/auth';
+import services from '@/apis/services';
 import { getAccountInfo } from '@/apis/services/accounts';
 import { useAccountsStore } from '@/stores/accounts.store';
+import { useAuthInput } from '@/utils/useAuthInput';
+import { toastTopErrorMessage } from '@/utils/toastManager';
 
 const router = useRouter();
 const username = ref('');
-const password = ref('');
 const { updateAccounts } = useAccountsStore();
 
-const handleLoginSubmit = function submitLogin() {
-    login(username.value, password.value).then(() => {
-        getAccountInfo().then((res: AxiosResponse<Account>) => {
+const {
+    value: password,
+    handleInput: handlePasswordInput,
+    condition: passwordCondition,
+} = useAuthInput('password');
+
+const handleLoginSubmit = function login() {
+    if (!username.value) {
+        toastTopErrorMessage('아이디를 입력해주세요');
+        return;
+    } else if (!password.value) {
+        toastTopErrorMessage('비밀번호를 입력해주세요');
+        return;
+    }
+
+    services.login(username.value, password.value).then(() => {
+        getAccountInfo().then((res) => {
             updateAccounts(res?.data);
             router.push({ name: 'admin-main' });
         });
@@ -40,7 +52,8 @@ const handleLoginSubmit = function submitLogin() {
             type="password"
             :value="password"
             label="비밀번호"
-            @input="(value) => (password = value)"
+            :placeholder="passwordCondition"
+            @input="handlePasswordInput"
             @enter="handleLoginSubmit" />
         <VButton
             text="로그인"

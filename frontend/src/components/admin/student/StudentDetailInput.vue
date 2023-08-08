@@ -7,6 +7,7 @@ const props = withDefaults(
     defineProps<{
         index: number;
         student: StudentDetail;
+        errorIndex?: number;
         isCreate?: boolean;
     }>(),
     { isCreate: false }
@@ -16,7 +17,7 @@ const sexData = ref(props.student.sex);
 </script>
 
 <template>
-    <tr>
+    <tr :class="errorIndex === index ? 'is-error' : null">
         <td class="student-data-input__content">
             <VIconButton
                 v-if="isCreate"
@@ -28,6 +29,8 @@ const sexData = ref(props.student.sex);
         <td class="student-data-input__content">
             <VInput
                 id="grade"
+                type="number"
+                :min="1"
                 :value="student.grade"
                 @input="
                     (grade) => $emit('update-input', index, 'grade', grade)
@@ -36,12 +39,16 @@ const sexData = ref(props.student.sex);
         <td class="student-data-input__content">
             <VInput
                 id="room"
+                type="number"
+                :min="1"
                 :value="student.room"
                 @input="(room) => $emit('update-input', index, 'room', room)" />
         </td>
         <td class="student-data-input__content">
             <VInput
                 id="number"
+                type="number"
+                :min="1"
                 :value="student.number"
                 @input="
                     (number) => $emit('update-input', index, 'number', number)
@@ -96,5 +103,9 @@ const sexData = ref(props.student.sex);
 
 input {
     text-align: center;
+}
+
+.is-error {
+    outline: 0.1rem solid $red;
 }
 </style>
