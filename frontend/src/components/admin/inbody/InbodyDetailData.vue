@@ -252,21 +252,20 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
     padding: 1rem;
     background-color: white;
     border-radius: 0.5rem;
-    // overflow: auto;
+    overflow: auto;
     font-size: 1.2rem;
     font-weight: 500;
 }
 
-.admin-inbody-detail::-webkit-scrollbar {
-    display: none;
-}
+// .admin-inbody-detail::-webkit-scrollbar {
+//     display: none;
+// }
 
 .admin-inbody-detail__personal {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    // width: 100%;
-    // height: 100%;
+    width: 100%;
     padding: 1rem;
     font-weight: 600;
     font-size: 1.4rem;
@@ -283,10 +282,10 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
 }
 
 .admin-inbody-detail--container {
-    display: flex;
+    display: grid;
     gap: 3rem;
-    // grid-template-columns: repeat(3, 1fr);
-    // grid-template-rows: repeat(8, minmax(100px, auto));
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr;
 }
 
 .admin-inbody-detail__subtitle {
