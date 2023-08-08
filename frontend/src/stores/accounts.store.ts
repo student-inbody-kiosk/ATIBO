@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import type { Account } from '@/types/admin.interace';
+import type { Account } from '@/types/accounts.interace';
 
 export const useAccountsStore = defineStore(
     'accounts',
