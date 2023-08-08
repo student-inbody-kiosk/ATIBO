@@ -39,22 +39,30 @@ const handleSubmit = function resetPwRequest(event: Event) {
 </script>
 
 <template>
-    <form class="pw-reset-form" @submit.prevent="handleSubmit">
-        <VLoading v-if="isLoading" color="admin-primary" />
-        <div v-else>
-            <VInput
-                id="pw-reset-username"
-                name="username"
-                type="text"
-                label="아이디" />
-            <VInput
-                id="pw-reset-email"
-                name="email"
-                type="email"
-                label="이메일" />
-            <VButton text="비밀번호 초기화" color="green" type="submit" />
-        </div>
+    <VLoading v-if="isLoading" color="admin-primary" />
+    <form v-else class="pw-reset-form" @submit.prevent="handleSubmit">
+        <VInput
+            id="pw-reset-username"
+            name="username"
+            type="text"
+            size="md"
+            label="아이디" />
+        <VInput
+            id="pw-reset-email"
+            name="email"
+            type="email"
+            size="md"
+            label="이메일" />
+        <VButton text="비밀번호 초기화" color="green" type="submit" />
     </form>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.pw-reset-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin: 1.5rem 1rem 0.7rem 1rem;
+}
+</style>

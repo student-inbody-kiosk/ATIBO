@@ -15,7 +15,7 @@ const props = withDefaults(
         max?: number;
         textAlign?: 'left' | 'right' | 'center' | 'justify';
         color?: 'kiosk-primary' | 'admin-primary';
-        size?: 'sm' | 'md' | 'lg';
+        size?: 'sm' | 'md' | 'lg' | 'xl';
         isError?: boolean;
         condition?: string;
         isFocus?: boolean;
@@ -116,11 +116,18 @@ const handleInput = function handleAppInput(event: Event) {
 
 .v-input__label-input label {
     font-weight: 600;
+    white-space: nowrap;
+}
+
+.v-input__label-input textarea {
+    width: 100%;
+    min-width: 17rem;
+    min-height: 5rem;
 }
 
 .v-input__condition {
     color: transparentize($black, 0.7);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
 }
 
 //color
@@ -164,6 +171,17 @@ const handleInput = function handleAppInput(event: Event) {
 }
 
 .v-input.md {
+    font-size: 1.2rem;
+
+    input,
+    textarea {
+        padding: 0.3rem;
+        border-radius: 0.5em;
+        font-size: 1.2rem;
+    }
+}
+
+.v-input.lg {
     font-size: 1.4rem;
 
     input,
@@ -174,7 +192,7 @@ const handleInput = function handleAppInput(event: Event) {
     }
 }
 
-.v-input.lg {
+.v-input.xl {
     font-size: 2rem;
 
     input,

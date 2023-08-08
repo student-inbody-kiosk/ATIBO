@@ -81,7 +81,7 @@ const handleSubmit = function signup(event: Event) {
 </script>
 
 <template>
-    <form @submit.prevent="handleSubmit">
+    <form class="signup-form" @submit.prevent="handleSubmit">
         <VInput
             id="signup-form-username"
             label="아이디"
@@ -139,8 +139,24 @@ const handleSubmit = function signup(event: Event) {
             condition="소개 문구는 공백 제외 10자 이상 작성해주세요"
             size="md"
             @input="handleCommentInput" />
-        <VButton text="회원가입" type="submit" color="green" />
+        <VButton
+            class="signup-form__button"
+            text="회원가입"
+            type="submit"
+            color="green" />
     </form>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+    margin: 1rem 2rem;
+}
+
+.signup-form__button {
+    align-self: center;
+}
+</style>
