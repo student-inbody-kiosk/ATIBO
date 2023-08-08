@@ -31,16 +31,20 @@ const handleCloseModal = function closeModal() {
                 <VIconButton
                     text="키오스크"
                     @click="$router.push({ name: 'kiosk-index' })">
-                    <font-awesome-icon icon="house" />
+                    <font-awesome-icon icon="house" size="2x" />
                 </VIconButton>
-                <VIconButton
-                    text="비밀번호 찾기"
-                    @click="isPwResetModalOpen = true">
-                    <font-awesome-icon icon="user-plus" />
-                </VIconButton>
-                <VIconButton text="회원가입" @click="isSignupModalOpen = true">
-                    <font-awesome-icon icon="user-plus" />
-                </VIconButton>
+                <div class="admin-index-header__right-buttons">
+                    <VIconButton
+                        text="비밀번호 찾기"
+                        @click="isPwResetModalOpen = true">
+                        <font-awesome-icon icon="lock" size="2x" />
+                    </VIconButton>
+                    <VIconButton
+                        text="회원가입"
+                        @click="isSignupModalOpen = true">
+                        <font-awesome-icon icon="user-plus" size="2x" />
+                    </VIconButton>
+                </div>
             </div>
             <AdmHeader v-else />
         </template>
@@ -65,5 +69,11 @@ const handleCloseModal = function closeModal() {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.admin-index-header__right-buttons {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
 }
 </style>

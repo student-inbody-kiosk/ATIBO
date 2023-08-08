@@ -15,27 +15,27 @@ const { username } = useAccountsStore();
             <VButton
                 text="학생 관리"
                 color="admin-primary"
-                size="lg"
+                size="xl"
                 @click="$router.push({ name: 'admin-student' })" />
             <VButton
                 text="출결 관리"
                 color="admin-primary"
-                size="lg"
+                size="xl"
                 @click="$router.push({ name: 'admin-attend' })" />
             <VButton
                 text="인바디 관리"
                 color="admin-primary"
-                size="lg"
+                size="xl"
                 @click="$router.push({ name: 'admin-inbody' })" />
             <VButton
                 text="운동기구 관리"
                 color="admin-primary"
-                size="lg"
+                size="xl"
                 @click="$router.push({ name: 'admin-gym' })" />
             <VButton
                 text="학교정보 관리"
                 color="admin-primary"
-                size="lg"
+                size="xl"
                 @click="$router.push({ name: 'admin-school' })" />
         </section>
     </div>
