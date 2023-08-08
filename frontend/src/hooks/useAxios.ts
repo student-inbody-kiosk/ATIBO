@@ -1,23 +1,27 @@
 import { AxiosError } from 'axios';
 import { ref, onMounted, onUnmounted } from 'vue';
 
-export function useAxios<T>(defaultValue, cb: () => Promise) {
+// T: response type
+// V: request data type
+export function useAxios<T, V = any>(defaultValue, cb: (data: V) => Promise) {
     const isLoading = ref(false);
     const isError = ref(false);
     const response = ref<T>(defaultValue);
     const error = ref<AxiosError | null>(null);
 
-    const fetchData = function () {
+    const fetchData = async function (data: V) {
         isLoading.value = true;
-        cb()
+        return await cb(data)
             .then((res) => {
                 response.value = res;
                 isLoading.value = false;
+                return res;
             })
-            .catch((er) => {
+            .catch((err) => {
                 error.value = err;
                 isLoading.value = false;
                 isError.value = true;
+                throw err;
             });
     };
 

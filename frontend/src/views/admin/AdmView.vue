@@ -1,32 +1,26 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router';
-import AdmLayout from '@/components/admin/AdmLayout.vue';
+import { ref, computed } from 'vue';
+import { useRoute, RouterView } from 'vue-router';
 import AdmHeader from '@/components/admin/AdmHeader.vue';
 import VIconButton from '@/components/common/VIconButton.vue';
 import TheModal from '@/components/common/TheModal.vue';
 import SignupForm from '@/components/admin/SignupForm.vue';
-import { useRoute } from 'vue-router';
-import { ref, watchEffect } from 'vue';
+import PwResetForm from '@/components/admin/accounts/PwResetForm.vue';
+import AdmLayout from '@/layouts/AdmLayout.vue';
 
 const route = useRoute();
-const isIndexPage = ref(false);
-const isSignupModalOpen = ref(false);
-const isEmailModalOpen = ref(false);
-const isPasswordModalOpen = ref(false);
-
-watchEffect(() => {
-    // show different components based on the route name
-    if (route.name === 'admin-index') {
-        isIndexPage.value = true;
-    } else {
-        isIndexPage.value = false;
-    }
+// Compute whether the current page is index page, based on the current route name
+const isIndexPage = computed<Boolean>(() => {
+    return route.name === 'admin-index' ? true : false;
 });
 
-const handleModalClose = function closeModal() {
-    isEmailModalOpen.value = false;
-    isPasswordModalOpen.value = false;
+/* Manage modal */
+const isSignupModalOpen = ref(false);
+const isPwResetModalOpen = ref(false);
+
+const handleCloseModal = function closeModal() {
     isSignupModalOpen.value = false;
+    isPwResetModalOpen.value = false;
 };
 </script>
 
@@ -39,29 +33,28 @@ const handleModalClose = function closeModal() {
                     @click="$router.push({ name: 'kiosk-index' })">
                     <font-awesome-icon icon="house" />
                 </VIconButton>
+                <VIconButton
+                    text="비밀번호 찾기"
+                    @click="isPwResetModalOpen = true">
+                    <font-awesome-icon icon="user-plus" />
+                </VIconButton>
                 <VIconButton text="회원가입" @click="isSignupModalOpen = true">
                     <font-awesome-icon icon="user-plus" />
                 </VIconButton>
             </div>
-            <AdmHeader
-                v-else
-                @email="isEmailModalOpen = true"
-                @password="isPasswordModalOpen = true" />
+            <AdmHeader v-else />
         </template>
 
         <template #admin-main>
             <RouterView />
             <TheModal
                 color="admin-secondary"
-                v-if="
-                    isSignupModalOpen || isEmailModalOpen || isPasswordModalOpen
-                "
-                @close-modal="handleModalClose">
+                v-if="isSignupModalOpen || isPwResetModalOpen"
+                @close-modal="handleCloseModal">
                 <SignupForm
                     v-if="isSignupModalOpen"
-                    @signup="isSignupModalOpen = false" />
-                <div v-if="isEmailModalOpen">Email Form</div>
-                <div v-if="isPasswordModalOpen">passwordform</div>
+                    @signup="handleCloseModal" />
+                <PwResetForm v-else @success="handleCloseModal" />
             </TheModal>
         </template>
     </AdmLayout>

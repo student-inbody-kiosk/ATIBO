@@ -1,27 +1,35 @@
 <script setup lang="ts">
-import VInput from '../common/VInput.vue';
-import VButton from '@/components/common/VButton.vue';
-
 import { ref } from 'vue';
-import { useAuthInput, usePasswordCheck } from '@/utils/useAuthInput';
 import services from '@/apis/services';
-import type { AccountSignup } from '@/types/accounts.interface';
+import VInput from '@/components/common/VInput.vue';
+import VButton from '@/components/common/VButton.vue';
+import { useAuthInput, usePasswordCheck } from '@/hooks/useAuthInput';
+import { computed } from 'vue';
+import { toastTopErrorMessage } from '@/utils/toastManager';
 
-const name = ref('');
-const comment = ref('');
+const emit = defineEmits<{
+    (e: 'success'): void;
+}>();
 
 const {
-    result: usernameResult,
     value: username,
-    handleInput: handleUsernameInput,
+    result: usernameResult,
     condition: usernameCondition,
+    handleInput: handleUsernameInput,
 } = useAuthInput('username');
 
 const {
-    result: emailResult,
+    value: name,
+    result: nameResult,
+    condition: nameCondition,
+    handleInput: handleNameInput,
+} = useAuthInput('name');
+
+const {
     value: email,
-    handleInput: handleEmailInput,
+    result: emailResult,
     condition: emailCondition,
+    handleInput: handleEmailInput,
 } = useAuthInput('email');
 
 const {
@@ -35,83 +43,104 @@ const {
     result: checkPasswordResult,
     value: checkPassword,
     handleInput: handleCheckPassword,
+    condition: checkPasswordCondition,
 } = usePasswordCheck(password);
 
-const handleSignupClick = function signup() {
-    const accountData = {
+const comment = ref('');
+const handleCommentInput = function updateComment(value: string) {
+    comment.value = value;
+};
+const commentResult = computed<Boolean>(() => {
+    const strippedComment = comment.value.replace(/ /g, '');
+    return strippedComment.length > 9 ? true : false;
+});
+
+const handleSubmit = function signup(event: Event) {
+    if (
+        !usernameResult ||
+        !nameResult ||
+        !emailResult ||
+        !passwordResult ||
+        !checkPasswordResult ||
+        !commentResult.value
+    )
+        toastTopErrorMessage('입력값을 다시 확인해주세요');
+
+    const data = {
         username: username.value,
         name: name.value,
         email: email.value,
-        comment: comment.value,
+        comment: comment.value.trim(),
         password: password.value,
     };
-    services.signup(accountData).then(() => {
-        emit('signup');
+
+    services.signup(data).then(() => {
+        emit('success');
     });
 };
-
-const emit = defineEmits<{
-    (e: 'signup'): void;
-}>();
 </script>
 
 <template>
-    <div>
+    <form @submit.prevent="handleSubmit">
         <VInput
-            id="username"
-            label="닉네임"
+            id="signup-form-username"
+            label="아이디"
+            name="username"
             :value="username"
-            :placeholder="usernameCondition"
+            :isError="username ? !usernameResult : false"
+            :condition="usernameCondition"
+            size="md"
             @input="handleUsernameInput" />
         <VInput
-            id="name"
+            id="signup-form-name"
             label="이름"
+            name="name"
             :value="name"
-            @input="(value) => (name = value)" />
+            :isError="name ? !nameResult : false"
+            :condition="nameCondition"
+            size="md"
+            @input="handleNameInput" />
         <VInput
-            id="email"
+            id="signup-form-email"
+            type="email"
             label="이메일"
+            name="email"
             :value="email"
-            :placeholder="emailCondition"
+            :isError="email ? !emailResult : false"
+            :condition="emailCondition"
+            size="md"
             @input="handleEmailInput" />
         <VInput
-            id="password"
+            id="signup-form-password"
             type="password"
             label="비밀번호"
+            name="password"
             :value="password"
-            :placeholder="passwordCondition"
+            :isError="password ? !passwordResult : false"
+            :condition="passwordCondition"
+            size="md"
             @input="handlePasswordInput" />
         <VInput
-            id="checkPassword"
+            id="signup-form-checkPassword"
             type="password"
             label="비밀번호 확인"
             :value="checkPassword"
+            :isError="checkPassword ? !checkPasswordResult : false"
+            :condition="checkPasswordCondition"
+            size="md"
             @input="handleCheckPassword" />
-        <div v-if="password" class="result-message">
-            {{
-                checkPasswordResult
-                    ? '비밀번호가 일치합니다.'
-                    : ' 비밀번호가 일치하지 않습니다.'
-            }}
-        </div>
         <VInput
-            id="comment"
+            id="signup-form-comment"
             label="소개 문구"
+            name="comment"
+            type="textarea"
             :value="comment"
-            @input="(value) => (comment = value)" />
-        <div v-if="comment.length < 10" class="result-message">
-            소개 문구는 10자 이상으로 작성해주세요.
-        </div>
-        <VButton
-            text="가입하기"
-            color="admin-primary"
-            @click="handleSignupClick" />
-    </div>
+            :isError="comment ? !commentResult : false"
+            condition="소개 문구는 공백 제외 10자 이상 작성해주세요"
+            size="md"
+            @input="handleCommentInput" />
+        <VButton text="회원가입" type="submit" color="green" />
+    </form>
 </template>
 
-<style lang="scss" scoped>
-.result-message {
-    color: $red;
-    font-weight: 600;
-}
-</style>
+<style lang="scss" scoped></style>
