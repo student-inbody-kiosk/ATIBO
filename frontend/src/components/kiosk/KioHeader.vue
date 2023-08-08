@@ -43,7 +43,7 @@ defineProps<{
 }
 
 .kiosk-header__title {
-    font-size: 3rem;
+    font-size: 4vh;
     font-weight: 600;
 }
 </style>

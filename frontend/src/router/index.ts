@@ -198,8 +198,6 @@ router.beforeEach(async (to, from) => {
     const name = to.name;
     const { accessToken, refreshToken } = useAuthStore();
 
-    console.log(refreshToken);
-
     if (ADMIN_PRIVATE_ROUTES.includes(name) && !refreshToken) {
         toastTopErrorMessage('다시 로그인 해주세요');
         return { name: 'admin-index' };

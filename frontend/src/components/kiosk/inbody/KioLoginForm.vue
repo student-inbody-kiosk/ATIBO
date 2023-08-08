@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import services from '@/apis/services';
-import regexes from '@/constants/regexes';
+import { studentRegexes } from '@/constants/regexes';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import TheKeypad from '@/components/kiosk/TheKeypad.vue';
@@ -28,8 +28,8 @@ const handleInput = function inputStudentPw(value: string) {
 
 // Student login asynchronously
 const handleSubmit = function loginStudent() {
-    if (!regexes.studentPw.test(studentPw.value)) {
-        toastCenterErrorMessage('비밀번호는 4자리 숫자로 입력해주세요');
+    if (!studentRegexes.password.reg.test(studentPw.value)) {
+        toastCenterErrorMessage(studentRegexes.password.condition);
         return;
     }
 
@@ -58,7 +58,7 @@ const handleSubmit = function loginStudent() {
                 :maxlength="4"
                 label="비밀번호"
                 textAlign="center"
-                size="lg"
+                size="xl"
                 color="kiosk-primary"
                 :value="studentPw"
                 @input="handleInput" />

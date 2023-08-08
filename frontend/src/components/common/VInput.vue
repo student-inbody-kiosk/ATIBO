@@ -132,28 +132,28 @@ const handleInput = function handleAppInput(event: Event) {
 
 //color
 .v-input.kiosk-primary {
-    input,
+    input:focus,
     textarea:focus {
         outline: $kiosk-deep-primary 3px solid;
     }
 }
 
 .v-input.kiosk-primary.focus {
-    input,
+    input:focus,
     textarea:focus {
         outline: $kiosk-deep-primary 3px solid;
     }
 }
 
 .v-input.admin-primary {
-    input,
+    input:focus,
     textarea:focus {
         outline: $admin-deep-primary 3px solid;
     }
 }
 
 .v-input.admin-primary.focus {
-    input,
+    input:focus,
     textarea:focus {
         outline: $admin-deep-primary 3px solid;
     }
