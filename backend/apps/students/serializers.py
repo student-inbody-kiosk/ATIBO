@@ -209,7 +209,7 @@ class InbodySerializer(serializers.ModelSerializer):
     class Meta:
         list_serializer_class = InbodyListSerializer
         model = Inbody
-        exclude = ['student']
+        exclude = ['student', 'is_constraint_activated']
 
     def create(self, validated_data):
         try:
