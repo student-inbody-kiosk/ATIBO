@@ -5,11 +5,11 @@ withDefaults(
     defineProps<{
         text: string;
         color: 'kiosk-primary' | 'admin-primary' | 'green' | 'red' | 'gray';
-        size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+        size?: 'sm' | 'md' | 'lg' | 'xl';
         type?: 'button' | 'submit' | 'reset';
     }>(),
     {
-        size: 'xs',
+        size: 'sm',
         type: 'button',
     }
 );
@@ -64,16 +64,10 @@ const handleClick = function () {
 }
 
 // size
-.v-button.xs {
+.v-button.sm {
     min-width: 2rem;
     padding: 0.3rem 0.6rem;
     font-size: 1rem;
-}
-
-.v-button.sm {
-    min-width: 3rem;
-    padding: 0.4rem 0.7rem;
-    font-size: 1.2rem;
 }
 
 .v-button.md {
