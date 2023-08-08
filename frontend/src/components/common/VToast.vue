@@ -64,10 +64,6 @@ withDefaults(
 .v-toast.top {
     display: flex;
     justify-content: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
 }
 
 .v-toast.center {

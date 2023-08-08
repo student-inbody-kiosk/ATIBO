@@ -13,6 +13,15 @@ class ToastManager {
             document.body.appendChild(toastRoot);
         }
 
+        toastRoot.style.position = 'fixed';
+        toastRoot.style.top = '0';
+        toastRoot.style.left = '0';
+        toastRoot.style.right = '0';
+
+        toastRoot.style.display = 'flex';
+        toastRoot.style.flexDirection = 'column';
+        toastRoot.style.gap = '5px';
+
         this.root = toastRoot;
     }
 
