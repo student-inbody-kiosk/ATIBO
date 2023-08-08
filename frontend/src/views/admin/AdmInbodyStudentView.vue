@@ -83,32 +83,36 @@ const handleCreateClick = function updateTheStudentInbodys() {
                 })`
             }}
         </div>
-        <div class="admin-inbody-container">
-            <div class="admin-inbody-container__header">
-                <div class="admin-inbody-container__header__searchbar">
-                    <VInput
-                        id="startDate"
-                        label="시작"
-                        type="date"
-                        :value="startDate"
-                        @input="(value) => (startDate = value)" />
-                    <VInput
-                        id="endDate"
-                        label="끝"
-                        type="date"
-                        :value="endDate"
-                        @input="(value) => (endDate = value)" />
-                    <VButton
-                        text="조회"
-                        color="admin-primary"
-                        @click="handleSearchClick" />
-                </div>
+
+        <div class="admin-inbody-header">
+            <div class="admin-inbody-header__searchbar">
                 <VButton
-                    text="기록 추가"
-                    color="green"
-                    @click="() => (isCreateModalOpen = true)" />
+                    text="뒤로"
+                    color="gray"
+                    @click="router.push({ name: 'admin-inbody' })" />
+                <VInput
+                    id="startDate"
+                    label="시작"
+                    type="date"
+                    :value="startDate"
+                    @input="(value) => (startDate = value)" />
+                <VInput
+                    id="endDate"
+                    label="끝"
+                    type="date"
+                    :value="endDate"
+                    @input="(value) => (endDate = value)" />
+                <VButton
+                    text="조회"
+                    color="admin-primary"
+                    @click="handleSearchClick" />
             </div>
+            <VButton
+                text="기록 추가"
+                color="green"
+                @click="() => (isCreateModalOpen = true)" />
         </div>
+
         <div class="admin-inbody-student-table-container">
             <table>
                 <InbodyDataLabel />
@@ -134,27 +138,24 @@ const handleCreateClick = function updateTheStudentInbodys() {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    gap: 2rem;
 }
 
 .admin-inbody-student-info {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 600;
     text-align: center;
+    padding-bottom: 1rem;
 }
-.admin-inbody-container {
+
+.admin-inbody-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding-bottom: 1rem;
 }
-
-.admin-inbody-container__header {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.admin-inbody-container__header__searchbar {
+.admin-inbody-header__searchbar {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -162,7 +163,6 @@ const handleCreateClick = function updateTheStudentInbodys() {
 
 .admin-inbody-student-table-container {
     width: 100%;
-
     overflow-x: auto;
 }
 
