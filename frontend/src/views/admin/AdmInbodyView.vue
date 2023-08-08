@@ -2,13 +2,15 @@
 import InbodySearchBar from '@/components/admin/inbody/InbodySearchBar.vue';
 import StudentTable from '@/components/admin/student/StudentTable.vue';
 import InbodyDateTable from '@/components/admin/inbody/InbodyDateTable.vue';
+import { toastTopErrorMessage } from '@/utils/toastManager';
 
+import router from '@/router';
 import { ref, computed } from 'vue';
 import { getInbodys } from '@/apis/services/inbodys';
+import { calculateDays, createIndexTable } from '@/utils/inbody';
+
 import type { Ref } from 'vue';
 import type { Inbody } from '@/types/inbody.interace';
-import router from '@/router';
-import { calculateDays, createIndexTable } from '@/utils/inbody';
 
 const startDate = ref('');
 const endDate = ref('');
@@ -30,6 +32,16 @@ const inbodyList = computed(() => {
 });
 
 const handleSubmit = function searchAttendance() {
+    if (!startDate.value || !endDate.value) {
+        toastTopErrorMessage('검색 기간을 입력해주세요');
+        return;
+    }
+
+    if (!grade.value && !room.value && !number.value && !name.value) {
+        toastTopErrorMessage('검색 조건을 입력해주세요');
+        return;
+    }
+
     getInbodys(
         startDate.value,
         endDate.value,

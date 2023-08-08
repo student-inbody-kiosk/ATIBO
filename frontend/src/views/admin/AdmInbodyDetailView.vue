@@ -68,10 +68,10 @@ const handleDeleteClick = function deleteInbodyData() {
             :sex="student.sex" />
         <InbodyUpdateModal
             v-if="isUpdateModalOpen && inbody"
-            @close-modal="isUpdateModalOpen = false"
             :inbodyId="Number(inbodyId)"
             :inbody="inbody"
-            @update="handleAfterUpdate" />
+            @update="handleAfterUpdate"
+            @close-modal="isUpdateModalOpen = false" />
     </div>
 </template>
 

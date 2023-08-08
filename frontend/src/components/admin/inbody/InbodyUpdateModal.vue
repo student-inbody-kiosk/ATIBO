@@ -6,6 +6,7 @@ import TheModal from '@/components/common/TheModal.vue';
 import { updateInbody } from '@/apis/services/inbodys';
 import type { InbodyDetail } from '@/types/inbody.interface';
 import { ref } from 'vue';
+import { checkInbodyInput } from '@/utils/checkInput';
 
 const props = defineProps<{
     inbodyId: number;
@@ -27,6 +28,9 @@ const handleInput = function updateInbodyInput(
 };
 
 const handleUpdateClick = function updateInbodyData() {
+    const errorData = checkInbodyInput(newInbody.value);
+    if (errorData !== false) return;
+
     updateInbody(props.inbodyId, newInbody.value).then(() => emit('update'));
 };
 </script>

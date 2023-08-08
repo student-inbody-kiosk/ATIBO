@@ -20,7 +20,7 @@ const checkInbodyInput = (inbody: InbodyDetail) => {
         if (key === 'id') continue;
         if (!inbodyRegexes[key].reg.test(inbody[key])) {
             toastTopErrorMessage(inbodyRegexes[key].condition);
-            return index;
+            return inbody;
         }
     }
     return false;

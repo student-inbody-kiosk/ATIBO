@@ -4,13 +4,16 @@ import VInput from '@/components/common/VInput.vue';
 import InbodyDataLabel from '@/components/admin/inbody/InbodyDataLabel.vue';
 import InbodyData from '@/components/admin/inbody/InbodyData.vue';
 import InbodyCreateModal from '@/components/admin/inbody/InbodyCreateModal.vue';
+
+import router from '@/router';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { getTheStudentInbodys } from '@/apis/services/inbodys';
-import type { InbodyDetail } from '@/types/inbody.interface';
-import type { Ref } from 'vue';
-import router from '@/router';
 import { useStudentStore } from '@/stores/student.store';
+import { getTheStudentInbodys } from '@/apis/services/inbodys';
+
+import type { Ref } from 'vue';
+import type { InbodyDetail } from '@/types/inbody.interface';
+import { toastTopErrorMessage } from '@/utils/toastManager';
 
 const { student, getStudent } = useStudentStore();
 const route = useRoute();
@@ -38,6 +41,11 @@ onMounted(() => {
 });
 
 const handleSearchClick = function searchInbodyList() {
+    if (!startDate.value || !endDate.value) {
+        toastTopErrorMessage('검색 기간을 입력해주세요');
+        return;
+    }
+
     getTheStudentInbodys(
         Number(grade),
         Number(room),
@@ -116,7 +124,8 @@ const handleCreateClick = function updateTheStudentInbodys() {
         </div>
         <InbodyCreateModal
             v-if="isCreateModalOpen"
-            @create="handleCreateClick" />
+            @create="handleCreateClick"
+            @close-modal="isCreateModalOpen = false" />
     </div>
 </template>
 

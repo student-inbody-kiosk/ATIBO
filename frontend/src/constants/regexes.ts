@@ -84,7 +84,7 @@ export const inbodyRegexes = {
         condition: 'BMI를 정확히 입력해주세요',
     },
     score: {
-        reg: /^(?:100|[1-9][0-9]?|0)$/,
+        reg: /^(?:[1-9]|[1-9][0-9]|100)$/,
         condition: '인바디 점수는 1~100 사이의 숫자로 입력해주세요',
     },
 };
