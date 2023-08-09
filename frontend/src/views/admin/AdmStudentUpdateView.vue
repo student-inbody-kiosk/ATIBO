@@ -108,7 +108,6 @@ const handleUpdateClick = function updateStudent() {
     padding-bottom: 0.5rem;
 }
 .admin-student-update-list {
-    width: 100%;
     overflow: auto;
     margin: 0 auto;
 }

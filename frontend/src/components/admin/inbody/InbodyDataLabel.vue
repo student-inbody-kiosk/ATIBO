@@ -31,7 +31,7 @@ thead {
 
 .inbody-data-label__content {
     display: block;
-    min-height: 2rem;
+    min-height: 2.5rem;
     min-width: 9rem;
     padding: 0.6rem;
     border: 0.1rem solid $admin-secondary;

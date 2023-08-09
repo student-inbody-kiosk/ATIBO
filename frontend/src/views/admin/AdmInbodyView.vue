@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VButton from '@/components/common/VButton.vue';
 import InbodySearchBar from '@/components/admin/inbody/InbodySearchBar.vue';
 import StudentTable from '@/components/admin/student/StudentTable.vue';
 import InbodyDateTable from '@/components/admin/inbody/InbodyDateTable.vue';
@@ -107,12 +108,14 @@ const handleSubmit = function searchAttendance() {
 const handleStudentClick = function goStudentInbodyList(student: any) {
     const { grade, room, number, name } = student;
 
+    const { startDate, endDate } = queryStore.routeQuery;
+
     router.push({
         name: 'admin-inbody-student',
         params: { grade, room, number, name },
         query: {
-            start: startDate.value,
-            end: endDate.value,
+            start: startDate,
+            end: endDate,
         },
     });
 };
@@ -130,7 +133,13 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
 
 <template>
     <div class="admin-inbody">
-        <div class="admin-inbody__header">인바디 관리</div>
+        <div class="admin-inbody__header">
+            <VButton
+                text="뒤로"
+                color="gray"
+                @click="$router.push({ name: 'admin-main' })" />
+            <div>인바디 관리</div>
+        </div>
         <InbodySearchBar
             :startDate="startDate"
             :endDate="endDate"
@@ -169,10 +178,16 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
 }
 
 .admin-inbody__header {
-    font-size: 1.4rem;
-    font-weight: 600;
-    text-align: center;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: auto minmax(0, 1fr);
     padding-bottom: 1rem;
+
+    div {
+        font-size: 1.4rem;
+        font-weight: 600;
+        text-align: center;
+    }
 }
 
 .admin-inbody-content {

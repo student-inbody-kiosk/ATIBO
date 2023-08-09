@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VButton from '@/components/common/VButton.vue';
 import StudentSearchBar from '@/components/admin/student/StudentSearchBar.vue';
 import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
 import StudentDetailData from '@/components/admin/student/StudentDetailData.vue';
@@ -52,7 +53,13 @@ const handleSubmit = function searchStudents() {
 
 <template>
     <div class="admin-student">
-        <div class="admin-student__header">학생 관리</div>
+        <div class="admin-student__header">
+            <VButton
+                text="뒤로"
+                color="gray"
+                @click="$router.push({ name: 'admin-main' })" />
+            <div>학생 관리</div>
+        </div>
         <StudentSearchBar
             :grade="grade"
             :room="room"
@@ -88,10 +95,16 @@ const handleSubmit = function searchStudents() {
 
 <style lang="scss" scoped>
 .admin-student__header {
-    font-size: 1.4rem;
-    font-weight: 600;
-    text-align: center;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: auto minmax(0, 1fr);
     padding-bottom: 1rem;
+
+    div {
+        font-size: 1.4rem;
+        font-weight: 600;
+        text-align: center;
+    }
 }
 .admin-student {
     width: 100%;

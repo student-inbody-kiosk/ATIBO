@@ -20,12 +20,14 @@ defineProps<{
                 label="시작"
                 type="date"
                 :value="startDate"
+                size="md"
                 @input="(value) => $emit('start-date', value)" />
             <VInput
                 id="endDate"
                 label="끝"
                 type="date"
                 :value="endDate"
+                size="md"
                 @input="(value) => $emit('end-date', value)" />
         </div>
         <div class="inbody-searchbar-student">
@@ -33,21 +35,25 @@ defineProps<{
                 id="grade"
                 label="학년"
                 :value="grade"
+                size="md"
                 @input="(value) => $emit('grade', value)" />
             <VInput
                 id="room"
                 label="반"
                 :value="room"
+                size="md"
                 @input="(value) => $emit('room', value)" />
             <VInput
                 id="number"
                 label="번호"
                 :value="number"
+                size="md"
                 @input="(value) => $emit('number', value)" />
             <VInput
                 id="name"
                 label="이름"
                 :value="name"
+                size="md"
                 @input="(value) => $emit('name', value)" />
             <VButton
                 text="조회"
