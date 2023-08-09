@@ -19,6 +19,7 @@ defineProps<{
                 label="월 입력"
                 type="month"
                 :value="date"
+                size="md"
                 @input="(value) => $emit('date', value)" />
             <span>출결 기록에 마우스를 올리면 상세 기록을 볼 수 있습니다</span>
         </div>
@@ -27,21 +28,25 @@ defineProps<{
                 id="grade"
                 label="학년"
                 :value="grade"
+                size="md"
                 @input="(value) => $emit('grade', value)" />
             <VInput
                 id="room"
                 label="반"
                 :value="room"
+                size="md"
                 @input="(value) => $emit('room', value)" />
             <VInput
                 id="number"
                 label="번호"
                 :value="number"
+                size="md"
                 @input="(value) => $emit('number', value)" />
             <VInput
                 id="name"
                 label="이름"
                 :value="name"
+                size="md"
                 @input="(value) => $emit('name', value)" />
             <VButton
                 text="조회"

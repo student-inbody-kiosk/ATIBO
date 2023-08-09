@@ -95,12 +95,14 @@ const handleCreateClick = function updateTheStudentInbodys() {
                     label="시작"
                     type="date"
                     :value="startDate"
+                    size="md"
                     @input="(value) => (startDate = value)" />
                 <VInput
                     id="endDate"
                     label="끝"
                     type="date"
                     :value="endDate"
+                    size="md"
                     @input="(value) => (endDate = value)" />
                 <VButton
                     text="조회"

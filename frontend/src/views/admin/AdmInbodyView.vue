@@ -108,12 +108,14 @@ const handleSubmit = function searchAttendance() {
 const handleStudentClick = function goStudentInbodyList(student: any) {
     const { grade, room, number, name } = student;
 
+    const { startDate, endDate } = queryStore.routeQuery;
+
     router.push({
         name: 'admin-inbody-student',
         params: { grade, room, number, name },
         query: {
-            start: startDate.value,
-            end: endDate.value,
+            start: startDate,
+            end: endDate,
         },
     });
 };
