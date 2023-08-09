@@ -5,12 +5,50 @@ import InbodyDateTable from '@/components/admin/inbody/InbodyDateTable.vue';
 import { toastTopErrorMessage } from '@/utils/toastManager';
 
 import router from '@/router';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { getInbodys } from '@/apis/services/inbodys';
 import { calculateDays, createIndexTable } from '@/utils/inbody';
+import { useQueryStore } from '@/stores/query.store';
 
 import type { Ref } from 'vue';
 import type { Inbody } from '@/types/inbody.interace';
+
+const queryStore = useQueryStore();
+
+onMounted(() => {
+    const { startDate, endDate, grade, room, number, name } =
+        queryStore.routeQuery;
+    if (!startDate && !endDate) return;
+    if (!grade && !room && !number && !name) return;
+    getInbodyAPI(startDate, endDate, grade, room, number, name);
+});
+
+// 데이터 요청 후 table 생성 및 데이터 할당
+const getInbodyAPI = (
+    startDate: string,
+    endDate: string,
+    grade: number,
+    room: number,
+    number: number,
+    name: string
+) => {
+    getInbodys(startDate, endDate, grade, room, number, name).then((res) => {
+        days.value = calculateDays(startDate, endDate);
+        dateIndexTable.value = createIndexTable(startDate, endDate);
+        students.value = res;
+
+        // inbodyList에 데이터 넣기
+        for (let i = 0; i < students.value.length; i++) {
+            for (let j = 0; j < students.value[i].inbodySet.length; j++) {
+                inbodyList.value[i][
+                    dateIndexTable.value[
+                        students.value[i].inbodySet[j].testDate
+                    ]
+                ] = students.value[i].inbodySet[j];
+            }
+        }
+    });
+};
 
 const startDate = ref('');
 const endDate = ref('');
@@ -31,6 +69,7 @@ const inbodyList = computed(() => {
     return arry;
 });
 
+// 검색
 const handleSubmit = function searchAttendance() {
     if (!startDate.value || !endDate.value) {
         toastTopErrorMessage('검색 기간을 입력해주세요');
@@ -42,29 +81,27 @@ const handleSubmit = function searchAttendance() {
         return;
     }
 
-    getInbodys(
+    const parsedGrade = Number(grade.value);
+    const parsedRoom = Number(room.value);
+    const parsedNumber = Number(number.value);
+
+    queryStore.updateQuery({
+        startDate: startDate.value,
+        endDate: endDate.value,
+        grade: parsedGrade,
+        room: parsedRoom,
+        number: parsedNumber,
+        name: name.value,
+    });
+
+    getInbodyAPI(
         startDate.value,
         endDate.value,
-        Number(grade.value),
-        Number(room.value),
-        Number(number.value),
+        parsedGrade,
+        parsedRoom,
+        parsedNumber,
         name.value
-    ).then((res) => {
-        days.value = calculateDays(startDate.value, endDate.value);
-        dateIndexTable.value = createIndexTable(startDate.value, endDate.value);
-        students.value = res;
-
-        // inbodyList에 데이터 넣기
-        for (let i = 0; i < students.value.length; i++) {
-            for (let j = 0; j < students.value[i].inbodySet.length; j++) {
-                inbodyList.value[i][
-                    dateIndexTable.value[
-                        students.value[i].inbodySet[j].testDate
-                    ]
-                ] = students.value[i].inbodySet[j];
-            }
-        }
-    });
+    );
 };
 
 const handleStudentClick = function goStudentInbodyList(student: any) {

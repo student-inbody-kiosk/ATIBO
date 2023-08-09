@@ -1,13 +1,22 @@
 <script setup lang="ts">
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
+import { useQueryStore } from '@/stores/query.store';
+import { computed } from 'vue';
+
+const query = computed(() => {
+    const { routeQuery } = useQueryStore();
+    const { grade, room, number, name } = routeQuery;
+
+    return { grade, room, number, name };
+});
+
 withDefaults(
     defineProps<{
         grade: string;
         room: string;
         number: string;
         name: string;
-        query: {};
         isStudentData: boolean;
     }>(),
     {
