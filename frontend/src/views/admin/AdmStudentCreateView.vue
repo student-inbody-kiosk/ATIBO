@@ -76,7 +76,7 @@ const handleCreateClick = function createStudent() {
             <VButton
                 text="취소"
                 color="gray"
-                @click="() => router.push({ name: 'admin-student' })" />
+                @click="$router.push({ name: 'admin-student' })" />
             <div>
                 <VButton
                     text="+ 학생 추가"

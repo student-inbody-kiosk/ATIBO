@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VButton from '@/components/common/VButton.vue';
 import AttendSearchBar from '@/components/admin/attendance/AttendSearchBar.vue';
 import StudentTable from '@/components/admin/student/StudentTable.vue';
 import AttendTable from '@/components/admin/attendance/AttendTable.vue';
@@ -41,7 +42,13 @@ const handleSubmit = function searchAttendance() {
 
 <template>
     <div class="admin-attend">
-        <div class="admin-attend__header">출결 관리</div>
+        <div class="admin-attend__header">
+            <VButton
+                text="뒤로"
+                color="gray"
+                @click="$router.push({ name: 'admin-main' })" />
+            <div>출결 관리</div>
+        </div>
         <AttendSearchBar
             :date="date"
             :grade="grade"
@@ -73,10 +80,16 @@ const handleSubmit = function searchAttendance() {
 }
 
 .admin-attend__header {
-    font-size: 1.4rem;
-    font-weight: 600;
-    text-align: center;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: auto minmax(0, 1fr);
     padding-bottom: 1rem;
+
+    div {
+        font-size: 1.4rem;
+        font-weight: 600;
+        text-align: center;
+    }
 }
 .admin-attend-content {
     display: flex;
