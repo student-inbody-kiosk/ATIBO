@@ -39,6 +39,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
+environ.Env.read_env(os.path.join(BASE_DIR, 'secret/.env'))
+
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -116,6 +118,11 @@ WSGI_APPLICATION = 'atibo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
         'OPTIONS': {
             'read_default_file': os.path.join(BASE_DIR, 'atibo/mysql.cnf'),
             'init_command': 'SET default_storage_engine=INNODB' 
@@ -164,7 +171,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Change the Password Hasher from the default 'PBKDF2PasswordHasher'
 # https://docs.djangoproject.com/en/4.2/topics/auth/passwords/#how-django-stores-passwords
 
-PASSWORD_HASHERS = [env.str('PRIMARY_PASSWORD_HASHER', default='django.contrib.auth.hashers.PBKDF2PasswordHasher')]
+PASSWORD_HASHERS = ['django.contrib.auth.hashers.Argon2PasswordHasher', 
+                    'django.contrib.auth.hashers.PBKDF2PasswordHasher']
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -197,40 +205,29 @@ STATICFILES_DIRS = [
 # Media files (User uploaded static fiels)
 # https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-MEDIA_ROOT
 
-MEDIA_URL = '/media/'
-
-MEDIA_ROOT = BASE_DIR / 'media/'
-
-STATIC_ROOT = BASE_DIR / 'static/'
-
-STATICFILES_DIRS = [
-     os.path.join(BASE_DIR, 'atibo/static'),
-]
-
-# Media files (User uploaded static fiels)
-# https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-MEDIA_ROOT
-
 MEDIA_URL = 'media/'
 
 MEDIA_ROOT = BASE_DIR / 'media/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
 # Email Setting
 # https://docs.djangoproject.com/en/4.2/topics/email/#obtaining-an-instance-of-an-email-backend
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_HOST = env.str('EMAIL_HOST', 'smtp.gmail.com')
 
-EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_PORT = env.str('EMAIL_PORT', '587')
 
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', 'kiokio.gym@gmail.com')
 
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', '')
 
 EMAIL_USE_TLS = True
 
@@ -241,9 +238,21 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:5173',
-    'http://localhost:5173',
+    'http://127.0.0.1:5173',    # Dev
+    'https://127.0.0.1:5173',   # Dev
+    'http://localhost' + ':' + env.str('HOST_PORT', ''),    # In case localhost
+    'http://localhost' + ':' + env.str('HOST_PORT', ''),    # In case localhost
+    'http://' + env.str('HOST_IP', '') + ':' + env.str('HOST_PORT', ''),
+    'https://' + env.str('HOST_IP', '') + ':' + env.str('HOST_PORT', ''),
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost' + ':' + env.str('HOST_PORT', ''),    # In case localhost
+    'http://localhost' + ':' + env.str('HOST_PORT', ''),    # In case localhost
+    'http://' + env.str('HOST_IP', '') + ':' + env.str('HOST_PORT', ''),
+    'https://' + env.str('HOST_IP', '') + ':' + env.str('HOST_PORT', ''),
+]
+
 
 # ckeditor settings
 # https://django-ckeditor.readthedocs.io/en/latest/
