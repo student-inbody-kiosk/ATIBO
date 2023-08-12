@@ -18,7 +18,7 @@ TODAY_DATE = date(2023, 7, 25) # for age calculation
 BIRTH_START_DATE = date(2010, 1, 1)
 BIRTH_END_DATE = date(2016, 12, 31)
 
-NUM_STUDENT = 300
+NUM_STUDENT = 30
 MAX_GRADE = 6 
 MAX_ROOM = 10
 MAX_NUMBER = 30
