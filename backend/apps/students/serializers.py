@@ -132,18 +132,20 @@ class AttendanceSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         student = validated_data['student']
 
+        tz = pytz.timezone(settings.TIME_ZONE)
+        now = datetime.now(tz=tz)
+        
         # Attendance Check can be repeated within 30min
         attendance =  Attendance.objects.filter(student=student).order_by('-date_attended')[:1]
-
         if attendance:
             attendance = attendance[0]
-            tz = pytz.timezone(settings.TIME_ZONE)
-            now = datetime.now(tz=tz)
             time_interval = now - attendance.date_attended
             if time_interval < timedelta(minutes=30):
                 time_interval_min = int(time_interval.total_seconds() / 60)
                 raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'이미 {time_interval_min} 분 전에 출석되었습니다. 출석은 최소 30분마다 가능합니다'), 'too_fast_attendance')
-            validated_data['date_attended'] = now
+        
+        # Add the date_attended time as now
+        validated_data['date_attended'] = now
 
         return super().create(validated_data)
 
