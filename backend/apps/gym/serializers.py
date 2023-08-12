@@ -45,6 +45,11 @@ class ImageSerializer(serializers.ModelSerializer):
         list_serializer_class = ImageListSerializer
         model = Image
         exclude = ['equipment']
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['image'] = '/media/' + str(instance.image)
+        return ret
         
 class EquipmentListSerializer(serializers.ModelSerializer):
     class Meta:
