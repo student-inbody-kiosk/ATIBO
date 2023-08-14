@@ -41,152 +41,52 @@ const handleUpdateClick = function updateSchoolInfo() {
     services.updateSchoolInfo(schoolName.value, fileInput.value?.files[0]);
 };
 
-const dummy = {
-    inactiveUsers: [
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: false,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: false,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: false,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: false,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: false,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: false,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: false,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: false,
-        },
-    ],
-    activeUsers: [
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e13346ffa1',
-            username: 'user2',
-            name: '김길동',
-            email: 'user@email.com',
-            comment: '5학년 2반 담임 고길동입니다.',
-            isActive: true,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: true,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: true,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: true,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: true,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: true,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: true,
-        },
-        {
-            id: '76f77a4f-aba0-42f0-9241-f0e189a7ffa1',
-            username: 'user1',
-            name: '홍길동',
-            email: 'user@email.com',
-            comment: '2학년 3반 담임 홍길동입니다.',
-            isActive: true,
-        },
-    ],
+const handleAccpetClick = function acceptAccount(userId: number) {
+    services.acceptAccount(userId).then(() => {
+        services.getSchoolAccounts().then((res) => {
+            activeUsers.value = res.activeUsers;
+            inactiveUsers.value = res.inactiveUsers;
+        });
+    });
+};
+
+const handleDeleteClick = function deleteAccount(userId: number) {
+    if (!confirm('정말 삭제하시겠습니까? 되돌릴 수 없습니다.')) return;
+    services.deleteAccount(userId).then(() => {
+        services.getSchoolAccounts().then((res) => {
+            activeUsers.value = res.activeUsers;
+            inactiveUsers.value = res.inactiveUsers;
+        });
+    });
 };
 </script>
 
 <template>
     <div class="admin-school">
-        <div>뒤로 학교정보 관리 앞으로</div>
-
         <div class="admin-school-header">
-            <div class="admin-school-title">학교 정보</div>
-            <div class="admin-school-title">학교 계정</div>
+            <VButton
+                text="뒤로"
+                color="gray"
+                @click="$router.push({ name: 'admin-main' })" />
+            <div>학교정보 관리</div>
+        </div>
+
+        <div class="admin-school-title">
+            <div>학교 정보</div>
+            <div>학교 계정</div>
         </div>
 
         <div class="admin-school-content">
+            <section class="admin-school-accounts">
+                <AdmAccountList
+                    title="승인 대기 목록"
+                    :accountList="inactiveUsers"
+                    @accept="handleAccpetClick" />
+                <AdmAccountList
+                    title="승인 완료 목록"
+                    :accountList="activeUsers"
+                    @delete="handleDeleteClick" />
+            </section>
             <section class="admin-school-info">
                 <img class="school-logo" :src="schoolLogo" alt="logo" />
                 <div class="admin-school-title">{{ schoolName }}</div>
@@ -208,15 +108,6 @@ const dummy = {
                         @click="handleUpdateClick" />
                 </div>
             </section>
-            <section class="admin-school-accounts">
-                <!-- TODO: 계정 승인 삭제 API 연결 -->
-                <AdmAccountList
-                    title="승인 대기"
-                    :accountList="dummy.inactiveUsers" />
-                <AdmAccountList
-                    title="승인 완료"
-                    :accountList="dummy.activeUsers" />
-            </section>
         </div>
     </div>
 </template>
@@ -231,19 +122,30 @@ const dummy = {
 }
 
 .admin-school-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    padding-bottom: 0.5rem;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: auto minmax(0, 1fr);
+    padding-bottom: 1rem;
+
+    div {
+        font-size: 1.4rem;
+        font-weight: 600;
+        text-align: center;
+    }
 }
 
 .admin-school-title {
-    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 1rem 0;
+    font-size: 1.3rem;
 }
 
 .admin-school-content {
     display: flex;
     justify-content: space-between;
+    gap: 1rem;
 }
 
 .school-logo {

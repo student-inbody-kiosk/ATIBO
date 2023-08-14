@@ -24,3 +24,9 @@ export interface AccountPwReset {
     username: string;
     email: string;
 }
+
+export interface AccountPwChange {
+    oldPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+}

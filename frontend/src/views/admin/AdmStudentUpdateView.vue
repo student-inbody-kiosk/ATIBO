@@ -2,41 +2,32 @@
 import VButton from '@/components/common/VButton.vue';
 import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
 import StudentDetailInput from '@/components/admin/student/StudentDetailInput.vue';
-import type { Student } from '@/types/admin.interface';
 
 import { getStudents, updateStudents } from '@/apis/services/students';
+import { checkStudentInput } from '@/utils/checkInput';
 
-import { ref, onBeforeMount } from 'vue';
-import type { Ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
 
-const route = useRoute();
-const students: Ref<Student[]> = ref([
-    {
-        grade: '',
-        room: '',
-        number: '',
-        name: '',
-        sex: 1,
-        birthDate: '',
-        password: '',
-    },
-]);
+import type { Ref } from 'vue';
+import type { StudentDetail } from '@/types/students.interface';
 
+const route = useRoute();
+const students: Ref<StudentDetail[]> = ref([]);
 const updateIndexSet: Ref<Set<number>> = ref(new Set<number>());
 
-onBeforeMount(() => {
+onMounted(() => {
     const { grade, room, number, name } = route.query;
     getStudents(Number(grade), Number(room), Number(number), String(name)).then(
         (res) => (students.value = res?.data)
     );
 });
 
-const handleInput = function updateStudentData<T extends keyof Student>(
+const handleInput = function updateStudentData<T extends keyof StudentDetail>(
     index: number,
     item: T,
-    data: Student[T]
+    data: StudentDetail[T]
 ) {
     students.value[index][item] = data;
 
@@ -44,11 +35,20 @@ const handleInput = function updateStudentData<T extends keyof Student>(
     updateIndexSet.value.add(index);
 };
 
+const errorIndex = ref();
 const handleUpdateClick = function updateStudent() {
     const updateStudentList = [];
 
-    // updateList의 인덱스 기준으로 수정된 학생 리스트 생성
+    // updateList의 인덱스 기준으로 정규식 검사 및 수정된 학생 리스트 생성
     for (const index of updateIndexSet.value) {
+        const errorStudentIndex = checkStudentInput(
+            students.value[index],
+            index
+        );
+        if (errorStudentIndex !== false) {
+            errorIndex.value = errorStudentIndex;
+            return;
+        }
         updateStudentList.push(students.value[index]);
     }
 
@@ -60,13 +60,13 @@ const handleUpdateClick = function updateStudent() {
 
 <template>
     <div class="admin-student-update">
-        <div>학생 수정</div>
+        <div class="admin-student-update__header">학생 수정</div>
         <section class="admin-student-update__buttons">
-            <VButton text="완료" color="green" @click="handleUpdateClick" />
             <VButton
                 text="취소"
-                color="red"
+                color="gray"
                 @click="() => router.push({ name: 'admin-student' })" />
+            <VButton text="완료" color="green" @click="handleUpdateClick" />
         </section>
 
         <section class="admin-student-update-list">
@@ -78,6 +78,7 @@ const handleUpdateClick = function updateStudent() {
                         :key="index"
                         :index="index"
                         :student="student"
+                        :errorIndex="errorIndex"
                         @update-input="handleInput" />
                 </tbody>
             </table>
@@ -87,16 +88,27 @@ const handleUpdateClick = function updateStudent() {
 
 <style lang="scss" scoped>
 .admin-student-update {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(0, 1fr);
 }
 
+.admin-student-update__header {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 1rem;
+}
+
 .admin-student-update__buttons {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
 }
 .admin-student-update-list {
     overflow: auto;
+    margin: 0 auto;
 }
 </style>

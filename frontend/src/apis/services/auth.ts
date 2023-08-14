@@ -1,7 +1,11 @@
 import apiRequest from '@/apis/axiosInterceptors';
 import router from '@/router/index';
 import { useAuthStore } from '@/stores/auth.store';
-import type { AccountPwReset, AccountSignup } from '@/types/accounts.interface';
+import type {
+    AccountPwReset,
+    AccountSignup,
+    AccountPwChange,
+} from '@/types/accounts.interface';
 import {
     toastTopErrorMessage,
     toastTopSuccessMessage,
@@ -49,6 +53,32 @@ export async function resetPw(data: AccountPwReset) {
         .put('/accounts/password/reset/', data)
         .then((res) => {
             toastTopSuccessMessage('이메일로 새 비밀번호가 발송되었습니다');
+            return res.data;
+        })
+        .catch((err) => {
+            toastTopErrorMessage('비밀번호 변경에 실패했습니다', err);
+            throw err;
+        });
+}
+
+export async function changeEmail(email: { email: string }) {
+    return await apiRequest
+        .put('accounts/email/change/', email)
+        .then((res) => {
+            toastTopSuccessMessage('이메일이 성공적으로 변경되었습니다');
+            return res.data;
+        })
+        .catch((err) => {
+            toastTopErrorMessage('이메일 변경에 실패했습니다', err);
+            throw err;
+        });
+}
+
+export async function changePassword(password: AccountPwChange) {
+    return await apiRequest
+        .put('accounts/password/change/', password)
+        .then((res) => {
+            toastTopSuccessMessage('비밀번호가 성공적으로 변경되었습니다');
             return res.data;
         })
         .catch((err) => {

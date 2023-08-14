@@ -42,17 +42,16 @@ defineEmits<{
 
 <style lang="scss" scoped>
 table {
+    width: 100%;
     overflow-x: auto;
     height: fit-content;
 }
 
 tr,
 th {
-    width: 42rem;
     padding: 0.2rem;
     border: 0.1rem solid $admin-secondary;
     background-color: $admin-tertiary;
-    text-align: left;
 }
 
 td {

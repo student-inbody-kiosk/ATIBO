@@ -6,6 +6,11 @@ defineProps<{
     title: string;
     accountList: SchoolAccount[];
 }>();
+
+defineEmits<{
+    (e: 'delete', userId: number): void;
+    (e: 'accept', userId: number): void;
+}>();
 </script>
 
 <template>
@@ -25,12 +30,12 @@ defineProps<{
                     v-if="account.isActive"
                     text="삭제"
                     color="red"
-                    @click="$emit('delete')" />
+                    @click="$emit('delete', account.id)" />
                 <VButton
                     v-else
                     text="승인"
                     color="green"
-                    @click="$emit('accept')" />
+                    @click="$emit('accept', account.id)" />
             </div>
         </div>
     </div>
@@ -38,6 +43,7 @@ defineProps<{
 
 <style lang="scss" scoped>
 .account-container {
+    min-width: 30rem;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr);

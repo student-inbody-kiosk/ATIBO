@@ -119,7 +119,7 @@ tr {
 
 td {
     display: block;
-    min-height: 2.49rem;
+    min-height: 2.5rem;
     padding: 0.3rem;
     border: 0.1rem solid $admin-secondary;
     font-size: 1.1rem;

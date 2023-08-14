@@ -72,18 +72,18 @@ td:hover {
     .tooltip {
         display: block;
         position: absolute;
-        right: 0%;
+        left: 100%;
         bottom: 0;
+        color: $white;
     }
 }
 
 .tooltip {
     display: none;
-    background-color: $admin-tertiary;
+    background-color: $admin-deep-primary;
 }
 
 .tooltip__content {
-    font-size: 1.2rem;
     text-align: center;
     padding: 0.2rem;
     min-width: 4rem;

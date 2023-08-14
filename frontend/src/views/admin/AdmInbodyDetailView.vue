@@ -53,13 +53,18 @@ const handleDeleteClick = function deleteInbodyData() {
 
 <template>
     <div class="admin-inbody-detail">
-        <!-- TODO: Inbody Graph -->
-        <div>
+        <div class="admin-inbody-detail__buttons">
             <VButton
-                text="수정"
-                color="admin-primary"
-                @click="handleUpdateClick" />
-            <VButton text="삭제" color="red" @click="handleDeleteClick" />
+                text="뒤로"
+                color="gray"
+                @click="router.push({ name: 'admin-inbody' })" />
+            <div>
+                <VButton
+                    text="수정"
+                    color="admin-primary"
+                    @click="handleUpdateClick" />
+                <VButton text="삭제" color="red" @click="handleDeleteClick" />
+            </div>
         </div>
         <InbodyDetailData
             v-if="student && inbody"
@@ -68,10 +73,10 @@ const handleDeleteClick = function deleteInbodyData() {
             :sex="student.sex" />
         <InbodyUpdateModal
             v-if="isUpdateModalOpen && inbody"
-            @close-modal="isUpdateModalOpen = false"
             :inbodyId="Number(inbodyId)"
             :inbody="inbody"
-            @update="handleAfterUpdate" />
+            @update="handleAfterUpdate"
+            @close-modal="isUpdateModalOpen = false" />
     </div>
 </template>
 
@@ -81,6 +86,19 @@ const handleDeleteClick = function deleteInbodyData() {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr);
+}
+
+.admin-inbody-detail__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+
+    div {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 }
 .student-info {
     font-size: 1.5rem;

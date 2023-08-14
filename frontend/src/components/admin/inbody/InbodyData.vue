@@ -64,6 +64,7 @@ tr:hover {
 td {
     display: block;
     min-width: 9rem;
+    min-height: 2.5rem;
     padding: 0.6rem;
     border: 0.1rem solid $admin-secondary;
     font-size: 1.1rem;

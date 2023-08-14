@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import { useRoute, RouterView } from 'vue-router';
 import AdmHeader from '@/components/admin/AdmHeader.vue';
 import VIconButton from '@/components/common/VIconButton.vue';
@@ -7,11 +7,21 @@ import TheModal from '@/components/common/TheModal.vue';
 import SignupForm from '@/components/admin/SignupForm.vue';
 import PwResetForm from '@/components/admin/accounts/PwResetForm.vue';
 import AdmLayout from '@/layouts/AdmLayout.vue';
+import { useQueryStore } from '@/stores/query.store';
 
 const route = useRoute();
 // Compute whether the current page is index page, based on the current route name
 const isIndexPage = computed<Boolean>(() => {
     return route.name === 'admin-index' ? true : false;
+});
+
+// reset query store when the user loads the admin main page
+const queryStore = useQueryStore();
+watchEffect(() => {
+    const routeName = route.name;
+    if (routeName === 'admin-main') {
+        queryStore.$reset;
+    }
 });
 
 /* Manage modal */
@@ -57,7 +67,7 @@ const handleCloseModal = function closeModal() {
                 @close-modal="handleCloseModal">
                 <SignupForm
                     v-if="isSignupModalOpen"
-                    @signup="handleCloseModal" />
+                    @success="handleCloseModal" />
                 <PwResetForm v-else @success="handleCloseModal" />
             </TheModal>
         </template>

@@ -9,12 +9,11 @@ import { ref, onBeforeMount } from 'vue';
 import { getStudents, deleteStudents } from '@/apis/services/students';
 
 import type { Ref } from 'vue';
-
-import type { Student } from '@/apis/types/students.interface';
+import type { StudentDetail } from '@/types/students.interface';
 import router from '@/router';
 
 const route = useRoute();
-const students: Ref<Student[]> = ref([]);
+const students: Ref<StudentDetail[]> = ref([]);
 const deleteList: Ref<{ [index: string]: number }> = ref({});
 
 onBeforeMount(() => {
@@ -42,9 +41,17 @@ const handleDeleteClick = function deleteStudent() {
 
 <template>
     <div class="admin-student-delete">
-        <div>학생 삭제</div>
+        <div class="admin-student-delete__header">학생 삭제</div>
 
-        <VButton text="삭제" color="red" @click="handleDeleteClick" />
+        <div class="admin-student-delete__buttons">
+            <VButton
+                text="취소"
+                color="gray"
+                @click="
+                    router.push({ name: 'admin-student', query: route.query })
+                " />
+            <VButton text="삭제" color="red" @click="handleDeleteClick" />
+        </div>
 
         <section class="admin-student-list">
             <table>
@@ -71,9 +78,24 @@ const handleDeleteClick = function deleteStudent() {
 
 <style lang="scss" scoped>
 .admin-student-delete {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.admin-student-delete__header {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 1rem;
+}
+
+.admin-student-delete__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
 }
 
 .admin-student-list {

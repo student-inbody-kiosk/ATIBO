@@ -4,25 +4,27 @@ import InbodyDataLabel from '@/components/admin/inbody/InbodyDataLabel.vue';
 import InbodyDataInput from '@/components/admin/inbody/InbodyDataInput.vue';
 import TheModal from '@/components/common/TheModal.vue';
 import { createInbody } from '@/apis/services/inbodys';
-import type { InbodyDetail } from '@/types/inbody.interface';
 import { ref } from 'vue';
 import { useStudentStore } from '@/stores/student.store';
+import { checkInbodyInput } from '@/utils/checkInput';
+
+import type { InbodyDetail } from '@/types/inbody.interface';
 
 const { student } = useStudentStore();
 
 const inbody = ref<InbodyDetail>({
     testDate: '',
+    score: 0,
+    age: 0,
+    height: 0,
     weight: 0,
     percentBodyFat: 0,
     skeletalMuscleMass: 0,
-    height: 0,
-    age: 0,
+    bodyFatMass: 0,
+    bodyMassIndex: 0,
     totalBodyWater: 0,
     protein: 0,
     minerals: 0,
-    bodyFatMass: 0,
-    bodyMassIndex: 0,
-    score: 0,
 });
 
 const emit = defineEmits<{
@@ -38,6 +40,9 @@ const handleInput = function updateInbodyInput(
 };
 
 const handleCreateClick = function updateInbodyData() {
+    const errorData = checkInbodyInput(inbody.value);
+    if (errorData !== false) return;
+
     createInbody(
         student?.grade,
         student?.room,
@@ -67,5 +72,6 @@ const handleCreateClick = function updateInbodyData() {
 table {
     display: flex;
     align-items: center;
+    padding: 0.5rem;
 }
 </style>

@@ -13,34 +13,40 @@ defineProps<{
 
 <template>
     <div>
-        <div>
+        <div class="attend-searchbar__date">
             <VInput
                 id="date"
-                label="월별 검색"
+                label="월 입력"
                 type="month"
                 :value="date"
+                size="md"
                 @input="(value) => $emit('date', value)" />
+            <span>출결 기록에 마우스를 올리면 상세 기록을 볼 수 있습니다</span>
         </div>
-        <div class="attend-searchbar-student">
+        <div class="attend-searchbar__student">
             <VInput
                 id="grade"
                 label="학년"
                 :value="grade"
+                size="md"
                 @input="(value) => $emit('grade', value)" />
             <VInput
                 id="room"
                 label="반"
                 :value="room"
+                size="md"
                 @input="(value) => $emit('room', value)" />
             <VInput
                 id="number"
                 label="번호"
                 :value="number"
+                size="md"
                 @input="(value) => $emit('number', value)" />
             <VInput
                 id="name"
                 label="이름"
                 :value="name"
+                size="md"
                 @input="(value) => $emit('name', value)" />
             <VButton
                 text="조회"
@@ -51,9 +57,21 @@ defineProps<{
 </template>
 
 <style lang="scss" scoped>
-.attend-searchbar-student {
+.attend-searchbar__date {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    gap: 1rem;
+
+    span {
+        color: $gray-dark;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+}
+.attend-searchbar__student {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
 }
 </style>
