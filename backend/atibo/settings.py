@@ -240,6 +240,8 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5173',    # Dev
     'https://127.0.0.1:5173',   # Dev
+    'http://localhost:5173',    # Dev
+    'https://localhost:5173',   # Dev
     'http://localhost' + ':' + env.str('HOST_PORT', ''),    # In case localhost
     'http://localhost' + ':' + env.str('HOST_PORT', ''),    # In case localhost
     'http://' + env.str('HOST_IP', '') + ':' + env.str('HOST_PORT', ''),
