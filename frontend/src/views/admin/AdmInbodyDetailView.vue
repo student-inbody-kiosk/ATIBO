@@ -41,7 +41,7 @@ const handleAfterUpdate = function getUpdatedInbody() {
 
 // 인바디 삭제
 const handleDeleteClick = function deleteInbodyData() {
-    if (!confirm('정말 삭제하시겠습니까? 기록을 되돌릴 수 없습니다.')) return;
+    if (!confirm('정말 삭제하시겠습니까? 기록을 되돌릴 수 없습니다')) return;
     deleteInbody(Number(inbodyId)).then(() =>
         router.push({
             name: 'admin-inbody-student',

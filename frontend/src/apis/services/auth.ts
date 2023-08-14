@@ -21,6 +21,11 @@ export async function login(username: string, password: string) {
             const { updateAccessToken, updateRefreshToken } = useAuthStore();
             updateAccessToken(res.data.accessToken);
             updateRefreshToken(res.data.refreshToken);
+            toastTopSuccessMessage('로그인되었습니다');
+        })
+        .catch((err) => {
+            toastTopErrorMessage(err.message, err);
+            throw err;
         });
 }
 
@@ -63,7 +68,7 @@ export async function resetPw(data: AccountPwReset) {
 
 export async function changeEmail(email: { email: string }) {
     return await apiRequest
-        .put('accounts/email/change/', email)
+        .put('/accounts/email/change/', email)
         .then((res) => {
             toastTopSuccessMessage('이메일이 성공적으로 변경되었습니다');
             return res.data;
@@ -76,7 +81,7 @@ export async function changeEmail(email: { email: string }) {
 
 export async function changePassword(password: AccountPwChange) {
     return await apiRequest
-        .put('accounts/password/change/', password)
+        .put('/accounts/password/change/', password)
         .then((res) => {
             toastTopSuccessMessage('비밀번호가 성공적으로 변경되었습니다');
             return res.data;

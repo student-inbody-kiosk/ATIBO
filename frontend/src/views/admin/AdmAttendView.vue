@@ -94,6 +94,10 @@ const handleSubmit = function searchAttendance() {
 .admin-attend-content {
     display: flex;
     overflow-y: auto;
+
+    table {
+        height: fit-content;
+    }
 }
 
 .admin-attend-attendance {

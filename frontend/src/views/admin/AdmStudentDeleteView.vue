@@ -24,7 +24,6 @@ onBeforeMount(() => {
 });
 
 const handleCheckClick = function selectStudent(studentId: string) {
-    console.log(studentId);
     if (studentId in deleteList.value) {
         return delete deleteList.value[studentId];
     }
@@ -32,6 +31,7 @@ const handleCheckClick = function selectStudent(studentId: string) {
 };
 
 const handleDeleteClick = function deleteStudent() {
+    if (!confirm('정말 삭제하시겠습니까? 되돌릴 수 없습니다')) return;
     const ids = Object.keys(deleteList.value);
     deleteStudents(ids).then(() => {
         router.push({ name: 'admin-student', query: route.query });
