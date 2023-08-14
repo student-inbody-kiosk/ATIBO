@@ -1,0 +1,92 @@
+version: '2'
+
+services:
+  atibo-front:
+    image: yzii/atibo-front
+    environment:
+      - VITE_API_IP=${DOMAIN_OR_PUBLIC_IP}
+      - VITE_API_PORT=${PORT}
+    networks:
+      - atibo-web-net
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost/']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  atibo-back:
+    image: byongho/atibo-back
+    environment:
+      - HOST_IP=${DOMAIN_OR_PUBLIC_IP}
+      - HOST_PORT=${PORT}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+    volumes:
+      - atibo-django-static:/app/static
+      - atibo-django-media:/app/media
+    depends_on:
+      atibo-db:
+        condition: service_healthy
+    networks:
+      - atibo-web-net
+      - atibo-db-net
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8000/api/school/']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  atibo-db:
+    image: mysql
+    volumes:
+      - atibo-mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    networks:
+      - atibo-db-net
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD',
+        ]
+      interval: 10s
+      timeout: 20s
+      retries: 3
+
+  atibo-nginx:
+    build: ./nginx
+    volumes:
+      - atibo-django-static:/django/static
+      - atibo-django-media:/django/media
+    environment:
+      - NGINX_HOST=${DOMAIN_OR_PUBLIC_IP}
+      - NGINX_PORT=${PORT}
+    ports:
+      - ${PORT}:80
+    depends_on:
+      atibo-front:
+        condition: service_healthy
+      atibo-back:
+        condition: service_healthy
+    networks:
+      - atibo-web-net
+
+volumes:
+  atibo-django-static:
+  atibo-django-media:
+  atibo-mysql:
+
+networks:
+  atibo-web-net:
+    driver: bridge
+  atibo-db-net:
+    driver: bridge
