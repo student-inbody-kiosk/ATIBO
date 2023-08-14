@@ -22,11 +22,11 @@ const schoolInfo = await services.getSchoolInfo();
 
 .kiosk-school-info__logo {
     width: auto;
-    height: 10rem;
+    height: 20vh;
 }
 
 .kiosk-school-info__name {
-    font-size: 3.5rem;
+    font-size: 5vh;
     font-weight: 700;
 }
 </style>

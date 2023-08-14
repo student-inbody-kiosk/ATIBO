@@ -14,7 +14,7 @@ const gymId = Number(route.params.gymId);
             <RouterLink
                 class="gym-update-view__button"
                 :to="{ name: 'admin-gym-detail', params: { gymId: gymId } }">
-                <VButton text="돌아가기" color="gray" />
+                <VButton text="뒤로" color="gray" />
             </RouterLink>
         </div>
         <GymUpdate :gymId="gymId" />
@@ -33,6 +33,7 @@ const gymId = Number(route.params.gymId);
 .gym-update-view__header {
     display: flex;
     justify-content: center;
+    align-items: center;
     position: relative;
     margin: 0 0 1.5rem 0;
 }

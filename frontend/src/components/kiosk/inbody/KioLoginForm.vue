@@ -62,12 +62,15 @@ const handleSubmit = function loginStudent() {
                 color="kiosk-primary"
                 :value="studentPw"
                 @input="handleInput" />
-            <VButton text="로그인" type="submit" color="green" size="lg" />
-            <VButton
-                text="취소"
-                color="gray"
-                size="lg"
-                @click="$emit('update-student', null)" />
+            <div class="kiosk-login-form__buttons">
+                <VButton text="로그인" type="submit" color="green" size="lg" />
+                <VButton
+                    text="취소"
+                    color="gray"
+                    size="lg"
+                    type="button"
+                    @click="$emit('update-student', null)" />
+            </div>
         </form>
         <TheKeypad :value="studentPw" @input="handleInput" />
     </div>
@@ -82,6 +85,12 @@ const handleSubmit = function loginStudent() {
 }
 
 .kiosk-login-form__form {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.kiosk-login-form__buttons {
     display: flex;
     align-items: center;
     gap: 1rem;
