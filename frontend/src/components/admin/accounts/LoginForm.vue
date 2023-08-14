@@ -1,23 +1,25 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import type { AxiosResponse } from 'axios';
-import { login } from '@/apis/services/auth';
+import services from '@/apis/services';
 import { getAccountInfo } from '@/apis/services/accounts';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
-import { useAccountsStore } from '@/stores/accounts.store';
-import type { Account } from '@/types/accounts.interface';
+import { useAccountStore } from '@/stores/accounts.store';
+import { useAxios } from '@/hooks/useAxios';
+import VLoading from '@/components/common/VLoading.vue';
 
 const router = useRouter();
 const username = ref('');
 const password = ref('');
-const { updateAccounts } = useAccountsStore();
+const { updateAccount } = useAccountStore();
+
+const { fetchData: login, isLoading } = useAxios(null, services.login);
 
 const handleLoginSubmit = function submitLogin() {
     login(username.value, password.value).then(() => {
-        getAccountInfo().then((res: AxiosResponse<Account>) => {
-            updateAccounts(res?.data);
+        getAccountInfo().then((res) => {
+            updateAccount(res);
             router.push({ name: 'admin-main' });
         });
     });
@@ -25,7 +27,8 @@ const handleLoginSubmit = function submitLogin() {
 </script>
 
 <template>
-    <form class="login-form">
+    <VLoading v-if="isLoading" color="admin-primary" />
+    <form v-else class="login-form">
         <VInput
             id="login-username"
             name="username"

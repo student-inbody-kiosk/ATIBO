@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import VButton from '@/components/common/VButton.vue';
 
-import { useAccountsStore } from '@/stores/accounts.store';
-const { username, role } = useAccountsStore();
+import { useAccountStore } from '@/stores/accounts.store';
+const { account } = useAccountStore();
 </script>
 
 <template>
     <div class="admin-main">
         <div class="admin-main__account">
-            <span> 반갑습니다, {{ username }} 님! </span>
+            <span> 반갑습니다, {{ account.username }} 님! </span>
         </div>
         <section class="admin-main__buttons">
             <VButton
@@ -27,13 +27,13 @@ const { username, role } = useAccountsStore();
                 size="xl"
                 @click="$router.push({ name: 'admin-inbody' })" />
             <VButton
-                v-if="role === 'admin'"
+                v-if="account.role === 'admin'"
                 text="운동기구 관리"
                 color="admin-primary"
                 size="xl"
                 @click="$router.push({ name: 'admin-gym' })" />
             <VButton
-                v-if="role === 'admin'"
+                v-if="account.role === 'admin'"
                 text="학교정보 관리"
                 color="admin-primary"
                 size="xl"
