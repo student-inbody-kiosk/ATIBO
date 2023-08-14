@@ -12,7 +12,7 @@ const {
     isLoading,
     isError,
     response: gyms,
-} = useAxios<GymSimple[]>([], () => services.getGyms());
+} = useAxios<GymSimple[]>([], services.getGyms);
 
 onMounted(() => {
     getGymList();

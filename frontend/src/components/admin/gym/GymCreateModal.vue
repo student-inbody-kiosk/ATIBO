@@ -1,20 +1,27 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import services from '@/apis/services';
-import VButton from '@/components/common/VButton.vue';
 import VInput from '@/components/common/VInput.vue';
+import VButton from '@/components/common/VButton.vue';
+import VLoading from '@/components/common/VLoading.vue';
+import { useAxios } from '@/hooks/useAxios';
 
 const router = useRouter();
 
 /* Create gym & if success navgiate to update page */
-const handleSubmit = function createGym(event: Event) {
+const { fetchData: createGym, isLoading } = useAxios<null>(
+    null,
+    services.createGym
+);
+
+const handleSubmit = function onHandleCreateGym(event: Event) {
     const form = event.target as HTMLFormElement;
     if (!form) return;
 
     const formData = new FormData(form);
     formData.append('description', '');
 
-    services.createGym(formData).then((res) => {
+    createGym(formData).then((res) => {
         router.push({ name: 'admin-gym-update', params: { gymId: res.id } });
     });
 };
@@ -22,16 +29,21 @@ const handleSubmit = function createGym(event: Event) {
 
 <template>
     <div class="gym-create-modal">
-        <p class="gym-create-modal__title">운동기구 이름</p>
-        <form class="gym-create-modal__content" @submit.prevent="handleSubmit">
-            <VInput
-                id="gym-create-name"
-                name="name"
-                text-align="center"
-                type="text"
-                size="md" />
-            <VButton text="생성" color="green" type="submit" />
-        </form>
+        <VLoading v-if="isLoading" color="admin-primary" />
+        <div v-else>
+            <p class="gym-create-modal__title">운동기구 이름</p>
+            <form
+                class="gym-create-modal__content"
+                @submit.prevent="handleSubmit">
+                <VInput
+                    id="gym-create-name"
+                    name="name"
+                    text-align="center"
+                    type="text"
+                    size="md" />
+                <VButton text="생성" color="green" type="submit" />
+            </form>
+        </div>
     </div>
 </template>
 
