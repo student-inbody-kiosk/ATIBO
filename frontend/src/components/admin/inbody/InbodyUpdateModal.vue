@@ -29,6 +29,7 @@ const handleInput = function updateInbodyInput(
 
 const handleUpdateClick = function updateInbodyData() {
     const errorData = checkInbodyInput(newInbody.value);
+    // 정규식 검사 끝난 후 number로 형변환
     if (errorData !== false) return;
 
     updateInbody(props.inbodyId, newInbody.value).then(() => emit('update'));

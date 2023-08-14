@@ -94,7 +94,7 @@ const inbodyRegexes = {
 
 const accountRegexes = {
     username: {
-        reg: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{5,20}$/,
+        reg: /^(?=.*[a-zA-Z])[a-zA-Z\d]{5,20}$/,
         condition: '영어와 숫자를 조합하여 5~20자로 입력해주세요',
     },
     name: {

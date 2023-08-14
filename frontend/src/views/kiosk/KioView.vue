@@ -62,19 +62,17 @@ onErrorCaptured(() => {
         <template #kiosk-main>
             <RouterView v-slot="{ Component }">
                 <template v-if="Component">
-                    <Transition name="kiosk">
-                        <Suspense>
-                            <!-- main content -->
-                            <component
-                                :is="Component"
-                                @update-header="handleUpdateHeader"></component>
+                    <Suspense>
+                        <!-- main content -->
+                        <component
+                            :is="Component"
+                            @update-header="handleUpdateHeader"></component>
 
-                            <!-- loading state -->
-                            <template #fallback>
-                                <VLoading color="kiosk-primary" size="lg" />
-                            </template>
-                        </Suspense>
-                    </Transition>
+                        <!-- loading state -->
+                        <template #fallback>
+                            <VLoading color="kiosk-primary" size="lg" />
+                        </template>
+                    </Suspense>
                 </template>
             </RouterView>
         </template>
@@ -86,19 +84,5 @@ onErrorCaptured(() => {
     position: absolute;
     top: 1.5rem;
     left: 2rem;
-}
-
-// Transition
-.kiosk-enter-active,
-.kiosk-leave-active {
-    transition:
-        opacity 0.3s ease,
-        transform 0.3s ease;
-}
-
-.kiosk-enter-from,
-.kiosk-leave-to {
-    transform: translateY(20px);
-    opacity: 0;
 }
 </style>

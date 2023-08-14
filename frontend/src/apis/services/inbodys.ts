@@ -90,7 +90,7 @@ export async function createInbody(
             toastTopSuccessMessage('인바디가 추가되었습니다');
         })
         .catch((err) => {
-            toastCenterErrorMessage('인바디 추가에 실패했습니다', err);
+            toastTopErrorMessage('인바디 추가에 실패했습니다', err);
             throw err;
         });
 }

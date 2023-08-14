@@ -22,8 +22,11 @@ export async function getAttendances(
             },
         })
         .then((res) => {
-            toastTopErrorMessage('출석 조회에 실패했습니다', err);
             return res.data;
+        })
+        .catch((err) => {
+            toastTopErrorMessage('출석 조회에 실패했습니다', err);
+            throw err;
         });
 }
 
