@@ -20,7 +20,8 @@ defineProps<{
                 type="month"
                 :value="date"
                 size="md"
-                @input="(value) => $emit('date', value)" />
+                @input="(value) => $emit('date', value)"
+                @enter="$emit('enter')" />
             <span>출결 기록에 마우스를 올리면 상세 기록을 볼 수 있습니다</span>
         </div>
         <div class="attend-searchbar__student">
@@ -29,25 +30,33 @@ defineProps<{
                 label="학년"
                 :value="grade"
                 size="md"
-                @input="(value) => $emit('grade', value)" />
+                @input="(value) => $emit('grade', value)"
+                @enter="$emit('enter')" />
+
             <VInput
                 id="room"
                 label="반"
                 :value="room"
                 size="md"
-                @input="(value) => $emit('room', value)" />
+                @input="(value) => $emit('room', value)"
+                @enter="$emit('enter')" />
+
             <VInput
                 id="number"
                 label="번호"
                 :value="number"
                 size="md"
-                @input="(value) => $emit('number', value)" />
+                @input="(value) => $emit('number', value)"
+                @enter="$emit('enter')" />
+
             <VInput
                 id="name"
                 label="이름"
                 :value="name"
                 size="md"
-                @input="(value) => $emit('name', value)" />
+                @input="(value) => $emit('name', value)"
+                @enter="$emit('enter')" />
+
             <VButton
                 text="조회"
                 color="admin-primary"

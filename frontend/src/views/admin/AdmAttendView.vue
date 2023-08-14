@@ -60,7 +60,8 @@ const handleSubmit = function searchAttendance() {
             @room="(value: string) => (room = value)"
             @number="(value: string) => (number = value)"
             @name="(value: string) => (name = value)"
-            @search="handleSubmit" />
+            @search="handleSubmit"
+            @enter="handleSubmit" />
 
         <section class="admin-attend-content">
             <StudentTable :students="students" />
