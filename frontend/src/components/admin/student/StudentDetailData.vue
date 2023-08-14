@@ -19,6 +19,13 @@ defineEmits<{
 }>();
 
 import VInput from '@/components/common/VInput.vue';
+
+const convertSex = {
+    0: '알 수 없음',
+    1: '남자',
+    2: '여자',
+    9: '그 외',
+};
 </script>
 
 <template>
@@ -35,7 +42,7 @@ import VInput from '@/components/common/VInput.vue';
         <td class="student-data__content">{{ room }}</td>
         <td class="student-data__content">{{ number }}</td>
         <td class="student-data__content">{{ name }}</td>
-        <td class="student-data__content">{{ sex }}</td>
+        <td class="student-data__content">{{ convertSex[sex] }}</td>
         <td class="student-data__content">{{ birthDate }}</td>
         <td class="student-data__content">{{ password }}</td>
     </tr>

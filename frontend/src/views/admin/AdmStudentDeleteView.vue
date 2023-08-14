@@ -3,23 +3,29 @@ import VButton from '@/components/common/VButton.vue';
 import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
 import StudentDetailData from '@/components/admin/student/StudentDetailData.vue';
 
+import router from '@/router';
+import services from '@/apis/services';
+import { useAxios } from '@/hooks/useAxios';
 import { useRoute } from 'vue-router';
 import { ref, onBeforeMount } from 'vue';
 
-import { getStudents, deleteStudents } from '@/apis/services/students';
-
 import type { Ref } from 'vue';
 import type { StudentDetail } from '@/types/students.interface';
-import router from '@/router';
 
 const route = useRoute();
 const students: Ref<StudentDetail[]> = ref([]);
 const deleteList: Ref<{ [index: string]: number }> = ref({});
+const { fetchData: getStudents, isLoading: isGetStudentLoading } = useAxios(
+    null,
+    services.getStudents
+);
+const { fetchData: deleteTheStudent, isLoading: isDeleteStudentLoading } =
+    useAxios(null, services.deleteStudents);
 
 onBeforeMount(() => {
     const { grade, room, number, name } = route.query;
     getStudents(Number(grade), Number(room), Number(number), String(name)).then(
-        (res) => (students.value = res?.data)
+        (res) => (students.value = res)
     );
 });
 
@@ -33,14 +39,18 @@ const handleCheckClick = function selectStudent(studentId: string) {
 const handleDeleteClick = function deleteStudent() {
     if (!confirm('정말 삭제하시겠습니까? 되돌릴 수 없습니다')) return;
     const ids = Object.keys(deleteList.value);
-    deleteStudents(ids).then(() => {
+    deleteTheStudent(ids).then(() => {
         router.push({ name: 'admin-student', query: route.query });
     });
 };
 </script>
 
 <template>
-    <div class="admin-student-delete">
+    <VLoading
+        v-if="isGetStudentLoading || isDeleteStudentLoading"
+        color="admin-primary" />
+
+    <div v-else class="admin-student-delete">
         <div class="admin-student-delete__header">학생 삭제</div>
 
         <div class="admin-student-delete__buttons">

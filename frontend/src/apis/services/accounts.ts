@@ -5,7 +5,9 @@ import {
 } from '@/utils/toastManager';
 
 export function getAccountInfo() {
-    return apiRequest.get('/accounts/');
+    return apiRequest.get('/accounts/').then((res) => {
+        return res.data;
+    });
 }
 
 export function deleteAccount(userId: number) {

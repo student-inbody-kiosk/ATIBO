@@ -3,13 +3,22 @@ import VButton from '@/components/common/VButton.vue';
 import StudentSearchbar from '@/components/admin/student/StudentSearchbar.vue';
 import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
 import StudentDetailData from '@/components/admin/student/StudentDetailData.vue';
+import VLoading from '@/components/common/VLoading.vue';
+
 import { ref, onMounted } from 'vue';
-import { getStudents } from '@/apis/services/students';
 import { toastTopErrorMessage } from '@/utils/toastManager';
-import type { Ref } from 'vue';
-import type { StudentDetail } from '@/types/students.interface';
 import { useQueryStore } from '@/stores/query.store';
 import { checkSearchInput } from '@/utils/checkInput';
+import services from '@/apis/services';
+import { useAxios } from '@/hooks/useAxios';
+
+import type { Ref } from 'vue';
+import type { StudentDetail } from '@/types/students.interface';
+
+const { fetchData: getStudents, isLoading } = useAxios(
+    null,
+    services.getStudents
+);
 const queryStore = useQueryStore();
 
 onMounted(() => {
@@ -60,7 +69,8 @@ const handleSubmit = function searchStudents() {
 </script>
 
 <template>
-    <div class="admin-student">
+    <VLoading v-if="isLoading" color="admin-primary" />
+    <div v-else class="admin-student">
         <div class="admin-student__header">
             <VButton
                 text="뒤로"

@@ -6,7 +6,11 @@ import {
     toastTopErrorMessage,
     toastTopSuccessMessage,
 } from '@/utils/toastManager';
-import type { Student, StudentSimple } from '@/types/students.interface';
+import type {
+    Student,
+    StudentDetail,
+    StudentSimple,
+} from '@/types/students.interface';
 import { useStudentStore } from '@/stores/student.store';
 
 export async function getStudents(
@@ -33,7 +37,7 @@ export async function getStudents(
         });
 }
 
-export async function createStudents(students: Student[]) {
+export async function createStudents(students: StudentDetail[]) {
     return await apiRequest
         .post('/students/', students)
         .then((res) => {

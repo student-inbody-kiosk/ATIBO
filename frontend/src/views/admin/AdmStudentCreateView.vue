@@ -2,15 +2,22 @@
 import VButton from '@/components/common/VButton.vue';
 import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
 import StudentDetailInput from '@/components/admin/student/StudentDetailInput.vue';
-import { createStudents } from '@/apis/services/students';
-import type { Student } from '@/types/admin.interface';
+import VLoading from '@/components/common/VLoading.vue';
 
 import { ref } from 'vue';
-import type { Ref } from 'vue';
 import router from '@/router';
+import services from '@/apis/services';
+import { useAxios } from '@/hooks/useAxios';
 import { checkStudentInput } from '@/utils/checkInput';
 
-const students: Ref<Student[]> = ref([
+import type { StudentCreate } from '@/types/students.interface';
+
+const { fetchData: createStudents, isLoading } = useAxios(
+    null,
+    services.createStudents
+);
+
+const students = ref<StudentCreate[]>([
     {
         grade: '',
         room: '',
@@ -34,10 +41,10 @@ const handleAddClick = function addStudent() {
     });
 };
 
-const handleInput = function updateStudentData<T extends keyof Student>(
+const handleInput = function updateStudentData<T extends keyof StudentCreate>(
     index: number,
     item: T,
-    data: Student[T]
+    data: StudentCreate[T]
 ) {
     students.value[index][item] = data;
 };
@@ -70,7 +77,8 @@ const handleCreateClick = function createStudent() {
 </script>
 
 <template>
-    <div class="admin-student-create">
+    <VLoading v-if="isLoading" color="admin-primary" />
+    <div v-else class="admin-student-create">
         <div class="admin-student-create__header">학생 등록</div>
         <section class="admin-student-create__buttons">
             <VButton

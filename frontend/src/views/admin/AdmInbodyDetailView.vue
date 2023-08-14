@@ -2,17 +2,30 @@
 import VButton from '@/components/common/VButton.vue';
 import InbodyDetailData from '@/components/admin/inbody/InbodyDetailData.vue';
 import InbodyUpdateModal from '@/components/admin/inbody/InbodyUpdateModal.vue';
+import VLoading from '@/components/common/VLoading.vue';
+
 import { onBeforeMount, ref } from 'vue';
+import services from '@/apis/services';
+import { useAxios } from '@/hooks/useAxios';
 import { useRoute } from 'vue-router';
-import { getInbody, deleteInbody } from '@/apis/services/inbodys';
-import router from '@/router';
-import type { InbodyDetail } from '@/types/inbody.interface';
+// import { getInbody, deleteInbody } from '@/apis/services/inbodys';
 import { useStudentStore } from '@/stores/student.store';
 import { storeToRefs } from 'pinia';
+import router from '@/router';
 
+import type { InbodyDetail } from '@/types/inbody.interface';
+
+const route = useRoute();
 const { getStudent } = useStudentStore();
 const { student } = storeToRefs(useStudentStore());
-const route = useRoute();
+const { fetchData: getInbody, isLoading: isGetInbodyLoading } = useAxios(
+    null,
+    services.getInbody
+);
+const { fetchData: deleteInbody, isLoading: isDeleteInbodyLoading } = useAxios(
+    null,
+    services.deleteInbody
+);
 const { grade, room, number, name, inbodyId } = route.params;
 const inbody = ref<InbodyDetail>();
 const isUpdateModalOpen = ref(false);
@@ -52,7 +65,10 @@ const handleDeleteClick = function deleteInbodyData() {
 </script>
 
 <template>
-    <div class="admin-inbody-detail">
+    <VLoading
+        v-if="isGetInbodyLoading || isDeleteInbodyLoading"
+        color="admin-primary" />
+    <div v-else class="admin-inbody-detail">
         <div class="admin-inbody-detail__buttons">
             <VButton
                 text="뒤로"

@@ -2,10 +2,11 @@
 import VButton from '@/components/common/VButton.vue';
 import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
 import StudentDetailInput from '@/components/admin/student/StudentDetailInput.vue';
+import VLoading from '@/components/common/VLoading.vue';
 
-import { getStudents, updateStudents } from '@/apis/services/students';
 import { checkStudentInput } from '@/utils/checkInput';
-
+import services from '@/apis/services';
+import { useAxios } from '@/hooks/useAxios';
 import { ref, onMounted } from 'vue';
 import router from '@/router';
 import { useRoute } from 'vue-router';
@@ -16,11 +17,17 @@ import type { StudentDetail } from '@/types/students.interface';
 const route = useRoute();
 const students: Ref<StudentDetail[]> = ref([]);
 const updateIndexSet: Ref<Set<number>> = ref(new Set<number>());
+const { fetchData: getStudents, isLoading: isGetStudentLoading } = useAxios(
+    null,
+    services.getStudents
+);
+const { fetchData: updateStudents, isLoading: isUpdateStudentLoading } =
+    useAxios(null, services.updateStudents);
 
 onMounted(() => {
     const { grade, room, number, name } = route.query;
     getStudents(Number(grade), Number(room), Number(number), String(name)).then(
-        (res) => (students.value = res?.data)
+        (res) => (students.value = res)
     );
 });
 
@@ -59,7 +66,11 @@ const handleUpdateClick = function updateStudent() {
 </script>
 
 <template>
-    <div class="admin-student-update">
+    <VLoading
+        v-if="isGetStudentLoading || isUpdateStudentLoading"
+        color="admin-primary" />
+
+    <div v-else class="admin-student-update">
         <div class="admin-student-update__header">학생 수정</div>
         <section class="admin-student-update__buttons">
             <VButton
