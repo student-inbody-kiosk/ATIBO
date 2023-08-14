@@ -1,11 +1,14 @@
 import apiRequest from '@/apis/axiosInterceptors';
 import { useAuthStore } from '@/stores/auth.store';
-import toastManager, {
+import {
     toastCenterErrorMessage,
     toastCenterSuccessMessage,
+    toastTopErrorMessage,
+    toastTopSuccessMessage,
 } from '@/utils/toastManager';
 import type { Student, StudentSimple } from '@/types/students.interface';
 import { useStudentStore } from '@/stores/student.store';
+import { useRoute } from 'vue-router';
 
 export async function getStudents(
     grade?: number | null,
@@ -13,26 +16,61 @@ export async function getStudents(
     number?: number | null,
     name?: string | null
 ) {
-    return await apiRequest.get('/students/', {
-        params: {
-            grade,
-            room,
-            number,
-            name,
-        },
-    });
+    return await apiRequest
+        .get('/students/', {
+            params: {
+                grade,
+                room,
+                number,
+                name,
+            },
+        })
+        .then((res) => {
+            return res.data;
+        })
+        .catch((err) => {
+            toastTopErrorMessage(err.message, err);
+            throw err;
+        });
 }
 
 export async function createStudents(students: Student[]) {
-    return await apiRequest.post('/students/', students);
+    return await apiRequest
+        .post('/students/', students)
+        .then((res) => {
+            toastTopSuccessMessage('학생이 등록되었습니다');
+            return res.data;
+        })
+        .catch((err) => {
+            toastTopErrorMessage(err.message, err);
+            throw err;
+        });
 }
 
 export async function deleteStudents(ids: string[]) {
-    return await apiRequest.patch('/students/', { ids: ids });
+    return await apiRequest
+        .patch('/students/', { ids: ids })
+        .then((res) => {
+            toastTopSuccessMessage('학생이 삭제되었습니다');
+            return res.data;
+        })
+        .catch((err) => {
+            toastTopErrorMessage('학생 삭제에 실패했습니다', err);
+            throw err;
+        });
 }
 
 export async function updateStudents(students: Student[]) {
-    return await apiRequest.put('/students/', students);
+    return await apiRequest
+        .put('/students/', students)
+        .then((res) => {
+            toastTopSuccessMessage('학생 정보가 수정되었습니다');
+            return res.data;
+        })
+        .catch((err) => {
+            toastTopErrorMessage('학생 정보 수정에 실패했습니다', err);
+            throw err;
+        });
 }
 
 export async function checkStudent(
@@ -79,13 +117,18 @@ export async function getTheStudent(
     room: number,
     number: number
 ) {
+    const route = useRoute();
     return await apiRequest
         .get(`/students/${grade}/${room}/${number}/`)
         .then((res): Student => {
             return res.data;
         })
         .catch((err) => {
-            toastCenterErrorMessage('학생 정보를 불러오지 못했습니다', err);
+            if (route.name.includes('kiosk')) {
+                toastCenterErrorMessage('학생 정보를 불러오지 못했습니다', err);
+            } else {
+                toastTopErrorMessage('학생 정보를 불러오지 못했습니다', err);
+            }
             throw err;
         });
 }

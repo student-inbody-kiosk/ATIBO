@@ -33,25 +33,29 @@ withDefaults(
                 label="학년"
                 :value="grade"
                 size="md"
-                @input="(value: string) => $emit('grade', value)" />
+                @input="(value: string) => $emit('grade', value)"
+                @enter="$emit('enter')" />
             <VInput
                 id="room"
                 label="반"
                 :value="room"
                 size="md"
-                @input="(value: string) => $emit('room', value)" />
+                @input="(value: string) => $emit('room', value)"
+                @enter="$emit('enter')" />
             <VInput
                 id="number"
                 label="번호"
                 :value="number"
                 size="md"
-                @input="(value: string) => $emit('number', value)" />
+                @input="(value: string) => $emit('number', value)"
+                @enter="$emit('enter')" />
             <VInput
                 id="name"
                 label="이름"
                 :value="name"
                 size="md"
-                @input="(value: string) => $emit('name', value)" />
+                @input="(value: string) => $emit('name', value)"
+                @enter="$emit('enter')" />
             <VButton
                 text="조회"
                 color="admin-primary"

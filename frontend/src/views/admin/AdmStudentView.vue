@@ -9,14 +9,14 @@ import { toastTopErrorMessage } from '@/utils/toastManager';
 import type { Ref } from 'vue';
 import type { StudentDetail } from '@/types/students.interface';
 import { useQueryStore } from '@/stores/query.store';
-
+import { checkSearchInput } from '@/utils/checkInput';
 const queryStore = useQueryStore();
 
 onMounted(() => {
     const { grade, room, number, name } = queryStore.routeQuery;
     if (!grade && !room && !number && !name) return;
     getStudents(grade, room, number, name).then((res) => {
-        students.value = res?.data;
+        students.value = res;
     });
 });
 
@@ -32,6 +32,14 @@ const handleSubmit = function searchStudents() {
         return;
     }
 
+    const data = {
+        grade: grade.value,
+        room: room.value,
+        name: name.value,
+        number: number.value,
+    };
+    if (checkSearchInput(data)) return;
+
     const parsedGrade = parseInt(grade.value);
     const parsedRoom = parseInt(room.value);
     const parsedNumber = parseInt(number.value);
@@ -45,7 +53,7 @@ const handleSubmit = function searchStudents() {
 
     getStudents(parsedGrade, parsedRoom, parsedNumber, name.value).then(
         (res) => {
-            students.value = res?.data;
+            students.value = res;
         }
     );
 };
@@ -70,7 +78,8 @@ const handleSubmit = function searchStudents() {
             @room="(value) => (room = value)"
             @number="(value) => (number = value)"
             @name="(value) => (name = value)"
-            @search="handleSubmit" />
+            @search="handleSubmit"
+            @enter="handleSubmit" />
 
         <section class="admin-student-list">
             <table>

@@ -5,9 +5,11 @@ import services from '@/apis/services';
 import { studentRegexes } from '@/constants/regexes';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
+import VLoading from '@/components/common/VLoading.vue';
 import TheKeypad from '@/components/kiosk/TheKeypad.vue';
-import type { StudentSimple } from '@/types/students.interface';
+import { useAxios } from '@/hooks/useAxios';
 import { toastCenterErrorMessage } from '@/utils/toastManager';
+import type { StudentSimple } from '@/types/students.interface';
 
 const props = defineProps<{
     student: StudentSimple;
@@ -27,7 +29,12 @@ const handleInput = function inputStudentPw(value: string) {
 };
 
 // Student login asynchronously
-const handleSubmit = function loginStudent() {
+const { fetchData: loginStudent, isLoading } = useAxios<StudentSimple>(
+    null,
+    services.loginStudent
+);
+
+const handleSubmit = function onSumbmitLoginStudent() {
     if (!studentRegexes.password.reg.test(studentPw.value)) {
         toastCenterErrorMessage(studentRegexes.password.condition);
         return;
@@ -40,7 +47,7 @@ const handleSubmit = function loginStudent() {
 
     studentPw.value = '';
 
-    services.loginStudent(grade, room, number, password).then(() => {
+    loginStudent(grade, room, number, password).then(() => {
         router.push({
             name: 'kiosk-inbody-list',
             params: { grade, room, number },
@@ -50,6 +57,7 @@ const handleSubmit = function loginStudent() {
 </script>
 
 <template>
+    <VLoading v-if="isLoading" color="kiosk-primary" class="kiosk-loading" />
     <div class="kiosk-login-form">
         <form class="kiosk-login-form__form" @submit.prevent="handleSubmit">
             <VInput

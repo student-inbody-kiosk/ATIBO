@@ -10,6 +10,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStudentStore } from '@/stores/student.store';
 import { getTheStudentInbodys } from '@/apis/services/inbodys';
+import { checkSearchInput } from '@/utils/checkInput';
 
 import type { Ref } from 'vue';
 import type { InbodyDetail } from '@/types/inbody.interface';
@@ -41,10 +42,8 @@ onMounted(() => {
 });
 
 const handleSearchClick = function searchInbodyList() {
-    if (!startDate.value || !endDate.value) {
-        toastTopErrorMessage('검색 기간을 입력해주세요');
-        return;
-    }
+    const data = { startDate: startDate.value, endDate: endDate.value };
+    if (checkSearchInput(data)) return;
 
     getTheStudentInbodys(
         Number(grade),
@@ -96,14 +95,16 @@ const handleCreateClick = function updateTheStudentInbodys() {
                     type="date"
                     :value="startDate"
                     size="md"
-                    @input="(value) => (startDate = value)" />
+                    @input="(value) => (startDate = value)"
+                    @enter="handleSearchClick" />
                 <VInput
                     id="endDate"
                     label="끝"
                     type="date"
                     :value="endDate"
                     size="md"
-                    @input="(value) => (endDate = value)" />
+                    @input="(value) => (endDate = value)"
+                    @enter="handleSearchClick" />
                 <VButton
                     text="조회"
                     color="admin-primary"

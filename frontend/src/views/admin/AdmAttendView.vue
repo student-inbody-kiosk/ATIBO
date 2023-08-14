@@ -5,6 +5,7 @@ import StudentTable from '@/components/admin/student/StudentTable.vue';
 import AttendTable from '@/components/admin/attendance/AttendTable.vue';
 import { getAttendances } from '@/apis/services/attendances';
 import { ref } from 'vue';
+import { checkSearchInput } from '@/utils/checkInput';
 
 import type { Ref } from 'vue';
 import type { StudentAttendance } from '@/types/attendance.interface';
@@ -18,15 +19,19 @@ const date = ref('');
 const students: Ref<StudentAttendance[]> = ref([]);
 
 const handleSubmit = function searchAttendance() {
-    if (!date.value) {
-        toastTopErrorMessage('조회할 날짜를 입력해주세요');
-        return;
-    }
-
     if (!grade.value && !room.value && !number.value && !name.value) {
         toastTopErrorMessage('검색 조건을 입력해주세요');
         return;
     }
+
+    const data = {
+        date: date.value,
+        grade: grade.value,
+        room: room.value,
+        name: name.value,
+        number: number.value,
+    };
+    if (checkSearchInput(data)) return;
 
     getAttendances(
         date.value,
@@ -60,7 +65,8 @@ const handleSubmit = function searchAttendance() {
             @room="(value: string) => (room = value)"
             @number="(value: string) => (number = value)"
             @name="(value: string) => (name = value)"
-            @search="handleSubmit" />
+            @search="handleSubmit"
+            @enter="handleSubmit" />
 
         <section class="admin-attend-content">
             <StudentTable :students="students" />
@@ -94,6 +100,10 @@ const handleSubmit = function searchAttendance() {
 .admin-attend-content {
     display: flex;
     overflow-y: auto;
+
+    table {
+        height: fit-content;
+    }
 }
 
 .admin-attend-attendance {

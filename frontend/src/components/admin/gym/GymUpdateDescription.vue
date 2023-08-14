@@ -8,6 +8,7 @@ import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import { useAxios } from '@/hooks/useAxios';
 import type { Gym } from '@/types/gyms.interface';
+import { toastTopErrorMessage } from '@/utils/toastManager';
 
 const props = defineProps<{
     gymId: number;
@@ -19,7 +20,7 @@ const {
     isLoading,
     isError,
     response: gym,
-} = useAxios<Gym, number>({}, (gymId) => services.getGym(gymId));
+} = useAxios<Gym>({}, services.getGym);
 
 onMounted(() => {
     getGym(props.gymId);
@@ -31,12 +32,18 @@ const handleSubmit = function updateGym(event: Event) {
     if (!form) return;
 
     const formData = new FormData(form);
-    formData.append(
-        'description',
-        gym.value?.description ? gym.value.description : ''
-    );
+    const name = (formData.get('name') as string) || '';
+    if (name.length < 2) {
+        toastTopErrorMessage('운동기구 이름은 2글자 이상 입력해주세요');
+    }
+    const description = gym.value?.description ? gym.value.description : '';
 
-    services.updateGym(props.gymId, formData);
+    const data = {
+        name,
+        description,
+    };
+
+    services.updateGym(props.gymId, data);
 };
 
 // ckeditor config

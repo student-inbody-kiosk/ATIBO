@@ -10,6 +10,7 @@ import { ref, computed, onMounted } from 'vue';
 import { getInbodys } from '@/apis/services/inbodys';
 import { calculateDays, createIndexTable } from '@/utils/inbody';
 import { useQueryStore } from '@/stores/query.store';
+import { checkSearchInput } from '@/utils/checkInput';
 
 import type { Ref } from 'vue';
 import type { Inbody } from '@/types/inbody.interace';
@@ -72,15 +73,25 @@ const inbodyList = computed(() => {
 
 // 검색
 const handleSubmit = function searchAttendance() {
-    if (!startDate.value || !endDate.value) {
-        toastTopErrorMessage('검색 기간을 입력해주세요');
-        return;
-    }
-
-    if (!grade.value && !room.value && !number.value && !name.value) {
+    if (
+        !grade.value.trim() &&
+        !room.value.trim() &&
+        !number.value.trim() &&
+        !name.value.trim()
+    ) {
         toastTopErrorMessage('검색 조건을 입력해주세요');
         return;
     }
+
+    const data = {
+        startDate: startDate.value,
+        endDate: endDate.value,
+        grade: grade.value,
+        room: room.value,
+        number: number.value,
+        name: name.value,
+    };
+    if (checkSearchInput(data)) return;
 
     const parsedGrade = Number(grade.value);
     const parsedRoom = Number(room.value);
@@ -153,7 +164,8 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
             @room="(value: string) => (room = value)"
             @number="(value: string) => (number = value)"
             @name="(value: string) => (name = value)"
-            @search="handleSubmit" />
+            @search="handleSubmit"
+            @enter="handleSubmit" />
 
         <section class="admin-inbody-content">
             <StudentTable :students="students" @click="handleStudentClick" />

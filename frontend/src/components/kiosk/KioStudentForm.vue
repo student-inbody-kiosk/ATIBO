@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import services from '@/apis/services';
-import { regexes, studentRegexes } from '@/constants/regexes';
+import { regexes } from '@/constants/regexes';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import TheKeypad from '@/components/kiosk/TheKeypad.vue';
 import { toastCenterErrorMessage } from '@/utils/toastManager';
 import type { StudentSimple } from '@/types/students.interface';
+import { useAxios } from '@/hooks/useAxios';
+import VLoading from '@/components/common/VLoading.vue';
 
 const emit = defineEmits<{
     (e: 'update-student', value: StudentSimple): void;
 }>();
 
-/* Student check with studentNum */
 const studentNum = ref<string>('');
 
 // Handle studentNum input
@@ -20,8 +21,13 @@ const handleInput = function inputStudentNum(value: string) {
     studentNum.value = value;
 };
 
-// Asynchronously the student info based on studentNum
-const handleSubmit = function checkStudent() {
+/* Check studnet with studentNum asynchronously*/
+const { fetchData: checkStudent, isLoading } = useAxios<StudentSimple>(
+    null,
+    services.checkStudent
+);
+
+const handleSubmit = function onSubmitCheckStudent() {
     if (!regexes.studentNum.reg.test(studentNum.value)) {
         toastCenterErrorMessage(regexes.studentNum.condition);
         return;
@@ -32,13 +38,14 @@ const handleSubmit = function checkStudent() {
 
     studentNum.value = '';
 
-    services.checkStudent(grade, room, number).then((res) => {
+    checkStudent(grade, room, number).then((res) => {
         emit('update-student', res);
     });
 };
 </script>
 
 <template>
+    <VLoading v-if="isLoading" color="kiosk-primary" class="kiosk-loading" />
     <div class="kiosk-student-form">
         <form class="kiosk-student-form__form" @submit.prevent="handleSubmit">
             <VInput

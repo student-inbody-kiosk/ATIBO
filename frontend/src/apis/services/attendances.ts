@@ -2,6 +2,7 @@ import apiRequest from '@/apis/axiosInterceptors';
 import {
     toastCenterErrorMessage,
     toastCenterSuccessMessage,
+    toastTopErrorMessage,
 } from '@/utils/toastManager';
 
 export async function getAttendances(
@@ -21,6 +22,7 @@ export async function getAttendances(
             },
         })
         .then((res) => {
+            toastTopErrorMessage('출석 조회에 실패했습니다', err);
             return res.data;
         });
 }

@@ -22,10 +22,10 @@ const {
     isLoading,
     isError,
     response: gymImages,
-} = useAxios<GymImage[]>([], () => services.getGymImages(props.gymId));
+} = useAxios<GymImage[]>([], services.getGymImages);
 
 onMounted(() => {
-    getGymImages();
+    getGymImages(props.gymId);
 });
 
 /* Computed gymImageUrls based on gymIamges */
@@ -39,13 +39,12 @@ const gymImageUrls = computed<string[]>(() => {
             imageUrls.push(URL.createObjectURL(image.image));
         }
     }
-    console.log(imageUrls, gymImages.value);
     return imageUrls;
 });
 
 /* Managing multiple image update */
 
-// Add gym images
+// Add gym images asynchronously
 const handleChangeAdd = function appendNewImages() {
     const fileInput = event?.target as HTMLInputElement;
     if (!fileInput) return;
