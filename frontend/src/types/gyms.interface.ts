@@ -7,6 +7,11 @@ export interface Gym extends GymSimple {
     description: string;
 }
 
+export interface GymUpdate {
+    name: string;
+    description: string;
+}
+
 export interface GymImage {
     id?: number;
     image: string | File;

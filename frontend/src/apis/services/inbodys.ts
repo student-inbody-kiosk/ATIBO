@@ -1,3 +1,4 @@
+import { useRoute } from 'vue-router';
 import apiRequest from '@/apis/axiosInterceptors';
 import {
     toastCenterErrorMessage,
@@ -20,6 +21,10 @@ export async function getInbodys(
         })
         .then((res) => {
             return res.data;
+        })
+        .catch((err) => {
+            toastTopErrorMessage('인바디 정보를 불러오지 못했습니다', err);
+            throw err;
         });
 }
 
@@ -30,6 +35,8 @@ export async function getTheStudentInbodys(
     startDate?: string,
     endDate?: string
 ) {
+    const route = useRoute();
+
     return await apiRequest
         .get(`/students/inbody/${grade}/${room}/${number}/`, {
             params: { startDate, endDate },
@@ -38,19 +45,35 @@ export async function getTheStudentInbodys(
             return res.data;
         })
         .catch((err) => {
-            toastCenterErrorMessage('인바디 정보를 불러오지 못했습니다', err);
+            if (route.name.includes('kiosk')) {
+                toastCenterErrorMessage(
+                    '인바디 정보를 불러오지 못했습니다',
+                    err
+                );
+            } else {
+                toastTopErrorMessage('인바디 정보를 불러오지 못했습니다', err);
+            }
             throw err;
         });
 }
 
 export async function getInbody(inbodyId: number) {
+    const route = useRoute();
+
     return await apiRequest
         .get(`/students/inbody/${inbodyId}/`)
         .then((res): InbodyDetail => {
             return res.data;
         })
         .catch((err) => {
-            toastCenterErrorMessage('인바디 정보를 불러오지 못했습니다', err);
+            if (route.name.includes('kiosk')) {
+                toastCenterErrorMessage(
+                    '인바디 정보를 불러오지 못했습니다',
+                    err
+                );
+            } else {
+                toastTopErrorMessage('인바디 정보를 불러오지 못했습니다', err);
+            }
             throw err;
         });
 }

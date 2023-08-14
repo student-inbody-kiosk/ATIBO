@@ -1,36 +1,54 @@
 import apiRequest from '@/apis/axiosInterceptors';
-import type { GymSimple, Gym, GymImage } from '@/types/gyms.interface';
+import type {
+    GymSimple,
+    Gym,
+    GymImage,
+    GymUpdate,
+} from '@/types/gyms.interface';
 import {
     toastCenterErrorMessage,
     toastTopErrorMessage,
     toastTopSuccessMessage,
 } from '@/utils/toastManager';
+import { useRoute } from 'vue-router';
 
 export function getGyms() {
+    const route = useRoute();
+
     return apiRequest
         .get('/gym/')
         .then((res): GymSimple[] => {
             return res.data;
         })
         .catch((err) => {
-            toastCenterErrorMessage('운동기구 조회에 실패했습니다', err);
+            if (route.name.includes('kiosk')) {
+                toastCenterErrorMessage('운동기구 조회에 실패했습니다', err);
+            } else {
+                toastTopErrorMessage('운동기구 조회에 실패했습니다', err);
+            }
             throw err;
         });
 }
 
 export function getGym(gymId: number) {
+    const route = useRoute();
+
     return apiRequest
         .get(`/gym/${gymId}/`)
         .then((res): Gym => {
             return res.data;
         })
         .catch((err) => {
-            toastCenterErrorMessage('운동기구 조회에 실패했습니다', err);
+            if (route.name.includes('kiosk')) {
+                toastCenterErrorMessage('운동기구 조회에 실패했습니다', err);
+            } else {
+                toastTopErrorMessage('운동기구 조회에 실패했습니다', err);
+            }
             throw err;
         });
 }
 
-export function createGym(gym: Gym | FormData) {
+export function createGym(gym: GymUpdate) {
     return apiRequest
         .post('/gym/', gym)
         .then((res): Gym => {
@@ -42,7 +60,7 @@ export function createGym(gym: Gym | FormData) {
         });
 }
 
-export function updateGym(gymId: nmber, data: Gym | FormData) {
+export function updateGym(gymId: nmber, data: GymUpdate) {
     return apiRequest
         .put(`/gym/${gymId}/`, data)
         .then((res): Gym => {
@@ -56,13 +74,22 @@ export function updateGym(gymId: nmber, data: Gym | FormData) {
 }
 
 export function getGymImages(gymId: number) {
+    const route = useRoute();
+
     return apiRequest
         .get(`/gym/${gymId}/image/`)
         .then((res): GymImage[] => {
             return res.data;
         })
         .catch((err) => {
-            toastCenterErrorMessage('운동기구 사진 조회에 실패했습니다', err);
+            if (route.name.includes('kiosk')) {
+                toastCenterErrorMessage(
+                    '운동기구 사진 조회에 실패했습니다',
+                    err
+                );
+            } else {
+                toastTopErrorMessage('운동기구 사진 조회에 실패했습니다', err);
+            }
             throw err;
         });
 }

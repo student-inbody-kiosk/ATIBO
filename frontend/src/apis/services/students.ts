@@ -8,6 +8,7 @@ import {
 } from '@/utils/toastManager';
 import type { Student, StudentSimple } from '@/types/students.interface';
 import { useStudentStore } from '@/stores/student.store';
+import { useRoute } from 'vue-router';
 
 export async function getStudents(
     grade?: number | null,
@@ -116,13 +117,18 @@ export async function getTheStudent(
     room: number,
     number: number
 ) {
+    const route = useRoute();
     return await apiRequest
         .get(`/students/${grade}/${room}/${number}/`)
         .then((res): Student => {
             return res.data;
         })
         .catch((err) => {
-            toastCenterErrorMessage('학생 정보를 불러오지 못했습니다', err);
+            if (route.name.includes('kiosk')) {
+                toastCenterErrorMessage('학생 정보를 불러오지 못했습니다', err);
+            } else {
+                toastTopErrorMessage('학생 정보를 불러오지 못했습니다', err);
+            }
             throw err;
         });
 }
