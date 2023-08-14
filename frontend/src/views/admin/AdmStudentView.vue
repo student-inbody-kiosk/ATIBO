@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import VButton from '@/components/common/VButton.vue';
-import StudentSearchBar from '@/components/admin/student/StudentSearchBar.vue';
+import StudentSearchbar from '@/components/admin/student/StudentSearchbar.vue';
 import StudentDetailDataLabel from '@/components/admin/student/StudentDetailDataLabel.vue';
 import StudentDetailData from '@/components/admin/student/StudentDetailData.vue';
 import { ref, onMounted } from 'vue';
@@ -60,7 +60,7 @@ const handleSubmit = function searchStudents() {
                 @click="$router.push({ name: 'admin-main' })" />
             <div>학생 관리</div>
         </div>
-        <StudentSearchBar
+        <StudentSearchbar
             :grade="grade"
             :room="room"
             :number="number"
