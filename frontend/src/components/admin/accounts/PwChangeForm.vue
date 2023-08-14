@@ -6,17 +6,16 @@ import VLoading from '@/components/common/VLoading.vue';
 import { accountRegexes } from '@/constants/regexes';
 import { useAxios } from '@/hooks/useAxios';
 import { toastTopErrorMessage } from '@/utils/toastManager';
-import type { AccountPwChange } from '@/types/accounts.interface';
 import { useAuthInput, usePasswordCheck } from '@/hooks/useAuthInput';
 
 const emit = defineEmits<{
     (e: 'success'): void;
 }>();
 
-const { fetchData: changePassword, isLoading } = useAxios<
+const { fetchData: changePassword, isLoading } = useAxios<null>(
     null,
-    AccountPwChange
->(null, services.changePassword);
+    services.changePassword
+);
 
 const { value: oldPassword, handleInput: handleOldPasswordInput } =
     useAuthInput('password');

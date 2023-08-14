@@ -100,6 +100,9 @@ def get_date_from_path_variables(variables, limit_period_days = 62):
     # Limit the period
     if end_date - start_date > timedelta(days=limit_period_days):
         raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'기간은 {limit_period_days}일 이내로 설정해주세요'), 'invalid_period')
+    # Filter the invalid period
+    if start_date > end_date:
+        raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'시작일이 종료일보다 클 수 없습니다'), 'invalid_period')
     
     return start_date, end_date
 
@@ -134,8 +137,11 @@ def get_date_from_query_params(query_params, limit_period_days = 730):
     end_date = datetime.strptime(end_date, "%Y-%m-%d")
     end_date = timezone.make_aware(end_date, timezone=tz) + timedelta(days=1)   # Add one day because the default time is 00:00:00 
 
-    # # Limit the search time period
+    # Limit the search time period
     if end_date - start_date > timedelta(days=limit_period_days):
         raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'기간은 {limit_period_days}일 이내로 설정해주세요'), 'invalid_period')
+    # Filter the invalid period
+    if start_date > end_date:
+        raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'시작일이 종료일보다 클 수 없습니다'), 'invalid_period')
 
     return start_date, end_date

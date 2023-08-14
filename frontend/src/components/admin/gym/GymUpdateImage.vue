@@ -44,7 +44,7 @@ const gymImageUrls = computed<string[]>(() => {
 
 /* Managing multiple image update */
 
-// Add gym images
+// Add gym images asynchronously
 const handleChangeAdd = function appendNewImages() {
     const fileInput = event?.target as HTMLInputElement;
     if (!fileInput) return;

@@ -7,7 +7,22 @@ import {
 export function getAccountInfo() {
     return apiRequest.get('/accounts/').then((res) => {
         return res.data;
+    }).catch((err) => {
+        toastTopErrorMessage('계정 정보를 불러오지 못했습니다', err);
+        throw err;
     });
+}
+
+export function getSchoolAccounts() {
+    return apiRequest
+        .get('accounts/admin/')
+        .then((res): AccountList => {
+            return res.data;
+        })
+        .catch((err) => {
+            toastTopErrorMessage('계정 정보를 불러오지 못했습니다', err);
+            throw err;
+        });
 }
 
 export function deleteAccount(userId: number) {
