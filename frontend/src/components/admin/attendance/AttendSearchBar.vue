@@ -9,6 +9,15 @@ defineProps<{
     number: string;
     name: string;
 }>();
+
+const emit = defineEmits<{
+    (e: 'date', value: string): void;
+    (e: 'grade', value: string): void;
+    (e: 'room', value: string): void;
+    (e: 'number', value: string): void;
+    (e: 'name', value: string): void;
+    (e: 'enter'): void;
+}>();
 </script>
 
 <template>

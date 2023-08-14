@@ -10,6 +10,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStudentStore } from '@/stores/student.store';
 import { getTheStudentInbodys } from '@/apis/services/inbodys';
+import { checkSearchInput } from '@/utils/checkInput';
 
 import type { Ref } from 'vue';
 import type { InbodyDetail } from '@/types/inbody.interface';
@@ -41,10 +42,8 @@ onMounted(() => {
 });
 
 const handleSearchClick = function searchInbodyList() {
-    if (!startDate.value || !endDate.value) {
-        toastTopErrorMessage('검색 기간을 입력해주세요');
-        return;
-    }
+    const data = { startDate: startDate.value, endDate: endDate.value };
+    if (checkSearchInput(data)) return;
 
     getTheStudentInbodys(
         Number(grade),

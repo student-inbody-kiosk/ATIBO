@@ -111,4 +111,41 @@ const accountRegexes = {
     },
 };
 
-export { regexes, studentRegexes, accountRegexes, inbodyRegexes };
+const searchRegexes = {
+    date: {
+        reg: /^\d{4}-(0[1-9]|1[0-2])$/,
+        condition: '날짜는 YYYY-MM 형식으로 입력해주세요',
+    },
+    startDate: {
+        reg: /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\d|3[0-1])$/,
+        condition: '날짜는 YYYY-MM-DD 형식으로 입력해주세요',
+    },
+    endDate: {
+        reg: /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2]\d|3[0-1])$/,
+        condition: '날짜는 YYYY-MM-DD 형식으로 입력해주세요',
+    },
+    name: {
+        reg: /^(?:[가-힣]{2,5})?$/,
+        condition: '학생 이름은 한글 2-5자로 입력해주세요',
+    },
+    grade: {
+        reg: /^(?:[1-9])?$/,
+        condition: '학년은 1~9 사이의 숫자로 입력해주세요',
+    },
+    room: {
+        reg: /^(?:(?:[1-9]|[1-9][0-9]))?$/,
+        condition: '반은 1~99 사이의 숫자로 입력해주세요',
+    },
+    number: {
+        reg: /^(?:(?:[1-9][0-9]?|100))?$/,
+        condition: '번호는 1~100 사이의 숫자로 입력해주세요',
+    },
+};
+
+export {
+    regexes,
+    studentRegexes,
+    accountRegexes,
+    inbodyRegexes,
+    searchRegexes,
+};
