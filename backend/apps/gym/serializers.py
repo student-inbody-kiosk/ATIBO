@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
@@ -48,7 +49,8 @@ class ImageSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        ret['image'] = '/media/' + str(instance.image)
+        if not settings.DEBUG:
+            ret['image'] = '/media/' + str(instance.image)
         return ret
         
 class EquipmentListSerializer(serializers.ModelSerializer):
