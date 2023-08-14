@@ -3,13 +3,20 @@ import axios from 'axios';
 import router from '@/router/index';
 import { useAuthStore } from '@/stores/auth.store';
 
-const VITE_BASE_URL = import.meta.env.VITE_BASE_URL;
+// 개발시 환경변수에 IP와 PORT 정보가 있다면 해당 변수 사용
+// 배포시 없다면 현재 URL 정보를 가져옴
+const CURRENT_IP = import.meta.env.VITE_API_IP
+    ? import.meta.env.VITE_API_IP
+    : window.location.hostname;
+
+const CURRENT_PORT = import.meta.env.VITE_API_PORT
+    ? import.meta.env.VITE_API_PORT
+    : window.location.port;
+
+const API_BASE_URL = `http://${CURRENT_IP}:${CURRENT_PORT}/api`;
 
 const axiosInstance = axios.create({
-    baseURL: VITE_BASE_URL,
-    // headers: {
-    //     'Content-Type': 'application/json',
-    // },
+    baseURL: API_BASE_URL,
 });
 
 axiosInstance.interceptors.request.use(

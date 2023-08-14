@@ -9,11 +9,10 @@ from .models import School
 
 class SchoolAPIView(RetrieveUpdateAPIView):
     http_method_names = ["get", "put"]
-    permission_classes = [ReadOnly | IsAdminUser]
+    permission_classes = [ReadOnly |  IsAdminUser]
     serializer_class = SchoolSerializer
 
     def get_object(self):
-
         return School.objects.get(id=1)
     
     def get_authenticators(self):

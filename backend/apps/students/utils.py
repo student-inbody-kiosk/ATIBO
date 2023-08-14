@@ -27,9 +27,9 @@ def get_student_object_from_path_variables(variables):
     if len(student) == 1:
         student = student[0]
     elif len(student) == 0:
-        raise DetailException(status.HTTP_404_NOT_FOUND, _(f'There\'s no corresponding student'), 'sutdent_not_found')
+        raise DetailException(status.HTTP_404_NOT_FOUND, _(f'해당 학년, 반, 번호의 학생이 없습니다'), 'sutdent_not_found')
     else:
-        raise DetailException(status.HTTP_409_CONFLICT, _(f'There\'re more than one student corresponding to this information. Please contact your administrator'), 'sutdent_too_many')
+        raise DetailException(status.HTTP_409_CONFLICT, _(f'해당 학년, 반, 번호의 학생이 여러 명입니다. 관리자에게 문의해주세요'), 'sutdent_too_many')
 
     return student
 
@@ -52,7 +52,7 @@ def get_student_queryset_from_query_params(query_params):
             params_valid = True
             query_filter &= Q(grade=grade)
         else:
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _('The grade must be a numeric value from 1 to 9'), 'invalid_grade')
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('학년은 1~9 사이의 값으로 입력해주세요'), 'invalid_grade')
     if room and room.isdigit():
         room = int(room)
         if room == 0:
@@ -61,7 +61,7 @@ def get_student_queryset_from_query_params(query_params):
             params_valid = True
             query_filter &= Q(room=room)
         else:
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _('The room must be a numeric value from 1 to 99'), 'invalid_room')
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('반은 1~99 사이의 값으로 입력해주세요'), 'invalid_room')
     if number and number.isdigit():
         number = int(number)
         if number == 0:
@@ -70,19 +70,19 @@ def get_student_queryset_from_query_params(query_params):
             params_valid = True
             query_filter &= Q(number=number)
         else:
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _('The number must be a numeric value from 1 to 100'), 'invalid_number')
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('번호는 1~100 사이의 값으로 입력해주세요'), 'invalid_number')
     if name: 
         if re.compile(KOREAN_NAME_REGEX).match(name):
             params_valid = True
             query_filter &= Q(name=name)
         else:
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _('The name must be written in 2-5 Korean characters'), 'invalid_name')
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('이름은 2~5자의 한글로 입력해주세요'), 'invalid_name')
 
     # For prevent large data transferring, constrain the params
     if not params_valid:
-        raise DetailException(status.HTTP_400_BAD_REQUEST, _('You must enter at least one of the following values: Grade, Room, Number, Name'), 'invalid_params')
+        raise DetailException(status.HTTP_400_BAD_REQUEST, _('학년, 반, 번호, 이름 중 적어도 하나의 값을 입력해주세요'), 'invalid_params')
 
-    return Student.objects.filter(query_filter)
+    return Student.objects.filter(query_filter).order_by('grade', 'room', 'number')
 
 
 def get_date_from_path_variables(variables, limit_period_days = 62):
@@ -99,7 +99,7 @@ def get_date_from_path_variables(variables, limit_period_days = 62):
 
     # Limit the period
     if end_date - start_date > timedelta(days=limit_period_days):
-        raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'Set the period within {limit_period_days} days'), 'invalid_period')
+        raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'기간은 {limit_period_days}일 이내로 설정해주세요'), 'invalid_period')
     
     return start_date, end_date
 
@@ -125,7 +125,7 @@ def get_date_from_query_params(query_params, limit_period_days = 730):
     end_date = query_params.get('end_date', datetime.today().strftime('%Y-%m-%d'))
 
     if not re.compile(DATE_REGEX).match(start_date) or not re.compile(DATE_REGEX).match(end_date):
-        raise DetailException(status.HTTP_400_BAD_REQUEST, _('Check the date format'), 'invalid_name')
+        raise DetailException(status.HTTP_400_BAD_REQUEST, _('날짜 형식을 확인해주세요'), 'invalid_name')
 
     # Customize the value including adding the timezone
     tz = pytz.timezone(settings.TIME_ZONE)
@@ -135,7 +135,7 @@ def get_date_from_query_params(query_params, limit_period_days = 730):
     end_date = timezone.make_aware(end_date, timezone=tz) + timedelta(days=1)   # Add one day because the default time is 00:00:00 
 
     # # Limit the search time period
-    # if end_date - start_date > timedelta(days=limit_period_days):
-    #     raise DetailException(status.HTTP_400_BAD_REQUEST, _('Set the period within two months'), 'invalid_period')
+    if end_date - start_date > timedelta(days=limit_period_days):
+        raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'기간은 {limit_period_days}일 이내로 설정해주세요'), 'invalid_period')
 
     return start_date, end_date

@@ -47,7 +47,7 @@ class AccountAPIView(GenericAPIView, CreateModelMixin, RetrieveModelMixin, Destr
     
     def destroy(self, request, *args, **kwargs):
         super().destroy(request, *args, **kwargs)
-        return Response({'message': _('The user is successfully deleted')}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': _('계정이 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
 
 
 @extend_schema(
@@ -103,7 +103,7 @@ class LogoutAPIView(APIView):
         user.refresh_token = ''
         user.save()
 
-        return Response({'message': _('Logged out successfully')}, status=status.HTTP_200_OK)
+        return Response({'message': _('로그아웃 되었습니다')}, status=status.HTTP_200_OK)
 
 
 class UsernameCheckAPIView(APIView):
@@ -142,7 +142,7 @@ class PasswordChangeAPIView(UpdateAPIView):
     
     def update(self, request, *args, **kwargs):
         super().update(request, *args, **kwargs)
-        return Response({'message': _('The password is changed')}, status=status.HTTP_200_OK)
+        return Response({'message': _('비밀번호가 변경되었습니다')}, status=status.HTTP_200_OK)
     
 
 class PasswordResetAPIView(APIView):
@@ -163,13 +163,13 @@ class PasswordResetAPIView(APIView):
 
         # Send Email
         email_message = EmailMessage(
-                _('Your ATIBO password has been reset.'), # Subject
-                _(f'New password : {new_password}'), # Body
+                _('ATIBO 계정의 비밀번호가 초기화 되었습니다'), # Subject
+                _(f'새 비밀번호 : {new_password}'), # Body
                 to=[email],
             )
         email_message.send()
 
-        return Response({'message': _('A new password has been sent to your email')}, status=status.HTTP_200_OK)    
+        return Response({'message': _('새 비밀번호가 이메일로 발송되었습니다')}, status=status.HTTP_200_OK)    
 
 
 @extend_schema(
@@ -255,4 +255,4 @@ class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyMode
     
     def destroy(self, request, *args, **kwargs):
         super().destroy(request, *args, **kwargs)
-        return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': _('계정이 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)

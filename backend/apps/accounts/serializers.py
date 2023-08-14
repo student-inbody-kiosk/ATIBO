@@ -45,16 +45,16 @@ class LoginSerializer(serializers.Serializer):
         try:
             user = get_object_or_404(get_user_model(), username=username)
         except Http404:
-            raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username'), 'user_not_found')
+            raise DetailException(status.HTTP_404_NOT_FOUND, _('해당 아이디의 사용자 정보가 없습니다'), 'user_not_found')
 
         # Check whether the user is active
         if not user.is_active:
-            raise DetailException(status.HTTP_403_FORBIDDEN, _('The user is not active. Please contact your administrator'), 'inactive_user')
+            raise DetailException(status.HTTP_403_FORBIDDEN, _('해당 계정은 활성화되지 않았습니다. 관리자에게 승인을 받으세요'), 'inactive_user')
         
         # Authenticate with username and apssword
         authenticated_user = authenticate(request=self.context.get('request'), username=username, password=password)
         if not authenticated_user:
-            raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username or password'), 'user_not_found')
+            raise DetailException(status.HTTP_404_NOT_FOUND, _('비밀번호가 틀렸습니다'), 'user_not_found')
         
         data['user'] = authenticated_user
         return data
@@ -80,7 +80,7 @@ class PasswordChangeSerializer(serializers.Serializer):
     def validate_old_password(self, value):
         user = self.context['request'].user
         if not user.check_password(value):
-            raise serializers.ValidationError(_('The existing password is incorrect'), 'invalid_old_password')
+            raise serializers.ValidationError(_('기존 비밀번호가 올바르지 않습니다'), 'invalid_old_password')
         return value
     
     def validate_new_password(self, value):
@@ -94,7 +94,7 @@ class PasswordChangeSerializer(serializers.Serializer):
         confirm_password = data.get('confirm_password')
 
         if new_password != confirm_password:
-            raise serializers.ValidationError({"confirm_password": _('The new passwords do not match')}, 'invalid_confirm_password')
+            raise serializers.ValidationError({"confirm_password": _('새 비밀번호가 서로 일치하지 않습니다')}, 'invalid_confirm_password')
 
         return data
 
@@ -118,7 +118,7 @@ class PasswordResetSerializer(serializers.Serializer):
         try:
             user = get_object_or_404(User, username=username, email=email)
         except Http404:
-            raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username or email'), 'user_not_found')
+            raise DetailException(status.HTTP_404_NOT_FOUND, _('아이디 혹은 이메일을 다시 확인해주세요'), 'user_not_found')
         
         data['user'] = user
         return data
@@ -137,17 +137,17 @@ class TokenRefreshSerializer(serializers.Serializer):
         try:
             user = get_object_or_404(User, username=username)
         except Http404:
-            raise DetailException(status.HTTP_404_NOT_FOUND, _('Check username'), 'user_not_found')
+            raise DetailException(status.HTTP_404_NOT_FOUND, _('해당 아이디의 계정이 없습니다'), 'user_not_found')
 
         # Compare the refresh_token (Concurrent Session Controll)
         if not user.refresh_token == refresh_token:
-            raise DetailException(status.HTTP_401_UNAUTHORIZED, _('You may be logged in from another place with that ID'), 'different_refresh_token')
+            raise DetailException(status.HTTP_401_UNAUTHORIZED, _('해당 아이디로 중복 로그인이 발생했습니다. 비밀번호를 변경해주세요'), 'different_refresh_token')
         
         # Check the RefreshToken
         try:
             RefreshToken(refresh_token).verify()
         except:
-            raise DetailException(status.HTTP_401_UNAUTHORIZED, _('Your session in terminated'), 'invalid_refresh_token')
+            raise DetailException(status.HTTP_401_UNAUTHORIZED, _('세션이 만료되었습니다'), 'invalid_refresh_token')
 
         data['user'] = user
         return data

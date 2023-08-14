@@ -11,13 +11,13 @@ from rest_framework import status, serializers
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.mixins import CreateModelMixin,ListModelMixin, UpdateModelMixin, DestroyModelMixin
+from rest_framework.mixins import CreateModelMixin,ListModelMixin, UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from atibo.authentications import StudentJWTAuthentication
 from atibo.exceptions import DetailException
-from atibo.permissions import IsUser, IsTheStudent, IsOwner
+from atibo.permissions import  IsTheStudent, IsOwner
 from atibo.utils.custom_token import encode
 from atibo.utils.dummy_data import generateStudentDummyData
 from .models import Student, Attendance, Inbody
@@ -30,7 +30,7 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
     serializer_class = StudentAuthSerializer
     queryset = Student.objects.all()
 
-    # Alsways list Serailzer
+    # Always list Serailzer
     def get_serializer(self, *args, **kwargs):
         serializer_class = self.get_serializer_class()
         kwargs.setdefault('context', self.get_serializer_context())
@@ -82,15 +82,24 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
     def update(self, request, *args, **kwargs):
         # Get mutilple instance
         instance = []
-        try:
-            for student_data in request.data:
-                instance.append(get_object_or_404(Student, id=student_data.get('id')))
-        except Http404:
-            grade = student_data.get('grade')
-            room = student_data.get('room')
-            number = student_data.get('number')
-            name = student_data.get('name')
-            raise DetailException(status.HTTP_404_NOT_FOUND, _(f'Not found the student info of {grade}-{room}-{number} {name}'), 'student_not_found')
+        for student_data in request.data:
+            student = Student.objects.select_for_update().get(id=student_data.get('id'))    # lock the records for multiple update
+
+            if not student:
+                grade = student_data.get('grade')
+                room = student_data.get('room')
+                number = student_data.get('number')
+                name = student_data.get('name')
+                raise DetailException(status.HTTP_404_NOT_FOUND, _(f'제출한 {grade}학년 {room}반 {number}번호 {name} 학생의 기존 데이터가 없습니다'), 'student_not_found')
+
+            """
+            Temporarily Deactivate (grade, room, number) constraint for multiple update.
+            It will be reactivated in the serializer
+            """
+            student.is_constraint_activated = False
+            student.save()
+
+            instance.append(student)
 
         """
         UpdateModelMixin.update()
@@ -112,8 +121,7 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
     def destroy(self, request, *args, **kwargs):
         student_ids = request.data.get('ids')
         Student.objects.filter(id__in=student_ids).delete()
-
-        return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': _('학생 정보가 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
 
 
 class StudentCheckAPIView(RetrieveAPIView):
@@ -141,7 +149,7 @@ class StudentLoginAPIView(APIView):
 
         password = request.data.get('password')
         if not student.password == password:
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _('The password is not correct'), 'invalid_student_password')
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _('비밀번호가 일치하지 않습니다'), 'invalid_student_password')
 
         # Create Custom Token
         payload = {
@@ -159,13 +167,13 @@ class StudentLoginAPIView(APIView):
 
 class StudentDetailAPIView(RetrieveAPIView):
     authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
-    permission_classes = [IsUser | IsTheStudent]
+    permission_classes = [IsTheStudent | IsAuthenticated]
     serializer_class = StudentDetailSerializer
 
     def get_object(self):
         student = get_student_object_from_path_variables(self.kwargs)
-
         return student
+
 
 @extend_schema(
     responses=inline_serializer(
@@ -178,7 +186,7 @@ class StudentDetailAPIView(RetrieveAPIView):
 class StudentPasswordChangeAPIView(UpdateAPIView):
     http_method_names = ["put"]
     authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
-    permission_classes = [IsUser | IsTheStudent]
+    permission_classes = [IsTheStudent | IsAuthenticated]
     serializer_class = StudentPasswordChangeSerializer
 
     def get_object(self):
@@ -187,7 +195,7 @@ class StudentPasswordChangeAPIView(UpdateAPIView):
     
     def update(self, request, *args, **kwargs):
         super().update(request, *args, **kwargs)
-        return Response({ 'message': _('The password is changed')}, status=status.HTTP_200_OK)
+        return Response({ 'message': _('비밀번호가 변경되었습니다')}, status=status.HTTP_200_OK)
     
 
 class AttendanceCheckAPIView(CreateAPIView):
@@ -196,7 +204,6 @@ class AttendanceCheckAPIView(CreateAPIView):
 
     def perform_create(self, serializer):
         student = get_student_object_from_path_variables(self.kwargs)
-
         serializer.save(student = student)  # It's converted as validated_data in the serialzer.save()
 
 
@@ -216,12 +223,13 @@ class StudentAttendanceAPIView(ListAPIView):
     def get_queryset(self):
         student_queryset = get_student_queryset_from_query_params(self.request.query_params)
         start_date, end_date = get_date_from_month_in_path_variables(self.kwargs)
-        return student_queryset.prefetch_related(Prefetch('attendance_set', queryset=Attendance.objects.filter(date_attended__gte=start_date, date_attended__lt=end_date)))
+        return student_queryset.prefetch_related(Prefetch('attendance_set', queryset=Attendance.objects.filter(date_attended__gte=start_date, date_attended__lt=end_date).order_by('date_attended')))
 
 
+# Inbody of a single student
 class InbodyStudentAPIView(ListCreateAPIView):
     authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
-    permission_classes = [IsUser | IsTheStudent]
+    permission_classes = [IsTheStudent | IsAuthenticated]
     serializer_class = InbodySerializer
 
     # Create dynamic query according to parameters
@@ -241,22 +249,22 @@ class InbodyStudentAPIView(ListCreateAPIView):
 
     def perform_create(self, serializer):
         student = get_student_object_from_path_variables(self.kwargs)
-
         serializer.save(student = student)  # It's converted as validated_data in the serialzer.save()
         
     
 class InbodyDetailAPIView(RetrieveUpdateDestroyAPIView):
     http_method_names = ['get', 'put', 'delete',]
     authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
-    permission_classes = [IsUser | IsOwner]
+    permission_classes = [IsOwner | IsAuthenticated]
     serializer_class = InbodySerializer
     queryset = Inbody.objects.all()
     
     def destroy(self, request, *args, **kwargs):
         super().destroy(request, *args, **kwargs)
-        return Response({'message': _('The Inbody is successfully deleted')}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': _('인바디가 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
     
 
+# Inbody of multiple students
 @extend_schema(
         parameters=[
             OpenApiParameter(name='grade', description=_('student grade'), type=int),
@@ -272,10 +280,11 @@ class StudentInbodyAPIView(ListAPIView):
     # Create dynamic query according to parameters
     def get_queryset(self):
         student_queryset = get_student_queryset_from_query_params(self.request.query_params)
-        start_date, end_date = get_date_from_path_variables(self.kwargs)
-        return student_queryset.prefetch_related(Prefetch('inbody_set', queryset=Inbody.objects.filter(test_date__gte=start_date, test_date__lt=end_date)))
+        start_date, end_date = get_date_from_path_variables(self.kwargs, 730)   # max available period: 2years
+        return student_queryset.prefetch_related(Prefetch('inbody_set', queryset=Inbody.objects.filter(test_date__gte=start_date, test_date__lt=end_date).order_by('test_date')))
 
 
+# Update(Create), Delete Multiple Inbody
 class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
     permission_classes = [IsAuthenticated]
     serializer_class = InbodySerializer
@@ -286,7 +295,7 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
         kwargs.setdefault('context', self.get_serializer_context())
         return serializer_class(many=True, *args, **kwargs)
         
-    # Multiple update
+    # Multiple update/create
     @transaction.atomic
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -309,15 +318,26 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
     def update(self, request, *args, **kwargs):
         # Get mutilple instance
         instance = []
-        try:
-            for inbody_data in request.data:
-                id = inbody_data.get('id')
-                if not id:
-                    pass
-                instance.append(get_object_or_404(Inbody, id=id))
-        except Http404:
-            test_date = inbody_data.get('test_date')
-            raise DetailException(status.HTTP_404_NOT_FOUND, _(f'Not found the inbody info of {test_date}'), 'inbody_not_found')
+
+        for inbody_data in request.data:
+            id = inbody_data.get('id')
+            if not id:  # Data for creation
+                pass
+
+            inbody = Inbody.objects.select_for_update().get(id=id)    # lock the records for multiple update
+
+            if not inbody:
+                test_date = inbody_data.get('test_date')
+                raise DetailException(status.HTTP_404_NOT_FOUND, _(f'{test_date} 날짜에 해당하는 기존 인바디 정보가 없습니다'), 'inbody_not_found')
+
+            """
+            Temporarily Deactivate (student, test_date) constraint for multiple update.
+            It will be reactivated in the serializer
+            """
+            inbody.is_constraint_activated = False
+            inbody.save()
+
+            instance.append(inbody)
 
         """
         UpdateModelMixin.update()
@@ -339,7 +359,7 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
     def destroy(self, request, *args, **kwargs):
         inbody_ids = request.data.get('ids')
         Inbody.objects.filter(id__in=inbody_ids).delete()
-        return Response({'message': _('Deleted successfully')}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'message': _('인바디가 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
 
 """
 Create dummy data. Only for superuser

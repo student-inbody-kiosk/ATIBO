@@ -8,19 +8,29 @@ from .models import Equipment, Image
 class ImageListSerializer(serializers.ListSerializer):
     # Multiple Create/Update/Delete
     def update(self, instance, validated_data):
+        # instance mapping
         image_mapping = {image.id: image for image in instance}
-        data_mapping = {item['id']: item for item in validated_data}
-
-        ret = []
-        # Perform creations and updates.
-        for inbody_id, data in data_mapping.items():
-            image = image_mapping.get(inbody_id, None)
-            if image is None:
-                ret.append(self.child.create(data))
+        # data mapping
+        invalid_id = -1
+        data_mapping = {}
+        for item in validated_data:
+            data_id = item.get('id')
+            if data_id:
+                data_mapping[data_id] = item
             else:
-                ret.append(self.child.update(image, data))
+                data_mapping[invalid_id] = item
+                invalid_id -= 1
 
-        # Perform deletions.
+        # Perform creations and updates(pass).
+        ret = []
+        for image_id, data in data_mapping.items():
+            image = image_mapping.get(image_id, None)
+            if image is None:   # create
+                ret.append(self.child.create(data))
+            else:   # pass the existing data
+                ret.append(image) 
+
+        # Perform deletions
         for image_id, image in image_mapping.items():
             if image_id not in data_mapping:
                 image.delete()
@@ -28,11 +38,18 @@ class ImageListSerializer(serializers.ListSerializer):
         return ret
 
 class ImageSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()    # For multiple update
+    id = serializers.IntegerField(required=False)    # For multiple update
+    image = serializers.ImageField(required=False)
 
     class Meta:
+        list_serializer_class = ImageListSerializer
         model = Image
         exclude = ['equipment']
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['image'] = '/media/' + str(instance.image)
+        return ret
         
 class EquipmentListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,8 +57,6 @@ class EquipmentListSerializer(serializers.ModelSerializer):
         exclude = ['description']
 
 class EquipmentSerializer(serializers.ModelSerializer):
-    image_set = ImageSerializer(many=True, read_only=True)
-
     class Meta:
         model = Equipment
         fields = '__all__'

@@ -10,18 +10,19 @@ from atibo.regexes import KOREAN_NAME_REGEX, STUDENT_PASSWORD_REGEX
 
 class Student(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=25, validators=[RegexValidator(KOREAN_NAME_REGEX, _('The name must be written in 2-5 Korean characters'), 'name_invalid')])
-    grade = TinyIntegerField(validators=[MinValueValidator(1, _('The grade must be greater than 0')), MaxValueValidator(9,  _('The grade must be less than 10'))])
-    room = TinyIntegerField(validators=[MinValueValidator(1, _('The room must be greater than 0')), MaxValueValidator(99,  _('The room must be less than 100'))])
-    number = TinyIntegerField(validators=[MinValueValidator(1, _('The number must be greater than 0')), MaxValueValidator(100,  _('The number must be less or equal than 100'))])
+    name = models.CharField(max_length=25, validators=[RegexValidator(KOREAN_NAME_REGEX, _('이름은 2~5자의 한글로 작성해주세요'), 'name_invalid')])
+    grade = TinyIntegerField(validators=[MinValueValidator(1, _('학년은 0보다 커야 합니다')), MaxValueValidator(9,  _('학년은 10보다 작아야 합니다'))])
+    room = TinyIntegerField(validators=[MinValueValidator(1, _('반은 0보다 커야 합니다')), MaxValueValidator(99,  _('반은 100보다 작아야 합니다'))])
+    number = TinyIntegerField(validators=[MinValueValidator(1, _('번호는 0보다 커야 합니다')), MaxValueValidator(100,  _('번호는 100 이하여야 합니다'))])
     sex = TinyIntegerField()
-    password = models.CharField(default='0000', max_length=4, validators=[MinLengthValidator(4, _('The password length must be 4')), RegexValidator(STUDENT_PASSWORD_REGEX, _('The password must be a numeric value'), 'student_password_invalid')])
+    password = models.CharField(default='0000', max_length=4, validators=[MinLengthValidator(4, _('비밀번호의 길이는 4자여야 합니다')), RegexValidator(STUDENT_PASSWORD_REGEX, _('비밀번호는 숫자로만 이뤄져야 합니다'), 'student_password_invalid')])
     birth_date = models.DateField()
     is_authenticated = models.BooleanField(default=False, editable=False)   # Just for the 'is_authenticated' property, which is required by 'rest_framework.throttling.UserRateThrottle.get_cache_key()'
+    is_constraint_activated = models.BooleanField(default=True) # The additional field to control (grade, room, number) constraint for supporting multiple update
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['grade', 'room', 'number'], name='unique_grade_room_number'),   
+            models.UniqueConstraint(fields=['grade', 'room', 'number', 'is_constraint_activated'], name='unique_grade_room_number_activated'),   
             models.CheckConstraint(check=models.Q(sex__in=[0, 1, 2, 9]), name='valid_sex_values'),  # https://en.wikipedia.org/wiki/ISO/IEC_5218
         ]
         # Django Model Index
@@ -48,17 +49,18 @@ class Inbody(models.Model):
     percent_body_fat = models.FloatField()
     skeletal_muscle_mass = models.FloatField()
     height = models.FloatField(null=True)
-    age = TinyIntegerField(null=True, validators=[MinValueValidator(1, _('The grade must be greater than 0')), MaxValueValidator(127,  _('The grade must be less than 127'))])
+    age = TinyIntegerField(null=True, validators=[MinValueValidator(1, _('나이는 0보다 커야 합니다')), MaxValueValidator(127,  _('나이는 128보다 작아야 합니다'))])
     total_body_water = models.FloatField(null=True)
     protein = models.FloatField(null=True)
     minerals = models.FloatField(null=True)
     body_fat_mass = models.FloatField(null=True)
     body_mass_index = models.FloatField(null=True)
-    score = TinyIntegerField(null=True, validators=[MinValueValidator(1, _('The grade must be greater than 0')), MaxValueValidator(100,  _('The grade must be less than 100'))])
+    score = TinyIntegerField(null=True, validators=[MinValueValidator(1, _('인바디 점수는 0보다 커야 합니다')), MaxValueValidator(100,  _('인바디 점수는 100이하여야 합니다'))])
+    is_constraint_activated = models.BooleanField(default=True) # The additional field to control (student, test_date) constraint for supporting multiple update
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['student', 'test_date'], name='test_per_day'),   
+            models.UniqueConstraint(fields=['student', 'test_date', 'is_constraint_activated'], name='unique_student_test_date_activated_constraint'),   
         ]
         indexes = [
             models.Index(fields=['student', 'test_date'], name='student_test_date_idx'),

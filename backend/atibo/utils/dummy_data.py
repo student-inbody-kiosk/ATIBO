@@ -18,7 +18,7 @@ TODAY_DATE = date(2023, 7, 25) # for age calculation
 BIRTH_START_DATE = date(2010, 1, 1)
 BIRTH_END_DATE = date(2016, 12, 31)
 
-NUM_STUDENT = 300
+NUM_STUDENT = 30
 MAX_GRADE = 6 
 MAX_ROOM = 10
 MAX_NUMBER = 30
@@ -141,8 +141,8 @@ class GenerateStudentDummyData():
                 room = 1
                 grade += 1
 
-            sex = random.choice([0, 1])
-            name = random.choice(GenerateStudentDummyData.MALE_NAMES) if sex else random.choice(GenerateStudentDummyData.FEMALE_NAMES)
+            sex = random.choice([1, 2])
+            name = random.choice(GenerateStudentDummyData.MALE_NAMES) if sex == 1 else random.choice(GenerateStudentDummyData.FEMALE_NAMES)
 
             random_num_days = random.randint(0, self.birth_num_days)
             birth_date_date = self.birth_start_date + timedelta(days=random_num_days)

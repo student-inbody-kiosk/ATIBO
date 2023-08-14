@@ -9,7 +9,7 @@ def gym_equipment_directory_path(instance, filename):
     return f'gym/{instance.equipment.name}/{filename}'
 
 class Equipment(models.Model):
-    name = models.CharField(max_length=30, validators=[MinLengthValidator(2, _('The name length must be longer than 2'))])
+    name = models.CharField(max_length=30, validators=[MinLengthValidator(2, _('이름은 2글자 이상으로 작성해주세요'))])
     description = RichTextField(blank=True)
 
 class Image(models.Model):
