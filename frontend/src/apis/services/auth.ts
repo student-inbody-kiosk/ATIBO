@@ -10,6 +10,7 @@ import {
     toastTopErrorMessage,
     toastTopSuccessMessage,
 } from '@/utils/toastManager';
+import type { Account } from '@/types/accounts.interface';
 
 export async function login(username: string, password: string) {
     return await apiRequest
@@ -17,11 +18,12 @@ export async function login(username: string, password: string) {
             username,
             password,
         })
-        .then((res) => {
+        .then((res): Account => {
             const { updateAccessToken, updateRefreshToken } = useAuthStore();
             updateAccessToken(res.data.accessToken);
             updateRefreshToken(res.data.refreshToken);
             toastTopSuccessMessage('로그인되었습니다');
+            return res.data;
         })
         .catch((err) => {
             toastTopErrorMessage(err.message, err);

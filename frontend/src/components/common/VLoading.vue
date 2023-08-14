@@ -4,7 +4,7 @@ import LoadingSvg from '@/assets/loading.svg';
 withDefaults(
     defineProps<{
         color: 'kiosk-primary' | 'admin-primary';
-        size: 'sm' | 'md' | 'lg';
+        size?: 'sm' | 'md' | 'lg';
     }>(),
     {
         size: 'md',

@@ -4,20 +4,26 @@ import VInput from '@/components/common/VInput.vue';
 import InbodyDataLabel from '@/components/admin/inbody/InbodyDataLabel.vue';
 import InbodyData from '@/components/admin/inbody/InbodyData.vue';
 import InbodyCreateModal from '@/components/admin/inbody/InbodyCreateModal.vue';
+import VLoading from '@/components/common/VLoading.vue';
 
 import router from '@/router';
+import services from '@/apis/services';
+import { useAxios } from '@/hooks/useAxios';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStudentStore } from '@/stores/student.store';
-import { getTheStudentInbodys } from '@/apis/services/inbodys';
+// import { getTheStudentInbodys } from '@/apis/services/inbodys';
 import { checkSearchInput } from '@/utils/checkInput';
 
 import type { Ref } from 'vue';
 import type { InbodyDetail } from '@/types/inbody.interface';
-import { toastTopErrorMessage } from '@/utils/toastManager';
 
-const { student, getStudent } = useStudentStore();
 const route = useRoute();
+const { fetchData: getTheStudentInbodys, isLoading } = useAxios(
+    null,
+    services.getTheStudentInbodys
+);
+const { student, getStudent } = useStudentStore();
 
 const { grade, room, number, name } = route.params;
 const { start, end } = route.query as { start: string; end: string };
@@ -74,7 +80,8 @@ const handleCreateClick = function updateTheStudentInbodys() {
 </script>
 
 <template>
-    <div class="admin-inbody-student">
+    <VLoading v-if="isLoading" color="admin-primary" />
+    <div v-else class="admin-inbody-student">
         <div class="admin-inbody-student-info">
             {{
                 `${grade} 학년 ${room} 반 ${number} 번 ${name} (${

@@ -3,54 +3,25 @@ import VButton from '@/components/common/VButton.vue';
 import InbodySearchBar from '@/components/admin/inbody/InbodySearchBar.vue';
 import StudentTable from '@/components/admin/student/StudentTable.vue';
 import InbodyDateTable from '@/components/admin/inbody/InbodyDateTable.vue';
-import { toastTopErrorMessage } from '@/utils/toastManager';
+import VLoading from '@/components/common/VLoading.vue';
 
 import router from '@/router';
-import { ref, computed, onMounted } from 'vue';
-import { getInbodys } from '@/apis/services/inbodys';
+import services from '@/apis/services';
+import { useAxios } from '@/hooks/useAxios';
 import { calculateDays, createIndexTable } from '@/utils/inbody';
 import { useQueryStore } from '@/stores/query.store';
 import { checkSearchInput } from '@/utils/checkInput';
+import { ref, computed, onMounted } from 'vue';
+import { toastTopErrorMessage } from '@/utils/toastManager';
 
 import type { Ref } from 'vue';
 import type { Inbody } from '@/types/inbody.interace';
 
 const queryStore = useQueryStore();
-
-onMounted(() => {
-    const { startDate, endDate, grade, room, number, name } =
-        queryStore.routeQuery;
-    if (!startDate && !endDate) return;
-    if (!grade && !room && !number && !name) return;
-    getInbodyAPI(startDate, endDate, grade, room, number, name);
-});
-
-// 데이터 요청 후 table 생성 및 데이터 할당
-const getInbodyAPI = (
-    startDate: string,
-    endDate: string,
-    grade: number,
-    room: number,
-    number: number,
-    name: string
-) => {
-    getInbodys(startDate, endDate, grade, room, number, name).then((res) => {
-        days.value = calculateDays(startDate, endDate);
-        dateIndexTable.value = createIndexTable(startDate, endDate);
-        students.value = res;
-
-        // inbodyList에 데이터 넣기
-        for (let i = 0; i < students.value.length; i++) {
-            for (let j = 0; j < students.value[i].inbodySet.length; j++) {
-                inbodyList.value[i][
-                    dateIndexTable.value[
-                        students.value[i].inbodySet[j].testDate
-                    ]
-                ] = students.value[i].inbodySet[j];
-            }
-        }
-    });
-};
+const { fetchData: getInbodys, isLoading } = useAxios(
+    null,
+    services.getInbodys
+);
 
 const startDate = ref('');
 const endDate = ref('');
@@ -69,6 +40,32 @@ const inbodyList = computed(() => {
         () => new Array(days.value)
     );
     return arry;
+});
+
+// 인바디 테이블 생성 및 데이터 할당
+const createTable = (startDate, endDate, data) => {
+    days.value = calculateDays(startDate, endDate);
+    dateIndexTable.value = createIndexTable(startDate, endDate);
+    students.value = data;
+
+    // inbodyList에 데이터 넣기
+    for (let i = 0; i < data.length; i++) {
+        for (let j = 0; j < data[i].inbodySet.length; j++) {
+            inbodyList.value[i][
+                dateIndexTable.value[data[i].inbodySet[j].testDate]
+            ] = data[i].inbodySet[j];
+        }
+    }
+};
+
+onMounted(() => {
+    const { startDate, endDate, grade, room, number, name } =
+        queryStore.routeQuery;
+    if (!startDate && !endDate) return;
+    if (!grade && !room && !number && !name) return;
+    getInbodys(startDate, endDate, grade, room, number, name).then((res) => {
+        createTable(startDate, endDate, res);
+    });
 });
 
 // 검색
@@ -106,14 +103,16 @@ const handleSubmit = function searchAttendance() {
         name: name.value,
     });
 
-    getInbodyAPI(
+    getInbodys(
         startDate.value,
         endDate.value,
         parsedGrade,
         parsedRoom,
         parsedNumber,
         name.value
-    );
+    ).then((res) => {
+        createTable(startDate.value, endDate.value, res);
+    });
 };
 
 const handleStudentClick = function goStudentInbodyList(student: any) {
@@ -143,7 +142,8 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
 </script>
 
 <template>
-    <div class="admin-inbody">
+    <VLoading v-if="isLoading" color="admin-primary" />
+    <div v-else class="admin-inbody">
         <div class="admin-inbody__header">
             <VButton
                 text="뒤로"

@@ -1,4 +1,4 @@
-import { useAccountsStore } from '@/stores/accounts.store';
+import { useAccountStore } from '@/stores/accounts.store';
 import axios from 'axios';
 import router from '@/router/index';
 import { useAuthStore } from '@/stores/auth.store';
@@ -39,7 +39,6 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     async function (error) {
-        console.log('ERROR >>>', error.response.data);
         const originalRequest = error.config;
         // Unauthorized : request a new accessToken
         const { refreshToken, updateAccessToken, updateRefreshToken } =
@@ -48,10 +47,10 @@ axiosInstance.interceptors.response.use(
         if (error.response.status === 401 || error.response.status === 403) {
             if (refreshToken) {
                 try {
-                    const { username } = useAccountsStore();
+                    const { account } = useAccountStore();
                     const res = await axios.post(
                         `${API_BASE_URL}/accounts/token/refresh/`,
-                        { username, refreshToken }
+                        { username: account.username, refreshToken }
                     );
                     const accessToken = res.data?.accessToken;
                     updateAccessToken(accessToken);

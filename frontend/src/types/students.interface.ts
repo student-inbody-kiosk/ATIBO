@@ -14,3 +14,7 @@ export interface Student extends StudentSimple {
 export interface StudentDetail extends Student {
     password: string;
 }
+
+export interface StudentCreate {
+    [key: string]: string | number;
+}

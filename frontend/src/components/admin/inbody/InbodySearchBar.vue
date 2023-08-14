@@ -74,7 +74,7 @@ const emit = defineEmits<{
             <VButton
                 text="조회"
                 color="admin-primary"
-                @click="$emit('search')" />
+                @click="$emit('enter')" />
         </div>
     </div>
 </template>

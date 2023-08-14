@@ -25,10 +25,12 @@ const handleSubmit = function resetPwRequest(event: Event) {
     const username = formData.get('username') as string;
     if (!username || !accountRegexes.username.reg.test(username)) {
         toastTopErrorMessage(accountRegexes.username.condition);
+        return;
     }
     const email = formData.get('email') as string;
     if (!email || !accountRegexes.email.reg.test(email)) {
-        toastTopErrorMessage(accountRegexes.username.condition);
+        toastTopErrorMessage(accountRegexes.email.condition);
+        return;
     }
 
     resetPw({ username, email }).then((res) => {

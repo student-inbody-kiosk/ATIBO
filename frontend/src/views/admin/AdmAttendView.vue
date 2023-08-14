@@ -3,13 +3,16 @@ import VButton from '@/components/common/VButton.vue';
 import AttendSearchBar from '@/components/admin/attendance/AttendSearchBar.vue';
 import StudentTable from '@/components/admin/student/StudentTable.vue';
 import AttendTable from '@/components/admin/attendance/AttendTable.vue';
-import { getAttendances } from '@/apis/services/attendances';
-import { ref } from 'vue';
+import VLoading from '@/components/common/VLoading.vue';
+
+import { toastTopErrorMessage } from '@/utils/toastManager';
+import services from '@/apis/services';
 import { checkSearchInput } from '@/utils/checkInput';
+import { ref } from 'vue';
 
 import type { Ref } from 'vue';
 import type { StudentAttendance } from '@/types/attendance.interface';
-import { toastTopErrorMessage } from '@/utils/toastManager';
+import { useAxios } from '@/hooks/useAxios';
 
 const grade = ref('');
 const room = ref('');
@@ -17,6 +20,11 @@ const name = ref('');
 const number = ref('');
 const date = ref('');
 const students: Ref<StudentAttendance[]> = ref([]);
+
+const { fetchData: getAttendances, isLoading } = useAxios(
+    null,
+    services.getAttendances
+);
 
 const handleSubmit = function searchAttendance() {
     if (!grade.value && !room.value && !number.value && !name.value) {
@@ -46,7 +54,8 @@ const handleSubmit = function searchAttendance() {
 </script>
 
 <template>
-    <div class="admin-attend">
+    <VLoading v-if="isLoading" color="admin-primary" />
+    <div v-else class="admin-attend">
         <div class="admin-attend__header">
             <VButton
                 text="뒤로"

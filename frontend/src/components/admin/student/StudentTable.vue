@@ -19,11 +19,11 @@ defineEmits<{
         <tbody>
             <StudentData
                 v-for="(student, index) in students"
-                :key="student.name"
+                :key="student.id"
                 :index="index"
                 :grade="student.grade"
                 :room="student.room"
-                :number="student.room"
+                :number="student.number"
                 :name="student.name"
                 @click="$emit('click', student)" />
         </tbody>
