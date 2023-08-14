@@ -15,6 +15,6 @@ import KioIndexButtons from '@/components/kiosk/index/KioIndexButtons.vue';
     align-self: center;
     display: flex;
     flex-direction: column;
-    gap: 4rem;
+    gap: 9vh;
 }
 </style>

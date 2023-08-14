@@ -80,7 +80,7 @@ const handleClick = function updateGymImages() {
     <section v-else-if="gymImages" class="gym-update-image">
         <div class="gym-update-image__buttons">
             <div class="gym-update-image__add-button">
-                <VButton text="사진 추가" color="green" size="xs" />
+                <VButton text="사진 추가" color="green" size="sm" />
                 <VInput
                     id="admin-gym-images"
                     name="images"
@@ -92,7 +92,7 @@ const handleClick = function updateGymImages() {
             <VButton
                 text="사진 저장"
                 color="admin-primary"
-                size="xs"
+                size="sm"
                 @click="handleClick" />
         </div>
         <ul class="gym-update-image__list">
@@ -135,7 +135,7 @@ const handleClick = function updateGymImages() {
     display: inline-block;
     cursor: pointer;
 
-    div:nth-child(2) {
+    div:nth-child(1) {
         position: absolute;
         top: 0;
         left: 0;

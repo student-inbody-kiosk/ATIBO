@@ -50,7 +50,7 @@ axiosInstance.interceptors.response.use(
                 try {
                     const { username } = useAccountsStore();
                     const res = await axios.post(
-                        `${VITE_BASE_URL}accounts/token/refresh/`,
+                        `${VITE_BASE_URL}/accounts/token/refresh/`,
                         { username, refreshToken }
                     );
                     const accessToken = res.data?.accessToken;
