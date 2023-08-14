@@ -139,8 +139,8 @@ const handleInput = function handleAppInput(event: Event) {
 }
 
 .v-input.kiosk-primary.focus {
-    input:focus,
-    textarea:focus {
+    input,
+    textarea {
         outline: $kiosk-deep-primary 3px solid;
     }
 }
@@ -153,8 +153,8 @@ const handleInput = function handleAppInput(event: Event) {
 }
 
 .v-input.admin-primary.focus {
-    input:focus,
-    textarea:focus {
+    input,
+    textarea {
         outline: $admin-deep-primary 3px solid;
     }
 }
@@ -193,13 +193,14 @@ const handleInput = function handleAppInput(event: Event) {
 }
 
 .v-input.xl {
-    font-size: 2rem;
+    font-size: 3vh;
 
     input,
     textarea {
-        padding: 1rem;
+        padding: 1.5vh;
+        max-width: 50vw;
         border-radius: 0.5em;
-        font-size: 1.8rem;
+        font-size: 3vh;
     }
 }
 
