@@ -11,7 +11,7 @@
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .kiosk-container {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
@@ -40,5 +40,15 @@
     grid-template-rows: minmax(0, 1fr);
     width: 100%;
     height: 100%;
+}
+
+.kiosk-loading {
+    @include z-index(toast);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #00000022;
 }
 </style>

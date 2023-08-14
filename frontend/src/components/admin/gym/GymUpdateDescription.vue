@@ -19,7 +19,7 @@ const {
     isLoading,
     isError,
     response: gym,
-} = useAxios<Gym, number>({}, (gymId) => services.getGym(gymId));
+} = useAxios<Gym>({}, services.getGym);
 
 onMounted(() => {
     getGym(props.gymId);

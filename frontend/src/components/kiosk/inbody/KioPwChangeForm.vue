@@ -4,8 +4,10 @@ import { ref, reactive } from 'vue';
 import services from '@/apis/services';
 import VButton from '@/components/common/VButton.vue';
 import VInput from '@/components/common/VInput.vue';
+import VLoading from '@/components/common/VLoading.vue';
 import TheKeypad from '@/components/kiosk/TheKeypad.vue';
 import { studentRegexes } from '@/constants/regexes';
+import { useAxios } from '@/hooks/useAxios';
 import { toastCenterErrorMessage } from '@/utils/toastManager';
 
 const props = defineProps<{
@@ -72,7 +74,12 @@ const handleInputConfirmPassword = function (value: string) {
 };
 
 // Change the student password asynchronously
-const handleSubmit = function updateStudentPw() {
+const { fetchData: updateStudentPw, isLoading } = useAxios<null>(
+    null,
+    services.updateStudentPw
+);
+
+const handleSubmit = function onHandleUpdateStudentPw() {
     if (!studentRegexes.password.reg.test(oldPassword.value)) {
         toastCenterErrorMessage('기존 비밀번호는 4자리 숫자입니다');
         return;
@@ -86,7 +93,7 @@ const handleSubmit = function updateStudentPw() {
         return;
     }
 
-    services.updateStudentPw(
+    updateStudentPw(
         props.grade,
         props.room,
         props.number,
@@ -102,6 +109,7 @@ const handleSubmit = function updateStudentPw() {
 </script>
 
 <template>
+    <VLoading v-if="isLoading" color="kiosk-primary" class="kiosk-loading" />
     <div class="kiosk-pw-change-form">
         <form class="kiosk-pw-change-form__form" @submit.prevent="handleSubmit">
             <VInput

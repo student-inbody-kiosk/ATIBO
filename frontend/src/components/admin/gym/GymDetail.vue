@@ -16,7 +16,7 @@ const {
     isLoading: isGymLoading,
     isError: isGymError,
     response: gym,
-} = useAxios<Gym, number>({}, (gymId) => services.getGym(gymId));
+} = useAxios<Gym>({}, services.getGym);
 
 onMounted(() => {
     getGym(props.gymId);
@@ -28,10 +28,10 @@ const {
     isLoading: isGymImagesLoading,
     isError: isGymImagesError,
     response: gymImages,
-} = useAxios<GymImage[]>([], () => services.getGymImages(props.gymId));
+} = useAxios<GymImage[]>([], services.getGymImages);
 
 onMounted(() => {
-    getGymImages();
+    getGymImages(props.gymId);
 });
 </script>
 

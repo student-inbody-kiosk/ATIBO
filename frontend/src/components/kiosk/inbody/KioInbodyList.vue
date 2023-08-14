@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { ref, watch, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import services from '@/apis/services';
 import VButton from '@/components/common/VButton.vue';
+import VLoading from '@/components/common/VLoading.vue';
 import KioInbodyTable from '@/components/kiosk/inbody/KioInbodyTable.vue';
 import KioInbodyGraph from '@/components/kiosk/inbody/KioInbodyGraph.vue';
+import { useAxios } from '@/hooks/useAxios';
 import type { InbodyDetail } from '@/types/inbody.interface';
 
 const props = defineProps<{
@@ -15,20 +17,25 @@ const props = defineProps<{
 }>();
 
 /* Inbody data logic */
-// Get the intial inbody data
-const inbodys = ref<InbodyDetail[]>(
-    await services.getTheStudentInbodys(
-        props.grade,
-        props.room,
-        props.number,
-        props.startDate,
-        props.endDate
-    )
+const {
+    fetchData: getTheStudentInbodys,
+    response: inbodys,
+    isLoading,
+    isError,
+} = useAxios<InbodyDetail[]>([], services.getTheStudentInbodys);
+
+// Get the intial inbody data Asynchronously
+await getTheStudentInbodys(
+    props.grade,
+    props.room,
+    props.number,
+    props.startDate,
+    props.endDate
 );
 
-// Update inbody data when props changed
+// Update inbody data when props changed Asynchronously
 watchEffect(async () => {
-    inbodys.value = await services.getTheStudentInbodys(
+    await getTheStudentInbodys(
         props.grade,
         props.room,
         props.number,
@@ -52,6 +59,7 @@ const handleClickGraph = function changeIsGraphTrue() {
 </script>
 
 <template>
+    <VLoading v-if="isLoading" color="kiosk-primary" class="kiosk-loading" />
     <div class="kiosk-inbody-list">
         <div class="kiosk-inbody-list__buttons">
             <VButton
