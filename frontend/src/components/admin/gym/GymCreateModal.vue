@@ -5,6 +5,7 @@ import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import VLoading from '@/components/common/VLoading.vue';
 import { useAxios } from '@/hooks/useAxios';
+import { toastTopErrorMessage } from '@/utils/toastManager';
 
 const router = useRouter();
 
@@ -19,9 +20,18 @@ const handleSubmit = function onHandleCreateGym(event: Event) {
     if (!form) return;
 
     const formData = new FormData(form);
-    formData.append('description', '');
+    const name = (formData.get('name') as string) || '';
+    if (name.length < 2) {
+        toastTopErrorMessage('운동기구 이름은 2글자 이상 입력해주세요');
+    }
+    const description = '';
 
-    createGym(formData).then((res) => {
+    const data = {
+        name,
+        description,
+    };
+
+    createGym(data).then((res) => {
         router.push({ name: 'admin-gym-update', params: { gymId: res.id } });
     });
 };

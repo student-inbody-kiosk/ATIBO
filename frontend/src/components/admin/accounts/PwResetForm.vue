@@ -6,13 +6,12 @@ import VLoading from '@/components/common/VLoading.vue';
 import { accountRegexes } from '@/constants/regexes';
 import { useAxios } from '@/hooks/useAxios';
 import { toastTopErrorMessage } from '@/utils/toastManager';
-import type { AccountPwReset } from '@/types/accounts.interface';
 
 const emit = defineEmits<{
     (e: 'success'): void;
 }>();
 
-const { fetchData: resetPw, isLoading } = useAxios<null, AccountPwReset>(
+const { fetchData: resetPw, isLoading } = useAxios<null>(
     null,
     services.resetPw
 );
