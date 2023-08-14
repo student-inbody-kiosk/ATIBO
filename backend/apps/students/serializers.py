@@ -41,11 +41,12 @@ class StudentListAuthSerializer(serializers.ListSerializer):
         try:
             for student_id, data in data_mapping.items():
                 student = student_mapping.get(student_id, None)
+                data['is_constraint_activated'] = True
                 ret.append(self.child.update(student, data))
         except IntegrityError as e:
-            grade = student.get('grade')
-            room = student.get('room')
-            number = student.get('number')
+            grade = data.get('grade')
+            room = data.get('room')
+            number = data.get('number')
             raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{grade}학년 {room}반 {number}번에 해당하는 학생이 이미 존재합니다.\n 학년, 반, 번호 조합은 고유해야 합니다.'), f'db_integrity_error')
             
         return ret
