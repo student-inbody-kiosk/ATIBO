@@ -20,12 +20,11 @@ const handleCloseModal = function closeGymCreateModal() {
 <template>
     <div class="gym-view">
         <div class="gym-view__header">
+            <RouterLink :to="{ name: 'admin-main' }">
+                <VButton text="뒤로" color="gray" />
+            </RouterLink>
             <h1 class="gym-view__header__title">운동기구 목록</h1>
-            <VButton
-                class="gym-view__header__button"
-                text="추가"
-                color="green"
-                @click="handleOpenModal" />
+            <VButton text="추가" color="green" @click="handleOpenModal" />
         </div>
         <GymList />
     </div>
@@ -54,7 +53,7 @@ const handleCloseModal = function closeGymCreateModal() {
 
 .gym-view__header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     position: relative;
 }

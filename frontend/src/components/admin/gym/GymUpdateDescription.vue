@@ -19,10 +19,10 @@ const {
     isLoading,
     isError,
     response: gym,
-} = useAxios<Gym>({}, () => services.getGym(props.gymId));
+} = useAxios<Gym, number>({}, (gymId) => services.getGym(gymId));
 
 onMounted(() => {
-    getGym();
+    getGym(props.gymId);
 });
 
 /* Update gym data */
@@ -64,7 +64,7 @@ const ckeditorConfig = {
                     text="글 저장"
                     type="submit"
                     color="admin-primary"
-                    size="xs" />
+                    size="sm" />
             </div>
             <div class="gym-update-description__ckeditor">
                 <ckeditor

@@ -22,6 +22,6 @@ import VButton from '@/components/common/VButton.vue';
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 3rem;
+    gap: 4vh;
 }
 </style>

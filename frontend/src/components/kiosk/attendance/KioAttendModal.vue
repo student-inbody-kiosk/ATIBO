@@ -33,7 +33,7 @@ const handleClick = function createAttendance() {
             {{ student.grade }}학년 {{ student.room }}학년
             {{ student.number }}번 <br />{{ student.name }}
         </p>
-        <VButton text="출석하기" color="green" size="md" @click="handleClick" />
+        <VButton text="출석하기" color="green" size="lg" @click="handleClick" />
     </div>
 </template>
 
