@@ -21,5 +21,8 @@ class SchoolSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         if not ret.get('logo_image'):
-            ret['logo_image'] = 'http://localhost:8000'+ settings.STATIC_URL + DEFAULT_LOGO_IMAGE_PATH
+            if not settings.DEBUG:
+                ret['logo_image'] = settings.STATIC_URL + DEFAULT_LOGO_IMAGE_PATH
+            else:
+                ret['logo_image'] = 'http://localhost:8000'+ settings.STATIC_URL + DEFAULT_LOGO_IMAGE_PATH
         return ret

@@ -20,7 +20,7 @@ const queryStore = useQueryStore();
 watchEffect(() => {
     const routeName = route.name;
     if (routeName === 'admin-main') {
-        queryStore.$reset;
+        queryStore.$reset();
     }
 });
 

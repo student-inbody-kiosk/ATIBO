@@ -47,7 +47,7 @@ const inbodyRegexes = {
         condition: '날짜는 YYYY-MM-DD 형식으로 입력해주세요',
     },
     weight: {
-        reg: /^[1-9][0-9]*$/,
+        reg: /^(?:[1-9][0-9]*|0)(?:\.\d+)?$/,
         condition: '체중을 정확히 입력해주세요',
     },
     percentBodyFat: {
@@ -59,7 +59,7 @@ const inbodyRegexes = {
         condition: '골격근량을 정확히 입력해주세요',
     },
     height: {
-        reg: /^[1-9][0-9]*$/,
+        reg: /^(?:[1-9][0-9]*|0)(?:\.\d+)?$/,
         condition: '키를 정확히 입력해주세요',
     },
     age: {
@@ -111,5 +111,4 @@ const accountRegexes = {
     },
 };
 
-export { regexes, studentRegexes, accountRegexes, inbodyRegexes};
-
+export { regexes, studentRegexes, accountRegexes, inbodyRegexes };
