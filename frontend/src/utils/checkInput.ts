@@ -1,4 +1,8 @@
-import { inbodyRegexes, studentRegexes } from '@/constants/regexes';
+import {
+    inbodyRegexes,
+    studentRegexes,
+    searchRegexes,
+} from '@/constants/regexes';
 import { toastTopErrorMessage } from './toastManager';
 import type { Student } from '@/types/students.interface';
 import type { InbodyDetail } from '@/types/inbody.interface';
@@ -26,4 +30,15 @@ const checkInbodyInput = (inbody: InbodyDetail) => {
     return false;
 };
 
-export { checkInbodyInput, checkStudentInput };
+// 정규식 검사를 만족하지 않으면 true 반환
+const checkSearchInput = (data) => {
+    for (const key in data) {
+        if (!searchRegexes[key].reg.test(data[key])) {
+            toastTopErrorMessage(searchRegexes[key].condition);
+            return true;
+        }
+    }
+    return false;
+};
+
+export { checkInbodyInput, checkStudentInput, checkSearchInput };
