@@ -17,37 +17,38 @@ from .models import Student, Attendance, Inbody
 class StudentListAuthSerializer(serializers.ListSerializer):
     # Mulltiple Create
     def create(self, validated_data):
-        students = [Student(**item) for item in validated_data]
+        ret = []
 
-        # Handle DB integrity error
+        # Handle DB integrity Error
         try:
-            instance = Student.objects.bulk_create(students)
+            for student in validated_data:
+                ret.append(self.child.create(student))
         except IntegrityError as e:
-            code, message = e.args
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{message}'), f'db_{code}')
+            grade = student.get('grade')
+            room = student.get('room')
+            number = student.get('number')
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{grade}학년 {room}반 {number}번에 해당하는 학생이 이미 존재합니다.\n 학년, 반, 번호 조합은 고유해야 합니다.'), f'db_integrity_error')
         
-        return instance
+        return ret
     
     # Multiple Update
     def update(self, instance, validated_data):
-        students =[]
-        for item in validated_data:
-            student = Student(**item)
-            """
-            Restore the (grade, room, number) constraint, which is deactivated in the serializer
-            """
-            student.is_constraint_activated = True
-            students.append(student)
-
+        student_mapping = {student.id: student for student in instance}
+        data_mapping = {item['id']: item for item in validated_data}
+    
+        ret =[]
         # Handle DB integrity error
         try:
-            # Bulk update
-            Student.objects.bulk_update(students, ['name', 'grade', 'room', 'number', 'sex', 'password', 'birth_date', 'is_constraint_activated'])
+            for student_id, data in data_mapping.items():
+                student = student_mapping.get(student_id, None)
+                ret.append(self.child.update(student, data))
         except IntegrityError as e:
-            code, message = e.args
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{message}'), f'db_{code}')
+            grade = student.get('grade')
+            room = student.get('room')
+            number = student.get('number')
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{grade}학년 {room}반 {number}번에 해당하는 학생이 이미 존재합니다.\n 학년, 반, 번호 조합은 고유해야 합니다.'), f'db_integrity_error')
             
-        return students
+        return ret
 
 
 class StudentAuthSerializer(serializers.ModelSerializer):
@@ -61,7 +62,7 @@ class StudentAuthSerializer(serializers.ModelSerializer):
     # Since this is constraints, and the default validator isn't set.
     def validate_sex(self, value):
         if not value in (0, 1, 2, 9):
-            raise serializers.ValidationError(_('Check the gender'), 'invalid_sex')
+            raise serializers.ValidationError(_('성별을 확인해주세요'), 'invalid_sex')
         return value
     
     def validate_birth_date(self, value):
@@ -240,4 +241,4 @@ class StudentInbodySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = ['name', 'grade', 'room', 'number', 'sex', 'inbody_set']
+        fields = ['id', 'name', 'grade', 'room', 'number', 'inbody_set']
