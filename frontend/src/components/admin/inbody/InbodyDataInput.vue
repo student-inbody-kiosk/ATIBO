@@ -20,36 +20,42 @@ const maxDate = new Date().toISOString().split('T')[0];
                 id="testDate"
                 type="date"
                 :max="maxDate"
+                size="xs"
                 :value="inbody.testDate"
                 @input="(testDate) => $emit('input', 'testDate', testDate)" />
         </td>
         <td>
             <VInput
                 id="score"
+                size="xs"
                 :value="inbody.score"
                 @input="(score) => $emit('input', 'score', Number(score))" />
         </td>
         <td>
             <VInput
                 id="age"
+                size="xs"
                 :value="inbody.age"
                 @input="(age) => $emit('input', 'age', Number(age))" />
         </td>
         <td>
             <VInput
                 id="height"
+                size="xs"
                 :value="inbody.height"
                 @input="(height) => $emit('input', 'height', Number(height))" />
         </td>
         <td>
             <VInput
                 id="weight"
+                size="xs"
                 :value="inbody.weight"
                 @input="(weight) => $emit('input', 'weight', Number(weight))" />
         </td>
         <td>
             <VInput
                 id="percentBodyFat"
+                size="xs"
                 :value="inbody.percentBodyFat"
                 @input="
                     (percentBodyFat) =>
@@ -59,6 +65,7 @@ const maxDate = new Date().toISOString().split('T')[0];
         <td>
             <VInput
                 id="skeletalMuscleMass"
+                size="xs"
                 :value="inbody.skeletalMuscleMass"
                 @input="
                     (skeletalMuscleMass) =>
@@ -72,6 +79,7 @@ const maxDate = new Date().toISOString().split('T')[0];
         <td>
             <VInput
                 id="bodyFatMass"
+                size="xs"
                 :value="inbody.bodyFatMass"
                 @input="
                     (bodyFatMass) =>
@@ -81,6 +89,7 @@ const maxDate = new Date().toISOString().split('T')[0];
         <td>
             <VInput
                 id="bodyMassIndex"
+                size="xs"
                 :value="inbody.bodyMassIndex"
                 @input="
                     (bodyMassIndex) =>
@@ -90,6 +99,7 @@ const maxDate = new Date().toISOString().split('T')[0];
         <td>
             <VInput
                 id="totalBodyWater"
+                size="xs"
                 :value="inbody.totalBodyWater"
                 @input="
                     (totalBodyWater) =>
@@ -99,6 +109,7 @@ const maxDate = new Date().toISOString().split('T')[0];
         <td>
             <VInput
                 id="protein"
+                size="xs"
                 :value="inbody.protein"
                 @input="
                     (protein) => $emit('input', 'protein', Number(protein))
@@ -107,6 +118,7 @@ const maxDate = new Date().toISOString().split('T')[0];
         <td>
             <VInput
                 id="minerals"
+                size="xs"
                 :value="inbody.minerals"
                 @input="
                     (minerals) => $emit('input', 'minerals', Number(minerals))

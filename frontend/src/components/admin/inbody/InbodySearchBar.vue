@@ -32,7 +32,6 @@ const maxDate = new Date().toISOString().split('T')[0];
                 label="시작"
                 type="date"
                 :value="startDate"
-                size="md"
                 @input="(value) => $emit('start-date', value)"
                 @enter="$emit('enter')" />
             <VInput
@@ -41,7 +40,6 @@ const maxDate = new Date().toISOString().split('T')[0];
                 type="date"
                 :value="endDate"
                 :max="maxDate"
-                size="md"
                 @input="(value) => $emit('end-date', value)"
                 @enter="$emit('enter')" />
         </div>
@@ -50,28 +48,24 @@ const maxDate = new Date().toISOString().split('T')[0];
                 id="grade"
                 label="학년"
                 :value="grade"
-                size="md"
                 @input="(value) => $emit('grade', value)"
                 @enter="$emit('enter')" />
             <VInput
                 id="room"
                 label="반"
                 :value="room"
-                size="md"
                 @input="(value) => $emit('room', value)"
                 @enter="$emit('enter')" />
             <VInput
                 id="number"
                 label="번호"
                 :value="number"
-                size="md"
                 @input="(value) => $emit('number', value)"
                 @enter="$emit('enter')" />
             <VInput
                 id="name"
                 label="이름"
                 :value="name"
-                size="md"
                 @input="(value) => $emit('name', value)"
                 @enter="$emit('enter')" />
             <VButton

@@ -15,7 +15,7 @@ const props = withDefaults(
         max?: number | string;
         textAlign?: 'left' | 'right' | 'center' | 'justify';
         color?: 'kiosk-primary' | 'admin-primary';
-        size?: 'sm' | 'md' | 'lg' | 'xl';
+        size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
         isError?: boolean;
         condition?: string;
         isFocus?: boolean;
@@ -160,13 +160,34 @@ const handleInput = function handleAppInput(event: Event) {
 }
 
 //size
+.v-input.xs {
+    font-size: 1rem;
+
+    input,
+    textarea {
+        font-size: 1rem;
+        width: 100%;
+        text-align: center;
+    }
+}
+
 .v-input.sm {
     font-size: 1rem;
 
     input,
     textarea {
-        padding: 0.2rem;
+        padding: 0.3rem;
         font-size: 1rem;
+        width: 4rem;
+        border-radius: 0.5em;
+    }
+
+    input[type='month'] {
+        width: 7.5rem;
+    }
+
+    input[type='date'] {
+        width: 10rem;
     }
 }
 
