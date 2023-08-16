@@ -20,6 +20,8 @@ const emit = defineEmits<{
     (e: 'name', value: string): void;
     (e: 'enter'): void;
 }>();
+
+const maxDate = new Date().toISOString().split('T')[0];
 </script>
 
 <template>
@@ -38,6 +40,7 @@ const emit = defineEmits<{
                 label="끝"
                 type="date"
                 :value="endDate"
+                :max="maxDate"
                 size="md"
                 @input="(value) => $emit('end-date', value)"
                 @enter="$emit('enter')" />

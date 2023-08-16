@@ -9,6 +9,8 @@ defineProps<{
 defineEmits<{
     (e: 'input', key: string, value: string): void;
 }>();
+
+const maxDate = new Date().toISOString().split('T')[0];
 </script>
 
 <template>
@@ -17,6 +19,7 @@ defineEmits<{
             <VInput
                 id="testDate"
                 type="date"
+                :max="maxDate"
                 :value="inbody.testDate"
                 @input="(testDate) => $emit('input', 'testDate', testDate)" />
         </td>

@@ -14,6 +14,7 @@ const props = withDefaults(
 );
 
 const sexData = ref(props.student.sex);
+const maxDate = new Date().toISOString().split('T')[0];
 </script>
 
 <template>
@@ -76,6 +77,7 @@ const sexData = ref(props.student.sex);
                 id="date"
                 type="date"
                 :value="student.birthDate"
+                :max="maxDate"
                 @input="
                     (date) => $emit('update-input', index, 'birthDate', date)
                 " />

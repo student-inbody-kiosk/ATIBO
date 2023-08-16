@@ -21,19 +21,23 @@ const { fetchData: getStudents, isLoading } = useAxios(
 );
 const queryStore = useQueryStore();
 
-onMounted(() => {
-    const { grade, room, number, name } = queryStore.routeQuery;
-    if (!grade && !room && !number && !name) return;
-    getStudents(grade, room, number, name).then((res) => {
-        students.value = res;
-    });
-});
-
 const grade = ref('');
 const room = ref('');
 const name = ref('');
 const number = ref('');
 const students: Ref<StudentDetail[]> = ref([]);
+
+onMounted(() => {
+    const { grade: g, room: r, number: num, name: n } = queryStore.routeQuery;
+    if (!g && !r && !num && !n) return;
+    grade.value = g ? String(g) : '';
+    room.value = r ? String(r) : '';
+    number.value = num ? String(num) : '';
+    name.value = n ? n : '';
+    getStudents(g, r, num, n).then((res) => {
+        students.value = res;
+    });
+});
 
 const handleSubmit = function searchStudents() {
     if (!grade.value && !room.value && !name.value && !number.value) {

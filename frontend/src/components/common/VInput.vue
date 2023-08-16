@@ -11,8 +11,8 @@ const props = withDefaults(
         readonly?: boolean;
         minlength?: number;
         maxlength?: number;
-        min?: number;
-        max?: number;
+        min?: number | string;
+        max?: number | string;
         textAlign?: 'left' | 'right' | 'center' | 'justify';
         color?: 'kiosk-primary' | 'admin-primary';
         size?: 'sm' | 'md' | 'lg' | 'xl';
