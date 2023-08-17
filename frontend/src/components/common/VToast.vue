@@ -35,17 +35,17 @@ withDefaults(
 .v-toast {
     @include z-index(toast);
     font-weight: 600;
-    animation: toast 0.5s ease-in-out;
+    animation: toast 0.5s ease-in-out forwards;
 }
 
 @keyframes toast {
     from {
         opacity: 0;
-        transform: translateY(-100px);
+        transform: translateY(-80px);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(20px);
     }
 }
 
@@ -97,7 +97,7 @@ withDefaults(
 
 // size
 .v-toast.sm {
-    font-size: 1rem;
+    font-size: 1.2rem;
 
     svg {
         width: 1.5rem;

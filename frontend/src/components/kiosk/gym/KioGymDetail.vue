@@ -54,9 +54,10 @@ const gymImages = await services.getGymImages(props.gymId);
 
 .kiosk-gym-detail__image {
     display: flex;
+    justify-self: center;
     gap: 1rem;
     overflow-x: auto;
-    width: 100%;
+    max-width: 100%;
 }
 
 .kiosk-gym-detail__image img {

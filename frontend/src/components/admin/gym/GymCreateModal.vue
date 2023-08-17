@@ -23,6 +23,7 @@ const handleSubmit = function onHandleCreateGym(event: Event) {
     const name = (formData.get('name') as string) || '';
     if (name.length < 2) {
         toastTopErrorMessage('운동기구 이름은 2글자 이상 입력해주세요');
+        return;
     }
     const description = '';
 
@@ -38,22 +39,18 @@ const handleSubmit = function onHandleCreateGym(event: Event) {
 </script>
 
 <template>
-    <div class="gym-create-modal">
-        <VLoading v-if="isLoading" color="admin-primary" />
-        <div v-else>
-            <p class="gym-create-modal__title">운동기구 이름</p>
-            <form
-                class="gym-create-modal__content"
-                @submit.prevent="handleSubmit">
-                <VInput
-                    id="gym-create-name"
-                    name="name"
-                    text-align="center"
-                    type="text"
-                    size="md" />
-                <VButton text="생성" color="green" type="submit" />
-            </form>
-        </div>
+    <VLoading v-if="isLoading" color="admin-primary" />
+    <div v-else class="gym-create-modal">
+        <p class="gym-create-modal__title">운동기구 이름</p>
+        <form class="gym-create-modal__content" @submit.prevent="handleSubmit">
+            <VInput
+                id="gym-create-name"
+                name="name"
+                text-align="center"
+                type="text"
+                size="md" />
+            <VButton text="생성" color="green" type="submit" />
+        </form>
     </div>
 </template>
 

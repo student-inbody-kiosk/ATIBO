@@ -28,10 +28,7 @@ defineProps<{
     height: 100%;
     border-radius: 1em;
     background-color: transparentize($white, 0.4);
-    box-shadow:
-        inset 0 3px 5px rgba(255, 255, 255, 0.3),
-        inset 0 -3px 5px rgba(0, 0, 0, 0.3),
-        0 1px 2px 2px transparentize($black, 0.9);
+    box-shadow: 0 3px 3px 2px rgba(0, 0, 0, 0.1);
     font-size: 1.5rem;
     font-weight: 600;
     transition: transform 0.2s ease-in-out;
