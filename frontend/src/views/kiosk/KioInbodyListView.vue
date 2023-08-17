@@ -7,7 +7,7 @@ import VIconButton from '@/components/common/VIconButton.vue';
 import KioInbodyList from '@/components/kiosk/inbody/KioInbodyList.vue';
 import KioInbodySearchForm from '@/components/kiosk/inbody/KioInbodySearchForm.vue';
 import { useStudentStore } from '@/stores/student.store';
-import { getToday, getAYearAgo } from '@/utils/date';
+import { getToday, getThreeMonthsAgo } from '@/utils/date';
 import type { HeaderUpdate } from '@/types/app.interface';
 
 const emit = defineEmits<{
@@ -27,7 +27,7 @@ const number = Number(route.params.number);
 const startDate = ref(
     regexes.startDate.reg.test(String(route.query.startDate))
         ? String(route.query.startDate)
-        : getAYearAgo() // The default startDate: a year ago
+        : getThreeMonthsAgo() // The default startDate: three months ago
 );
 const endDate = ref(
     regexes.endDate.reg.test(String(route.query.endDate))
@@ -99,8 +99,8 @@ watch(student, () => {
         <RouterLink
             class="kiosk-inbody-list-view__password"
             :to="{ name: 'kiosk-inbody-pw' }">
-            <VIconButton>
-                <font-awesome-icon icon="lock" size="3x" />
+            <VIconButton text="비밀번호 변경">
+                <font-awesome-icon icon="lock" size="2x" />
             </VIconButton>
         </RouterLink>
     </div>
@@ -126,5 +126,7 @@ watch(student, () => {
     position: fixed;
     top: 1.5rem;
     right: 2rem;
+    text-decoration: none;
+    color: inherit;
 }
 </style>
