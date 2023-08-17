@@ -40,6 +40,7 @@ onMounted(() => {
     overflow-y: auto;
     height: 100%;
     width: 100%;
+    min-width: 600px;
 }
 
 .gym-list li {

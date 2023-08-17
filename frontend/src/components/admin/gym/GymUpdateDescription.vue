@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import CKEditor from '@ckeditor/ckeditor5-vue';
 import services from '@/apis/services';
 import VError from '@/components/common/VError.vue';
 import VLoading from '@/components/common/VLoading.vue';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import { useAxios } from '@/hooks/useAxios';
-import type { Gym } from '@/types/gyms.interface';
 import { toastTopErrorMessage } from '@/utils/toastManager';
-import { useRouter } from 'vue-router';
+import type { Gym } from '@/types/gyms.interface';
 
 const props = defineProps<{
     gymId: number;
@@ -54,13 +55,9 @@ const handleSubmit = function updateGym(event: Event) {
     });
 };
 
-// ckeditor config
-const ckeditorConfig = {
-    default: {
-        width: '100%',
-        height: '100%',
-    },
-};
+// ckeditor config & component
+const ckeditorConfig = {};
+const ckeditor = CKEditor.component;
 </script>
 
 <template>
