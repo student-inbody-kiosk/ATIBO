@@ -95,9 +95,11 @@ const handleDeleteClick = function deleteInbodyData() {
 <style lang="scss" scoped>
 .admin-inbody-detail {
     width: 100%;
+    height: 100%;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    // grid-template-rows: repeat(5, auto);
 }
 
 .admin-inbody-detail__buttons {
@@ -115,10 +117,5 @@ const handleDeleteClick = function deleteInbodyData() {
 .student-info {
     font-size: 1.5rem;
     text-align: center;
-}
-
-table {
-    display: flex;
-    align-items: center;
 }
 </style>

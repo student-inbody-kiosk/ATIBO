@@ -29,28 +29,28 @@ const maxDate = new Date().toISOString().split('T')[0];
                 id="score"
                 size="xs"
                 :value="inbody.score"
-                @input="(score) => $emit('input', 'score', Number(score))" />
+                @input="(score) => $emit('input', 'score', score)" />
         </td>
         <td>
             <VInput
                 id="age"
                 size="xs"
                 :value="inbody.age"
-                @input="(age) => $emit('input', 'age', Number(age))" />
+                @input="(age) => $emit('input', 'age', age)" />
         </td>
         <td>
             <VInput
                 id="height"
                 size="xs"
                 :value="inbody.height"
-                @input="(height) => $emit('input', 'height', Number(height))" />
+                @input="(height) => $emit('input', 'height', height)" />
         </td>
         <td>
             <VInput
                 id="weight"
                 size="xs"
                 :value="inbody.weight"
-                @input="(weight) => $emit('input', 'weight', Number(weight))" />
+                @input="(weight) => $emit('input', 'weight', weight)" />
         </td>
         <td>
             <VInput
@@ -59,7 +59,7 @@ const maxDate = new Date().toISOString().split('T')[0];
                 :value="inbody.percentBodyFat"
                 @input="
                     (percentBodyFat) =>
-                        $emit('input', 'percentBodyFat', Number(percentBodyFat))
+                        $emit('input', 'percentBodyFat', percentBodyFat)
                 " />
         </td>
         <td>
@@ -69,11 +69,7 @@ const maxDate = new Date().toISOString().split('T')[0];
                 :value="inbody.skeletalMuscleMass"
                 @input="
                     (skeletalMuscleMass) =>
-                        $emit(
-                            'input',
-                            'skeletalMuscleMass',
-                            Number(skeletalMuscleMass)
-                        )
+                        $emit('input', 'skeletalMuscleMass', skeletalMuscleMass)
                 " />
         </td>
         <td>
@@ -82,8 +78,7 @@ const maxDate = new Date().toISOString().split('T')[0];
                 size="xs"
                 :value="inbody.bodyFatMass"
                 @input="
-                    (bodyFatMass) =>
-                        $emit('input', 'bodyFatMass', Number(bodyFatMass))
+                    (bodyFatMass) => $emit('input', 'bodyFatMass', bodyFatMass)
                 " />
         </td>
         <td>
@@ -93,7 +88,7 @@ const maxDate = new Date().toISOString().split('T')[0];
                 :value="inbody.bodyMassIndex"
                 @input="
                     (bodyMassIndex) =>
-                        $emit('input', 'bodyMassIndex', Number(bodyMassIndex))
+                        $emit('input', 'bodyMassIndex', bodyMassIndex)
                 " />
         </td>
         <td>
@@ -103,7 +98,7 @@ const maxDate = new Date().toISOString().split('T')[0];
                 :value="inbody.totalBodyWater"
                 @input="
                     (totalBodyWater) =>
-                        $emit('input', 'totalBodyWater', Number(totalBodyWater))
+                        $emit('input', 'totalBodyWater', totalBodyWater)
                 " />
         </td>
         <td>
@@ -111,18 +106,14 @@ const maxDate = new Date().toISOString().split('T')[0];
                 id="protein"
                 size="xs"
                 :value="inbody.protein"
-                @input="
-                    (protein) => $emit('input', 'protein', Number(protein))
-                " />
+                @input="(protein) => $emit('input', 'protein', protein)" />
         </td>
         <td>
             <VInput
                 id="minerals"
                 size="xs"
                 :value="inbody.minerals"
-                @input="
-                    (minerals) => $emit('input', 'minerals', Number(minerals))
-                " />
+                @input="(minerals) => $emit('input', 'minerals', minerals)" />
         </td>
     </tr>
 </template>

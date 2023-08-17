@@ -35,7 +35,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-    (e: 'input', value: string): void;
+    (e: 'input', value: string, target: HTMLInputElement): void;
     (e: 'change'): void;
     (e: 'enter'): void;
     (e: 'focus'): void;
@@ -44,7 +44,11 @@ const emit = defineEmits<{
 // Emit input event when it's not readonly
 const handleInput = function handleAppInput(event: Event) {
     if (props.readonly) return;
-    emit('input', (event.target as HTMLInputElement).value);
+    emit(
+        'input',
+        (event.target as HTMLInputElement).value,
+        event.target as HTMLInputElement
+    );
 };
 </script>
 
