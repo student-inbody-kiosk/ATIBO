@@ -8,9 +8,9 @@ import services from '@/apis/services';
 
 import type { SchoolAccount } from '@/types/accounts.interface';
 import type { Ref } from 'vue';
+
 const schoolName = ref('');
 const schoolLogo = ref('');
-const fileInput = ref();
 
 const activeUsers: Ref<SchoolAccount[]> = ref([]);
 const inactiveUsers: Ref<SchoolAccount[]> = ref([]);
@@ -26,10 +26,12 @@ onBeforeMount(() => {
     });
 });
 
-const handleLogoInput = function updateLogoFile(e: any) {
-    if (!e.target.files.length) return;
+const fileInput = ref();
+const handleLogoInput = function updateLogoFile(foo, target) {
+    if (!target.files.length) return;
 
-    const logoFile = e.target.files[0];
+    const logoFile = target.files[0];
+    fileInput.value = logoFile;
     let reader = new FileReader();
     reader.onload = function (e: any) {
         schoolLogo.value = e.target.result;
@@ -38,7 +40,7 @@ const handleLogoInput = function updateLogoFile(e: any) {
 };
 
 const handleUpdateClick = function updateSchoolInfo() {
-    services.updateSchoolInfo(schoolName.value, fileInput.value?.files[0]);
+    services.updateSchoolInfo(schoolName.value, fileInput.value);
 };
 
 const handleAccpetClick = function acceptAccount(userId: number) {
@@ -71,44 +73,40 @@ const handleDeleteClick = function deleteAccount(userId: number) {
             <div>학교정보 관리</div>
         </div>
 
-        <div class="admin-school-title">
-            <div>학교 정보</div>
-            <div>학교 계정</div>
-        </div>
-
-        <div class="admin-school-content">
-            <section class="admin-school-accounts">
-                <AdmAccountList
-                    title="승인 대기 목록"
-                    :accountList="inactiveUsers"
-                    @accept="handleAccpetClick" />
-                <AdmAccountList
-                    title="승인 완료 목록"
-                    :accountList="activeUsers"
-                    @delete="handleDeleteClick" />
-            </section>
-            <section class="admin-school-info">
-                <img class="school-logo" :src="schoolLogo" alt="logo" />
-                <div class="admin-school-title">{{ schoolName }}</div>
-
-                <div class="admin-school-update">
-                    <VInput :id="schoolName" type="file" label="로고 선택" />
-                    <input
-                        type="file"
-                        ref="fileInput"
-                        @input="handleLogoInput" />
-                    <VInput
-                        :id="schoolName"
-                        :value="schoolName"
-                        @input="(value) => (schoolName = value)"
-                        label="학교 이름" />
-                    <VButton
-                        text="수정"
-                        color="admin-primary"
-                        @click="handleUpdateClick" />
-                </div>
-            </section>
-        </div>
+        <section class="admin-school-info">
+            <div class="admin-school-info__logo">
+                <img :src="schoolLogo" alt="logo" />
+                <span>{{ schoolName }}</span>
+            </div>
+            <div class="admin-school-info__update">
+                <VInput
+                    :id="schoolName"
+                    type="file"
+                    size="md"
+                    label="로고 선택"
+                    @input="handleLogoInput" />
+                <VInput
+                    :id="schoolName"
+                    :value="schoolName"
+                    size="md"
+                    @input="(value) => (schoolName = value)"
+                    label="학교 이름" />
+                <VButton
+                    text="수정"
+                    color="admin-primary"
+                    @click="handleUpdateClick" />
+            </div>
+        </section>
+        <section class="admin-school-accounts">
+            <AdmAccountList
+                title="승인 대기"
+                :accountList="inactiveUsers"
+                @accept="handleAccpetClick" />
+            <AdmAccountList
+                title="승인 완료"
+                :accountList="activeUsers"
+                @delete="handleDeleteClick" />
+        </section>
     </div>
 </template>
 
@@ -134,47 +132,37 @@ const handleDeleteClick = function deleteAccount(userId: number) {
     }
 }
 
-.admin-school-title {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    padding: 1rem 0;
-    font-size: 1.3rem;
-}
-
-.admin-school-content {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-}
-
-.school-logo {
-    width: 10rem;
-}
-
 .admin-school-info,
 .admin-school-accounts {
-    width: 100%;
-    height: 100%;
+    margin: 0.5rem 0;
 }
 
 .admin-school-info {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    gap: 3rem;
 }
 
-.admin-school-update {
+.admin-school-info__logo {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    text-align: center;
+    background-color: $white;
+    border-radius: 0.3rem;
+    padding: 1rem;
+    gap: 1rem;
+    img {
+        max-width: 20rem;
+    }
 }
 
-.admin-school-accounts {
-    height: 100%;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 0.5rem;
+.admin-school-info__update {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+
+    button {
+        align-self: flex-end;
+    }
 }
 </style>

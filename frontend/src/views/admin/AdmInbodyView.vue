@@ -59,12 +59,24 @@ const createTable = (startDate, endDate, data) => {
 };
 
 onMounted(() => {
-    const { startDate, endDate, grade, room, number, name } =
-        queryStore.routeQuery;
-    if (!startDate && !endDate) return;
-    if (!grade && !room && !number && !name) return;
-    getInbodys(startDate, endDate, grade, room, number, name).then((res) => {
-        createTable(startDate, endDate, res);
+    const {
+        startDate: start,
+        endDate: end,
+        grade: g,
+        room: r,
+        number: num,
+        name: n,
+    } = queryStore.routeQuery;
+    if (!start && !end) return;
+    if (!g && !r && !num && !n) return;
+    startDate.value = start ? start : '';
+    endDate.value = end ? end : '';
+    grade.value = g ? String(g) : '';
+    room.value = r ? String(r) : '';
+    number.value = num ? String(num) : '';
+    name.value = n ? n : '';
+    getInbodys(start, end, g, r, num, n).then((res) => {
+        createTable(start, end, res);
     });
 });
 

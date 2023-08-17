@@ -34,6 +34,7 @@ const convertSex = {
             <VInput
                 v-if="isDelete"
                 id="delete"
+                size="xs"
                 type="checkbox"
                 @input="$emit('input')" />
             <span v-else>{{ id + 1 }}</span>

@@ -64,34 +64,36 @@ const handleSubmit = function changeAuthPassword() {
     <VLoading v-if="isLoading" color="admin-primary" />
     <form v-else class="pw-change-form" @submit.prevent="handleSubmit">
         <div class="form-title">비밀번호 변경</div>
-        <VInput
-            id="old-password"
-            name="old-password"
-            type="password"
-            :value="oldPassword"
-            size="md"
-            label="기존 비밀번호"
-            @input="handleOldPasswordInput" />
-        <VInput
-            id="new-password"
-            name="new-password"
-            type="password"
-            :value="newPassword"
-            :isError="newPassword ? !newPasswordResult : false"
-            :condition="newPasswordCondition"
-            size="md"
-            label="새 비밀번호"
-            @input="handleNewPasswordInput" />
-        <VInput
-            id="check-new-password"
-            name="check-new-password"
-            type="password"
-            :value="checkPassword"
-            :isError="checkPassword ? !checkPasswordResult : false"
-            :condition="checkPasswordCondition"
-            size="md"
-            label="새 비밀번호 확인"
-            @input="handleCheckPassword" />
+        <div class="form-input">
+            <VInput
+                id="old-password"
+                name="old-password"
+                type="password"
+                :value="oldPassword"
+                size="md"
+                label="기존 비밀번호"
+                @input="handleOldPasswordInput" />
+            <VInput
+                id="new-password"
+                name="new-password"
+                type="password"
+                :value="newPassword"
+                :isError="newPassword ? !newPasswordResult : false"
+                :condition="newPasswordCondition"
+                size="md"
+                label="새 비밀번호"
+                @input="handleNewPasswordInput" />
+            <VInput
+                id="check-new-password"
+                name="check-new-password"
+                type="password"
+                :value="checkPassword"
+                :isError="checkPassword ? !checkPasswordResult : false"
+                :condition="checkPasswordCondition"
+                size="md"
+                label="새 비밀번호 확인"
+                @input="handleCheckPassword" />
+        </div>
         <VButton text="비밀번호 변경" color="green" type="submit" />
     </form>
 </template>
@@ -107,5 +109,10 @@ const handleSubmit = function changeAuthPassword() {
     align-items: center;
     gap: 2rem;
     margin: 1.5rem 1rem 0.7rem 1rem;
+}
+
+.form-input {
+    display: grid;
+    gap: 1.5rem;
 }
 </style>

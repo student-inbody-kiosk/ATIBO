@@ -18,8 +18,17 @@ const grade = ref('');
 const room = ref('');
 const name = ref('');
 const number = ref('');
-const date = ref('');
 const students: Ref<StudentAttendance[]> = ref([]);
+
+// 현재 날짜 YYYY-MM 형식으로 반환
+const handleMonth = function getCurrentMonth(): string {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+
+    return `${year}-${month}`;
+};
+const date = ref(handleMonth());
 
 const { fetchData: getAttendances, isLoading } = useAxios(
     null,

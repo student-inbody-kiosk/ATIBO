@@ -20,6 +20,8 @@ const emit = defineEmits<{
     (e: 'name', value: string): void;
     (e: 'enter'): void;
 }>();
+
+const maxDate = new Date().toISOString().split('T')[0];
 </script>
 
 <template>
@@ -30,7 +32,6 @@ const emit = defineEmits<{
                 label="시작"
                 type="date"
                 :value="startDate"
-                size="md"
                 @input="(value) => $emit('start-date', value)"
                 @enter="$emit('enter')" />
             <VInput
@@ -38,7 +39,7 @@ const emit = defineEmits<{
                 label="끝"
                 type="date"
                 :value="endDate"
-                size="md"
+                :max="maxDate"
                 @input="(value) => $emit('end-date', value)"
                 @enter="$emit('enter')" />
         </div>
@@ -47,28 +48,24 @@ const emit = defineEmits<{
                 id="grade"
                 label="학년"
                 :value="grade"
-                size="md"
                 @input="(value) => $emit('grade', value)"
                 @enter="$emit('enter')" />
             <VInput
                 id="room"
                 label="반"
                 :value="room"
-                size="md"
                 @input="(value) => $emit('room', value)"
                 @enter="$emit('enter')" />
             <VInput
                 id="number"
                 label="번호"
                 :value="number"
-                size="md"
                 @input="(value) => $emit('number', value)"
                 @enter="$emit('enter')" />
             <VInput
                 id="name"
                 label="이름"
                 :value="name"
-                size="md"
                 @input="(value) => $emit('name', value)"
                 @enter="$emit('enter')" />
             <VButton

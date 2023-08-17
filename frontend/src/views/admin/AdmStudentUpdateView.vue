@@ -121,5 +121,10 @@ const handleUpdateClick = function updateStudent() {
 .admin-student-update-list {
     overflow: auto;
     margin: 0 auto;
+    width: 100%;
+
+    table {
+        width: 100%;
+    }
 }
 </style>

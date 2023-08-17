@@ -8,7 +8,6 @@ import { onBeforeMount, ref } from 'vue';
 import services from '@/apis/services';
 import { useAxios } from '@/hooks/useAxios';
 import { useRoute } from 'vue-router';
-// import { getInbody, deleteInbody } from '@/apis/services/inbodys';
 import { useStudentStore } from '@/stores/student.store';
 import { storeToRefs } from 'pinia';
 import router from '@/router';
@@ -70,10 +69,7 @@ const handleDeleteClick = function deleteInbodyData() {
         color="admin-primary" />
     <div v-else class="admin-inbody-detail">
         <div class="admin-inbody-detail__buttons">
-            <VButton
-                text="뒤로"
-                color="gray"
-                @click="router.push({ name: 'admin-inbody' })" />
+            <VButton text="뒤로" color="gray" @click="router.go(-1)" />
             <div>
                 <VButton
                     text="수정"
@@ -99,9 +95,11 @@ const handleDeleteClick = function deleteInbodyData() {
 <style lang="scss" scoped>
 .admin-inbody-detail {
     width: 100%;
+    height: 100%;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    // grid-template-rows: repeat(5, auto);
 }
 
 .admin-inbody-detail__buttons {
@@ -119,10 +117,5 @@ const handleDeleteClick = function deleteInbodyData() {
 .student-info {
     font-size: 1.5rem;
     text-align: center;
-}
-
-table {
-    display: flex;
-    align-items: center;
 }
 </style>

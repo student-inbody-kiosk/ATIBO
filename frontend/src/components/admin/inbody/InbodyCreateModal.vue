@@ -3,8 +3,11 @@ import VButton from '@/components/common/VButton.vue';
 import InbodyDataLabel from '@/components/admin/inbody/InbodyDataLabel.vue';
 import InbodyDataInput from '@/components/admin/inbody/InbodyDataInput.vue';
 import TheModal from '@/components/common/TheModal.vue';
-import { createInbody } from '@/apis/services/inbodys';
+import VLoading from '@/components/common/VLoading.vue';
+
 import { ref } from 'vue';
+import { useAxios } from '@/hooks/useAxios';
+import services from '@/apis/services';
 import { useStudentStore } from '@/stores/student.store';
 import { checkInbodyInput } from '@/utils/checkInput';
 
@@ -39,6 +42,11 @@ const handleInput = function updateInbodyInput(
     inbody.value[key] = value;
 };
 
+const { fetchData: createInbody, isLoading } = useAxios(
+    null,
+    services.createInbody
+);
+
 const handleCreateClick = function updateInbodyData() {
     const errorData = checkInbodyInput(inbody.value);
     if (errorData !== false) return;
@@ -53,7 +61,8 @@ const handleCreateClick = function updateInbodyData() {
 </script>
 
 <template>
-    <TheModal @close-modal="$emit('close-modal')">
+    <VLoading v-if="isLoading" color="admin-primary" />
+    <TheModal v-else @close-modal="$emit('close-modal')">
         <table>
             <InbodyDataLabel />
             <tbody>
