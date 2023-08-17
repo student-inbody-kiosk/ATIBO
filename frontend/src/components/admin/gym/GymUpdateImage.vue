@@ -11,6 +11,7 @@ import VIconButton from '@/components/common/VIconButton.vue';
 import type { GymImage } from '@/types/gyms.interface';
 import { watchEffect } from 'vue';
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 
 const props = defineProps<{
     gymId: number;
@@ -68,8 +69,14 @@ const handleClickDelete = function deleteImages(index: number) {
 };
 
 // Update gym images data asynchronously
+const router = useRouter();
 const handleClick = function updateGymImages() {
-    services.updateGymImages(props.gymId, gymImages.value);
+    services.updateGymImages(props.gymId, gymImages.value).then(() => {
+        router.push({
+            name: 'admin-gym-detail',
+            params: { gymId: props.gymId },
+        });
+    });
 };
 </script>
 

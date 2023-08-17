@@ -9,6 +9,7 @@ import VButton from '@/components/common/VButton.vue';
 import { useAxios } from '@/hooks/useAxios';
 import type { Gym } from '@/types/gyms.interface';
 import { toastTopErrorMessage } from '@/utils/toastManager';
+import { useRouter } from 'vue-router';
 
 const props = defineProps<{
     gymId: number;
@@ -27,6 +28,7 @@ onMounted(() => {
 });
 
 /* Update gym data */
+const router = useRouter();
 const handleSubmit = function updateGym(event: Event) {
     const form = event.target as HTMLFormElement;
     if (!form) return;
@@ -35,6 +37,7 @@ const handleSubmit = function updateGym(event: Event) {
     const name = (formData.get('name') as string) || '';
     if (name.length < 2) {
         toastTopErrorMessage('운동기구 이름은 2글자 이상 입력해주세요');
+        return;
     }
     const description = gym.value?.description ? gym.value.description : '';
 
@@ -43,7 +46,12 @@ const handleSubmit = function updateGym(event: Event) {
         description,
     };
 
-    services.updateGym(props.gymId, data);
+    services.updateGym(props.gymId, data).then(() => {
+        router.push({
+            name: 'admin-gym-detail',
+            params: { gymId: props.gymId },
+        });
+    });
 };
 
 // ckeditor config
@@ -66,7 +74,7 @@ const ckeditorConfig = {
                     label="기구 이름"
                     name="name"
                     :value="gym.name"
-                    size="sm" />
+                    size="md" />
                 <VButton
                     text="글 저장"
                     type="submit"

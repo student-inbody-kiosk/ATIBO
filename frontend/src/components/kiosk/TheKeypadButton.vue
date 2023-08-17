@@ -6,16 +6,32 @@ defineProps<{
 defineEmits<{
     (e: 'click'): void;
 }>();
+
+const handleMousedown = function onMousedownAddClass(event: TouchEvent) {
+    const button = event.target as HTMLButtonElement;
+    button.classList.add('touch');
+};
+
+const handleMouseup = function onMouseupremoveClass(event: TouchEvent) {
+    const button = event.target as HTMLButtonElement;
+    button.classList.remove('touch');
+};
 </script>
 
 <template lang="">
-    <button class="keypad__button" @click="$emit('click')">
+    <button
+        class="keypad-button"
+        @click="$emit('click')"
+        @mousedown="handleMousedown"
+        @touchstart="handleMousedown"
+        @mouseup="handleMouseup"
+        @touchend="handleMouseup">
         {{ text }}
     </button>
 </template>
 
 <style lang="scss">
-.keypad__button {
+.keypad-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -24,5 +40,9 @@ defineEmits<{
     color: $white;
     font-size: 4vh;
     font-weight: 700;
+}
+
+.keypad-button.touch {
+    background-color: $kiosk-deep-primary;
 }
 </style>

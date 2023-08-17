@@ -55,7 +55,7 @@ export function createGym(gym: GymUpdate) {
             return res.data;
         })
         .catch((err) => {
-            toastCenterErrorMessage('운동기구 생성에 실패했습니다', err);
+            toastTopErrorMessage('운동기구 생성에 실패했습니다', err);
             throw err;
         });
 }
