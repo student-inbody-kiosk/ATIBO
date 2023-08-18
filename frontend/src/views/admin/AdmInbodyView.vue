@@ -161,7 +161,7 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
                 text="뒤로"
                 color="gray"
                 @click="$router.push({ name: 'admin-main' })" />
-            <div>인바디 관리</div>
+            <h1>인바디 관리</h1>
         </div>
         <InbodySearchBar
             :startDate="startDate"
@@ -205,10 +205,11 @@ const handleInbodyClick = function goInbodyDetail(i: number, j: number) {
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
     padding-bottom: 1rem;
 
-    div {
-        font-size: 1.4rem;
+    h1 {
+        font-size: 1.5rem;
         font-weight: 600;
         text-align: center;
     }

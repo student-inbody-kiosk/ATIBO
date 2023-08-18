@@ -36,11 +36,14 @@ const FEMALE_AVG_HEIGHT = 1.609;
 
 // 적정 인바디값
 export function getAverageValue(inbody: InbodyDetail, sex: number) {
-    const height = inbody.height
-        ? inbody.height / 100
-        : sex === 1
-        ? MALE_AVG_HEIGHT
-        : FEMALE_AVG_HEIGHT;
+    let height = 0;
+    if (inbody.height) {
+        height = inbody.height / 100;
+    } else if (sex === 1) {
+        height = MALE_AVG_HEIGHT;
+    } else {
+        height = FEMALE_AVG_HEIGHT;
+    }
 
     const weight = height * height * (sex === 1 ? 22 : 21);
 
@@ -69,11 +72,14 @@ export function getAverageValue(inbody: InbodyDetail, sex: number) {
 
 // 그래프 상 인바디 최솟값
 export function getMinValue(inbody: InbodyDetail, sex: number) {
-    const height = inbody.height
-        ? inbody.height / 100
-        : sex === 1
-        ? MALE_AVG_HEIGHT
-        : FEMALE_AVG_HEIGHT;
+    let height = 0;
+    if (inbody.height) {
+        height = inbody.height / 100;
+    } else if (sex === 1) {
+        height = MALE_AVG_HEIGHT;
+    } else {
+        height = FEMALE_AVG_HEIGHT;
+    }
 
     const weight = height * height * (sex === 1 ? 11 : 10);
 
@@ -96,11 +102,14 @@ export function getMinValue(inbody: InbodyDetail, sex: number) {
 
 // 그래프 상 인바디 최댓값
 export function getMaxValue(inbody: InbodyDetail, sex: number) {
-    const height = inbody.height
-        ? inbody.height / 100
-        : sex === 1
-        ? MALE_AVG_HEIGHT
-        : FEMALE_AVG_HEIGHT;
+    let height = 0;
+    if (inbody.height) {
+        height = inbody.height / 100;
+    } else if (sex === 1) {
+        height = MALE_AVG_HEIGHT;
+    } else {
+        height = FEMALE_AVG_HEIGHT;
+    }
 
     const weight = height * height * (sex === 1 ? 40 : 38);
 

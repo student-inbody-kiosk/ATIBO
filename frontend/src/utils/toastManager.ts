@@ -1,5 +1,5 @@
 import VToast from '@/components/common/VToast.vue';
-import { createVNode, h, render } from 'vue';
+import { h, render } from 'vue';
 
 class ToastManager {
     // Set the Toast Root

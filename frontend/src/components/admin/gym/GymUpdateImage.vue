@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import services from '@/apis/services';
 import { useAxios } from '@/hooks/useAxios';
@@ -9,9 +10,6 @@ import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import VIconButton from '@/components/common/VIconButton.vue';
 import type { GymImage } from '@/types/gyms.interface';
-import { watchEffect } from 'vue';
-import { computed } from 'vue';
-import { useRouter } from 'vue-router';
 
 const props = defineProps<{
     gymId: number;
@@ -46,8 +44,8 @@ const gymImageUrls = computed<string[]>(() => {
 /* Managing multiple image update */
 
 // Add gym images asynchronously
-const handleChangeAdd = function appendNewImages() {
-    const fileInput = event?.target as HTMLInputElement;
+const handleChangeAdd = function appendNewImages(target: HTMLInputElement) {
+    const fileInput = target;
     if (!fileInput) return;
 
     const files = fileInput.files;
@@ -114,7 +112,7 @@ const handleClick = function updateGymImages() {
                         size="xl"
                         color="#ce0000" />
                 </VIconButton>
-                <img :src="gymImageUrl" />
+                <img :src="gymImageUrl" alt="운동 기구 이미지" />
             </li>
         </ul>
     </section>
