@@ -44,6 +44,7 @@ const handleSubmit = function getTheStudentInbodys(event: Event) {
         <VInput
             id="kiosk-inbody-start-date"
             name="startDate"
+            aria-label="시작일"
             type="date"
             size="lg"
             :value="startDate"
@@ -52,6 +53,7 @@ const handleSubmit = function getTheStudentInbodys(event: Event) {
             id="kiosk-inbody-end-date"
             name="endDate"
             label="~"
+            aria-label="종료일"
             type="date"
             size="lg"
             :value="endDate"
