@@ -15,11 +15,12 @@ import {
     faEnvelope,
     faFileCircleMinus,
     faHouse,
+    faLock,
+    faMobileScreen,
+    faShare,
     faUser,
     faUserLock,
     faUserPlus,
-    faLock,
-    faShare,
     faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -41,11 +42,12 @@ library.add(
     faEnvelope,
     faFileCircleMinus,
     faHouse,
+    faLock,
+    faMobileScreen,
+    faShare,
     faUser,
     faUserLock,
     faUserPlus,
-    faLock,
-    faShare,
     faXmark
 );
 app.component('font-awesome-icon', FontAwesomeIcon);

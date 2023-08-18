@@ -38,23 +38,23 @@ const handleCloseModal = function closeModal() {
     <AdmLayout>
         <template #admin-header>
             <div v-if="isIndexPage" class="admin-index-header">
-                <VIconButton
-                    text="키오스크"
-                    @click="$router.push({ name: 'kiosk-index' })">
-                    <font-awesome-icon icon="house" size="2x" />
-                </VIconButton>
                 <div class="admin-index-header__right-buttons">
                     <VIconButton
                         text="비밀번호 찾기"
                         @click="isPwResetModalOpen = true">
-                        <font-awesome-icon icon="lock" size="2x" />
+                        <font-awesome-icon icon="lock" size="xl" />
                     </VIconButton>
                     <VIconButton
                         text="회원가입"
                         @click="isSignupModalOpen = true">
-                        <font-awesome-icon icon="user-plus" size="2x" />
+                        <font-awesome-icon icon="user-plus" size="xl" />
                     </VIconButton>
                 </div>
+                <VIconButton
+                    text="키오스크"
+                    @click="$router.push({ name: 'kiosk-index' })">
+                    <font-awesome-icon icon="mobile-screen" size="xl" />
+                </VIconButton>
             </div>
             <AdmHeader v-else />
         </template>
@@ -84,6 +84,6 @@ const handleCloseModal = function closeModal() {
 .admin-index-header__right-buttons {
     display: flex;
     align-items: center;
-    gap: 3rem;
+    gap: 1rem;
 }
 </style>

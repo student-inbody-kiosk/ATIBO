@@ -63,7 +63,7 @@ const inbodyRegexes = {
         condition: '키를 정확히 입력해주세요',
     },
     age: {
-        reg: /^[1-9][0-9]*$/,
+        reg: /^(?:[1-9]|[1-9][0-9]|1[0-1][0-9]|12[0-7])$/,
         condition: '나이는 1~127 사이의 숫자로 입력해주세요',
     },
     totalBodyWater: {
