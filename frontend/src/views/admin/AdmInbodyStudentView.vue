@@ -83,19 +83,19 @@ const handleCreateClick = function updateTheStudentInbodys() {
     <VLoading v-if="isLoading" color="admin-primary" />
     <div v-else class="admin-inbody-student">
         <div class="admin-inbody-student-info">
-            {{
+            <VButton
+                text="뒤로"
+                color="gray"
+                @click="router.push({ name: 'admin-inbody' })" />
+            <span>{{
                 `${grade} 학년 ${room} 반 ${number} 번 ${name} (${
                     student?.sex === 1 ? '남' : '여'
                 })`
-            }}
+            }}</span>
         </div>
 
         <div class="admin-inbody-header">
             <div class="admin-inbody-header__searchbar">
-                <VButton
-                    text="뒤로"
-                    color="gray"
-                    @click="router.push({ name: 'admin-inbody' })" />
                 <VInput
                     id="startDate"
                     label="시작"
@@ -153,6 +153,9 @@ const handleCreateClick = function updateTheStudentInbodys() {
 }
 
 .admin-inbody-student-info {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: 1fr;
     font-size: 1.4rem;
     font-weight: 600;
     text-align: center;
