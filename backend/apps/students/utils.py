@@ -90,9 +90,9 @@ def get_date_from_path_variables(variables, limit_period_days = 62):
 
     # Customize the value including timezone
     tz = pytz.timezone(settings.TIME_ZONE)
-    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    start_date = datetime.strptime(start_date, STR_DATE_FORMAT)
     start_date = timezone.make_aware(start_date, timezone=tz)
-    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    end_date = datetime.strptime(end_date, STR_DATE_FORMAT)
     end_date = timezone.make_aware(end_date, timezone=tz) + timedelta(days=1) # Add one day because the default time is 00:00:00 
 
     # Limit the period
@@ -133,9 +133,9 @@ def get_date_from_query_params(query_params, limit_period_days = 730):
 
     # Customize the value including adding the timezone
     tz = pytz.timezone(settings.TIME_ZONE)
-    start_date = datetime.strptime(start_date, "%Y-%m-%d")
+    start_date = datetime.strptime(start_date, STR_DATE_FORMAT)
     start_date = timezone.make_aware(start_date, timezone=tz)
-    end_date = datetime.strptime(end_date, "%Y-%m-%d")
+    end_date = datetime.strptime(end_date, STR_DATE_FORMAT)
     end_date = timezone.make_aware(end_date, timezone=tz) + timedelta(days=1)   # Add one day because the default time is 00:00:00 
 
     # Limit the search time period
