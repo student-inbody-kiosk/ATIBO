@@ -53,9 +53,9 @@ const handleSubmit = function searchStudents() {
     };
     if (checkSearchInput(data)) return;
 
-    const parsedGrade = parseInt(grade.value);
-    const parsedRoom = parseInt(room.value);
-    const parsedNumber = parseInt(number.value);
+    const parsedGrade = Number(grade.value);
+    const parsedRoom = Number(room.value);
+    const parsedNumber = Number(number.value);
 
     queryStore.updateQuery({
         grade: parsedGrade,

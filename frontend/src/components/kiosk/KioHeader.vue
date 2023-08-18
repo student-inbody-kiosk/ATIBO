@@ -14,12 +14,13 @@ defineProps<{
         <h1 class="kiosk-header__title">{{ title }}</h1>
         <div class="kiosk-header__button">
             <RouterLink
+                title="뒤로가기"
                 :to="{
                     name: routeName,
                     params: routeParams,
                     query: routeQuery,
                 }">
-                <VIconButton>
+                <VIconButton ariaLabel="뒤로 가기">
                     <font-awesome-icon icon="circle-arrow-left" size="3x" />
                 </VIconButton>
             </RouterLink>
