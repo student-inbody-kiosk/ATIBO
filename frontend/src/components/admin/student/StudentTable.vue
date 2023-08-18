@@ -15,6 +15,9 @@ defineEmits<{
 
 <template>
     <table class="student-table">
+        <caption>
+            Student Table
+        </caption>
         <StudentDataLabel />
         <tbody>
             <StudentData
