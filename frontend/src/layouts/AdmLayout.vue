@@ -2,7 +2,7 @@
 
 <template>
     <div class="admin-container">
-        <header>
+        <header class="admin-container__header">
             <slot name="admin-header"></slot>
         </header>
 
@@ -26,13 +26,30 @@ body {
     grid-template-rows: auto minmax(0, 1fr) auto;
     justify-content: center;
     height: 100vh;
-    padding: 2rem;
+    margin: 0 2rem;
     background-color: $white;
+}
+
+.admin-container ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.admin-container ::-webkit-scrollbar-thumb {
+    background: $admin-primary;
+    border-radius: 10px;
+}
+
+.admin-container ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.admin-container__header {
+    padding: 0.7rem 0 0.3rem;
 }
 
 .admin-container__main {
     display: flex;
-    // align-items: center;
     justify-content: center;
     padding: 2rem;
     background-color: $admin-secondary;
@@ -40,5 +57,6 @@ body {
 .admin-container__footer {
     text-align: center;
     color: $gray;
+    padding: 1rem;
 }
 </style>

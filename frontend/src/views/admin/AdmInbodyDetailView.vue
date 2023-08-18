@@ -102,6 +102,7 @@ const handleDeleteClick = function deleteInbodyData() {
 <style lang="scss" scoped>
 .admin-inbody-detail {
     width: 100%;
+    min-width: 800px;
     height: 100%;
     display: grid;
     grid-template-columns: 1fr;

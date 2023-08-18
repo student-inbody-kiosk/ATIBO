@@ -39,11 +39,6 @@ const handleCloseModal = function closeGymCreateModal() {
 
 <style lang="scss">
 .gym-view {
-    width: 100%;
-    height: 100%;
-}
-
-.gym-view {
     display: grid;
     grid-template-columns: 1fr;
     grid-auto-rows: auto minmax(0, 1fr);
@@ -56,13 +51,13 @@ const handleCloseModal = function closeGymCreateModal() {
     justify-content: space-between;
     align-items: center;
     position: relative;
+    margin: 0 0 1.5rem 0;
 }
 
 .gym-view__header__title {
     font-size: 1.5rem;
     font-weight: 600;
     text-align: center;
-    margin: 0 0 1.5rem 0;
 }
 
 .gym-view__header__button {

@@ -29,8 +29,8 @@ const CONFIRM_PASSWORD_INPUT_ID = 'kiosk-student-confirm-password';
 const currentFocusedInput = ref(OLD_PASSWORD_INPUT_ID); // input border color
 const currentFocusedValue = reactive({ value: oldPassword }); // the value linked to the keypad
 
-const handleFocus = function changeCurrentFocused() {
-    const id = event?.target?.id as string;
+const handleFocus = function changeCurrentFocused(target: HTMLInputElement) {
+    const id = target.id as string;
     switch (id) {
         case OLD_PASSWORD_INPUT_ID:
             currentFocusedInput.value = OLD_PASSWORD_INPUT_ID;
@@ -88,7 +88,7 @@ const handleSubmit = function onHandleUpdateStudentPw() {
         toastCenterErrorMessage('새 비밀번호를 4자리 숫자로 입력해주세요');
         return;
     }
-    if (!(newPassword.value == confirmPassword.value)) {
+    if (newPassword.value !== confirmPassword.value) {
         toastCenterErrorMessage('새 비밀번호가 일치하지 않습니다');
         return;
     }
