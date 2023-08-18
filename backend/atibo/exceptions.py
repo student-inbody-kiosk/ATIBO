@@ -9,17 +9,16 @@ from rest_framework.views import exception_handler
 
 """
 Exception Handler
-"""
 
-# Change all the unknown error to '500 Internal Server Error'
+Convert all the unknown error to '500 Internal Server Error'
+"""
 def default_exception_handler(exc, context):
-    # Call REST framework's default exception handler first,
-    # to get the standard error response.
+    # Call REST framework's default exception handler
     response = exception_handler(exc, context)
 
-    # if response is None:
-    #     print('Error: ', exc, context)
-    #     return Response({'message': _('예상치 못한 서버 에러가 발생했습니다. 개발자에게 문의해주세요')}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if response is None:
+        print('Error: ', exc, context)
+        return Response({'message': _('예상치 못한 서버 에러가 발생했습니다. 개발자에게 문의해주세요')}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return response
 

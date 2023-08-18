@@ -7,7 +7,7 @@ from .views import AccountAPIView, LoginAPIView, LogoutAPIView, UsernameCheckAPI
 app_name = 'accounts'
 
 router = routers.SimpleRouter()
-router.register(r'admin', AdminViewSet)
+router.register(r'admin', AdminViewSet) # Admin user feature
 
 urlpatterns = [
     path('', AccountAPIView.as_view(), name='user_detail'),

@@ -19,9 +19,9 @@ from .serializers import UserSerializer, LoginSerializer, UsernameCheckSerialize
 
 
 """
-post: sign up
-get: userinfo
-delete: withdraw
+post: signup
+get: user info
+delete: withdrawl
 """
 class AccountAPIView(GenericAPIView, CreateModelMixin, RetrieveModelMixin, DestroyModelMixin):
     permission_classes = [CreateOnly | IsAuthenticated]
@@ -50,6 +50,9 @@ class AccountAPIView(GenericAPIView, CreateModelMixin, RetrieveModelMixin, Destr
         return Response({'message': _('계정이 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
 
 
+"""
+post: login
+"""
 @extend_schema(
     responses=inline_serializer(
         name="LoginResponseSerializer",
@@ -86,6 +89,9 @@ class LoginAPIView(APIView):
         return Response(data, status=status.HTTP_202_ACCEPTED)
 
 
+"""
+post: logout
+"""
 @extend_schema(
     responses=inline_serializer(
         name="LogoutResponseSerializer",
@@ -97,32 +103,38 @@ class LoginAPIView(APIView):
 class LogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
+    # Delete refresh token
     def post(self, request):
-        # Delete Refresh Token
         user = request.user
         user.refresh_token = ''
         user.save()
-
         return Response({'message': _('로그아웃 되었습니다')}, status=status.HTTP_200_OK)
 
 
+"""
+post: check username duplcation
+"""
 class UsernameCheckAPIView(APIView):
     authentication_classes = []
     serializer_class = UsernameCheckSerializer
 
     def post(self, request):
+        # Check the validity of the username
         serializer = UsernameCheckSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        # Check the duplication
         User = get_user_model()
         username = serializer.validated_data.get('username')
-
         if User.objects.filter(username=username).exists():
             return Response({"duplicate": True}, status=status.HTTP_200_OK)
         else:
             return Response({"duplicate": False}, status=status.HTTP_200_OK)
 
 
+"""
+put: change email
+"""
 class EmailChangeAPIView(UpdateAPIView):
     http_method_names = ["put"]
     permission_classes = [IsAuthenticated]
@@ -132,6 +144,9 @@ class EmailChangeAPIView(UpdateAPIView):
         return self.request.user
 
 
+"""
+put: change password
+"""
 class PasswordChangeAPIView(UpdateAPIView):
     http_method_names = ["put"]
     permission_classes = [IsAuthenticated]
@@ -145,14 +160,19 @@ class PasswordChangeAPIView(UpdateAPIView):
         return Response({'message': _('비밀번호가 변경되었습니다')}, status=status.HTTP_200_OK)
     
 
+"""
+put: reset password & send email
+"""
 class PasswordResetAPIView(APIView):
     authentication_classes = []
     serializer_class = PasswordResetSerializer
 
     def put(self, request):
+        # Check the validty of the user & email data
         serializer = PasswordResetSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        # Get the validated data from serializer result
         user = serializer.validated_data['user']
         email = serializer.validated_data['email']
 
@@ -172,6 +192,10 @@ class PasswordResetAPIView(APIView):
         return Response({'message': _('새 비밀번호가 이메일로 발송되었습니다')}, status=status.HTTP_200_OK)    
 
 
+
+"""
+post: refresh accesstoken
+"""
 @extend_schema(
     responses=inline_serializer(
         name="TokenRefreshResponseSerializer",
@@ -185,11 +209,12 @@ class TokenRefreshAPIView(APIView):
     serializer_class = TokenRefreshSerializer
 
     def post(self, request):
+        # Check the validtaion
         serializer = TokenRefreshSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        # Reissue the token
         user = serializer.validated_data.get('user')
-
         access = AccessToken.for_user(user) 
         access_token = str(access)
 
@@ -197,9 +222,9 @@ class TokenRefreshAPIView(APIView):
 
 
 """
-get: get normal user accounts
-waiting: get normal user accounts waiting (boolean)
-put: update an account to be active
+get: get normal user list
+waiting(get): whether there's noraml user not activated
+put: upddate is_activated as true
 delete: delete an account
 """
 class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyModelMixin):
@@ -208,7 +233,6 @@ class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyMode
     serializer_class = AdminSerializer
     queryset = get_user_model().objects.filter(role='user')
 
-    # Check there's an inactive user
     @extend_schema(
     responses=inline_serializer(
             name="AdminWatingSerializer",
@@ -219,6 +243,7 @@ class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyMode
     )
     @action(detail=False, methods=['get'])
     def waiting(self, request):
+        # Find users not activated
         if get_user_model().objects.filter(is_active=False).exists():
             return Response({'is_waiting': True}, status=status.HTTP_200_OK)
         else:
@@ -237,20 +262,19 @@ class AdminViewSet(GenericViewSet, ListModelMixin, UpdateModelMixin, DestroyMode
         serializer = self.get_serializer(queryset, many=True)
         """
         """
-        # Customize the serializer.data
-        users = serializer.data
 
+        # Customize the response
+        # Divide user data basd on is_activate field
+        users = serializer.data
         users_classified = {
             'inactive_users': [],
             'active_users': []
         }
-
         for user in users:
             if user.get('is_active'):
                 users_classified['active_users'].append(user)
             else:
                 users_classified['inactive_users'].append(user)
-
         return Response(users_classified, status=status.HTTP_200_OK)
     
     def destroy(self, request, *args, **kwargs):

@@ -1,5 +1,5 @@
-import random
 import string
+import secrets
 
 def generate_random_password():
     # The candidate letters
@@ -9,12 +9,12 @@ def generate_random_password():
 
     # Select password chars
     password_list = []
-    password_list += random.sample(alphabets, 4)
-    password_list += random.sample(numbers,3)
-    password_list += random.sample(special_chars,3)
+    password_list += [secrets.choice(alphabets) for _ in range(4)]
+    password_list += [secrets.choice(numbers) for _ in range(3)]
+    password_list += [secrets.choice(special_chars) for _ in range(3)]
 
     # Shuffle and generate password
-    random.shuffle(password_list)
+    secrets.SystemRandom().shuffle(password_list)
     password = ''.join(password_list)
 
     return password
