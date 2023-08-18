@@ -1,16 +1,16 @@
 import apiRequest from '@/apis/axiosInterceptors';
 import router from '@/router/index';
 import { useAuthStore } from '@/stores/auth.store';
-import type {
-    AccountPwReset,
-    AccountSignup,
-    AccountPwChange,
-} from '@/types/accounts.interface';
 import {
     toastTopErrorMessage,
     toastTopSuccessMessage,
 } from '@/utils/toastManager';
-import type { Account } from '@/types/accounts.interface';
+import type {
+    AccountPwReset,
+    AccountSignup,
+    AccountPwChange,
+    Account,
+} from '@/types/accounts.interface';
 
 export async function login(username: string, password: string) {
     return await apiRequest

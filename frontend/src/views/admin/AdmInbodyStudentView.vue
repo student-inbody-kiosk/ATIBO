@@ -12,7 +12,6 @@ import { useAxios } from '@/hooks/useAxios';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStudentStore } from '@/stores/student.store';
-// import { getTheStudentInbodys } from '@/apis/services/inbodys';
 import { checkSearchInput } from '@/utils/checkInput';
 
 import type { Ref } from 'vue';
