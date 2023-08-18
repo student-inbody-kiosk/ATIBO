@@ -5,7 +5,7 @@ import {
     toastTopErrorMessage,
     toastTopSuccessMessage,
 } from '@/utils/toastManager';
-import type { Inbody, InbodyDetail } from '@/types/inbody.interface';
+import type { InbodyDetail } from '@/types/inbody.interface';
 
 export async function getInbodys(
     startDate: string,

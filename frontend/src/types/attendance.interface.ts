@@ -1,4 +1,3 @@
-// TODO: AttendanceDetail로 수정
 export interface Attendance {
     [key: number]: {
         id: number;

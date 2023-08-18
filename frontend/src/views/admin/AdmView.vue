@@ -11,7 +11,7 @@ import { useQueryStore } from '@/stores/query.store';
 
 const route = useRoute();
 // Compute whether the current page is index page, based on the current route name
-const isIndexPage = computed<Boolean>(() => {
+const isIndexPage = computed<boolean>(() => {
     return route.name === 'admin-index' ? true : false;
 });
 
