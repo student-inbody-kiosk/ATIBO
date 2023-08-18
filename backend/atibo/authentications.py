@@ -18,7 +18,7 @@ class StudentJWTAuthentication(BaseAuthentication):
             raw_token = jwtAuthentication.get_raw_token(header)
             student = decode(raw_token)
             student = Student.objects.get(id=student['id'])
-        except:
+        except Exception:
             return None
         
         return student, 'student' # (request.user, request.auth) 
