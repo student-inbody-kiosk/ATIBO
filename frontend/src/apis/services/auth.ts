@@ -11,6 +11,7 @@ import type {
     AccountPwChange,
     Account,
 } from '@/types/accounts.interface';
+import { useAccountStore } from '@/stores/accounts.store';
 
 export async function login(username: string, password: string) {
     return await apiRequest
@@ -33,7 +34,9 @@ export async function login(username: string, password: string) {
 
 export async function logout() {
     return await apiRequest.post('/accounts/logout/').then(() => {
+        const { updateAccount } = useAccountStore();
         const { updateAccessToken, updateRefreshToken } = useAuthStore();
+        updateAccount({});
         updateAccessToken('');
         updateRefreshToken('');
         router.push({ name: 'admin-index' });

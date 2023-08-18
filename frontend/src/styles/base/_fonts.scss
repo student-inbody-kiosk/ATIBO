@@ -2,19 +2,22 @@
     font-family: 'Pretendard';
     font-style: normal;
     font-weight: 400;
-    src: url('@/assets/fonts/Pretendard-Regular.otf');
+    font-display: swap;
+    src: url('@/assets/fonts/Pretendard-Regular.woff');
 }
 
 @font-face {
     font-family: 'Pretendard';
     font-style: 'semi-bold';
     font-weight: 600;
-    src: url('@/assets/fonts/Pretendard-SemiBold.otf');
+    font-display: swap;
+    src: url('@/assets/fonts/Pretendard-SemiBold.woff');
 }
 
 @font-face {
     font-family: 'Pretendard';
     font-style: 'extra-bold';
     font-weight: 800;
-    src: url('@/assets/fonts/Pretendard-ExtraBold.otf');
+    font-display: swap;
+    src: url('@/assets/fonts/Pretendard-ExtraBold.woff');
 }

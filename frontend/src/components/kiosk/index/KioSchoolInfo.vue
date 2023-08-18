@@ -14,7 +14,7 @@ const schoolInfo = await services.getSchoolInfo();
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .kiosk-school-info {
     display: flex;
     flex-direction: column;

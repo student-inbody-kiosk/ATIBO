@@ -23,6 +23,6 @@ export const useAuthStore = defineStore('auth', {
     // refreshToken will be stored with the key name 'ATIBO'
     persist: {
         key: 'ATIBO',
-        paths: ['refreshToken'],
+        paths: ['refreshToken', 'accessToken'],
     },
 });

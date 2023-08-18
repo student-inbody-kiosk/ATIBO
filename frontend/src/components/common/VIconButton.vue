@@ -3,9 +3,13 @@ withDefaults(
     defineProps<{
         text?: string;
         size?: 'sm' | 'md' | 'lg';
+        type?: 'button' | 'submit' | 'reset';
+        ariaLabel?: string;
     }>(),
     {
         size: 'sm',
+        type: 'button',
+        ariaLabel: '',
     }
 );
 
@@ -15,9 +19,14 @@ defineEmits<{
 </script>
 
 <template>
-    <button :class="['v-icon-button', size]" @click="$emit('click')">
+    <button
+        :id="`v-icon-button-${text}`"
+        :class="['v-icon-button', size]"
+        :type="type"
+        :aria-label="ariaLabel"
+        @click="$emit('click')">
         <slot />
-        <span>{{ text }}</span>
+        <label v-if="text" :for="`v-icon-button-${text}`">{{ text }}</label>
     </button>
 </template>
 
