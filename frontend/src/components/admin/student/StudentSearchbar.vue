@@ -84,7 +84,7 @@ withDefaults(
 .student-search-bar {
     display: flex;
     justify-content: space-between;
-    gap: 0.5rem;
+    gap: 1.5rem;
     padding-bottom: 0.5rem;
 }
 .student-search-bar__buttons {
@@ -96,6 +96,6 @@ withDefaults(
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.5rem;
+    gap: 1.5rem;
 }
 </style>
