@@ -99,6 +99,9 @@ const handleCreateClick = function createStudent() {
 
         <section class="admin-student-create-list">
             <table class="admin-student-create-list__table">
+                <caption>
+                    Student Create Table
+                </caption>
                 <StudentDetailDataLabel />
                 <tbody>
                     <StudentDetailInput
