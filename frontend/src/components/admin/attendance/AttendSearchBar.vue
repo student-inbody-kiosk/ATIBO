@@ -28,7 +28,6 @@ const emit = defineEmits<{
                 label="월 입력"
                 type="month"
                 :value="date"
-                size="md"
                 @input="(value) => $emit('date', value)"
                 @enter="$emit('enter')" />
             <span>출결 기록에 마우스를 올리면 상세 기록을 볼 수 있습니다</span>
@@ -38,7 +37,6 @@ const emit = defineEmits<{
                 id="grade"
                 label="학년"
                 :value="grade"
-                size="md"
                 @input="(value) => $emit('grade', value)"
                 @enter="$emit('enter')" />
 
@@ -46,7 +44,6 @@ const emit = defineEmits<{
                 id="room"
                 label="반"
                 :value="room"
-                size="md"
                 @input="(value) => $emit('room', value)"
                 @enter="$emit('enter')" />
 
@@ -54,7 +51,6 @@ const emit = defineEmits<{
                 id="number"
                 label="번호"
                 :value="number"
-                size="md"
                 @input="(value) => $emit('number', value)"
                 @enter="$emit('enter')" />
 
@@ -62,7 +58,6 @@ const emit = defineEmits<{
                 id="name"
                 label="이름"
                 :value="name"
-                size="md"
                 @input="(value) => $emit('name', value)"
                 @enter="$emit('enter')" />
 
@@ -89,7 +84,7 @@ const emit = defineEmits<{
 .attend-searchbar__student {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1.5rem;
     padding: 0.5rem 0;
 }
 </style>

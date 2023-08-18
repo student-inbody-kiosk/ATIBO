@@ -22,9 +22,11 @@ defineEmits<{
                 v-for="account in accountList"
                 :key="account.id">
                 <div class="account-list__item__content">
-                    <span>{{ account.name }}</span>
-                    <span>{{ account.email }}</span>
-                    <span>{{ account.comment }}</span>
+                    <div>
+                        <p>{{ account.name }}</p>
+                        <span>{{ account.email }}</span>
+                    </div>
+                    <div>소개 : {{ account.comment }}</div>
                 </div>
                 <VButton
                     v-if="account.isActive"
@@ -69,7 +71,16 @@ defineEmits<{
 }
 
 .account-list__item__content {
-    display: flex;
+    display: grid;
     gap: 0.5rem;
+
+    div:first-child {
+        display: flex;
+        gap: 1rem;
+
+        p {
+            font-weight: 600;
+        }
+    }
 }
 </style>

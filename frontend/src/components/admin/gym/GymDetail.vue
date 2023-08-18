@@ -60,10 +60,11 @@ onMounted(() => {
 
 .gym-detail {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 300px;
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 300px);
     grid-template-rows: minmax(0, 1fr);
     column-gap: 1rem;
     width: 100%;
+    min-width: 800px;
     height: 100%;
 }
 

@@ -25,7 +25,7 @@ const students = ref<StudentCreate[]>([
         name: '',
         sex: 1,
         birthDate: '',
-        password: '',
+        password: '0000',
     },
 ]);
 
@@ -37,7 +37,7 @@ const handleAddClick = function addStudent() {
         name: '',
         sex: 1,
         birthDate: '',
-        password: '',
+        password: '0000',
     });
 };
 

@@ -14,6 +14,7 @@ const props = withDefaults(
 );
 
 const sexData = ref(props.student.sex);
+const maxDate = new Date().toISOString().split('T')[0];
 </script>
 
 <template>
@@ -31,6 +32,7 @@ const sexData = ref(props.student.sex);
                 id="grade"
                 type="number"
                 :min="1"
+                size="xs"
                 :value="student.grade"
                 @input="
                     (grade) => $emit('update-input', index, 'grade', grade)
@@ -41,6 +43,7 @@ const sexData = ref(props.student.sex);
                 id="room"
                 type="number"
                 :min="1"
+                size="xs"
                 :value="student.room"
                 @input="(room) => $emit('update-input', index, 'room', room)" />
         </td>
@@ -49,6 +52,7 @@ const sexData = ref(props.student.sex);
                 id="number"
                 type="number"
                 :min="1"
+                size="xs"
                 :value="student.number"
                 @input="
                     (number) => $emit('update-input', index, 'number', number)
@@ -57,6 +61,7 @@ const sexData = ref(props.student.sex);
         <td class="student-data-input__content">
             <VInput
                 id="name"
+                size="xs"
                 :value="student.name"
                 @input="(name) => $emit('update-input', index, 'name', name)" />
         </td>
@@ -75,7 +80,9 @@ const sexData = ref(props.student.sex);
             <VInput
                 id="date"
                 type="date"
+                size="xs"
                 :value="student.birthDate"
+                :max="maxDate"
                 @input="
                     (date) => $emit('update-input', index, 'birthDate', date)
                 " />
@@ -83,6 +90,7 @@ const sexData = ref(props.student.sex);
         <td class="student-data-input__content">
             <VInput
                 id="password"
+                size="xs"
                 :value="student.password"
                 @input="
                     (password) =>
@@ -95,13 +103,9 @@ const sexData = ref(props.student.sex);
 <style lang="scss" scoped>
 .student-data-input__content {
     margin-top: 0.2rem;
-    padding: 0.2rem;
     border: 0.1rem solid $admin-secondary;
     background-color: $white;
-    text-align: center;
-}
-
-input {
+    padding: 0.3rem;
     text-align: center;
 }
 

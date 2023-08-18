@@ -32,28 +32,24 @@ withDefaults(
                 id="grade"
                 label="학년"
                 :value="grade"
-                size="md"
                 @input="(value: string) => $emit('grade', value)"
                 @enter="$emit('enter')" />
             <VInput
                 id="room"
                 label="반"
                 :value="room"
-                size="md"
                 @input="(value: string) => $emit('room', value)"
                 @enter="$emit('enter')" />
             <VInput
                 id="number"
                 label="번호"
                 :value="number"
-                size="md"
                 @input="(value: string) => $emit('number', value)"
                 @enter="$emit('enter')" />
             <VInput
                 id="name"
                 label="이름"
                 :value="name"
-                size="md"
                 @input="(value: string) => $emit('name', value)"
                 @enter="$emit('enter')" />
             <VButton
@@ -88,7 +84,7 @@ withDefaults(
 .student-search-bar {
     display: flex;
     justify-content: space-between;
-    gap: 0.5rem;
+    gap: 1.5rem;
     padding-bottom: 0.5rem;
 }
 .student-search-bar__buttons {
@@ -100,6 +96,6 @@ withDefaults(
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.5rem;
+    gap: 1.5rem;
 }
 </style>

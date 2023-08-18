@@ -26,11 +26,13 @@ defineProps<{
     align-items: center;
     width: 100%;
     height: 100%;
+    padding: 1rem;
     border-radius: 1em;
     background-color: transparentize($white, 0.4);
     box-shadow: 0 3px 3px 2px rgba(0, 0, 0, 0.1);
     font-size: 1.5rem;
     font-weight: 600;
+    text-align: center;
     transition: transform 0.2s ease-in-out;
 }
 

@@ -23,8 +23,6 @@ import {
     faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
-import CKEditor from '@ckeditor/ckeditor5-vue';
-
 // create vue app
 const app = createApp(App);
 
@@ -51,9 +49,6 @@ library.add(
     faXmark
 );
 app.component('font-awesome-icon', FontAwesomeIcon);
-
-// CKEditor
-app.use(CKEditor);
 
 // mount the vue app to index.html
 app.mount('#app');

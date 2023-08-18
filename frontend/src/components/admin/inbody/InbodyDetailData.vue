@@ -56,13 +56,6 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
 
 <template lang="">
     <div class="admin-inbody-detail">
-        <div class="admin-inbody-detail__personal">
-            <p>이름: {{ name }}</p>
-            <p>나이: {{ inbody.age }}</p>
-            <p>키: {{ inbody.height }}cm</p>
-            <p>성별: {{ sex === 1 ? '남' : '여' }}</p>
-            <p>날짜: {{ inbody.testDate }}</p>
-        </div>
         <div class="admin-inbody-detail__comment">
             <p>* 본 결과지는 간이 결과지입니다.</p>
             <p>
@@ -71,167 +64,159 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
             </p>
         </div>
         <div class="admin-inbody-detail--container">
-            <section class="admin-inbody-detail__total">
-                <p class="admin-inbody-detail__total__label">
-                    <span>인바디 점수</span
-                    ><span class="admin-inbody-detail__total__score">
-                        {{ inbody.score }}</span
-                    >
-                </p>
-                <p class="admin-inbody-detail__total__label">
-                    <span>적정 체중</span
-                    ><span> {{ avgValue.weight.toFixed(2) }} kg</span>
-                </p>
-                <p class="admin-inbody-detail__total__label">
-                    <span>체중 조절</span
-                    ><span>
-                        {{ (avgValue.weight - inbody.weight).toFixed(2) }}
-                        kg</span
-                    >
-                </p>
-                <p class="admin-inbody-detail__total__label">
-                    <span>지방 조절</span
-                    ><span>
-                        {{
-                            (avgValue.bodyFatMass - inbody.bodyFatMass).toFixed(
-                                2
-                            )
-                        }}
-                        kg</span
-                    >
-                </p>
-                <p class="admin-inbody-detail__total__label">
-                    <span>근육 조절</span
-                    ><span>
-                        {{
-                            (
-                                avgValue.skeletalMuscleMass -
-                                inbody.skeletalMuscleMass
-                            ).toFixed(2)
-                        }}
-                        kg</span
-                    >
-                </p>
-                <p class="admin-inbody-detail__total__label">
-                    <span> BMI</span
-                    ><span>
-                        {{
-                            inbody.bodyMassIndex > avgValue.maxBodyMassIndex
-                                ? '과체중'
-                                : inbody.bodyMassIndex <
-                                  avgValue.minBodyMassIndex
-                                ? '저체중'
-                                : '표준'
-                        }}</span
-                    >
-                </p>
-                <p class="admin-inbody-detail__total__label">
-                    <span> 체지방률 </span>
-                    <span>
-                        {{
-                            inbody.percentBodyFat > avgValue.maxPercentBodyFat
-                                ? '표준 이상'
-                                : inbody.percentBodyFat <
-                                  avgValue.minPercentBodyFat
-                                ? '표준 이하'
-                                : '표준'
-                        }}</span
-                    >
-                </p>
-            </section>
-            <section class="admin-inbody-detail__composition">
-                <h2 class="admin-inbody-detail__subtitle">체성분 분석</h2>
-                <div class="admin-inbody-detail__composition--container">
-                    <div class="admin-inbody-detail__compositoin__label">
-                        <div>
-                            <p>우리 몸을 이루는 물</p>
-                            <p>체수분</p>
-                        </div>
-                        <p>{{ inbody.totalBodyWater }} L</p>
-                    </div>
+            <table class="inbody-total-table">
+                <thead>
+                    <tr>
+                        <th>인바디 점수</th>
+                        <th>적정 체중</th>
+                        <th>체중 조절</th>
+                        <th>지방 조절</th>
+                        <th>근육 조절</th>
+                        <th>BMI</th>
+                        <th>체지방률</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ inbody.score }}</td>
+                        <td>{{ avgValue.weight.toFixed(2) }} kg</td>
+                        <td>
+                            {{ (avgValue.weight - inbody.weight).toFixed(2) }}
+                            kg
+                        </td>
+                        <td>
+                            {{
+                                (
+                                    avgValue.bodyFatMass - inbody.bodyFatMass
+                                ).toFixed(2)
+                            }}
+                            kg
+                        </td>
+                        <td>
+                            {{
+                                (
+                                    avgValue.skeletalMuscleMass -
+                                    inbody.skeletalMuscleMass
+                                ).toFixed(2)
+                            }}
+                            kg
+                        </td>
+                        <td>
+                            {{
+                                inbody.bodyMassIndex > avgValue.maxBodyMassIndex
+                                    ? '과체중'
+                                    : inbody.bodyMassIndex <
+                                      avgValue.minBodyMassIndex
+                                    ? '저체중'
+                                    : '표준'
+                            }}
+                        </td>
+                        <td>
+                            {{
+                                inbody.percentBodyFat >
+                                avgValue.maxPercentBodyFat
+                                    ? '표준 이상'
+                                    : inbody.percentBodyFat <
+                                      avgValue.minPercentBodyFat
+                                    ? '표준 이하'
+                                    : '표준'
+                            }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-                    <div class="admin-inbody-detail__compositoin__label">
-                        <div>
-                            <p>근육을 만들어 주는</p>
-                            <p>단백질</p>
-                        </div>
-                        <p>{{ inbody.protein }} kg</p>
-                    </div>
+            <table class="inbody-composition-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <span>우리 몸을 이루는 물</span>
+                            <span>체수분</span>
+                        </th>
 
-                    <div class="admin-inbody-detail__compositoin__label">
-                        <div>
-                            <p>뼈를 단단하게 하는</p>
-                            <p>무기질</p>
-                        </div>
-                        <p>{{ inbody.minerals }} kg</p>
-                    </div>
+                        <th>
+                            <span>근육을 만들어 주는</span>
+                            <span>단백질</span>
+                        </th>
 
-                    <div class="admin-inbody-detail__compositoin__label">
-                        <div>
-                            <p>남은 에너지를 저장한</p>
-                            <p>체지방</p>
-                        </div>
-                        <p>{{ inbody.bodyFatMass }} kg</p>
-                    </div>
+                        <th>
+                            <span>뼈를 단단하게 하는</span>
+                            <span>무기질</span>
+                        </th>
+                        <th>
+                            <span>남은 에너지를 저장한</span>
+                            <span>체지방</span>
+                        </th>
+                        <th>
+                            <span>위의 모든 값을 합한</span>
+                            <span>체중</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ inbody.totalBodyWater }} L</td>
+                        <td>{{ inbody.protein }} kg</td>
+                        <td>{{ inbody.minerals }} kg</td>
+                        <td>{{ inbody.bodyFatMass }} kg</td>
+                        <td>{{ inbody.weight }} kg</td>
+                    </tr>
+                </tbody>
+            </table>
 
-                    <div class="admin-inbody-detail__compositoin__label">
-                        <div>
-                            <p>위의 모든 값을 합한</p>
-                            <p>체중</p>
-                        </div>
-                        <p>{{ inbody.weight }} kg</p>
-                    </div>
-                </div>
-            </section>
-            <section class="admin-inbody-detail__muscle-fat">
-                <h2 class="admin-inbody-detail__subtitle">골격근 지방 분석</h2>
-                <div class="admin-inbody-detail__muscle-fat--container">
-                    <p class="admin-inbody-detail__bar-label">
-                        체중<br />
-                        {{ inbody.weight }} kg
+            <section class="admin-inbody-detail__graph">
+                <div>
+                    <h2>골격근 지방 분석</h2>
+
+                    <p>
+                        <span> 체중</span>
+                        <span> {{ inbody.weight }} kg</span>
                     </p>
-                    <div>
+                    <div class="bar-container">
                         <Bar
                             :data="barData.weightData"
                             :options="weightOptions" />
                     </div>
-                    <p class="admin-inbody-detail__bar-label">
-                        골격근량 <br />
-                        {{ inbody.skeletalMuscleMass }} kg
+
+                    <p>
+                        <span> 골격근량</span>
+                        <span>{{ inbody.skeletalMuscleMass }} kg</span>
                     </p>
-                    <div>
+                    <div class="bar-container">
                         <Bar
                             :data="barData.skeletalMuscleMassData"
                             :options="skeletalMuscleMassOptions" />
                     </div>
-                    <p class="admin-inbody-detail__bar-label">
-                        체지방량<br />
-                        {{ inbody.bodyFatMass }} kg
+
+                    <p>
+                        <span>체지방량</span>
+                        <span>{{ inbody.bodyFatMass }} kg</span>
                     </p>
-                    <div>
+                    <div class="bar-container">
                         <Bar
                             :data="barData.bodyFatMassData"
                             :options="bodyFatMassOptions" />
                     </div>
                 </div>
-            </section>
-            <section class="admin-inbody-detail__obesity">
-                <h2 class="admin-inbody-detail__subtitle">비만 분석</h2>
-                <div class="admin-inbody-detail__obesity--container">
-                    <p class="admin-inbody-detail__bar-label">
-                        BMI<br />
-                        {{ inbody.bodyMassIndex }}
+
+                <div>
+                    <h2>비만 분석</h2>
+
+                    <p>
+                        <span>BMI</span>
+                        <span>{{ inbody.bodyMassIndex }}</span>
                     </p>
-                    <div>
+                    <div class="bar-container">
                         <Bar
                             :data="barData.bodyMassIndexData"
                             :options="bodyMassIndexOptions" />
                     </div>
-                    <p class="admin-inbody-detail__bar-label">
-                        체지방률<br />
-                        {{ inbody.percentBodyFat }} %
+
+                    <p>
+                        <span>체지방률</span>
+                        <span> {{ inbody.percentBodyFat }} % </span>
                     </p>
-                    <div>
+                    <div class="bar-container">
                         <Bar
                             :data="barData.percentBodyFatData"
                             :options="percentBodyFatOptions" />
@@ -244,178 +229,112 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
 
 <style lang="scss" scoped>
 .admin-inbody-detail {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
-    min-width: 45rem;
-    width: 100%;
-    padding: 1rem;
-    background-color: white;
-    border-radius: 0.5rem;
-    overflow: auto;
-    font-size: 1.2rem;
-    font-weight: 500;
-}
-
-// .admin-inbody-detail::-webkit-scrollbar {
-//     display: none;
-// }
-
-.admin-inbody-detail__personal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 1rem;
-    font-weight: 600;
-    font-size: 1.4rem;
+    overflow-y: auto;
+    min-width: 890px;
 }
 
 .admin-inbody-detail__comment {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0 0 1rem 1rem;
-    color: $gray;
+    color: $gray-dark;
     font-size: 0.9rem;
     font-weight: 600;
+    padding: 0.5rem 0;
+    p {
+        padding: 0.2rem 0;
+    }
 }
 
 .admin-inbody-detail--container {
     display: grid;
-    gap: 3rem;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: 1fr;
+    gap: 1rem;
 }
 
-.admin-inbody-detail__subtitle {
-    color: $admin-primary;
-    font-size: 1.5rem;
-    font-weight: 600;
+.inbody-total-table,
+.inbody-composition-table {
+    min-width: 10rem;
+    display: flex;
+    justify-content: space-evenly;
+    font-size: 1.3rem;
     text-align: center;
-    padding-bottom: 2rem;
-}
+    background-color: $white;
+    border-radius: 0.5rem;
 
-// bar graph canvas
-.admin-inbody-detail canvas {
-    // width: 100%;
-    // height: 100%;
-}
-
-.admin-inbody-detail__composition {
-    // display: flex;
-    // flex-direction: column;
-    // align-content: space-around;
-    // grid-column: 1 / 3;
-    // grid-row: 1 / 4;
-    // display: grid;
-    // grid-template-columns: minmax(0, 1fr);
-    // grid-template-rows: auto minmax(0, 1fr);
-    // width: 100%;
-    // height: 100%;
-    // padding: 1rem;
-}
-
-.admin-inbody-detail__composition--container {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: repeat(5, minmax(0, 1fr));
-
-    height: 70%;
-    padding: 1rem 0;
-}
-
-.admin-inbody-detail__compositoin__label {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    grid-template-rows: repeat(2, minmax(0, 1fr));
-    gap: 1.5rem;
-    align-items: center;
-
-    div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-
-        p:first-child {
-            font-size: 1rem;
+    thead {
+        tr {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
         }
 
-        p:last-child {
-            font-size: 1.3rem;
+        th {
+            font-weight: 600;
+            font-size: 1.35rem;
+        }
+    }
+
+    tbody {
+        tr {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+    }
+}
+
+.inbody-total-table {
+    grid-column: 1/2;
+}
+
+.inbody-composition-table {
+    grid-column: 2/3;
+}
+
+.inbody-composition-table {
+    th {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        span:first-child {
+            font-size: 1rem;
+            font-weight: normal;
+        }
+    }
+}
+
+.admin-inbody-detail__graph {
+    padding: 1rem;
+    grid-column: 3/5;
+    display: flex;
+    flex-direction: column;
+    background-color: $white;
+    border-radius: 0.5rem;
+    gap: 1rem;
+
+    h2 {
+        font-size: 1.5rem;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    p {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        span:first-child {
+            font-size: 1.15rem;
             font-weight: 600;
         }
     }
 }
 
-.admin-inbody-detail__muscle-fat {
-    // grid-column: 1 / 3;
-    // grid-row: 4 / 7;
-    // display: grid;
-    // grid-template-columns: minmax(0, 1fr);
-    // grid-template-rows: auto minmax(0, 1fr);
-    // width: 100%;
-    height: 100%;
-    // padding: 0 1rem 1rem 1rem;
-}
-
-.admin-inbody-detail__muscle-fat--container {
-    // display: grid;
-    // grid-template-columns: auto minmax(0, 1fr);
-    // grid-template-rows: repeat(3, minmax(0, 1fr));
-    // width: 100%;
-    // height: 100%;
-    // padding: 1rem 0;
-}
-
-.admin-inbody-detail__obesity {
-    // grid-column: 1 / 3;
-    // grid-row: 7 / 9;
-    // display: grid;
-    // grid-template-columns: minmax(0, 1fr);
-    // grid-template-rows: auto minmax(0, 1fr);
-    // width: 100%;
-    // height: 100%;
-    // padding: 0 1rem 1rem 1rem;
-}
-
-.admin-inbody-detail__obesity--container {
-    // display: grid;
-    // grid-template-columns: auto minmax(0, 1fr);
-    // grid-template-rows: repeat(2, minmax(0, 1fr));
-    // width: 100%;
-    // height: 100%;
-}
-
-.admin-inbody-detail__bar-label {
-    align-self: center;
-    font-weight: 600;
-    text-align: center;
-    line-height: 130%;
-}
-
-.admin-inbody-detail__total {
-    // grid-column: 3 / 4;
-    // grid-row: 1 / 9;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    // width: 100%;
-    height: 100%;
-    padding: 1rem;
-}
-
-.admin-inbody-detail__total__score {
-    font-size: 5rem;
-}
-
-.admin-inbody-detail__total__label {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    span:nth-child(1) {
-        font-weight: 600;
-    }
+.bar-container {
+    width: 100%;
+    min-width: 5rem;
+    height: 4rem;
 }
 </style>

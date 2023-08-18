@@ -11,11 +11,11 @@ const props = withDefaults(
         readonly?: boolean;
         minlength?: number;
         maxlength?: number;
-        min?: number;
-        max?: number;
+        min?: number | string;
+        max?: number | string;
         textAlign?: 'left' | 'right' | 'center' | 'justify';
         color?: 'kiosk-primary' | 'admin-primary';
-        size?: 'sm' | 'md' | 'lg' | 'xl';
+        size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
         isError?: boolean;
         condition?: string;
         isFocus?: boolean;
@@ -35,7 +35,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-    (e: 'input', value: string): void;
+    (e: 'input', value: string, target: HTMLInputElement): void;
     (e: 'change'): void;
     (e: 'enter'): void;
     (e: 'focus'): void;
@@ -44,7 +44,11 @@ const emit = defineEmits<{
 // Emit input event when it's not readonly
 const handleInput = function handleAppInput(event: Event) {
     if (props.readonly) return;
-    emit('input', (event.target as HTMLInputElement).value);
+    emit(
+        'input',
+        (event.target as HTMLInputElement).value,
+        event.target as HTMLInputElement
+    );
 };
 </script>
 
@@ -160,13 +164,34 @@ const handleInput = function handleAppInput(event: Event) {
 }
 
 //size
+.v-input.xs {
+    font-size: 1rem;
+
+    input,
+    textarea {
+        font-size: 1rem;
+        width: 100%;
+        text-align: center;
+    }
+}
+
 .v-input.sm {
     font-size: 1rem;
 
     input,
     textarea {
-        padding: 0.2rem;
+        padding: 0.3rem;
         font-size: 1rem;
+        width: 4rem;
+        border-radius: 0.5em;
+    }
+
+    input[type='month'] {
+        width: 7.5rem;
+    }
+
+    input[type='date'] {
+        width: 10rem;
     }
 }
 

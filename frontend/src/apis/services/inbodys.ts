@@ -102,7 +102,7 @@ export async function updateInbody(inbodyId: number, inbody: InbodyDetail) {
             toastTopSuccessMessage('인바디가 수정되었습니다');
         })
         .catch((err) => {
-            toastCenterErrorMessage('인바디 정보 수정에 실패했습니다', err);
+            toastTopErrorMessage('인바디 정보 수정에 실패했습니다', err);
             throw err;
         });
 }
@@ -114,7 +114,7 @@ export async function deleteInbody(inbodyId: number) {
             toastTopSuccessMessage('인바디가 삭제되었습니다');
         })
         .catch((err) => {
-            toastCenterErrorMessage('인바디 삭제에 실패했습니다', err);
+            toastTopErrorMessage('인바디 삭제에 실패했습니다', err);
             throw err;
         });
 }
