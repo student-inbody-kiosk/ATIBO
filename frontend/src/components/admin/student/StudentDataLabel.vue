@@ -3,11 +3,11 @@
 <template>
     <thead>
         <tr class="student-attend-label">
-            <th class="student-attend-label__content"></th>
-            <th class="student-attend-label__content">학년</th>
-            <th class="student-attend-label__content">반</th>
-            <th class="student-attend-label__content">번호</th>
-            <th class="student-attend-label__content">이름</th>
+            <th class="student-attend-label__content" id="empty"></th>
+            <th class="student-attend-label__content" id="grade">학년</th>
+            <th class="student-attend-label__content" id="room">반</th>
+            <th class="student-attend-label__content" id="number">번호</th>
+            <th class="student-attend-label__content" id="name">이름</th>
         </tr>
     </thead>
 </template>
