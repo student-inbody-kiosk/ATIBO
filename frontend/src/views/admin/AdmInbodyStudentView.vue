@@ -124,6 +124,9 @@ const handleCreateClick = function updateTheStudentInbodys() {
 
         <div class="admin-inbody-student-table-container">
             <table>
+                <caption>
+                    Inbody Table
+                </caption>
                 <InbodyDataLabel />
                 <tbody>
                     <InbodyData

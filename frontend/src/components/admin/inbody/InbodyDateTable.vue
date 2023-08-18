@@ -14,6 +14,9 @@ defineEmits<{
 
 <template>
     <table>
+        <caption>
+            Inbody Record Table
+        </caption>
         <thead>
             <tr>
                 <th :colspan="days">인바디 기록</th>

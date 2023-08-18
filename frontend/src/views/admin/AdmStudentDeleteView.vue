@@ -65,6 +65,9 @@ const handleDeleteClick = function deleteStudent() {
 
         <section class="admin-student-list">
             <table>
+                <caption>
+                    Student Detail Table
+                </caption>
                 <StudentDetailDataLabel />
                 <tbody>
                     <StudentDetailData

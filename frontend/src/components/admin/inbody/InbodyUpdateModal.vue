@@ -49,6 +49,9 @@ const handleUpdateClick = function updateInbodyData() {
     <VLoading v-if="isLoading" color="admin-primary" />
     <TheModal v-else @close-modal="$emit('close-modal')">
         <table>
+            <caption>
+                Inbody Update Table
+            </caption>
             <InbodyDataLabel />
             <tbody>
                 <InbodyDataInput

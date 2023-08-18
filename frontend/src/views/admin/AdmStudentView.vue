@@ -97,6 +97,9 @@ const handleSubmit = function searchStudents() {
 
         <section class="admin-student-list">
             <table>
+                <caption>
+                    Student Table
+                </caption>
                 <StudentDetailDataLabel />
                 <tbody>
                     <StudentDetailData

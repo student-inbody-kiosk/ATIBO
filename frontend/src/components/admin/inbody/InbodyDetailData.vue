@@ -65,6 +65,9 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
         </div>
         <div class="admin-inbody-detail--container">
             <table class="inbody-total-table">
+                <caption>
+                    Inbody Total Table
+                </caption>
                 <thead>
                     <tr>
                         <th>인바디 점수</th>
@@ -127,6 +130,9 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
             </table>
 
             <table class="inbody-composition-table">
+                <caption>
+                    Inbody Composition Table
+                </caption>
                 <thead>
                     <tr>
                         <th>
