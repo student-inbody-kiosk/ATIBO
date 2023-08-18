@@ -6,7 +6,10 @@ const schoolInfo = await services.getSchoolInfo();
 
 <template>
     <div class="kiosk-school-info">
-        <img class="kiosk-school-info__logo" :src="schoolInfo?.logoImage" />
+        <img
+            class="kiosk-school-info__logo"
+            :src="schoolInfo?.logoImage"
+            alt="학교 로고" />
         <h1 class="kiosk-school-info__name">{{ schoolInfo?.name }}</h1>
     </div>
 </template>

@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref } from 'vue';
 
 // T: response type
 // V: request data type

@@ -1,5 +1,5 @@
 # Node.js 기반 이미지
-FROM node:18 as build-stage
+FROM node:18 AS build-stage
 
 # Add curl for healthcheck
 RUN apt-get update \

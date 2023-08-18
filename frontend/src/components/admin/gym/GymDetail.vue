@@ -48,7 +48,7 @@ onMounted(() => {
         <section class="gym-detail__image">
             <ul class="gym-detail__image__list">
                 <li v-for="image in gymImages" :key="image.id">
-                    <img :src="image.image" />
+                    <img :src="image.image" alt="운동 기구 이미지" />
                 </li>
             </ul>
         </section>

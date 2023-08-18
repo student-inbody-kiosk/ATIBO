@@ -26,28 +26,28 @@ const handleModalClose = function closeModal() {
             class="admin-header__icon"
             text="메인 화면"
             @click="$router.push({ name: 'admin-main' })">
-            <font-awesome-icon icon="house" size="2x" />
+            <font-awesome-icon icon="house" size="xl" />
         </VIconButton>
         <div class="admin-header__buttons">
             <VIconButton
                 class="admin-header__icon"
                 text="이메일 변경"
                 @click="isEmailModalOpen = true">
-                <font-awesome-icon icon="envelope" size="2x" />
+                <font-awesome-icon icon="envelope" size="xl" />
             </VIconButton>
 
             <VIconButton
                 class="admin-header__icon"
                 text="비밀번호 변경"
                 @click="isPasswordModalOpen = true">
-                <font-awesome-icon icon="lock" size="2x" />
+                <font-awesome-icon icon="lock" size="xl" />
             </VIconButton>
 
             <VIconButton
                 class="admin-header__icon"
                 text="로그아웃"
                 @click="logout">
-                <font-awesome-icon icon="user" size="2x" />
+                <font-awesome-icon icon="user" size="xl" />
             </VIconButton>
         </div>
     </div>

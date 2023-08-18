@@ -13,7 +13,6 @@ const handleClick = function handleKeypadClick(value: string) {
     let newValue = '';
     switch (value) {
         case 'cancel':
-            newValue = '';
             break;
         case 'delete':
             newValue = props.value.slice(0, -1);
