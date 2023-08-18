@@ -290,9 +290,7 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
 
 .inbody-composition-table {
     grid-column: 2/3;
-}
 
-.inbody-composition-table {
     th {
         display: flex;
         flex-direction: column;

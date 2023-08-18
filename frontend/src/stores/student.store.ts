@@ -1,4 +1,3 @@
-import { ref, inject } from 'vue';
 import { defineStore } from 'pinia';
 import services from '@/apis/services';
 import type { Student } from '@/types/students.interface';
