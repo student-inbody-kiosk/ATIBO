@@ -155,7 +155,7 @@ class GenerateStudentDummyData():
             self.generate_attendance(student_id)
             self.generate_inbody(student_id, birth_date_date)
 
-def generateStudentDummyData():
+def generate_student_dummy_data():
     GenerateStudentDummyData(today_date=TODAY_DATE, birth_start_date=BIRTH_START_DATE, birth_end_date=BIRTH_END_DATE, 
                             num_student=NUM_STUDENT, max_grade=MAX_GRADE, max_room=MAX_ROOM, max_number=MAX_NUMBER, 
                             attendance_start_date=ATTENDANCE_START_DATE, attendance_end_date=ATTENDANCE_END_DATE, 

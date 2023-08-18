@@ -7,28 +7,32 @@ from .models import Equipment, Image
 
 
 class ImageListSerializer(serializers.ListSerializer):
-    # Multiple Create/Update/Delete
+    # Multiple create/update/delete
     def update(self, instance, validated_data):
-        # instance mapping
+        # Instance mapping
         image_mapping = {image.id: image for image in instance}
-        # data mapping
-        invalid_id = -1
+        # Data mapping
         data_mapping = {}
+        invalid_id = -1
         for item in validated_data:
             data_id = item.get('id')
+            # Existing data => update
             if data_id:
                 data_mapping[data_id] = item
+            # Non Existing data => create
             else:
                 data_mapping[invalid_id] = item
-                invalid_id -= 1
+                invalid_id -= 1 # allocate invalid id temporarily
 
         # Perform creations and updates(pass).
         ret = []
         for image_id, data in data_mapping.items():
             image = image_mapping.get(image_id, None)
-            if image is None:   # create
+            # Create
+            if image is None:
                 ret.append(self.child.create(data))
-            else:   # pass the existing data
+            # Update (pass)
+            else:
                 ret.append(image) 
 
         # Perform deletions
@@ -37,6 +41,7 @@ class ImageListSerializer(serializers.ListSerializer):
                 image.delete()
 
         return ret
+
 
 class ImageSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)    # For multiple update
@@ -53,10 +58,12 @@ class ImageSerializer(serializers.ModelSerializer):
             ret['image'] = '/media/' + str(instance.image)
         return ret
         
+
 class EquipmentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipment
         exclude = ['description']
+
 
 class EquipmentSerializer(serializers.ModelSerializer):
     class Meta:

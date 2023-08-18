@@ -5,6 +5,7 @@ from django.core.validators import MinLengthValidator
 from ckeditor.fields import RichTextField
 
 
+# Gym equipment image directory
 def gym_equipment_directory_path(instance, filename):
     return f'gym/{instance.equipment.name}/{filename}'
 

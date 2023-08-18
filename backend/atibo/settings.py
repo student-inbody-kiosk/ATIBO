@@ -233,23 +233,22 @@ EMAIL_USE_TLS = True
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-# corsheaders settings
 
-# CORS_ALLOW_ALL_ORIGINS = True
+# corsheaders settings
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:5173',    # Dev
-    'https://127.0.0.1:5173',   # Dev
     'http://localhost:5173',    # Dev
-    'https://localhost:5173',   # Dev
-    'http://localhost' + ':' + env.str('HOST_PORT', ''),    # In case localhost
+    'http://127.0.0.1:3000',    # Dev
+    "http://localhost:3000",    # Dev
+    'http://127.0.0.1' + ':' + env.str('HOST_PORT', ''),    # In case localhost
     'http://localhost' + ':' + env.str('HOST_PORT', ''),    # In case localhost
     'http://' + env.str('HOST_IP', '') + ':' + env.str('HOST_PORT', ''),
     'https://' + env.str('HOST_IP', '') + ':' + env.str('HOST_PORT', ''),
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost' + ':' + env.str('HOST_PORT', ''),    # In case localhost
+    'http://127.0.0.1' + ':' + env.str('HOST_PORT', ''),    # In case localhost
     'http://localhost' + ':' + env.str('HOST_PORT', ''),    # In case localhost
     'http://' + env.str('HOST_IP', '') + ':' + env.str('HOST_PORT', ''),
     'https://' + env.str('HOST_IP', '') + ':' + env.str('HOST_PORT', ''),

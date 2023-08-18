@@ -19,13 +19,21 @@ from atibo.authentications import StudentJWTAuthentication
 from atibo.exceptions import DetailException
 from atibo.permissions import  IsTheStudent, IsOwner
 from atibo.utils.custom_token import encode
-from atibo.utils.dummy_data import generateStudentDummyData
+from atibo.utils.dummy_data import generate_student_dummy_data
 from .models import Student, Attendance, Inbody
 from .serializers import StudentAuthSerializer, StudentCheckSerializer, StudentDetailSerializer, StudentPasswordChangeSerializer, AttendanceSerializer, StudentAttendanceSerializer, InbodySerializer, StudentInbodySerializer
 from .utils import get_student_object_from_path_variables, get_student_queryset_from_query_params, get_date_from_path_variables, get_date_from_query_params, get_date_from_month_in_path_variables
 
+
+"""
+Student API for authenticated users
+get: get student list
+post: create student list (multiple create)
+put: update student list (multiple update)
+patch: delete studnet list (multiple delete)
+"""
 class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, UpdateModelMixin):
-    http_method_names = ["post", "get", "put", "patch"] # patch is for multiple deletion
+    http_method_names = ["get", "post", "put", "patch"]
     permission_classes = [IsAuthenticated]
     serializer_class = StudentAuthSerializer
     queryset = Student.objects.all()
@@ -35,12 +43,12 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
         serializer_class = self.get_serializer_class()
         kwargs.setdefault('context', self.get_serializer_context())
 
-        if self.request and self.request.method == 'GET':
-            return serializer_class(*args, **kwargs)    # ListModelMixin.list() add `many=True` internally 
+        if self.request and self.request.method == 'GET': # ListModelMixin.list() add `many=True` internally 
+            return serializer_class(*args, **kwargs)
         else:
             return serializer_class(many=True, *args, **kwargs)
 
-    # Create dynamic query according to parameters
+    # Search students based on query params
     def get_queryset(self):
         request = self.request
         return get_student_queryset_from_query_params(request.query_params)
@@ -75,15 +83,16 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
             },
         ),
     )
+    @transaction.atomic
     def patch(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     
-    # Multiple update
+    # Multiple updates
     def update(self, request, *args, **kwargs):
-        # Get mutilple instance
+        # Get Instances for updates
         instance = []
         for student_data in request.data:
-            student = Student.objects.select_for_update().get(id=student_data.get('id'))    # lock the records for multiple update
+            student = Student.objects.select_for_update().get(id=student_data.get('id')) # Lock the records: Multiple updates by Multiple users
 
             if not student:
                 grade = student_data.get('grade')
@@ -117,13 +126,16 @@ class StudentAuthAPIView(GenericAPIView, ListModelMixin, CreateModelMixin, Updat
         """
         return Response(serializer.data)
     
-    # Multiple Delete : Ignore the invalid id
+    # Multiple Delete 
     def destroy(self, request, *args, **kwargs):
         student_ids = request.data.get('ids')
-        Student.objects.filter(id__in=student_ids).delete()
+        Student.objects.filter(id__in=student_ids).delete() # Just ignore invalid ids
         return Response({'message': _('학생 정보가 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
 
 
+"""
+get: get the student info
+"""
 class StudentCheckAPIView(RetrieveAPIView):
     authentication_classes = []
     serializer_class = StudentCheckSerializer
@@ -133,6 +145,9 @@ class StudentCheckAPIView(RetrieveAPIView):
         return student
 
 
+"""
+post: student login & issue custom JWT token
+"""
 @extend_schema(
     request=inline_serializer(
         name="StudentLoginSerializer",
@@ -145,13 +160,15 @@ class StudentLoginAPIView(APIView):
     authentication_classes = []
 
     def post(self, request, *args, **kwargs):
+        # Get the instance
         student = get_student_object_from_path_variables(self.kwargs)
 
+        # Check the password
         password = request.data.get('password')
-        if not student.password == password:
+        if student.password != password:
             raise DetailException(status.HTTP_400_BAD_REQUEST, _('비밀번호가 일치하지 않습니다'), 'invalid_student_password')
 
-        # Create Custom Token
+        # Create custom JWT Token
         payload = {
             'id': str(student.id),
         }
@@ -165,6 +182,9 @@ class StudentLoginAPIView(APIView):
         return Response(data, status=status.HTTP_202_ACCEPTED)
 
 
+"""
+get: student detail info
+"""
 class StudentDetailAPIView(RetrieveAPIView):
     authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
     permission_classes = [IsTheStudent | IsAuthenticated]
@@ -175,6 +195,9 @@ class StudentDetailAPIView(RetrieveAPIView):
         return student
 
 
+"""
+put: update student password
+"""
 @extend_schema(
     responses=inline_serializer(
         name="StudentPasswordChangeResponseSerializer",
@@ -198,6 +221,9 @@ class StudentPasswordChangeAPIView(UpdateAPIView):
         return Response({ 'message': _('비밀번호가 변경되었습니다')}, status=status.HTTP_200_OK)
     
 
+"""
+post: create attendance
+"""
 class AttendanceCheckAPIView(CreateAPIView):
     authentication_classes = []
     serializer_class = AttendanceSerializer
@@ -207,6 +233,9 @@ class AttendanceCheckAPIView(CreateAPIView):
         serializer.save(student = student)  # It's converted as validated_data in the serialzer.save()
 
 
+"""
+list(get): get student list with attendance_set
+"""
 @extend_schema(
         parameters=[
             OpenApiParameter(name='grade', description=_('student grade'), type=int),
@@ -219,14 +248,18 @@ class StudentAttendanceAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = StudentAttendanceSerializer
 
-    # Create dynamic query according to parameters
+    # Create dynamic queryset
     def get_queryset(self):
-        student_queryset = get_student_queryset_from_query_params(self.request.query_params)
-        start_date, end_date = get_date_from_month_in_path_variables(self.kwargs)
+        student_queryset = get_student_queryset_from_query_params(self.request.query_params)    # Dynamic query based on query parmas
+        start_date, end_date = get_date_from_month_in_path_variables(self.kwargs)   # start_date, end_date based on path variables
         return student_queryset.prefetch_related(Prefetch('attendance_set', queryset=Attendance.objects.filter(date_attended__gte=start_date, date_attended__lt=end_date).order_by('date_attended')))
 
 
-# Inbody of a single student
+"""
+Inbody API for a student
+list(get): get inbody list of a student
+post: create a inbody
+"""
 class InbodyStudentAPIView(ListCreateAPIView):
     authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
     permission_classes = [IsTheStudent | IsAuthenticated]
@@ -251,7 +284,12 @@ class InbodyStudentAPIView(ListCreateAPIView):
         student = get_student_object_from_path_variables(self.kwargs)
         serializer.save(student = student)  # It's converted as validated_data in the serialzer.save()
         
-    
+
+"""
+get: get the detail inbody
+put: update the detail inbody
+delete: dlelete the detail inbody
+"""
 class InbodyDetailAPIView(RetrieveUpdateDestroyAPIView):
     http_method_names = ['get', 'put', 'delete',]
     authentication_classes = [StudentJWTAuthentication, JWTAuthentication]
@@ -264,6 +302,12 @@ class InbodyDetailAPIView(RetrieveUpdateDestroyAPIView):
         return Response({'message': _('인바디가 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
     
 
+"""
+Student list API with inbody_set
+get: get the detail inbody
+put: update the detail inbody
+delete: delete the detail inbody
+"""
 # Inbody of multiple students
 @extend_schema(
         parameters=[
@@ -277,15 +321,19 @@ class StudentInbodyAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = StudentInbodySerializer
 
-    # Create dynamic query according to parameters
     def get_queryset(self):
-        student_queryset = get_student_queryset_from_query_params(self.request.query_params)
-        start_date, end_date = get_date_from_path_variables(self.kwargs, 730)   # max available period: 2years
+        student_queryset = get_student_queryset_from_query_params(self.request.query_params)    # Create dynamic queryset based on query params
+        start_date, end_date = get_date_from_path_variables(self.kwargs, 730)   # Max available period: 2 years
         return student_queryset.prefetch_related(Prefetch('inbody_set', queryset=Inbody.objects.filter(test_date__gte=start_date, test_date__lt=end_date).order_by('test_date')))
 
 
-# Update(Create), Delete Multiple Inbody
+"""
+Inbody list API
+put: update inbody list (multiple create/update)
+delete: delete inbody list (multiple delete)
+"""
 class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
+    http_method_names = ['put', 'patch',]
     permission_classes = [IsAuthenticated]
     serializer_class = InbodySerializer
     
@@ -295,7 +343,7 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
         kwargs.setdefault('context', self.get_serializer_context())
         return serializer_class(many=True, *args, **kwargs)
         
-    # Multiple update/create
+    # Multiple create/update
     @transaction.atomic
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -308,28 +356,28 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
             },
         ),
     )
+    # Multiple delete
+    @transaction.atomic
     def patch(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-
-    def delete(self, request, *args, **kwargs):
-        return self.destroy(request, *args, **kwargs)
     
-    # Multiple update
+    # Multiple create/update
     def update(self, request, *args, **kwargs):
         # Get mutilple instance
         instance = []
 
         for inbody_data in request.data:
-            id = inbody_data.get('id')
-            if not id:  # Data for creation
-                pass
-
-            inbody = Inbody.objects.select_for_update().get(id=id)    # lock the records for multiple update
-
+            inbody_id = inbody_data.get('id')
+            
+            # Create
+            if not inbody_id:
+                continue
+            
+            # Update
+            inbody = Inbody.objects.select_for_update().get(id=inbody_id) # Lock the records: Multiple updates by Multiple users
             if not inbody:
                 test_date = inbody_data.get('test_date')
                 raise DetailException(status.HTTP_404_NOT_FOUND, _(f'{test_date} 날짜에 해당하는 기존 인바디 정보가 없습니다'), 'inbody_not_found')
-
             """
             Temporarily Deactivate (student, test_date) constraint for multiple update.
             It will be reactivated in the serializer
@@ -355,21 +403,23 @@ class InbodyListAPIView(GenericAPIView, UpdateModelMixin):
         """
         return Response(serializer.data)
     
-    # Multiple Delete : Ignore invalid id
+    # Multiple delete
     def destroy(self, request, *args, **kwargs):
         inbody_ids = request.data.get('ids')
-        Inbody.objects.filter(id__in=inbody_ids).delete()
+        Inbody.objects.filter(id__in=inbody_ids).delete() # Just ignore invalid id
         return Response({'message': _('인바디가 삭제되었습니다')}, status=status.HTTP_204_NO_CONTENT)
 
 """
-Create dummy data. Only for superuser
+[Superuser]
+Create dummy data
 """
 class CreateDummyAPIView(APIView):
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
+        # Only for supersuer
         if not request.user.is_superuser:
             return Response(status=status.HTTP_403_FORBIDDEN)
         print('Start Generating Dummy')
-        generateStudentDummyData()
+        generate_student_dummy_data()
         return Response(status=status.HTTP_201_CREATED)

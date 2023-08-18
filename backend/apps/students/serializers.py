@@ -15,20 +15,21 @@ from .models import Student, Attendance, Inbody
 
 
 class StudentListAuthSerializer(serializers.ListSerializer):
-    # Mulltiple Create
+    # Multiple Create
     def create(self, validated_data):
+        """
+        Handle DB integrity Error
+        No `bulk_create()` for the detailed error message 
+        """
         ret = []
-
-        # Handle DB integrity Error
         try:
             for student in validated_data:
                 ret.append(self.child.create(student))
-        except IntegrityError as e:
+        except IntegrityError:
             grade = student.get('grade')
             room = student.get('room')
             number = student.get('number')
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{grade}학년 {room}반 {number}번에 해당하는 학생이 이미 존재합니다.\n 학년, 반, 번호 조합은 고유해야 합니다.'), f'db_integrity_error')
-        
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{grade}학년 {room}반 {number}번에 해당하는 학생이 이미 존재합니다.\n 학년, 반, 번호 조합은 고유해야 합니다.'), 'db_integrity_error') 
         return ret
     
     # Multiple Update
@@ -36,19 +37,21 @@ class StudentListAuthSerializer(serializers.ListSerializer):
         student_mapping = {student.id: student for student in instance}
         data_mapping = {item['id']: item for item in validated_data}
     
+        """
+        Handle DB integrity Error
+        No `bulk_update()` for the detailed error message 
+        """
         ret =[]
-        # Handle DB integrity error
         try:
             for student_id, data in data_mapping.items():
-                student = student_mapping.get(student_id, None)
-                data['is_constraint_activated'] = True
+                student = student_mapping.get(student_id)
+                data['is_constraint_activated'] = True  # which was set as False in the views.py
                 ret.append(self.child.update(student, data))
-        except IntegrityError as e:
+        except IntegrityError:
             grade = data.get('grade')
             room = data.get('room')
             number = data.get('number')
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{grade}학년 {room}반 {number}번에 해당하는 학생이 이미 존재합니다.\n 학년, 반, 번호 조합은 고유해야 합니다.'), f'db_integrity_error')
-            
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{grade}학년 {room}반 {number}번에 해당하는 학생이 이미 존재합니다.\n 학년, 반, 번호 조합은 고유해야 합니다.'), 'db_integrity_error')
         return ret
 
 
@@ -60,9 +63,9 @@ class StudentAuthSerializer(serializers.ModelSerializer):
         model = Student
         exclude = ['is_authenticated', 'is_constraint_activated']
 
-    # Since this is constraints, and the default validator isn't set.
+    # Note: The constraints in Model field don't force validation check.
     def validate_sex(self, value):
-        if not value in (0, 1, 2, 9):
+        if value not in (0, 1, 2, 9):
             raise serializers.ValidationError(_('성별을 확인해주세요'), 'invalid_sex')
         return value
     
@@ -91,7 +94,7 @@ class StudentPasswordChangeSerializer(serializers.Serializer):
 
     def validate_old_password(self, value):
         user = self.context['request'].user
-        if not user.password == value:
+        if user.password != value:
             raise serializers.ValidationError(_('기존 비밀번호가 일치하지 않습니다'), 'invalid_old_password')
         return value
     
@@ -103,10 +106,8 @@ class StudentPasswordChangeSerializer(serializers.Serializer):
     def validate(self, data):
         new_password = data.get('new_password')
         confirm_password = data.get('confirm_password')
-
         if new_password != confirm_password:
             raise serializers.ValidationError({"confirm_password": _('새 비밀번호가 서로 일치하지 않습니다')}, 'invalid_student_confirm_password')
-
         return data
     
     def update(self, instance, validated_data):
@@ -125,7 +126,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
 
-        # Change the datetime format    
+        # Change the date_attended format: "YYYY-MM-DD HH:MM"
         date_attended = ret.get('date_attended')
         ret['date_attended'] = datetime_to_date_time(date_attended)
 
@@ -134,10 +135,11 @@ class AttendanceSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         student = validated_data['student']
 
+        # Add the date_attended time as now
         tz = pytz.timezone(settings.TIME_ZONE)
         now = datetime.now(tz=tz)
         
-        # Attendance Check can be repeated within 30min
+        # Attendance Check can't be repeated within 30min
         attendance =  Attendance.objects.filter(student=student).order_by('-date_attended')[:1]
         if attendance:
             attendance = attendance[0]
@@ -146,9 +148,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
                 time_interval_min = int(time_interval.total_seconds() / 60)
                 raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'이미 {time_interval_min} 분 전에 출석되었습니다. 출석은 최소 30분마다 가능합니다'), 'too_fast_attendance')
         
-        # Add the date_attended time as now
         validated_data['date_attended'] = now
-
         return super().create(validated_data)
 
 
@@ -159,50 +159,74 @@ class StudentAttendanceSerializer(serializers.ModelSerializer):
         model = Student
         fields = ['name', 'grade', 'room', 'number', 'attendance_set']
 
-    # Group the attendnace data by date
     def to_representation(self, instance):
         ret = super().to_representation(instance)
 
+        """
+        Hypothesis: The student attendance list should be searched within a month
+
+        [INPUT]
+        attendance_set: [ {id: 1, date_attended: '2023-08-09 12:53'}, {id: 13, date_attended: '2023-08-13 18:59'}]
+
+        [OUTPUT]
+        attendance_set: { 9 : [ {id: 1, date_attended: '12:53'} ], 13: [ {id: 13, date_attended: '18:59'} ] }
+        """
         attendance_set = {}
         for attendnace in ret['attendance_set']:
-            id, date_attended = attendnace['id'], attendnace['date_attended']
+            attendance_id, date_attended = attendnace['id'], attendnace['date_attended']
             date, time = date_attended.split()
             date = int(date[-2:])
-
             if date not in attendance_set:
                 attendance_set[date] = []
-
             attendance_set[date].append({
-                'id': id,
+                'id': attendance_id,
                 'time': time,
             })
 
         ret['attendance_set'] = attendance_set
         return ret
 
-class InbodyListSerializer(serializers.ListSerializer):    
-    # Multiple Create/Update
-    def update(self, instance, validated_data):
-        inbody_mapping = {inbody.id: inbody for inbody in instance}
-        data_mapping = {item['id']: item for item in validated_data}
 
+class InbodyListSerializer(serializers.ListSerializer):    
+    # Multiple create / update
+    def update(self, instance, validated_data):
+        # Instance mapping
+        inbody_mapping = {inbody.id: inbody for inbody in instance}
+        # Data mapping
+        data_mapping = {}
+        invalid_id = -1
+        for item in validated_data:
+            data_id = item.get('id')
+            # Existing data => update
+            if data_id:
+                data_mapping[data_id] = item
+            # Non Existing data => create
+            else:
+                data_mapping[invalid_id] = item
+                invalid_id -= 1 # allocate invalid id temporarily
+
+        """
+        Handle DB integrity Error
+        Return the detailed error message 
+        """
         ret = []
-        # Handle DB integrity error
         try:
             for inbody_id, data in data_mapping.items():
-                student = inbody_mapping.get(inbody_id, None)
-                if student is None: # Create
+                inbody = inbody_mapping.get(inbody_id, None)
+                # Create
+                if inbody is None:
                     ret.append(self.child.create(data))
-                else:   # Update
+                # Update
+                else: 
                     """
                     Restore the (grade, room, number) constraint, which is deactivated in the serializer
                     """
                     data['is_constraint_activated'] = True
-                    ret.append(self.child.update(student, data))
+                    ret.append(self.child.update(inbody, data))
                     
-        except IntegrityError as e:
-            code, message = e.args
-            raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'{message}'), f'db_{code}')
+        except IntegrityError:
+            test_date = data.get('test_date')
+            raise DetailException(status.HTTP_400_BAD_REQUEST, _(f'해당 학생에게 {test_date}의 인바디 기록이 이미 존재합니다'), 'db_integrity_error')
             
         return ret
 
@@ -215,11 +239,12 @@ class InbodySerializer(serializers.ModelSerializer):
         model = Inbody
         exclude = ['student', 'is_constraint_activated']
 
+    # Error message for unique constraint
     def create(self, validated_data):
         try:
             return super().create(validated_data)
         except IntegrityError as e:
-            code, message = e.args
+            code = e.args
             raise DetailException(status.HTTP_400_BAD_REQUEST, _('해당 날짜에 인바디 기록이 이미 존재합니다'), f'db_{code}')
 
     def validate_test_date(self, value):
@@ -227,14 +252,13 @@ class InbodySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(_('테스트 날짜가 오늘 이후일 수 없습니다'), 'invalid_birth_date')
         return value
     
-    # Round to second decimal place
+    # Round data up to second decimal place
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         for key, value in  ret.items():
             if key not in  {'id', 'student', 'test_date', 'score'}:
                 ret[key] = round(value,2)
         return ret
-
 
 
 class StudentInbodySerializer(serializers.ModelSerializer):

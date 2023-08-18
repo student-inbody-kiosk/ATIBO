@@ -19,16 +19,17 @@ class UserSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
-    # strip the comment data
+    # strip the comment text
     def to_internal_value(self, data):
         ret = super().to_internal_value(data)
         ret['comment'] = ret.get('comment').strip()
         return ret
 
+    # create user with the default field value
     def create(self, validated_data):
         User = self.Meta.model
-        validated_data['role'] = 'user'
-        validated_data['is_active'] = False
+        validated_data['role'] = 'user' # noraml user
+        validated_data['is_active'] = False # is_activated by admin user
         user = User.objects.create_user(**validated_data)
         return user
 
@@ -47,11 +48,11 @@ class LoginSerializer(serializers.Serializer):
         except Http404:
             raise DetailException(status.HTTP_404_NOT_FOUND, _('해당 아이디의 사용자 정보가 없습니다'), 'user_not_found')
 
-        # Check whether the user is active
+        # Check whether the user is activated
         if not user.is_active:
             raise DetailException(status.HTTP_403_FORBIDDEN, _('해당 계정은 활성화되지 않았습니다. 관리자에게 승인을 받으세요'), 'inactive_user')
         
-        # Authenticate with username and apssword
+        # Authenticate with username and passwrod
         authenticated_user = authenticate(request=self.context.get('request'), username=username, password=password)
         if not authenticated_user:
             raise DetailException(status.HTTP_404_NOT_FOUND, _('비밀번호가 틀렸습니다'), 'user_not_found')
@@ -83,19 +84,17 @@ class PasswordChangeSerializer(serializers.Serializer):
             raise serializers.ValidationError(_('기존 비밀번호가 올바르지 않습니다'), 'invalid_old_password')
         return value
     
+    # Note that validators will not be run automatically when you save a model
+    # https://docs.djangoproject.com/en/4.2/ref/validators/#how-validators-are-run
     def validate_new_password(self, value):
-        # Note that validators will not be run automatically when you save a model
-        # https://docs.djangoproject.com/en/4.2/ref/validators/#how-validators-are-run
         validate_password(value)
         return value
 
     def validate(self, data):
         new_password = data.get('new_password')
         confirm_password = data.get('confirm_password')
-
         if new_password != confirm_password:
             raise serializers.ValidationError({"confirm_password": _('새 비밀번호가 서로 일치하지 않습니다')}, 'invalid_confirm_password')
-
         return data
 
     def update(self, instance, validated_data):
@@ -119,7 +118,6 @@ class PasswordResetSerializer(serializers.Serializer):
             user = get_object_or_404(User, username=username, email=email)
         except Http404:
             raise DetailException(status.HTTP_404_NOT_FOUND, _('아이디 혹은 이메일을 다시 확인해주세요'), 'user_not_found')
-        
         data['user'] = user
         return data
 
@@ -139,14 +137,14 @@ class TokenRefreshSerializer(serializers.Serializer):
         except Http404:
             raise DetailException(status.HTTP_404_NOT_FOUND, _('해당 아이디의 계정이 없습니다'), 'user_not_found')
 
-        # Compare the refresh_token (Concurrent Session Controll)
-        if not user.refresh_token == refresh_token:
+        # Compare the refresh_token (for concurrent session control)
+        if user.refresh_token != refresh_token:
             raise DetailException(status.HTTP_401_UNAUTHORIZED, _('해당 아이디로 중복 로그인이 발생했습니다. 비밀번호를 변경해주세요'), 'different_refresh_token')
         
         # Check the RefreshToken
         try:
             RefreshToken(refresh_token).verify()
-        except:
+        except Exception:
             raise DetailException(status.HTTP_401_UNAUTHORIZED, _('세션이 만료되었습니다'), 'invalid_refresh_token')
 
         data['user'] = user
@@ -159,6 +157,7 @@ class AdminSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'name', 'email', 'comment', 'is_active']
         read_only_fields = ['id', 'username', 'name', 'email', 'comment', 'is_active']
 
+    # update account as activated
     def update(self, instance, validated_data):
         instance.is_active = True
         instance.save()
