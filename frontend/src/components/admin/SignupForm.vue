@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
 import services from '@/apis/services';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import { useAuthInput, usePasswordCheck } from '@/hooks/useAuthInput';
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import { toastTopErrorMessage } from '@/utils/toastManager';
 
 const emit = defineEmits<{
@@ -50,7 +49,7 @@ const comment = ref('');
 const handleCommentInput = function updateComment(value: string) {
     comment.value = value;
 };
-const commentResult = computed<Boolean>(() => {
+const commentResult = computed<boolean>(() => {
     const strippedComment = comment.value.replace(/ /g, '');
     return strippedComment.length > 9 ? true : false;
 });

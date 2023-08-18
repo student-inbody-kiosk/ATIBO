@@ -25,7 +25,7 @@ const { fetchData: deleteInbody, isLoading: isDeleteInbodyLoading } = useAxios(
     null,
     services.deleteInbody
 );
-const { grade, room, number, name, inbodyId } = route.params;
+const { grade, room, number, name, sex, inbodyId } = route.params;
 const inbody = ref<InbodyDetail>();
 const isUpdateModalOpen = ref(false);
 
@@ -70,6 +70,13 @@ const handleDeleteClick = function deleteInbodyData() {
     <div v-else class="admin-inbody-detail">
         <div class="admin-inbody-detail__buttons">
             <VButton text="뒤로" color="gray" @click="router.go(-1)" />
+            <div class="admin-inbody-detail__personal">
+                <p>이름: {{ name }}</p>
+                <p>나이: {{ inbody?.age }}</p>
+                <p>키: {{ inbody?.height }}cm</p>
+                <p>성별: {{ student?.sex === 1 ? '남' : '여' }}</p>
+                <p>날짜: {{ inbody?.testDate }}</p>
+            </div>
             <div>
                 <VButton
                     text="수정"
@@ -100,6 +107,15 @@ const handleDeleteClick = function deleteInbodyData() {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto minmax(0, 1fr);
+}
+
+.admin-inbody-detail__personal {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-weight: 600;
+    font-size: 1.4rem;
 }
 
 .admin-inbody-detail__buttons {

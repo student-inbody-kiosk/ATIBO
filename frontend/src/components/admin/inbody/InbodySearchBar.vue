@@ -81,7 +81,7 @@ const maxDate = new Date().toISOString().split('T')[0];
 .inbody-searchbar-student {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1.5rem;
     padding: 0.25rem 0;
 }
 </style>

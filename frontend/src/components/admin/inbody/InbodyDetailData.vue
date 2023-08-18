@@ -56,13 +56,6 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
 
 <template lang="">
     <div class="admin-inbody-detail">
-        <div class="admin-inbody-detail__personal">
-            <p>이름: {{ name }}</p>
-            <p>나이: {{ inbody.age }}</p>
-            <p>키: {{ inbody.height }}cm</p>
-            <p>성별: {{ sex === 1 ? '남' : '여' }}</p>
-            <p>날짜: {{ inbody.testDate }}</p>
-        </div>
         <div class="admin-inbody-detail__comment">
             <p>* 본 결과지는 간이 결과지입니다.</p>
             <p>
@@ -72,6 +65,9 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
         </div>
         <div class="admin-inbody-detail--container">
             <table class="inbody-total-table">
+                <caption>
+                    Inbody Total Table
+                </caption>
                 <thead>
                     <tr>
                         <th>인바디 점수</th>
@@ -134,6 +130,9 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
             </table>
 
             <table class="inbody-composition-table">
+                <caption>
+                    Inbody Composition Table
+                </caption>
                 <thead>
                     <tr>
                         <th>
@@ -176,8 +175,8 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
                     <h2>골격근 지방 분석</h2>
 
                     <p>
-                        체중
-                        {{ inbody.weight }} kg
+                        <span> 체중</span>
+                        <span> {{ inbody.weight }} kg</span>
                     </p>
                     <div class="bar-container">
                         <Bar
@@ -186,8 +185,8 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
                     </div>
 
                     <p>
-                        골격근량
-                        {{ inbody.skeletalMuscleMass }} kg
+                        <span> 골격근량</span>
+                        <span>{{ inbody.skeletalMuscleMass }} kg</span>
                     </p>
                     <div class="bar-container">
                         <Bar
@@ -196,8 +195,8 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
                     </div>
 
                     <p>
-                        체지방량
-                        {{ inbody.bodyFatMass }} kg
+                        <span>체지방량</span>
+                        <span>{{ inbody.bodyFatMass }} kg</span>
                     </p>
                     <div class="bar-container">
                         <Bar
@@ -210,8 +209,8 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
                     <h2>비만 분석</h2>
 
                     <p>
-                        BMI
-                        {{ inbody.bodyMassIndex }}
+                        <span>BMI</span>
+                        <span>{{ inbody.bodyMassIndex }}</span>
                     </p>
                     <div class="bar-container">
                         <Bar
@@ -220,8 +219,8 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
                     </div>
 
                     <p>
-                        체지방률
-                        {{ inbody.percentBodyFat }} %
+                        <span>체지방률</span>
+                        <span> {{ inbody.percentBodyFat }} % </span>
                     </p>
                     <div class="bar-container">
                         <Bar
@@ -235,12 +234,9 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
 </template>
 
 <style lang="scss" scoped>
-.admin-inbody-detail__personal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-weight: 600;
-    font-size: 1.4rem;
+.admin-inbody-detail {
+    overflow-y: auto;
+    min-width: 890px;
 }
 
 .admin-inbody-detail__comment {
@@ -269,12 +265,18 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
     text-align: center;
     background-color: $white;
     border-radius: 0.5rem;
+
     thead {
         tr {
             height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: space-evenly;
+        }
+
+        th {
+            font-weight: 600;
+            font-size: 1.35rem;
         }
     }
 
@@ -294,9 +296,7 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
 
 .inbody-composition-table {
     grid-column: 2/3;
-}
 
-.inbody-composition-table {
     th {
         display: flex;
         flex-direction: column;
@@ -304,6 +304,7 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
 
         span:first-child {
             font-size: 1rem;
+            font-weight: normal;
         }
     }
 }
@@ -316,9 +317,22 @@ percentBodyFatOptions.scales.x.suggestedMax = maxValue.percentBodyFat;
     background-color: $white;
     border-radius: 0.5rem;
     gap: 1rem;
+
     h2 {
         font-size: 1.5rem;
         text-align: center;
+        font-weight: 600;
+    }
+
+    p {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        span:first-child {
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
     }
 }
 

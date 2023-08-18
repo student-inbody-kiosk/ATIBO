@@ -82,6 +82,9 @@ const handleUpdateClick = function updateStudent() {
 
         <section class="admin-student-update-list">
             <table>
+                <caption>
+                    Student Detail Table
+                </caption>
                 <StudentDetailDataLabel />
                 <tbody>
                     <StudentDetailInput

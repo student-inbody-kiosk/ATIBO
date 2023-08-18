@@ -12,6 +12,9 @@ defineEmits<{
 
 <template>
     <table>
+        <caption>
+            Attendance Table
+        </caption>
         <thead>
             <tr>
                 <th v-for="index in 31" :key="index">

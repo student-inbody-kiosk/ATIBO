@@ -5,7 +5,6 @@ import InbodyDataInput from '@/components/admin/inbody/InbodyDataInput.vue';
 import TheModal from '@/components/common/TheModal.vue';
 import VLoading from '@/components/common/VLoading.vue';
 
-// import { updateInbody } from '@/apis/services/inbodys';
 import { ref } from 'vue';
 import services from '@/apis/services';
 import { useAxios } from '@/hooks/useAxios';
@@ -50,6 +49,9 @@ const handleUpdateClick = function updateInbodyData() {
     <VLoading v-if="isLoading" color="admin-primary" />
     <TheModal v-else @close-modal="$emit('close-modal')">
         <table>
+            <caption>
+                Inbody Update Table
+            </caption>
             <InbodyDataLabel />
             <tbody>
                 <InbodyDataInput

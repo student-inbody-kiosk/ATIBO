@@ -49,11 +49,11 @@ const createTable = (startDate, endDate, data) => {
     students.value = data;
 
     // inbodyList에 데이터 넣기
-    for (let i = 0; i < data.length; i++) {
-        for (let j = 0; j < data[i].inbodySet.length; j++) {
-            inbodyList.value[i][
-                dateIndexTable.value[data[i].inbodySet[j].testDate]
-            ] = data[i].inbodySet[j];
+    for (const item of data) {
+        for (const inbodyItem of item.inbodySet) {
+            const testDate = inbodyItem.testDate;
+            const dateIndex = dateIndexTable.value[testDate];
+            inbodyList.value[data.indexOf(item)][dateIndex] = inbodyItem;
         }
     }
 };

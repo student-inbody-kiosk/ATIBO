@@ -84,7 +84,7 @@ const emit = defineEmits<{
 .attend-searchbar__student {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1.5rem;
     padding: 0.5rem 0;
 }
 </style>

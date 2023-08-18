@@ -73,40 +73,45 @@ const handleDeleteClick = function deleteAccount(userId: number) {
             <h1>학교정보 관리</h1>
         </div>
 
-        <section class="admin-school-info">
-            <div class="admin-school-info__logo">
-                <img :src="schoolLogo" alt="logo" />
-                <span>{{ schoolName }}</span>
-            </div>
-            <div class="admin-school-info__update">
-                <VInput
-                    :id="schoolName"
-                    type="file"
-                    size="md"
-                    label="로고 선택"
-                    @input="handleLogoInput" />
-                <VInput
-                    :id="schoolName"
-                    :value="schoolName"
-                    size="md"
-                    @input="(value) => (schoolName = value)"
-                    label="학교 이름" />
-                <VButton
-                    text="수정"
-                    color="admin-primary"
-                    @click="handleUpdateClick" />
-            </div>
-        </section>
-        <section class="admin-school-accounts">
-            <AdmAccountList
-                title="승인 대기"
-                :accountList="inactiveUsers"
-                @accept="handleAccpetClick" />
-            <AdmAccountList
-                title="승인 완료"
-                :accountList="activeUsers"
-                @delete="handleDeleteClick" />
-        </section>
+        <div class="admin-school-content">
+            <section class="admin-school-info">
+                <div class="admin-school-info__logo">
+                    <img :src="schoolLogo" alt="logo" />
+                    <span>{{ schoolName }}</span>
+                </div>
+
+                <div class="admin-school-info-container">
+                    <div class="admin-school-info__update">
+                        <VInput
+                            :id="schoolName"
+                            type="file"
+                            size="md"
+                            label="로고 선택"
+                            @input="handleLogoInput" />
+                        <VInput
+                            :id="schoolName"
+                            :value="schoolName"
+                            size="md"
+                            @input="(value) => (schoolName = value)"
+                            label="학교 이름" />
+                    </div>
+                    <VButton
+                        text="수정"
+                        color="admin-primary"
+                        @click="handleUpdateClick" />
+                </div>
+            </section>
+            <section class="admin-school-accounts">
+                <AdmAccountList
+                    title="승인 대기"
+                    :accountList="inactiveUsers"
+                    @accept="handleAccpetClick" />
+                <AdmAccountList
+                    title="승인 완료"
+                    :accountList="activeUsers"
+                    @delete="handleDeleteClick" />
+            </section>
+        </div>
     </div>
 </template>
 
@@ -116,7 +121,8 @@ const handleDeleteClick = function deleteAccount(userId: number) {
     height: 100%;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 1rem;
 }
 
 .admin-school-header {
@@ -133,37 +139,57 @@ const handleDeleteClick = function deleteAccount(userId: number) {
     }
 }
 
-.admin-school-info,
-.admin-school-accounts {
-    margin: 0.5rem 0;
+.admin-school-content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
 }
 
 .admin-school-info {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 3rem;
 }
 
 .admin-school-info__logo {
+    width: 90%;
+    height: 50%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     background-color: $white;
     border-radius: 0.3rem;
-    padding: 1rem;
+    padding: 1.5rem;
     gap: 1rem;
+
+    font-size: 1.5rem;
+    font-weight: 600;
+
     img {
-        max-width: 20rem;
+        width: 45%;
+        height: auto;
+        max-height: 90%;
+    }
+}
+.admin-school-info-container {
+    display: flex;
+    align-items: center;
+
+    button {
+        align-self: flex-end;
     }
 }
 
 .admin-school-info__update {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: flex-start;
+    display: grid;
+    gap: 1.5rem;
 
-    button {
-        align-self: flex-end;
+    div.v-input {
+        display: flex;
+        align-items: flex-start;
     }
 }
 </style>

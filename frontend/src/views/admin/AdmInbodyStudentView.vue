@@ -12,7 +12,6 @@ import { useAxios } from '@/hooks/useAxios';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useStudentStore } from '@/stores/student.store';
-// import { getTheStudentInbodys } from '@/apis/services/inbodys';
 import { checkSearchInput } from '@/utils/checkInput';
 
 import type { Ref } from 'vue';
@@ -83,19 +82,19 @@ const handleCreateClick = function updateTheStudentInbodys() {
     <VLoading v-if="isLoading" color="admin-primary" />
     <div v-else class="admin-inbody-student">
         <div class="admin-inbody-student-info">
-            {{
+            <VButton
+                text="뒤로"
+                color="gray"
+                @click="router.push({ name: 'admin-inbody' })" />
+            <span>{{
                 `${grade} 학년 ${room} 반 ${number} 번 ${name} (${
                     student?.sex === 1 ? '남' : '여'
                 })`
-            }}
+            }}</span>
         </div>
 
         <div class="admin-inbody-header">
             <div class="admin-inbody-header__searchbar">
-                <VButton
-                    text="뒤로"
-                    color="gray"
-                    @click="router.push({ name: 'admin-inbody' })" />
                 <VInput
                     id="startDate"
                     label="시작"
@@ -125,6 +124,9 @@ const handleCreateClick = function updateTheStudentInbodys() {
 
         <div class="admin-inbody-student-table-container">
             <table>
+                <caption>
+                    Inbody Table
+                </caption>
                 <InbodyDataLabel />
                 <tbody>
                     <InbodyData
@@ -153,6 +155,9 @@ const handleCreateClick = function updateTheStudentInbodys() {
 }
 
 .admin-inbody-student-info {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: 1fr;
     font-size: 1.4rem;
     font-weight: 600;
     text-align: center;
