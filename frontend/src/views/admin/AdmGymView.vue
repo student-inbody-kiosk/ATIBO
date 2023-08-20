@@ -5,6 +5,13 @@ import TheModal from '@/components/common/TheModal.vue';
 import GymList from '@/components/admin/gym/GymList.vue';
 import GymCreateModal from '@/components/admin/gym/GymCreateModal.vue';
 
+import { useMeta } from 'vue-meta';
+
+useMeta({
+    title: 'ATIBO 아티보 운동기구 정보 관리',
+    description: 'ATIBO 아티보 운동기구 정보 관리 페이지',
+});
+
 // handle modal
 const isModalOpen = ref(false);
 

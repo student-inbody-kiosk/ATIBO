@@ -6,7 +6,12 @@ import KioStudentForm from '@/components/kiosk/KioStudentForm.vue';
 import KioAttendModal from '@/components/kiosk/attendance/KioAttendModal.vue';
 import type { HeaderUpdate } from '@/types/app.interface';
 import type { StudentSimple } from '@/types/students.interface';
+import { useMeta } from 'vue-meta';
 
+useMeta({
+    title: 'ATIBO 아티보 출결 키오스크',
+    description: 'ATIBO 아티보 학생 출결 등록 키오스크',
+});
 const emit = defineEmits<{
     (e: 'update-header', info: HeaderUpdate): void;
 }>();

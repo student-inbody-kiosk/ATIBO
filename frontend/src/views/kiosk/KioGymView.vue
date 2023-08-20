@@ -2,6 +2,12 @@
 import { onBeforeMount } from 'vue';
 import KioGymList from '@/components/kiosk/gym/KioGymList.vue';
 import type { HeaderUpdate } from '@/types/app.interface';
+import { useMeta } from 'vue-meta';
+
+useMeta({
+    title: 'ATIBO 아티보 운동기구 키오스크',
+    description: 'ATIBO 아티보 운동기구 정보 조회 키오스크',
+});
 
 const emit = defineEmits<{
     (e: 'update-header', info: HeaderUpdate): void;

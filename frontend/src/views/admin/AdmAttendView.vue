@@ -7,12 +7,19 @@ import VLoading from '@/components/common/VLoading.vue';
 
 import { toastTopErrorMessage } from '@/utils/toastManager';
 import services from '@/apis/services';
+import { useAxios } from '@/hooks/useAxios';
 import { checkSearchInput } from '@/utils/checkInput';
 import { ref } from 'vue';
 
 import type { Ref } from 'vue';
 import type { StudentAttendance } from '@/types/attendance.interface';
-import { useAxios } from '@/hooks/useAxios';
+
+import { useMeta } from 'vue-meta';
+
+useMeta({
+    title: 'ATIBO 아티보 학생 출결 관리',
+    description: 'ATIBO 아티보 학생 출결 관리 페이지',
+});
 
 const grade = ref('');
 const room = ref('');

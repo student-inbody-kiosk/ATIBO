@@ -8,6 +8,12 @@ import SignupForm from '@/components/admin/SignupForm.vue';
 import PwResetForm from '@/components/admin/accounts/PwResetForm.vue';
 import AdmLayout from '@/layouts/AdmLayout.vue';
 import { useQueryStore } from '@/stores/query.store';
+import { useMeta } from 'vue-meta';
+
+useMeta({
+    title: 'ATIBO 아티보 관리자 페이지',
+    description: 'ATIBO 아티보 출결, 인바디 관리 관리자 페이지',
+});
 
 const route = useRoute();
 // Compute whether the current page is index page, based on the current route name

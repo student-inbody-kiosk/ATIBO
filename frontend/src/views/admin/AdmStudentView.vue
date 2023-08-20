@@ -15,6 +15,13 @@ import { useAxios } from '@/hooks/useAxios';
 import type { Ref } from 'vue';
 import type { StudentDetail } from '@/types/students.interface';
 
+import { useMeta } from 'vue-meta';
+
+useMeta({
+    title: 'ATIBO 아티보 학생 정보 관리',
+    description: 'ATIBO 아티보 학생 정보 관리 페이지',
+});
+
 const { fetchData: getStudents, isLoading } = useAxios(
     null,
     services.getStudents
