@@ -7,6 +7,7 @@ const props = withDefaults(
         multiple?: boolean;
         label?: string;
         name?: string;
+        ariaLabel?: string;
         value?: string | number;
         readonly?: boolean;
         minlength?: number;
@@ -24,6 +25,7 @@ const props = withDefaults(
     {
         type: 'text',
         value: '',
+        ariaLabel: '',
         multiple: false,
         readonly: false,
         size: 'sm',
@@ -67,6 +69,7 @@ const handleInput = function handleAppInput(event: Event) {
                 v-if="type === 'textarea'"
                 :id="id"
                 :name="name"
+                :aria-label="ariaLabel"
                 :value="value"
                 :readonly="readonly"
                 :minlength="minlength"
@@ -86,6 +89,7 @@ const handleInput = function handleAppInput(event: Event) {
                 :type="type"
                 :accept="accept"
                 :name="name"
+                :aria-label="ariaLabel"
                 :value="value"
                 :readonly="readonly"
                 :minlength="minlength"

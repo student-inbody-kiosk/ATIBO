@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import services from '@/apis/services';
-import { getAccountInfo } from '@/apis/services/accounts';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import { useAccountStore } from '@/stores/accounts.store';
@@ -12,14 +11,13 @@ import VLoading from '@/components/common/VLoading.vue';
 const router = useRouter();
 const username = ref('');
 const password = ref('');
-const { updateAccount } = useAccountStore();
+const { getAccount } = useAccountStore();
 
 const { fetchData: login, isLoading } = useAxios(null, services.login);
 
 const handleLoginSubmit = function submitLogin() {
     login(username.value, password.value).then(() => {
-        getAccountInfo().then((res) => {
-            updateAccount(res);
+        getAccount().then(() => {
             router.push({ name: 'admin-main' });
         });
     });

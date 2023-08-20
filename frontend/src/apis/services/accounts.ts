@@ -1,16 +1,20 @@
 import apiRequest from '@/apis/axiosInterceptors';
+import type { Account } from '@/types/accounts.interface';
 import {
     toastTopErrorMessage,
     toastTopSuccessMessage,
 } from '@/utils/toastManager';
 
 export function getAccountInfo() {
-    return apiRequest.get('/accounts/').then((res) => {
-        return res.data;
-    }).catch((err) => {
-        toastTopErrorMessage('계정 정보를 불러오지 못했습니다', err);
-        throw err;
-    });
+    return apiRequest
+        .get('/accounts/')
+        .then((res): Account => {
+            return res.data;
+        })
+        .catch((err) => {
+            toastTopErrorMessage('계정 정보를 불러오지 못했습니다', err);
+            throw err;
+        });
 }
 
 export function getSchoolAccounts() {
