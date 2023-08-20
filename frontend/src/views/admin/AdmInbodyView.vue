@@ -17,6 +17,13 @@ import { toastTopErrorMessage } from '@/utils/toastManager';
 import type { Ref } from 'vue';
 import type { Inbody } from '@/types/inbody.interace';
 
+import { useMeta } from 'vue-meta';
+
+useMeta({
+    title: 'ATIBO 아티보 학생 인바디 정보 관리',
+    description: 'ATIBO 아티보 학생 인바디 정보 관리 페이지',
+});
+
 const queryStore = useQueryStore();
 const { fetchData: getInbodys, isLoading } = useAxios(
     null,
