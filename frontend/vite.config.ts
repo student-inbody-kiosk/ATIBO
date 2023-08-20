@@ -1,9 +1,14 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import svgLoader from 'vite-svg-loader';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-    plugins: [vue(), svgLoader()],
+    plugins: [
+        vue(),
+        svgLoader(),
+        VitePWA({ registerType: 'autoUpdate', devOptions: { enabled: true } }),
+    ],
     resolve: {
         alias: [{ find: '@', replacement: '/src' }],
     },
