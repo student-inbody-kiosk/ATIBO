@@ -1,5 +1,6 @@
 credentials.txt
 three_grade_students.json
+six_grade_students.json
 static
 
 ### mysql
@@ -181,6 +182,7 @@ celerybeat.pid
 \*.sage.py
 
 # Environments
+
 .env
 .venv
 env/
