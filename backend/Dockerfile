@@ -38,4 +38,4 @@ ENV EMAIL_HOST_PASSWORD $DB_HOST_PASSWORD
 EXPOSE 8000
 
 # Run startup.sh
-CMD ["/bin/bash","-c","./startup.sh"]
+CMD ["/bin/bash", "-c", "./startup.sh"]

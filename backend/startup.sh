@@ -2,6 +2,11 @@
 
 # Generate a random secret key
 GENERATED_KEY=$(python -c 'import random; import string; print("".join(random.SystemRandom().choice(string.ascii_letters + string.digits + "!@#$%^&*(-_=+)") for _ in range(50)))')
+
+# Create the /app/secret directory if it doesn't exist
+mkdir -p /app/secret
+
+# Create the .env file with the generated secret key
 echo "SECRET_KEY=$GENERATED_KEY" >> /app/secret/.env
 
 # Collect staticfiles
