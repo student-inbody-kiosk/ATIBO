@@ -9,6 +9,13 @@ import services from '@/apis/services';
 import type { SchoolAccount } from '@/types/accounts.interface';
 import type { Ref } from 'vue';
 
+import { useMeta } from 'vue-meta';
+
+useMeta({
+    title: 'ATIBO 아티보 학교 정보 관리',
+    description: 'ATIBO 아티보 학교 정보 관리 페이지',
+});
+
 const schoolName = ref('');
 const schoolLogo = ref('');
 

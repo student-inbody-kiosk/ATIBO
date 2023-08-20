@@ -4,6 +4,8 @@ import '@/styles/main.scss';
 
 import router from './router';
 
+import { createMetaManager } from 'vue-meta';
+
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
@@ -28,6 +30,9 @@ const app = createApp(App);
 
 // router
 app.use(router);
+
+// vue meta
+app.use(createMetaManager());
 
 // pinia
 const pinia = createPinia();
