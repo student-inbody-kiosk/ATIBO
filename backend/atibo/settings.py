@@ -209,7 +209,7 @@ STATICFILES_DIRS = [
 # Media files (User uploaded static fiels)
 # https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-MEDIA_ROOT
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media/'
 

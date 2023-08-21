@@ -20,6 +20,8 @@ class SchoolSerializer(serializers.ModelSerializer):
     # If the image is None, return the default Image
     def to_representation(self, instance):
         ret = super().to_representation(instance)
+
+        # if null, return the default logo
         if not ret.get('logo_image'):
             # Development environment
             if not settings.DEBUG:
@@ -27,4 +29,7 @@ class SchoolSerializer(serializers.ModelSerializer):
             # Deployment environment
             else:
                 ret['logo_image'] = 'http://localhost:8000'+ settings.STATIC_URL + DEFAULT_LOGO_IMAGE_PATH
+        
+        elif not settings.DEBUG:
+            ret['logo_image'] = settings.MEDIA_URL + str(instance.logo_image)
         return ret
