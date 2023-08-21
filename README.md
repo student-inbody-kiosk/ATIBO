@@ -8,7 +8,42 @@
 
 </div>
 
-## 🤸‍♂️ 소개
+## 🔖 소개
+
+**ATIBO | 초중고 체육 활성화를 위한 인바디 관리 솔루션**
+
+2022년 정부는 초중고생 체력증진을 목표로 학교체육 활성화를 추진했습니다. ATIBO는 초중고 체력단련실 내의 키오스크 및 관리자 페이지를 통해 학생들의 인바디 정보를 기록하고 간편한 출결 관리 서비스를 제공하는 플랫폼입니다. 도커 컴포즈를 통해 실행 환경에 구애받지 않고 ATIBO 서비스를 이용할 수 있습니다.
+
+**📊 키오스크**
+
+```
+학생은 키오스크를 통해 다음과 같은 기능을 이용할 수 있습니다.
+
+1. 출석 체크
+   - 수업 출석을 간편하게 등록할 수 있습니다.
+
+2. 인바디 정보 조회
+   - 자신의 인바디 정보를 조회하고 건강 상태를 파악할 수 있습니다.
+
+3. 운동기구 정보 조회
+   - 체력단련실 내의 운동기구에 대한 설명을 확인하고 올바른 사용법을 숙지할 수 있습니다.
+```
+
+**🖥️ 관리자 페이지**
+
+```
+선생님은 계정 권한에 따라 다음과 같은 기능을 이용할 수 있습니다.
+
+1. 학생 정보 관리
+   - 학생 정보를 등록, 조회, 수정할 수 있습니다.
+
+2. 학생 출결 관리
+   - 학생의 출결 기록을 조회할 수 있습니다.
+
+3. 학생 인바디 관리
+   - 학생의 인바디 정보를 등록, 수정, 삭제할 수 있습니다.
+   - 인바디 정보 조회를 통해 체력 상태를 지속적으로 관찰할 수 있습니다.
+```
 
 ## 🌎 다운로드 및 설치
 
@@ -109,11 +144,54 @@ docker compose -p atibo up -d
 
 ## 📌 사용 가이드
 
-## 💻 화면 예시
+ATIBO는 계정을 Student, User, Admin 세 가지로 분류해 각기 다른 권한을 부여합니다.
 
 <img src="./assets/images/atibo-mockup-2.png" alt="atibo-mockup-2.png" width="600"/>
 
-## 😄 컨트리뷰터
+### • Student
+
+<div style="display:flex; gap:10px; text-align:center;">
+   <div>
+      <p>출석 확인</p>
+      <img src="./assets/gifs/kiosk_attendance.gif" alt="kiosk_attendance.gif" width="200" style="border-radius:2px;"/>
+   </div>
+
+   <div>
+      <p>인바디 조회</p>
+      <img src="./assets/gifs/kiosk_inbody.gif" alt="kiosk_inbody.gif"  width="200" style="border-radius:2px;"/>
+   </div>
+
+<div>
+      <p>운동기구 조회</p>
+      <img src="./assets/gifs/kiosk_gym.gif" alt="kiosk_gym.gif"  width="200" style="border-radius:2px;"/>
+   </div>
+
+</div>
+
+<br/>
+
+### • User
+
+학생 정보 조회
+<img src="./assets/gifs/admin_student.gif" alt="admin_student.gif" width="590" style="border-radius:2px;"/>
+
+출결 정보 조회
+<img src="./assets/gifs/admin_attendance.gif" alt="admin_attendance.gif" width="590" style="border-radius:2px;"/>
+
+인바디 정보 조회
+<img src="./assets/gifs/admin_inbody.gif" alt="admin_inbody.gif" width="590" style="border-radius:2px;"/>
+
+<br/>
+
+### • Admin
+
+학교 정보 및 계정 관리
+<img src="./assets/gifs/admin_school.gif" alt="admin_school.gif" width="590" style="border-radius:2px;"/>
+
+운동기구 정보 관리
+<img src="./assets/gifs/admin_gym.gif" alt="admin_gym.gif" width="590"/>
+
+## 😄 Contributors
 
 <a href="https://github.com/student-inbody-kiosk/ATIBO/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=student-inbody-kiosk/ATIBO" />
