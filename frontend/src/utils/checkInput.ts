@@ -2,6 +2,7 @@ import {
     inbodyRegexes,
     studentRegexes,
     searchRegexes,
+    accountRegexes,
 } from '@/constants/regexes';
 import { toastTopErrorMessage } from './toastManager';
 import type { Student } from '@/types/students.interface';
@@ -41,4 +42,19 @@ const checkSearchInput = (data) => {
     return false;
 };
 
-export { checkInbodyInput, checkStudentInput, checkSearchInput };
+const checkAccountInput = (data) => {
+    for (const key in data) {
+        if (!accountRegexes[key].reg.test(data[key])) {
+            toastTopErrorMessage(accountRegexes[key].condition);
+            return true;
+        }
+    }
+    return false;
+};
+
+export {
+    checkInbodyInput,
+    checkStudentInput,
+    checkSearchInput,
+    checkAccountInput,
+};
