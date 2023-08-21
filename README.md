@@ -144,39 +144,54 @@ docker compose -p atibo up -d
 
 ## 📌 사용 가이드
 
-ATIBO는 계정을 student, user, admin 세 가지로 분류해 각기 다른 권한을 부여합니다.
-
-## 💻 화면 예시
+ATIBO는 계정을 Student, User, Admin 세 가지로 분류해 각기 다른 권한을 부여합니다.
 
 <img src="./assets/images/atibo-mockup-2.png" alt="atibo-mockup-2.png" width="600"/>
 
-### **student**
+### • Student
 
-<div style="display:flex; gap:10px; ">
-   <img src="./assets/gifs/kiosk_attendance.gif" alt="kiosk_attendance.gif" width="190" style="border-radius:2px;"/>
-   <img src="./assets/gifs/kiosk_inbody.gif" alt="kiosk_inbody.gif"  width="190" style="border-radius:2px;"/>
-   <img src="./assets/gifs/kiosk_gym.gif" alt="kiosk_gym.gif"  width="190" style="border-radius:2px;" />
+<div style="display:flex; gap:10px; text-align:center;">
+   <div>
+      <p>출석 확인</p>
+      <img src="./assets/gifs/kiosk_attendance.gif" alt="kiosk_attendance.gif" width="200" style="border-radius:2px;"/>
+   </div>
+
+   <div>
+      <p>인바디 조회</p>
+      <img src="./assets/gifs/kiosk_inbody.gif" alt="kiosk_inbody.gif"  width="200" style="border-radius:2px;"/>
+   </div>
+
+<div>
+      <p>운동기구 조회</p>
+      <img src="./assets/gifs/kiosk_gym.gif" alt="kiosk_gym.gif"  width="200" style="border-radius:2px;"/>
+   </div>
+
 </div>
 
 <br/>
 
-### **user**
+### • User
 
+학생 정보 조회
 <img src="./assets/gifs/admin_student.gif" alt="admin_student.gif" width="590" style="border-radius:2px;"/>
 
+출결 정보 조회
 <img src="./assets/gifs/admin_attendance.gif" alt="admin_attendance.gif" width="590" style="border-radius:2px;"/>
 
+인바디 정보 조회
 <img src="./assets/gifs/admin_inbody.gif" alt="admin_inbody.gif" width="590" style="border-radius:2px;"/>
 
 <br/>
 
-### **admin**
+### • Admin
 
+학교 정보 및 계정 관리
 <img src="./assets/gifs/admin_school.gif" alt="admin_school.gif" width="590" style="border-radius:2px;"/>
 
+운동기구 정보 관리
 <img src="./assets/gifs/admin_gym.gif" alt="admin_gym.gif" width="590"/>
 
-## 😄 컨트리뷰터
+## 😄 Contributors
 
 <a href="https://github.com/student-inbody-kiosk/ATIBO/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=student-inbody-kiosk/ATIBO" />
