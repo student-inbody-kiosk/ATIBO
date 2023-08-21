@@ -172,23 +172,23 @@ ATIBO는 계정을 Student, User, Admin 세 가지로 분류해 각기 다른 �
 
 ### • User
 
-학생 정보 조회
+<p>학생 정보 조회</p>
 <img src="./assets/gifs/admin_student.gif" alt="admin_student.gif" width="590" style="border-radius:2px;"/>
 
-출결 정보 조회
+<p>출결 정보 조회</p>
 <img src="./assets/gifs/admin_attendance.gif" alt="admin_attendance.gif" width="590" style="border-radius:2px;"/>
 
-인바디 정보 조회
+<p>인바디 정보 조회</p>
 <img src="./assets/gifs/admin_inbody.gif" alt="admin_inbody.gif" width="590" style="border-radius:2px;"/>
 
 <br/>
 
 ### • Admin
 
-학교 정보 및 계정 관리
+<p>학교 정보 및 계정 관리</p>
 <img src="./assets/gifs/admin_school.gif" alt="admin_school.gif" width="590" style="border-radius:2px;"/>
 
-운동기구 정보 관리
+<p>운동기구 정보 관리</p>
 <img src="./assets/gifs/admin_gym.gif" alt="admin_gym.gif" width="590"/>
 
 ## 😄 Contributors
