@@ -55,7 +55,7 @@ class ImageSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         if not settings.DEBUG:
-            ret['image'] = '/media/' + str(instance.image)
+            ret['image'] = settings.MEDIA_URL + str(instance.image)
         return ret
         
 

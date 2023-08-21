@@ -31,5 +31,5 @@ class SchoolSerializer(serializers.ModelSerializer):
                 ret['logo_image'] = 'http://localhost:8000'+ settings.STATIC_URL + DEFAULT_LOGO_IMAGE_PATH
         
         elif not settings.DEBUG:
-            ret['logo_image'] = settings.STATIC_URL + str(instance.logo_image)
+            ret['logo_image'] = settings.MEDIA_URL + str(instance.logo_image)
         return ret
