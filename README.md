@@ -144,9 +144,37 @@ docker compose -p atibo up -d
 
 ## 📌 사용 가이드
 
+ATIBO는 계정을 student, user, admin 세 가지로 분류해 각기 다른 권한을 부여합니다.
+
 ## 💻 화면 예시
 
 <img src="./assets/images/atibo-mockup-2.png" alt="atibo-mockup-2.png" width="600"/>
+
+### **student**
+
+<div style="display:flex; gap:10px; ">
+   <img src="./assets/gifs/kiosk_attendance.gif" alt="kiosk_attendance.gif" width="190" style="border-radius:2px;"/>
+   <img src="./assets/gifs/kiosk_inbody.gif" alt="kiosk_inbody.gif"  width="190" style="border-radius:2px;"/>
+   <img src="./assets/gifs/kiosk_gym.gif" alt="kiosk_gym.gif"  width="190" style="border-radius:2px;" />
+</div>
+
+<br/>
+
+### **user**
+
+<img src="./assets/gifs/admin_student.gif" alt="admin_student.gif" width="590" style="border-radius:2px;"/>
+
+<img src="./assets/gifs/admin_attendance.gif" alt="admin_attendance.gif" width="590" style="border-radius:2px;"/>
+
+<img src="./assets/gifs/admin_inbody.gif" alt="admin_inbody.gif" width="590" style="border-radius:2px;"/>
+
+<br/>
+
+### **admin**
+
+<img src="./assets/gifs/admin_school.gif" alt="admin_school.gif" width="590" style="border-radius:2px;"/>
+
+<img src="./assets/gifs/admin_gym.gif" alt="admin_gym.gif" width="590"/>
 
 ## 😄 컨트리뷰터
 
