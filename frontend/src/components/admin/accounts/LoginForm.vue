@@ -6,6 +6,7 @@ import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import { useAccountStore } from '@/stores/accounts.store';
 import { useAxios } from '@/hooks/useAxios';
+import { checkAccountInput } from '@/utils/checkInput';
 import VLoading from '@/components/common/VLoading.vue';
 
 const router = useRouter();
@@ -16,6 +17,12 @@ const { getAccount } = useAccountStore();
 const { fetchData: login, isLoading } = useAxios(null, services.login);
 
 const handleLoginSubmit = function submitLogin() {
+    const inputError = checkAccountInput({
+        username: username.value,
+        password: password.value,
+    });
+    if (inputError) return;
+
     login(username.value, password.value).then(() => {
         getAccount().then(() => {
             router.push({ name: 'admin-main' });
