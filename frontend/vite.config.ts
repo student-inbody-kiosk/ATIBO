@@ -4,11 +4,7 @@ import svgLoader from 'vite-svg-loader';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-    plugins: [
-        vue(),
-        svgLoader(),
-        VitePWA({ registerType: 'autoUpdate', devOptions: { enabled: true } }),
-    ],
+    plugins: [vue(), svgLoader(), VitePWA({ registerType: 'autoUpdate' })],
     resolve: {
         alias: [{ find: '@', replacement: '/src' }],
     },

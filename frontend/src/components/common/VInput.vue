@@ -52,6 +52,15 @@ const handleInput = function handleAppInput(event: Event) {
         event.target as HTMLInputElement
     );
 };
+
+const handleChange = function handleAppInput(event: Event) {
+    if (props.readonly) return;
+    emit('change', event.target as HTMLInputElement);
+};
+
+const handleFocus = function handleAppInput(event: Event) {
+    emit('focus', event.target as HTMLInputElement);
+};
 </script>
 
 <template>
@@ -100,9 +109,9 @@ const handleInput = function handleAppInput(event: Event) {
                 :multiple="multiple"
                 :placeholder="placeholder"
                 @input="handleInput"
-                @change="$emit('change')"
+                @change="handleChange"
                 @keyup.enter="$emit('enter')"
-                @focus="$emit('focus')" />
+                @focus="handleFocus" />
         </div>
         <p class="v-input__condition" v-if="condition">{{ condition }}</p>
     </div>
