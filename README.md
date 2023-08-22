@@ -2,7 +2,7 @@
 
 # ATIBO <!-- omit in toc -->
 
-<img src="./assets/images/atibo-1980-1080.png" alt="atibo-1980-1080.png" width="600"/>
+<img src="./assets/images/atibo-1980-1080.png" alt="atibo-1980-1080.png" width="500"/>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
@@ -12,7 +12,15 @@
 
 **ATIBO | 초중고 체육 활성화를 위한 인바디 관리 솔루션**
 
-2022년 정부는 초중고생 체력증진을 목표로 학교체육 활성화를 추진했습니다. ATIBO는 초중고 체력단련실 내의 키오스크 및 관리자 페이지를 통해 학생들의 인바디 정보를 기록하고 간편한 출결 관리 서비스를 제공하는 플랫폼입니다. 도커 컴포즈를 통해 실행 환경에 구애받지 않고 ATIBO 서비스를 이용할 수 있습니다.
+2022년 정부는 초중고생 체력증진을 목표로 학교체육 활성화를 추진했습니다. ATIBO는 초중고 체력단련실 내의 키오스크 및 관리자 페이지를 통해 학생들의 인바디 정보를 기록하고 간편한 출결 관리 서비스를 제공하는 웹 서비스입니다.
+
+로컬 컴퓨터에 **도커**가 설치되어 있다면, 실행 환경에 구애받지 않고 누구나 ATIBO 웹 서비스를 다운받아 제공(실행)할 수 있습니다.
+
+<div align="center">
+
+<img src="./assets/images/atibo-mockup-2.png" alt="atibo-mockup-2.png" width="600"/>
+
+</div>
 
 **📊 키오스크**
 
@@ -32,7 +40,7 @@
 **🖥️ 관리자 페이지**
 
 ```
-선생님은 계정 권한에 따라 다음과 같은 기능을 이용할 수 있습니다.
+선생님(일반 계정)은 따라 다음과 같은 기능을 이용할 수 있습니다.
 
 1. 학생 정보 관리
    - 학생 정보를 등록, 조회, 수정할 수 있습니다.
@@ -47,9 +55,13 @@
 
 ## 🌎 다운로드 및 설치
 
-ATIBO 웹 서비스는 총 4개의 Docker 컨테이너로 구성되어 있으며 Docker Compose로 관리할 수 있습니다. ATIBO의 모든 컨테이너는 Linux OS를 바탕으로 설계되었지만, Docker Engine이 실처되어 있다면 Windows / MacOS 환경에서도 실행할 수 있습니다.
+ATIBO 웹 서비스는 총 4개의 도커 컨테이너로 구성되어 있으며, 하나의 도커 컴포즈로 관리할 수 있습니다.
 
-<img src="./assets/images/atibo-architecture.png" alt="atibo-architecture.png" width="700"/>
+<div align="center">
+
+<img src="./assets/images/atibo-architecture.png" alt="atibo-architecture.png" width="600"/>
+
+</div>
 
 ### 사전 준비
 
@@ -142,54 +154,152 @@ docker compose -p atibo up -d
   docker compose -p atibo down -v
   ```
 
-## 📌 사용 가이드
+## 🏷️ 계정 권한
 
-ATIBO는 계정을 Student, User, Admin 세 가지로 분류해 각기 다른 권한을 부여합니다.
+ATIBO는 계정을 **Admin**, **User**, **Student** 세 가지로 분류해 각기 다른 권한을 부여합니다.
 
-<img src="./assets/images/atibo-mockup-2.png" alt="atibo-mockup-2.png" width="600"/>
+<div align="center">
 
-### • Student
-
-<div style="display:flex; gap:10px; text-align:center;">
-   <div>
-      <p>출석 확인</p>
-      <img src="./assets/gifs/kiosk_attendance.gif" alt="kiosk_attendance.gif" width="200" style="border-radius:2px;"/>
-   </div>
-
-   <div>
-      <p>인바디 조회</p>
-      <img src="./assets/gifs/kiosk_inbody.gif" alt="kiosk_inbody.gif"  width="200" style="border-radius:2px;"/>
-   </div>
-
-<div>
-      <p>운동기구 조회</p>
-      <img src="./assets/gifs/kiosk_gym.gif" alt="kiosk_gym.gif"  width="200" style="border-radius:2px;"/>
-   </div>
+| 권한 내역                 | Admin | User | Student |
+| ------------------------- | ----- | ---- | ------- |
+| 인바디 조회               | ✅    | ✅   | ✅      |
+| 운동기구 조회             | ✅    | ✅   | ✅      |
+| 출석 체크                 |       |      | ✅      |
+| 학생 조회                 | ✅    | ✅   |         |
+| 학생 생성, 수정, 삭제     | ✅    | ✅   |         |
+| 인바디 생성, 수정, 삭제   | ✅    | ✅   |         |
+| 출결 조회                 | ✅    | ✅   |         |
+| 운동기구 생성, 수정, 삭제 | ✅    |      |         |
+| User 계정 승인, 삭제      | ✅    |      |         |
+| 학교 정보 수정            | ✅    |      |         |
 
 </div>
 
-<br/>
+- **Admin**
 
-### • User
+  초기 계정 정보는 다음과 같습니다. 보안을 위해 비밀번호 변경을 권장합니다.
 
-학생 정보 조회
-<img src="./assets/gifs/admin_student.gif" alt="admin_student.gif" width="590" style="border-radius:2px;"/>
+  - ID: admin
+  - PASSWORD: 1q2w3e4r!
 
-출결 정보 조회
-<img src="./assets/gifs/admin_attendance.gif" alt="admin_attendance.gif" width="590" style="border-radius:2px;"/>
+- **User**
 
-인바디 정보 조회
-<img src="./assets/gifs/admin_inbody.gif" alt="admin_inbody.gif" width="590" style="border-radius:2px;"/>
+  회원가입 시 기본으로 부여되는 권한으로, **Admin 계정의 승인 후** 관리자 페이지를 사용할 수 있습니다.  
+  `[관리자 페이지] > [학교정보 관리] > [승인 대기]`에서 계정을 승인할 수 있습니다.
 
-<br/>
+- **Student**
 
-### • Admin
+  Admin 혹은 User 계정이 직접 생성해야 하는 계정입니다.  
+  `[관리자 페이지] > [학생 관리] > [추가]`에서 Student 계정을 생성할 수 있습니다.
 
-학교 정보 및 계정 관리
-<img src="./assets/gifs/admin_school.gif" alt="admin_school.gif" width="590" style="border-radius:2px;"/>
+## 🎞️ 예시 화면
 
-운동기구 정보 관리
-<img src="./assets/gifs/admin_gym.gif" alt="admin_gym.gif" width="590"/>
+### 키오스크
+
+- **출석 체크**
+
+  ```
+  학년, 반, 번호 다섯자리 입력 후 출석 체크를 진행합니다. 출석은 30분마다 한 번씩 가능합니다.
+  ```
+
+   <div align="center" style="margin: 10px 0;">
+
+   <img src="./assets/gifs/kiosk_attendance.gif" alt="kiosk_attendance.gif" width="300" style="border-radius:2px;"/>
+
+   </div>
+
+- **인바디 조회**
+
+  ```
+  학년, 반, 번호 다섯자리 입력 후 비밀번호 네 자리를 입력합니다. 기본 값은 0000입니다.
+  ```
+
+   <div align="center" style="margin: 10px 0;">
+
+   <img src="./assets/gifs/kiosk_inbody.gif" alt="kiosk_inbody.gif"  width="300" style="border-radius:2px;"/>
+   
+   </div>
+
+- **운동기구 조회**
+
+  ```
+  체력단련실 내에 설치된 운동기구에 대한 정보와 사용법을 숙지할 수 있습니다.
+  ```
+
+   <div align="center" style="margin: 10px 0;">
+
+   <img src="./assets/gifs/kiosk_gym.gif" alt="kiosk_gym.gif"  width="300" style="border-radius:2px;"/>
+
+   </div>
+
+### 관리자 페이지
+
+- **학생 정보 조회**
+
+  ```
+  학생 정보를 조회하고 생성, 수정, 삭제할 수 있습니다.
+  정보 조회시 학년, 반, 번호, 이름 중 적어도 하나의 조건을 입력해야 합니다.
+  ```
+
+   <div align="center" style="margin: 10px 0;">
+
+   <img src="./assets/gifs/admin_student.gif" alt="admin_student.gif" width="700" style="border-radius:2px;"/>
+
+   </div>
+
+- **출결 정보 조회**
+
+  ```
+  출결 정보를 월단위로 조회할 수 있습니다.
+  정보 조회시 학년, 반, 번호, 이름 중 적어도 하나의 조건을 입력해야 합니다.
+  ```
+
+   <div align="center" style="margin: 10px 0;">
+
+   <img src="./assets/gifs/admin_attendance.gif" alt="admin_attendance.gif" width="700" style="border-radius:2px;"/>
+   
+   </div>
+
+- **인바디 정보 조회**
+
+  ```
+  인바디 정보를 조회하고 생성, 수정, 삭제할 수 있습니다.
+  정보 조회시 시작과 끝 날짜는 필수값이며 학년, 반, 번호, 이름 중 적어도 하나의 조건을 입력해야 합니다.
+  학생 이름 클릭시 검색 날짜에 해당하는 학생의 인바디 목록을 조회할 수 있습니다.
+  인바디 날짜 클릭시 해당 학생의 인바디 상세 정보를 확인할 수 있습니다.
+  ```
+
+   <div align="center" style="margin: 10px 0;">
+
+   <img src="./assets/gifs/admin_inbody.gif" alt="admin_inbody.gif" width="700" style="border-radius:2px;"/>
+   
+   </div>
+
+- **학교 정보 및 계정 관리**
+
+  ```
+  학교 로고와 이름을 수정할 수 있습니다. 로고는 하나만 업로드할 수 있습니다.
+  User 계정을 승인하고 삭제할 수 있습니다.
+  ```
+
+   <div align="center" style="margin: 10px 0;">
+
+   <img src="./assets/gifs/admin_school.gif" alt="admin_school.gif" width="700" style="border-radius:2px;"/>
+
+   </div>
+
+- **운동기구 정보 관리**
+
+  ```
+  키오스크에 표시할 운동기구에 대한 설명과 사진을 등록할 수 있습니다.
+  여러 개의 운동 기구 사진을 업로드할 수 있습니다.
+  ```
+
+   <div align="center" style="margin: 10px 0;">
+
+   <img src="./assets/gifs/admin_gym.gif" alt="admin_gym.gif" width="700" style="border-radius:2px;"/>
+   
+   </div>
 
 ## 😄 Contributors
 
