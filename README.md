@@ -108,28 +108,26 @@ ATIBO에 대한 상세 설정은 `.env` 파일의 환경변수로 관리됩니�
 - 보안을 위해 데이터베이스 비밀번호(`DB_PASSWORD`)를 수정해주세요
 - 이메일을 통한 비밀번호 초기화 기능을 이용하기 위해서는 이메일(`EMAIL_HOST_USER`)과 이메일 비밀번호(`EMAIL_HOST_PASSWORD`)를 입력해주세요. 단, 원격 접속이 가능한 이메일이어야 합니다.
 
-```python
-# Domain name. If you do not have one, the public IP of the machine.
-# For example: 198.51.100.1, or openvidu.example.com
-DOMAIN_OR_PUBLIC_IP=127.0.0.1
-PORT=9005
+  ```python
+  # 웹페이지를 제공할 로컬 서버의 IP 주소와 Port 번호
+  DOMAIN_OR_PUBLIC_IP=127.0.0.1
+  PORT=9005
 
-# DataBase
-# Modify the password for security
-DB_PASSWORD=atibo-project-123
-DB_NAME=atibo
-DB_USER=root
-DB_HOST=atibo-db
-DB_PORT=3306
+  # 보안을 위해 데이터베이스 비밀번호 변경을 권장
+  DB_PASSWORD=atibo-project-123
 
-# Email host
-# To use password initialization, enter remote accessible email information
-# https://integer-ji.tistory.com/274
-EMAIL_HOST_USER=
-EMAIL_HOST_PASSWORD=
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-```
+  DB_NAME=atibo
+  DB_USER=root
+  DB_HOST=atibo-db
+  DB_PORT=3306
+
+  # 비밀번호 초기화 기능을 위한 이메일 정보 입력을 권장
+  # STMP을 통한 연결이 허용된 이메일이어야 합니다
+  EMAIL_HOST_USER=
+  EMAIL_HOST_PASSWORD=
+  EMAIL_HOST=smtp.gmail.com
+  EMAIL_PORT=587
+  ```
 
 ### 서비스 실행
 
