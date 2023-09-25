@@ -122,6 +122,7 @@ const handleSubmit = function onHandleUpdateStudentPw() {
                 :isFocus="currentFocusedInput === OLD_PASSWORD_INPUT_ID"
                 :value="oldPassword"
                 :maxlength="4"
+                :readonly="true"
                 @input="handleInputOldPassword"
                 @focus="handleFocus" />
             <VInput
@@ -134,6 +135,7 @@ const handleSubmit = function onHandleUpdateStudentPw() {
                 :isFocus="currentFocusedInput === NEW_PASSWORD_INPUT_ID"
                 :value="newPassword"
                 :maxlength="4"
+                :readonly="true"
                 @input="handleInputNewPassword"
                 @focus="handleFocus" />
             <VInput
@@ -146,6 +148,7 @@ const handleSubmit = function onHandleUpdateStudentPw() {
                 :isFocus="currentFocusedInput === CONFIRM_PASSWORD_INPUT_ID"
                 :value="confirmPassword"
                 :maxlength="4"
+                :readonly="true"
                 @input="handleInputConfirmPassword"
                 @focus="handleFocus" />
             <VButton text="변경하기" type="submit" color="green" size="lg" />
