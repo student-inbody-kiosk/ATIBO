@@ -69,6 +69,7 @@ const handleSubmit = function onSumbmitLoginStudent() {
                 size="xl"
                 color="kiosk-primary"
                 :value="studentPw"
+                :readonly="true"
                 @input="handleInput" />
             <div class="kiosk-login-form__buttons">
                 <VButton text="로그인" type="submit" color="green" size="lg" />

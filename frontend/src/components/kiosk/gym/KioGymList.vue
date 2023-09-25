@@ -18,8 +18,7 @@ const gyms = await services.getGyms();
 .kiosk-gym-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(5, 1fr);
-    grid-auto-rows: auto;
+    grid-auto-rows: minmax(170px, 190px);
     justify-items: center;
     align-items: center;
     overflow-y: auto;
