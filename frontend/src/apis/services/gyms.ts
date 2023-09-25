@@ -73,6 +73,19 @@ export function updateGym(gymId: nmber, data: GymUpdate) {
         });
 }
 
+export function deleteGym(gymId: nmber) {
+    return apiRequest
+        .delete(`/gym/${gymId}/`)
+        .then((res): Gym => {
+            toastTopSuccessMessage('운동기구가 삭제되었습니다');
+            return res.data;
+        })
+        .catch((err) => {
+            toastTopErrorMessage('운동기구를 삭제하지 못했습니다', err);
+            throw err;
+        });
+}
+
 export function getGymImages(gymId: number) {
     const route = useRoute();
 

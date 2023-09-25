@@ -57,6 +57,7 @@ const handleSubmit = function onSubmitCheckStudent() {
                 textAlign="center"
                 size="xl"
                 color="kiosk-primary"
+                :readonly="true"
                 @input="handleInput" />
             <VButton text="검색하기" type="submit" color="green" size="lg" />
         </form>

@@ -33,8 +33,7 @@ onMounted(() => {
 .gym-list {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    grid-auto-rows: auto;
+    grid-auto-rows: minmax(130px, 140px);
     justify-items: center;
     align-items: center;
     overflow-y: auto;
