@@ -1,5 +1,6 @@
 credentials.txt
 six_grade_students.json
+one_grade_students.json
 
 ### mysql ###
 mysql.cnf
