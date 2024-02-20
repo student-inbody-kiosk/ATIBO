@@ -1,0 +1,16 @@
+spring:
+    # MySQL ?? ??
+    datasource:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306
+        username: root
+        password: 1q2w3e4r!
+    # JPA ??
+    jpa:
+        hibernate:
+            ddl-auto: create # ?????? ??? ??
+        properties:
+            show_sql: true # ???? ?? ?? ??
+            format_sql: true # ???? ???? ??? ???? ?? ???
+            hibernate.dialect: org.hibernate.dialect.MySQLDialect
+
