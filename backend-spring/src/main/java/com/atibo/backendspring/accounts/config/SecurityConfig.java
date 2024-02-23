@@ -13,13 +13,27 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
-        return http.build();
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/login", "/accounts").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                    //  .anyRequest().authenticated()
+                );  // TODO: 경로별 접근 권한 설정 주기
+
+        http
+                .formLogin(auth -> auth.loginProcessingUrl("/login")
+                                       .permitAll()
+                );
+
+        http
+                .csrf(auth -> auth.disable());
+        return http.build();
     }
 }
