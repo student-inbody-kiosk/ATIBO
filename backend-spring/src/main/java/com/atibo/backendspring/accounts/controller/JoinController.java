@@ -17,7 +17,7 @@ public class JoinController {
     @Autowired
     private AccountService accountService;
 
-    @PostMapping("/accounts")
+    @PostMapping("/api/accounts")
     public ResponseEntity<AccountDto> createAccounts(@RequestBody AccountDto accountDto) {
 
         accountService.saveAccount(accountDto);

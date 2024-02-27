@@ -21,7 +21,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers( "/login", "/accounts", "/error").permitAll()
+                                .requestMatchers( "/", "/login", "/api/accounts", "/error").permitAll()
                                 .requestMatchers("/admin").hasRole("ADMIN")
                           .anyRequest().authenticated()
                 );  // TODO: 경로별 접근 권한 설정 주기
@@ -29,6 +29,7 @@ public class SecurityConfig {
         http
                 .formLogin(auth -> auth.loginProcessingUrl("/api/accounts/login/")
                                        .permitAll()
+                        .defaultSuccessUrl("/")
                 );
 
         http
