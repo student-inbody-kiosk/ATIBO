@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -22,13 +21,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/accounts").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
-                    //  .anyRequest().authenticated()
+                                .requestMatchers( "/login", "/accounts", "/error").permitAll()
+                                .requestMatchers("/admin").hasRole("ADMIN")
+                          .anyRequest().authenticated()
                 );  // TODO: 경로별 접근 권한 설정 주기
 
         http
-                .formLogin(auth -> auth.loginProcessingUrl("/login")
+                .formLogin(auth -> auth.loginProcessingUrl("/api/accounts/login/")
                                        .permitAll()
                 );
 

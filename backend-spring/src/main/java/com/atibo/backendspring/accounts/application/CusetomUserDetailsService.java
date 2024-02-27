@@ -1,4 +1,4 @@
-package com.atibo.backendspring.accounts.config;
+package com.atibo.backendspring.accounts.application;
 
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.dto.CustomUserDetails;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CusetomUserDetailsService implements UserDetailsService {
 
+    // TODO: 생성자 주입으로 바꾸기
     @Autowired
     AccountRepository accountRepository;
 

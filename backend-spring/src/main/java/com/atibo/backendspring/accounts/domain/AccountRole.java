@@ -1,5 +1,5 @@
 package com.atibo.backendspring.accounts.domain;
 
 public enum AccountRole {
-    USER, ADMIN
+    ROLE_USER, ROLE_ADMIN
 }

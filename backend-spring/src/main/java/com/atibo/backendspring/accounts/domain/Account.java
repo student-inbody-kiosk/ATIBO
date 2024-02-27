@@ -50,18 +50,4 @@ public class Account {
         this.role = role;
         this.comment = comment;
     }
-
-    public static Account createAccount(AccountDto accountDto) {
-        Account account = Account.builder()
-                .username(accountDto.getUsername())
-                .name(accountDto.getName())
-                .email(accountDto.getEmail())
-                .comment(accountDto.getComment())
-                .password(accountDto.getPassword())
-//                .password(passwordEncoder.encode(accountDto.getPassword())) //암호화
-                .role(AccountRole.USER)
-                .build();
-        return account;
-    }
-
 }

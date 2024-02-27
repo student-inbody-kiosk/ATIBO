@@ -24,21 +24,8 @@ public class CustomUserDetails implements UserDetails {
         this.account = account;
     }
 
-    //UserDetail에서 기본 getter가 필요한 fields
-//    private String username;                                    // 계정 id
-//    private String password;
-//    private boolean accountNonLocked = true;                    // 계정 잠금 여부
-//    private boolean accountNonExpired = true;                   // 사용자 계정 만료 없음
-//    private boolean credentialsNonExpired = true;               // 비밀번호 만료 없음
-//    private boolean enabled = true;                             // 사용자 활성화 여부
-//    private Collection<? extends GrantedAuthority> authorities; // 사용자 권한 목록
-//
-//    // 추가 설정
-//    private String name;            // 사용자 이름
-//    private String email;
-
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities() {                // 사용자 권한
 
         Collection<GrantedAuthority> collection = new ArrayList<>();
 
@@ -55,40 +42,41 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
+
         return account.getPassword();
     }
 
     @Override
     public String getUsername() {
+
         return account.getUsername();
     }
 
     @Override
+    // 사용자 계정 만료 없음
     public boolean isAccountNonExpired() {
+
         return true;
     }
 
     @Override
+    // 계정 잠금 여부
     public boolean isAccountNonLocked() {
+
         return true;
     }
 
     @Override
+    // 비밀번호 만료 없음
     public boolean isCredentialsNonExpired() {
+
         return true;
     }
 
     @Override
     public boolean isEnabled() {
+
         return true;
     }
 
-
-    //    public CustomUserDetails(AccountDto dto) {
-//        this.username = dto.getUsername();
-//        this.password = dto.getPassword();
-//        this.email = dto.getEmail();
-//        this.name = dto.getName();
-//
-//    }
 }
