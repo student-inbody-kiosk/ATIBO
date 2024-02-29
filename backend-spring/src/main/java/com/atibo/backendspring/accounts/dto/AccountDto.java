@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.Length;
 public class AccountDto {
 
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
-//    @Pattern(regexp = "^(?=.*[A-Za-z])([A-Za-z/d]{5,20})$")
+    @Pattern(regexp = "^(?=.*[A-Za-z])([A-Za-z/d]{5,20})$")
     @Size(min = 5, max = 20)
     private String username;
 

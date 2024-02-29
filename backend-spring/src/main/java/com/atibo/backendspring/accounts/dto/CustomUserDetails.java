@@ -4,15 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.atibo.backendspring.accounts.domain.Account;
-import com.atibo.backendspring.accounts.domain.AccountRole;
-import com.atibo.backendspring.accounts.dto.AccountDto;
-import com.atibo.backendspring.accounts.repository.AccountRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.Getter;
 
 
 public class CustomUserDetails implements UserDetails {

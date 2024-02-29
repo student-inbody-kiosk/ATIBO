@@ -18,31 +18,4 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class AccountController {
 
-
-//    private final AccountService accountService;
-//
-//    private final PasswordEncoder passwordEncoder;
-//
-//
-//    @GetMapping(value = "new")
-//    public String accountForm(Model model) {
-//        model.addAttribute("accountDto", new AccountDto());
-//        return "/";
-//    }
-//
-//    @PostMapping(value = "new")
-//    public String accountForm(@Valid AccountDto accountDto, BindingResult bindingResult){
-//        if (bindingResult.hasErrors()) {
-//            return "/";
-//        }
-//        try {
-//            Account account = Account.createAccount(accountDto, passwordEncoder);
-//            accountService.saveAccount(account);
-//        } catch (IllegalStateException e) {
-//            return "/";
-//        }
-//        return "redirect:/";
-//    }
-
-
 }

@@ -15,3 +15,9 @@ spring:
             hibernate.dialect: org.hibernate.dialect.MySQLDialect
             naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStanderImpl
 
+    # 개발용(Postman 요청)
+    spring:
+        security:
+            user:
+                name: user
+                password: 1234
