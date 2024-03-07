@@ -10,6 +10,7 @@ import com.atibo.backendspring.accounts.dto.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,15 +40,12 @@ public class AdminController {
         model.addAttribute("id", id);
         model.addAttribute("role", role);
 
-        return new ResponseEntity<>(model,HttpStatus.OK);
+        return new ResponseEntity<>(model, HttpStatus.OK);
     }
 
     @GetMapping("/admin")
     public ResponseEntity<String> admin() {
-        return new ResponseEntity<>("admin role test",HttpStatus.OK);
+
+        return new ResponseEntity<>("test", HttpStatus.OK);
     }
-
-
-
-
 }
