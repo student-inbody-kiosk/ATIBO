@@ -18,32 +18,31 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service
 public class AccountService {
-
-    @Autowired
     private final AccountRepository accountRepository;
-
-    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    public AccountService(AccountRepository accountRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.accountRepository = accountRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
-    public void saveAccount(AccountDto accountDto) {
-
+    public AccountDto.ResponseDto saveAccount(AccountDto.RequestDto requestDto) {
         // db 중복 조회하기
-        boolean isAccount = accountRepository.existsByUsername(accountDto.getUsername());
+        boolean isAccount = accountRepository.existsByUsername(requestDto.getUsername());
         if (isAccount) {
             throw new IllegalStateException("user with this username already exists");
         }
-
         Account data = new Account();
 
-        data.setUsername(accountDto.getUsername());
-        data.setName(accountDto.getName());
-        data.setPassword(bCryptPasswordEncoder.encode(accountDto.getPassword()));
+        data.setUsername(requestDto.getUsername());
+        data.setName(requestDto.getName());
+        data.setPassword(bCryptPasswordEncoder.encode(requestDto.getPassword()));
         data.setRole(AccountRole.ROLE_USER);
-        data.setEmail(accountDto.getEmail());
-        data.setComment(accountDto.getComment());
+        data.setEmail(requestDto.getEmail());
+        data.setComment(requestDto.getComment());
+        Account account = accountRepository.save(data);
 
-        accountRepository.save(data);
+        return new AccountDto.ResponseDto().toResponseDto(account);
     }
-
 }

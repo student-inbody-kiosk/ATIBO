@@ -1,37 +1,60 @@
 package com.atibo.backendspring.accounts.dto;
 
+import com.atibo.backendspring.accounts.domain.Account;
+import com.atibo.backendspring.accounts.domain.AccountRole;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
+import lombok.*;
 
-@NoArgsConstructor
-@Getter
+
 public class AccountDto {
 
-    @NotBlank(message = "아이디는 필수 입력 값입니다.")
-    @Pattern(regexp = "^(?=.*[A-Za-z])([A-Za-z/d]{5,20})$")
-    @Size(min = 5, max = 20)
-    private String username;
-
-    private String name;
-
-    private String password;
-
-    private String email;
-
-    private String comment;
-
+    @AllArgsConstructor
     @Builder
-    public AccountDto(String username, String name, String email, String comment, String password) {
+    @Getter
+    public static class RequestDto {
+        @NotBlank(message = "아이디는 필수 입력 값입니다.")
+        @Pattern(regexp = "^(?=.*[A-Za-z])([A-Za-z/d]{5,20})$")
+        @Size(min = 5, max = 20)
+        private String username;
+        private String name;
+        private String password;
+        private String email;
+        private String comment;
+    }
 
-        this.username = username;
-        this.name = name;
-        this.email = email;
-        this.comment = comment;
-        this.password = password;
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    @Getter
+    public static class ResponseDto {
+        private Long id;
+        private String username;
+        private String name;
+        private String email;
+        private AccountRole role;
+        private String comment;
+
+        public ResponseDto toResponseDto(Account account) {
+            return ResponseDto.builder()
+                      .id(account.getId())
+                      .username(account.getUsername())
+                      .name(account.getName())
+                      .email(account.getEmail())
+                      .role(account.getRole())
+                      .comment(account.getComment()).
+                      build();
+        }
+    }
+
+    @Getter
+    @Setter
+    private static class JoinFailDto {
+        //TODO 정규식 처리
+        private String username = "user with this username already exists.";
+        private String name = "Ensure this field has no more than 5 characters.";
+        private String email = "user with this email already exists.";
     }
 }
