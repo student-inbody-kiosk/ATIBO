@@ -1,20 +1,38 @@
 package com.atibo.backendspring.accounts.config;
 
-import com.atibo.backendspring.accounts.domain.AccountRole;
+import com.atibo.backendspring.accounts.jwt.LoginFilter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    //AuthenticationManager 가 인자로 받을 AuthenticationConfiguration 객체 생성자 주입
+    private final AuthenticationConfiguration authenticationConfiguration;
+
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
+
+        this.authenticationConfiguration = authenticationConfiguration;
+    }
+
+    //AuthenticationManager Bean 등록
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+
+        return configuration.getAuthenticationManager();
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -33,6 +51,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        //        api 서버의 경우 세션을 jwt 등의 방법으로 관리하므로 disable
+        http
+                .csrf(auth -> auth.disable());
+        //      Form 로그인 방식 disable
+        http
+                .formLogin((auth) -> auth.disable());
+        //      http basic 인증 방식 disable
+        http
+                .httpBasic((auth) -> auth.disable());
+
         // TODO: 경로별 접근 권한 설정 주기
         http
                 .authorizeRequests(auth -> auth
@@ -43,26 +72,12 @@ public class SecurityConfig {
                 );
 
         http
-                .formLogin(auth -> auth.loginProcessingUrl("/api/accounts/login/")
-                                       .permitAll()
-                        .defaultSuccessUrl("/")
-                );
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
 
-        //        api 서버의 경우 세션을 jwt 와 비슷하게 관리하므로 disable 해도 ㄱㅊ음
-        http
-                .csrf(auth -> auth.disable());
-
+        //      세션 설정 (JWT 인증/인가 위해서는 STATELESS 상태로 설정하는 것이 중요
         http
                 .sessionManagement((auth) -> auth
-                        //                        하나의 아이디에 대한 다중 로그인 허용 개수
-                        .maximumSessions(1)
-                        //                        다중 로그인 개수를 초과하였으 경우 처리 방법 true: 새로운 로그인 차단, false: 기존 세션 하나 삭제
-                        .maxSessionsPreventsLogin(true));
-
-        http
-                .sessionManagement((auth) -> auth
-                        //                        세션 고정 보호
-                        .sessionFixation().changeSessionId());
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }

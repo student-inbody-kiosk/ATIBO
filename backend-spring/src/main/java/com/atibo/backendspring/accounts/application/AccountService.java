@@ -29,10 +29,11 @@ public class AccountService {
 
     public AccountDto.ResponseDto saveAccount(AccountDto.RequestDto requestDto) {
         // db 중복 조회하기
-        boolean isAccount = accountRepository.existsByUsername(requestDto.getUsername());
-        if (isAccount) {
+        boolean isExist = accountRepository.existsByUsername(requestDto.getUsername());
+        if (isExist) {
             throw new IllegalStateException("user with this username already exists");
         }
+
         Account data = new Account();
 
         data.setUsername(requestDto.getUsername());
