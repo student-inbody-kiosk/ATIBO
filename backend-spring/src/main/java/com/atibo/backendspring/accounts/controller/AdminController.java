@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class AdminController {
 
 
-    @GetMapping("/")
+    @GetMapping("/api/")
     public ResponseEntity<Model> test(Model model) {
 
         String id = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -43,8 +43,14 @@ public class AdminController {
         return new ResponseEntity<>(model, HttpStatus.OK);
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/api/admin")
     public ResponseEntity<String> admin() {
+
+        return new ResponseEntity<>("test", HttpStatus.OK);
+    }
+
+    @GetMapping("/api/test")
+    public ResponseEntity<String> test() {
 
         return new ResponseEntity<>("test", HttpStatus.OK);
     }

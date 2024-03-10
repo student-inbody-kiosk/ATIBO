@@ -25,7 +25,6 @@ public class JoinController {
 
     @PostMapping("/api/accounts")
     public ResponseEntity<AccountDto.ResponseDto> createAccounts(@RequestBody AccountDto.RequestDto requestDto) {
-
         AccountDto.ResponseDto responseDto = accountService.saveAccount(requestDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);

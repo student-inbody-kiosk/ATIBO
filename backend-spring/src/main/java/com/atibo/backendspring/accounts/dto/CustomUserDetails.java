@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails {
 
-    private Account account;
+    private final Account account;
 
     public CustomUserDetails(Account account) {
 
@@ -72,5 +72,4 @@ public class CustomUserDetails implements UserDetails {
 
         return true;
     }
-
 }

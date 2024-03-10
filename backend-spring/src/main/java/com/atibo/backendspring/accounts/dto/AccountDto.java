@@ -57,4 +57,16 @@ public class AccountDto {
         private String name = "Ensure this field has no more than 5 characters.";
         private String email = "user with this email already exists.";
     }
+
+    public static class LoginRequestDto {
+
+        public String username;
+        public String password;
+    }
+
+    public static class LoginResponseDto {
+
+        private String accessToken;
+        private String refreshToken;
+    }
 }

@@ -22,6 +22,10 @@ spring:
                 name: user
                 password: 1234
 
+    # 임의의 긴 암호 문자열
+    jwt:
+        secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
+
 # TODO: test 해보고 삭제해도 될듯( csrf 설정 )
     mustache:
         servlet:
@@ -32,4 +36,6 @@ server:
     servlet:
         session:
             timeout: 90m
+
+
 
