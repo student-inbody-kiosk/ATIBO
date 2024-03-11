@@ -1,0 +1,41 @@
+spring:
+    # MySQL ?? ??
+    datasource:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/atibo?characterEncoding=utf8
+        username: root
+        password: 1q2w3e4r!
+    # JPA ??
+    jpa:
+        hibernate:
+            ddl-auto: none
+        properties:
+            show_sql: true # ???? ?? ?? ??
+            format_sql: true # ???? ???? ??? ???? ?? ???
+            hibernate.dialect: org.hibernate.dialect.MySQLDialect
+            naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStanderImpl
+
+    # 개발용(Postman 요청)
+    spring:
+        security:
+            user:
+                name: user
+                password: 1234
+
+    # 임의의 긴 암호 문자열
+    jwt:
+        secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
+
+# TODO: test 해보고 삭제해도 될듯( csrf 설정 )
+    mustache:
+        servlet:
+            expose-request-attributes: true
+
+#   세션 소멸시간
+server:
+    servlet:
+        session:
+            timeout: 90m
+
+
+
