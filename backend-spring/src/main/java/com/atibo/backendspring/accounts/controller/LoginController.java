@@ -19,9 +19,9 @@ public class LoginController {
     private final AccountService accountService;
 
     @PostMapping("/api/accounts/login/")
-    public ResponseEntity<AccountDto.LoginRequestDto> login(@RequestBody AccountDto.LoginRequestDto loginRequestDto) {
+    public ResponseEntity<AccountDto.LoginResponseDto> login(@RequestBody AccountDto.LoginRequestDto loginRequestDto) {
 //      로그인  테스트
         System.out.println("login 시도");
-        return new ResponseEntity<>(loginRequestDto, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

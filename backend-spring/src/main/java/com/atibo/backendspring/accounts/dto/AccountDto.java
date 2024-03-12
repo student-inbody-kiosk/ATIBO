@@ -69,4 +69,12 @@ public class AccountDto {
         private String accessToken;
         private String refreshToken;
     }
+
+    @Getter
+    @Setter
+    public static class tokenDto {
+
+        private String username;
+        private String refreshToken;
+    }
 }

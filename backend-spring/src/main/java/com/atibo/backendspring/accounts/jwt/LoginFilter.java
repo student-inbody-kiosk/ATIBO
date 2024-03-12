@@ -3,7 +3,6 @@ package com.atibo.backendspring.accounts.jwt;
 import java.util.Collection;
 import java.util.Iterator;
 
-import com.atibo.backendspring.accounts.dto.CustomUserDetails;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,8 +36,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String password = obtainPassword(request);
 
         System.out.println(">>토큰생성<<");
-        System.out.println(username);
-        System.out.println(password);
         //스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야함
         //TODO: role 값 설정(임시로 null 처리함)
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
@@ -76,13 +73,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         System.out.println("fail");
     }
 
-
+    //쿠키 생성 메소드
     private Cookie createCookie(String key, String value) {
 
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24*60*60);
-        //cookie.setSecure(true);
-        //cookie.setPath("/");
+        cookie.setMaxAge(24 * 60 * 60);
+        // https 사용시 true 설정
+        // cookie.setSecure(true);
+        // cookie.setPath("/");
         cookie.setHttpOnly(true);
 
         return cookie;
