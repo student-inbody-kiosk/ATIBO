@@ -64,6 +64,7 @@ public class AccountDto {
         public String password;
     }
 
+    @Builder
     public static class LoginResponseDto {
 
         private String accessToken;

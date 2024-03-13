@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.Iterator;
 
 
+import com.atibo.backendspring.accounts.dto.AccountDto;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,8 +46,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     }
 
     //로그인 성공시 실행하는 메소드 (JWT 발급)
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, Authentication authentication) {
+
+    protected  AccountDto.LoginResponseDto successfulLogin(HttpServletRequest request, Authentication authentication) {
 
         //유저 정보
         String username = authentication.getName();
@@ -59,10 +61,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String access = jwtUtil.createJwt("access", username, role, 600000L);
         String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
-        //응답 설정
-        response.setHeader("access", access);
-        response.addCookie(createCookie("refresh", refresh));
-        response.setStatus(HttpStatus.OK.value());
+        AccountDto.LoginResponseDto tokens = AccountDto.LoginResponseDto.builder()
+                .accessToken(access)
+                .refreshToken(refresh)
+                .build();
+
+
+        return tokens;
     }
 
     //로그인 실패시 실행하는 메소드
