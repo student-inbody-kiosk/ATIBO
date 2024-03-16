@@ -60,7 +60,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+        //      cors 설정
         http
                 .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
 
@@ -74,13 +74,12 @@ public class SecurityConfig {
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
-
                         configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
                         return configuration;
                     }
                 })));
-        //        api 서버의 경우 세션을 jwt 등의 방법으로 관리하므로 disable
+        //      api 서버의 경우 세션을 jwt 등의 방법으로 관리하므로 disable
         http
                 .csrf(auth -> auth.disable());
         //      Form 로그인 방식 disable
@@ -89,25 +88,31 @@ public class SecurityConfig {
         //      http basic 인증 방식 disable
         http
                 .httpBasic((auth) -> auth.disable());
+        //      세션 설정 (JWT 인증/인가 위해서는 STATELESS 상태로 설정하는 것이 중요
+        http
+                .sessionManagement((auth) -> auth
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // TODO: 경로별 접근 권한 설정 주기
         http
                 .authorizeRequests(auth -> auth
-                        .requestMatchers("/api/", "/api/accounts/login/", "/api/accounts", "/error", "/api/test").permitAll()
+                        .requestMatchers("/api/school", "/api/accounts/login/", "/api/accounts", "/error", "/api/test").permitAll()
                         .requestMatchers("/user").hasAnyRole("USER")
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .requestMatchers("/api/accounts/login/").permitAll()
                         .anyRequest().authenticated()
                 );
 
+        // LoginFilter 설정
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
+        loginFilter.setFilterProcessesUrl("/api/accounts/login/");
+
+        // securityFilter 동작 설정
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
-        //      세션 설정 (JWT 인증/인가 위해서는 STATELESS 상태로 설정하는 것이 중요
-        http
-                .sessionManagement((auth) -> auth
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }

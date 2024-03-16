@@ -2,6 +2,7 @@ package com.atibo.backendspring.accounts.dto;
 
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.domain.AccountRole;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -67,7 +68,9 @@ public class AccountDto {
     @Builder
     public static class LoginResponseDto {
 
+        @JsonProperty("accessToken")
         private String accessToken;
+        @JsonProperty("refreshToken")
         private String refreshToken;
     }
 
