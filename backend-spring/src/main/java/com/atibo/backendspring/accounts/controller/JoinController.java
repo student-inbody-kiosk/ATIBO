@@ -23,7 +23,7 @@ public class JoinController {
         this.accountService = accountService;
     }
 
-    @PostMapping("/api/accounts")
+    @PostMapping("/api/accounts/")
     public ResponseEntity<AccountDto.ResponseDto> createAccounts(@RequestBody AccountDto.RequestDto requestDto) {
         AccountDto.ResponseDto responseDto = accountService.saveAccount(requestDto);
 
