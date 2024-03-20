@@ -1,22 +1,12 @@
 package com.atibo.backendspring.accounts.controller;
 
 import com.atibo.backendspring.accounts.application.AccountService;
-import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.jwt.JWTUtil;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -28,9 +18,14 @@ public class AccountController {
 
     private final JWTUtil jwtUtil;
 
-    public AccountController(JWTUtil jwtUtil) {
+    private final AccountService accountService;
+
+
+    public AccountController(JWTUtil jwtUtil, AccountService accountService) {
 
         this.jwtUtil = jwtUtil;
+        this.accountService = accountService;
+
     }
 
     @PostMapping("/api/accounts/token/refresh/")
@@ -40,7 +35,12 @@ public class AccountController {
         String refresh = request.getRefreshToken();
 
         // TODO: username 이 잘못되었을 경우 에러처리 확인하고 만들기
-        // String name = request.getUsername();
+        String username = request.getUsername();
+
+        if (accountService.CheckByUserName(username) == false) {
+
+            return new ResponseEntity<>("Check username", HttpStatus.NOT_FOUND);
+        }
 
         if (refresh == null) {
 
@@ -58,23 +58,24 @@ public class AccountController {
         }
 
         // 토큰이 refresh인지 확인 (발급시 페이로드에 명시), 아마 필요없을듯 api 명세에 따르면
-        String category = jwtUtil.getCategory(refresh);
+//        String category = jwtUtil.getCategory(refresh);
+//
+//        if (!category.equals("refresh")) {
+//
+//            //response status code
+//            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+//        }
 
-        if (!category.equals("refresh")) {
-
-            //response status code
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
-        }
-
-        String username = jwtUtil.getUsername(refresh);
+        username = jwtUtil.getUsername(refresh);
         String role = jwtUtil.getRole(refresh);
 
         //make new JWT
         String accessToken = jwtUtil.createJwt("access", username, role, 600000L);
 
-        //response
+        AccountDto.reissueDto new_accessToken = new AccountDto.reissueDto(accessToken);
 
-        return ResponseEntity.ok().body(accessToken);
+        return new ResponseEntity<>(new_accessToken, HttpStatus.OK);
+
     }
 }
 

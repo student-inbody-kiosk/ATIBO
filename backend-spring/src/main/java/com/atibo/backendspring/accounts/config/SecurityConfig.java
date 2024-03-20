@@ -96,7 +96,7 @@ public class SecurityConfig {
         // TODO: 경로별 접근 권한 설정 주기
         http
                 .authorizeRequests(auth -> auth
-                        .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/", "/error", "/api/test").permitAll()
+                        .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/", "/error", "/api/test", "/api/accounts/token/refresh/").permitAll()
                         .requestMatchers("/user").hasAnyRole("USER")
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()

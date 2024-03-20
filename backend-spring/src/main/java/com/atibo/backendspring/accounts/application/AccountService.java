@@ -46,4 +46,9 @@ public class AccountService {
 
         return new AccountDto.ResponseDto().toResponseDto(account);
     }
+
+    public boolean CheckByUserName(String username) {
+
+        return accountRepository.existsByUsername(username);
+    }
 }

@@ -51,8 +51,7 @@ public class AccountDto {
     }
 
     @Getter
-    @Setter
-    private static class JoinFailDto {
+    public static class JoinFailDto {
         //TODO 정규식 처리
         private String username = "user with this username already exists.";
         private String name = "Ensure this field has no more than 5 characters.";
@@ -80,5 +79,14 @@ public class AccountDto {
 
         private String username;
         private String refreshToken;
+    }
+
+    public static class reissueDto {
+        @JsonProperty("accessToken")
+        private String accessToken;
+
+        public reissueDto(String token) {
+            this.accessToken = token;
+        }
     }
 }
