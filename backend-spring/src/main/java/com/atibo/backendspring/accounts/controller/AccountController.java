@@ -37,7 +37,7 @@ public class AccountController {
         // TODO: username 이 잘못되었을 경우 에러처리 확인하고 만들기
         String username = request.getUsername();
 
-        if (accountService.CheckByUserName(username) == false) {
+        if (accountService.existByUserName(username) == false) {
 
             return new ResponseEntity<>("Check username", HttpStatus.NOT_FOUND);
         }
