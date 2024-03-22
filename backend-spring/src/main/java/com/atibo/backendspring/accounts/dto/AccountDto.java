@@ -20,6 +20,7 @@ public class AccountDto {
         @Pattern(regexp = "^(?=.*[A-Za-z])([A-Za-z/d]{5,20})$")
         @Size(min = 5, max = 20)
         private String username;
+        @Size(min = 2, max = 5)
         private String name;
         private String password;
         private String email;

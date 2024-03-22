@@ -2,9 +2,11 @@ package com.atibo.backendspring.accounts.config;
 
 import java.util.Collections;
 
+import com.atibo.backendspring.accounts.jwt.CustomLogoutFilter;
 import com.atibo.backendspring.accounts.jwt.JWTFilter;
 import com.atibo.backendspring.accounts.jwt.JWTUtil;
 import com.atibo.backendspring.accounts.jwt.LoginFilter;
+import com.atibo.backendspring.accounts.repository.RefreshRepository;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,10 +32,13 @@ public class SecurityConfig {
     //AuthenticationManager 가 인자로 받을 AuthenticationConfiguration 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
+
+    private final RefreshRepository refreshRepository;
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
 
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
+        this.refreshRepository = refreshRepository;
     }
 
     //AuthenticationManager Bean 등록
@@ -96,21 +101,24 @@ public class SecurityConfig {
         // TODO: 경로별 접근 권한 설정 주기
         http
                 .authorizeRequests(auth -> auth
-                        .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/", "/error", "/api/accounts/token/refresh/", "/api/accounts/username/check/").permitAll()
-                        .requestMatchers("/user").hasAnyRole("USER")
+                        .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/", "/error", "/api/accounts/token/refresh/", "/api/accounts/username/check/","/api/accounts/logout/").permitAll()
+//                        .requestMatchers().hasAnyRole("USER")
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
                 );
 
         // LoginFilter 설정
-        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository);
         loginFilter.setFilterProcessesUrl("/api/accounts/login/");
+        CustomLogoutFilter customLogoutFilter = new CustomLogoutFilter(jwtUtil, refreshRepository);
 
         // securityFilter 동작 설정
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         http
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+        http
+                .addFilterBefore(customLogoutFilter, UsernamePasswordAuthenticationFilter.class);
 
 
         return http.build();

@@ -3,9 +3,12 @@ package com.atibo.backendspring.accounts.jwt;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
 import com.atibo.backendspring.accounts.dto.AccountDto;
+import com.atibo.backendspring.accounts.dto.RefreshEntity;
+import com.atibo.backendspring.accounts.repository.RefreshRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,12 +32,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
 
+    private RefreshRepository refreshRepository;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
 
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.refreshRepository = refreshRepository;
     }
 
     //로그인 요청시 가장 먼저 실행
@@ -94,6 +100,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String access = jwtUtil.createJwt("access", username, role, 600000L);
         String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
+        //refresh 토큰 저장
+        addRefreshEntity(username, refresh, 86400000L);
+
         AccountDto.LoginResponseDto tokens = AccountDto.LoginResponseDto.builder()
                 .accessToken(access)
                 .refreshToken(refresh)
@@ -113,6 +122,18 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         response.setStatus(401);
         System.out.println("======= login 실패 =======");
+    }
+
+    private void addRefreshEntity(String username, String refresh, Long expiredMs) {
+
+        Date date = new Date(System.currentTimeMillis() + expiredMs);
+
+        RefreshEntity refreshEntity = new RefreshEntity();
+        refreshEntity.setUsername(username);
+        refreshEntity.setRefresh(refresh);
+        refreshEntity.setExpiration(date.toString());
+
+        refreshRepository.save(refreshEntity);
     }
 
     //쿠키 생성 메소드

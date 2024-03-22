@@ -3,7 +3,6 @@ package com.atibo.backendspring.accounts.application;
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.domain.AccountRole;
 import com.atibo.backendspring.accounts.dto.AccountDto;
-import com.atibo.backendspring.accounts.dto.ValidAccount;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,8 @@ public class AccountService {
     public AccountDto.ResponseDto saveAccount(AccountDto.RequestDto requestDto) {
         //
         existByUserName(requestDto.getUsername());
-        ValidAccount.validAccountDto(requestDto.getUsername(), requestDto.getEmail(), requestDto.getPassword());
+        existByEmail(requestDto.getEmail());
+        ValidAccount.validAccount(requestDto);
 
         Account data = new Account();
         data.setUsername(requestDto.getUsername());
@@ -56,6 +56,30 @@ public class AccountService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "user with this username already exists",
+                    new IllegalArgumentException()
+            );
+        }
+    }
+
+    public void existByUserName1(String username) {
+
+        boolean isExist = accountRepository.existsByUsername(username);
+
+        if (isExist) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Check username",
+                    new IllegalArgumentException()
+            );
+        }
+    }
+
+    public void existByEmail(String email) {
+        boolean isExist = accountRepository.existsByEmail(email);
+        if (isExist) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "user with this email already exists",
                     new IllegalArgumentException()
             );
         }

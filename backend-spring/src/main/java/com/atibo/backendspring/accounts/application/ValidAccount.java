@@ -1,10 +1,14 @@
-package com.atibo.backendspring.accounts.dto;
+package com.atibo.backendspring.accounts.application;
 
 import java.util.regex.Pattern;
+
+import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
 
 public class ValidAccount {
 
@@ -15,15 +19,26 @@ public class ValidAccount {
     //문자, 숫자, 특수문자 조합 8~24자. 각각 1개의 문자 포함
     private static final String PASSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[\\(\\)\\[\\]\\{\\}\\|\\\\`~!@#\\$%\\^&\\*\\-+=;:,<>\\./\\?])[A-Za-z\\d\\(\\)\\[\\]\\{\\}\\|\\\\`~!@#\\$%\\^&\\*\\-+=;:,<>\\./\\?]{8,24}$";
 
+    private static final String NAME_PATTERN = "^[가-힣]{2,5}$";
+    private static final String COMMENT_PATTERN = "^.{10,100}$";
 
     public ValidAccount(AccountRepository accountRepository) {
+
         this.accountRepository = accountRepository;
     }
 
+    public static void validAccount(AccountDto.RequestDto account) {
+        String username = account.getUsername();
+        String name = account.getName();
+        String email = account.getEmail();
+        String password = account.getPassword();
+        String comment = account.getComment().trim();
 
-    public static void validAccountDto(String username, String email, String password) {
+
         validUserName(username);
+        validName(name);
         validEmail(email);
+        validComment(comment);
         validPassword(password);
     }
 
@@ -59,4 +74,28 @@ public class ValidAccount {
             );
         }
     }
+
+    public static void validName(String name) {
+        boolean regex = Pattern.matches(NAME_PATTERN, name);
+        if (!regex) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The name must be written in 2-5 Korean characters,\"\n\"Ensure this field has no more than 5 characters.",
+                    new IllegalArgumentException()
+            );
+        }
+    }
+
+    public static void validComment(String comment) {
+        boolean regex = Pattern.matches(COMMENT_PATTERN, comment);
+        if (!regex) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The comment must be written 10-100 characters",
+                    new IllegalArgumentException()
+            );
+        }
+    }
+
+
 }
