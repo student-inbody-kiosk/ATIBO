@@ -32,7 +32,7 @@ public class ValidAccount {
         if (!regex) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    "check username pattern",
+                    "The username must be 5 to 20 characters in combination with letters and numbers",
                     new IllegalArgumentException()
             );
         }

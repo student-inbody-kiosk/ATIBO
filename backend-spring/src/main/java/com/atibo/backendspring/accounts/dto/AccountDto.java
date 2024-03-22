@@ -89,4 +89,25 @@ public class AccountDto {
             this.accessToken = token;
         }
     }
+
+    @Getter
+    public static class checkUserNameDto {
+
+        private String username;
+
+        public checkUserNameDto() {
+        };
+
+        public checkUserNameDto(String username) {
+            this.username = username;
+        }
+    }
+
+    public static final class checkUserNameResponse {
+
+        @JsonProperty("duplicate")
+        private boolean duplicate = false;
+    }
+
+
 }

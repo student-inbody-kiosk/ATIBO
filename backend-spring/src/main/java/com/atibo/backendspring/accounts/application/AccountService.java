@@ -29,18 +29,13 @@ public class AccountService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 
     }
+
     // 회원가입
     public AccountDto.ResponseDto saveAccount(AccountDto.RequestDto requestDto) {
         //
+        existByUserName(requestDto.getUsername());
         ValidAccount.validAccountDto(requestDto.getUsername(), requestDto.getEmail(), requestDto.getPassword());
-        boolean isExist = accountRepository.existsByUsername(requestDto.getUsername());
-        if (isExist) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "user with this username already exists",
-                    new IllegalArgumentException()
-            );
-        }
+
         Account data = new Account();
         data.setUsername(requestDto.getUsername());
         data.setName(requestDto.getName());
@@ -53,8 +48,16 @@ public class AccountService {
         return new AccountDto.ResponseDto().toResponseDto(account);
     }
 
-    public boolean existByUserName(String username) {
+    public void existByUserName(String username) {
 
-        return accountRepository.existsByUsername(username);
+        boolean isExist = accountRepository.existsByUsername(username);
+
+        if (isExist) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "user with this username already exists",
+                    new IllegalArgumentException()
+            );
+        }
     }
 }
