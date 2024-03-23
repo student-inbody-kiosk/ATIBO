@@ -44,7 +44,6 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         //path and method verify
         String requestUri = request.getRequestURI();
-        System.out.println(requestUri);
         if (!requestUri.matches("^/api/accounts/logout/?$")) {
 
             filterChain.doFilter(request, response);
@@ -60,20 +59,15 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         //get refresh token
         String refresh = null;
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-
-            if (cookie.getName().equals("refresh")) {
-
-                refresh = cookie.getValue();
-            }
-        }
+        refresh = request.getHeader("Authorization");
 
         //refresh null check
         if (refresh == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
+
+        refresh.substring(7);
 
         //expired check
         try {

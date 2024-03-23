@@ -102,7 +102,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests(auth -> auth
                         .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/", "/error", "/api/accounts/token/refresh/", "/api/accounts/username/check/","/api/accounts/logout/").permitAll()
-//                        .requestMatchers().hasAnyRole("USER")
+//                        .requestMatchers("/api/accounts/").hasAnyRole("USER")
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
                 );

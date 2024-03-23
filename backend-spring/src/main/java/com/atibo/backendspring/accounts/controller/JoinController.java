@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.ServletOutputStream;
+
 @RestController
 public class JoinController {
 
@@ -23,8 +25,9 @@ public class JoinController {
 
     @PostMapping("/api/accounts/")
     public ResponseEntity<AccountDto.ResponseDto> createAccounts(@RequestBody AccountDto.RequestDto requestDto) {
+        System.out.println("가입하고싶어욤");
         AccountDto.ResponseDto responseDto = accountService.saveAccount(requestDto);
-
+        System.out.println("가입했더욤");
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 

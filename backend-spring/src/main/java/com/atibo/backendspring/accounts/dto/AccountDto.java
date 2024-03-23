@@ -1,13 +1,16 @@
 package com.atibo.backendspring.accounts.dto;
 
+import java.util.UUID;
+
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.domain.AccountRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.Id;
+
+import jakarta.persistence.GeneratedValue;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 
 public class AccountDto {
@@ -16,11 +19,8 @@ public class AccountDto {
     @Builder
     @Getter
     public static class RequestDto {
-        @NotBlank(message = "아이디는 필수 입력 값입니다.")
-        @Pattern(regexp = "^(?=.*[A-Za-z])([A-Za-z/d]{5,20})$")
-        @Size(min = 5, max = 20)
+
         private String username;
-        @Size(min = 2, max = 5)
         private String name;
         private String password;
         private String email;
@@ -32,7 +32,7 @@ public class AccountDto {
     @Builder
     @Getter
     public static class ResponseDto {
-        private Long id;
+        private UUID id;
         private String username;
         private String name;
         private String email;
@@ -41,13 +41,13 @@ public class AccountDto {
 
         public ResponseDto toResponseDto(Account account) {
             return ResponseDto.builder()
-                      .id(account.getId())
-                      .username(account.getUsername())
-                      .name(account.getName())
-                      .email(account.getEmail())
-                      .role(account.getRole())
-                      .comment(account.getComment()).
-                      build();
+                              .id(account.getId())
+                              .username(account.getUsername())
+                              .name(account.getName())
+                              .email(account.getEmail())
+                              .role(account.getRole())
+                              .comment(account.getComment())
+                              .build();
         }
     }
 
@@ -87,6 +87,7 @@ public class AccountDto {
         private String accessToken;
 
         public reissueDto(String token) {
+
             this.accessToken = token;
         }
     }
@@ -96,10 +97,8 @@ public class AccountDto {
 
         private String username;
 
-        public checkUserNameDto() {
-        };
-
         public checkUserNameDto(String username) {
+
             this.username = username;
         }
     }

@@ -1,5 +1,7 @@
 package com.atibo.backendspring.accounts.domain;
 
+import java.util.UUID;
+
 import com.atibo.backendspring.accounts.dto.AccountDto;
 
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
+import org.hibernate.annotations.GenericGenerator;
 
 @NoArgsConstructor
 @Getter
@@ -18,9 +21,10 @@ import org.antlr.v4.runtime.misc.NotNull;
 @Table(name = "accounts")
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
-    private Long id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, columnDefinition = "BINARY(16)")
+    private UUID id;
 
     @Column(name = "username")
     @NotNull

@@ -65,7 +65,8 @@ public class AccountService {
 
         boolean isExist = accountRepository.existsByUsername(username);
 
-        if (isExist) {
+        if (!isExist) {
+            System.out.println("잠깐, 너같은놈 없는데?");
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
                     "Check username",
