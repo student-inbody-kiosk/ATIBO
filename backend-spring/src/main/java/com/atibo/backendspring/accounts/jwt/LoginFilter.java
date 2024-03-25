@@ -6,8 +6,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
+import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.dto.AccountDto;
-import com.atibo.backendspring.accounts.dto.RefreshEntity;
+import com.atibo.backendspring.accounts.domain.RefreshToken;
+import com.atibo.backendspring.accounts.repository.AccountRepository;
 import com.atibo.backendspring.accounts.repository.RefreshRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.util.StreamUtils;
 
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,16 +32,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
-
     private RefreshRepository refreshRepository;
+    private AccountRepository accountRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, RefreshRepository refreshRepository, AccountRepository accountRepository) {
 
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        this.accountRepository = accountRepository;
     }
 
     //로그인 요청시 가장 먼저 실행
@@ -97,7 +99,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         //토큰 생성
         System.out.println("======= 토큰 생성 =======");
-        String access = jwtUtil.createJwt("access", username, role, 100000L);
+        String access = jwtUtil.createJwt("access", username, role, 600000L);
         String refresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
         //refresh 토큰 저장
@@ -128,24 +130,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         Date date = new Date(System.currentTimeMillis() + expiredMs);
 
-        RefreshEntity refreshEntity = new RefreshEntity();
-        refreshEntity.setUsername(username);
-        refreshEntity.setRefresh(refresh);
-        refreshEntity.setExpiration(date.toString());
+        Account account = accountRepository.findByUsername(username);
 
-        refreshRepository.save(refreshEntity);
-    }
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setAccount(account);
+        refreshToken.setRefresh(refresh);
+        refreshToken.setExpiration(date.toString());
+        refreshRepository.deleteByAccount(account);
+        refreshRepository.save(refreshToken);
 
-    //쿠키 생성 메소드
-    private Cookie createCookie(String key, String value) {
-
-        Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(24 * 60 * 60);
-        // https 사용시 true 설정
-        // cookie.setSecure(true);
-        // cookie.setPath("/");
-        cookie.setHttpOnly(true);
-
-        return cookie;
+//        account.setRefreshToken(refreshToken);
     }
 }

@@ -6,6 +6,7 @@ import com.atibo.backendspring.accounts.jwt.CustomLogoutFilter;
 import com.atibo.backendspring.accounts.jwt.JWTFilter;
 import com.atibo.backendspring.accounts.jwt.JWTUtil;
 import com.atibo.backendspring.accounts.jwt.LoginFilter;
+import com.atibo.backendspring.accounts.repository.AccountRepository;
 import com.atibo.backendspring.accounts.repository.RefreshRepository;
 
 import org.springframework.context.annotation.Bean;
@@ -32,13 +33,14 @@ public class SecurityConfig {
     //AuthenticationManager 가 인자로 받을 AuthenticationConfiguration 객체 생성자 주입
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
-
     private final RefreshRepository refreshRepository;
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    private final AccountRepository accountRepository;
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository, AccountRepository accountRepository) {
 
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
+        this.accountRepository = accountRepository;
     }
 
     //AuthenticationManager Bean 등록
@@ -108,9 +110,9 @@ public class SecurityConfig {
                 );
 
         // LoginFilter 설정
-        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository);
+        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, accountRepository);
         loginFilter.setFilterProcessesUrl("/api/accounts/login/");
-        CustomLogoutFilter customLogoutFilter = new CustomLogoutFilter(jwtUtil, refreshRepository);
+        CustomLogoutFilter customLogoutFilter = new CustomLogoutFilter(jwtUtil, refreshRepository, accountRepository);
 
         // securityFilter 동작 설정
         http

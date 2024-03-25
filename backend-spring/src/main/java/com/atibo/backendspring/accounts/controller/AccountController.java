@@ -1,11 +1,9 @@
 package com.atibo.backendspring.accounts.controller;
 
-import java.util.Date;
-
 import com.atibo.backendspring.accounts.application.AccountService;
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.dto.AccountDto;
-import com.atibo.backendspring.accounts.dto.RefreshEntity;
+import com.atibo.backendspring.accounts.dto.Response;
 import com.atibo.backendspring.accounts.jwt.JWTUtil;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 import com.atibo.backendspring.accounts.repository.RefreshRepository;
@@ -44,24 +42,36 @@ public class AccountController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-        System.out.println("springsecurity username 확인용" + username);
+        System.out.println("회원정보조회");
         Account account = accountRepository.findByUsername(username);
         AccountDto.ResponseDto userInfo = new AccountDto.ResponseDto().toResponseDto(account);
 
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
+    @DeleteMapping("/api/accounts/")
+    public ResponseEntity<?> deleteAccount() {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        System.out.println("회원삭제");
+        Account account = accountRepository.findByUsername(username);
+        refreshRepository.deleteByAccount(account);
+        accountRepository.deleteByUsername(username);
+        Response response = new Response("The user is successfully deleted");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
     @PostMapping("/api/accounts/token/refresh/")
     public ResponseEntity<?> reissue(@RequestBody AccountDto.tokenDto request) {
-        System.out.println("토큰재발급딱대");
+
         //get refresh token
         String refresh = request.getRefreshToken();
-        System.out.println("토큰여기있습니다요" + refresh);
         // TODO: username 이 잘못되었을 경우 에러처리 확인하고 만들기
         String username = request.getUsername();
-        System.out.println("나의 이름은" + username);
+        System.out.println(username);
+        System.out.println(refresh);
         accountService.existByUserName1(username);
-        System.out.println("토큰 검증들어간다");
 
         if (refresh == null) {
 
@@ -102,30 +112,10 @@ public class AccountController {
 
         //make new JWT
         String accessToken = jwtUtil.createJwt("access", username, role, 600000L);
-        String newRefresh = jwtUtil.createJwt("refresh", username, role, 8640000L);
-
-        //Refresh 토큰 저장 DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장
-//        //TODO: 구현 물어봐야함, 초기화 안할꺼면 없어져야하는 로직
-//        refreshRepository.deleteByRefresh(refresh);
-//        addRefreshEntity(username, newRefresh, 86400000L);
-////        System.out.println("기존 refresh 제거 후 새로운 refresh 저장");
-
+                                    //DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장 (Refresh Rotate 기능 고려해보기)
         //response
         AccountDto.reissueDto newAccess = new AccountDto.reissueDto(accessToken);
-        System.out.println("전달~");
         return new ResponseEntity<>(newAccess, HttpStatus.OK);
-    }
-
-    private void addRefreshEntity(String username, String refresh, Long expiredMs) {
-
-        Date date = new Date(System.currentTimeMillis() + expiredMs);
-
-        RefreshEntity refreshEntity = new RefreshEntity();
-        refreshEntity.setUsername(username);
-        refreshEntity.setRefresh(refresh);
-        refreshEntity.setExpiration(date.toString());
-
-        refreshRepository.save(refreshEntity);
     }
 
 }

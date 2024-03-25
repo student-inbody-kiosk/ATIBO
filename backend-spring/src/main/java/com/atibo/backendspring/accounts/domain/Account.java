@@ -2,10 +2,6 @@ package com.atibo.backendspring.accounts.domain;
 
 import java.util.UUID;
 
-import com.atibo.backendspring.accounts.dto.AccountDto;
-
-import org.springframework.stereotype.Service;
-
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

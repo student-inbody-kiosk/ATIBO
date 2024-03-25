@@ -78,6 +78,7 @@ public class AccountDto {
     @Setter
     public static class tokenDto {
 
+        @JsonProperty("user")
         private String username;
         private String refreshToken;
     }
