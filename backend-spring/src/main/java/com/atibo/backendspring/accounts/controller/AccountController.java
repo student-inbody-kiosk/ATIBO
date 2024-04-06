@@ -30,7 +30,7 @@ public class AccountController {
     private final EmailService emailService;
 
 
-    public AccountController(JWTUtil jwtUtil, AccountRepository accountRepository, AccountService accountService, RefreshRepository refreshRepository, EmailService emailService    ) {
+    public AccountController(JWTUtil jwtUtil, AccountRepository accountRepository, AccountService accountService, RefreshRepository refreshRepository, EmailService emailService) {
 
         this.jwtUtil = jwtUtil;
         this.accountRepository = accountRepository;
@@ -134,6 +134,13 @@ public class AccountController {
         accountService.changeEmail(email);
         Response.emailResponse emailResponse = new Response.emailResponse(email);
         return new ResponseEntity<>(emailResponse, HttpStatus.OK);
+    }
+
+    @PutMapping("/api/accounts/password/change/")
+    public ResponseEntity<?> changePassword(@RequestBody AccountDto.changePasswordDto request) {
+        accountService.changePassword(request);
+        Response response = new Response("The password is changed");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
 

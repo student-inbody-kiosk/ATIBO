@@ -23,7 +23,6 @@ public class ValidAccount {
     private static final String COMMENT_PATTERN = "^.{10,100}$";
 
     public ValidAccount(AccountRepository accountRepository) {
-
         this.accountRepository = accountRepository;
     }
 
@@ -69,7 +68,7 @@ public class ValidAccount {
         if (!regex) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    "check password pattern",
+                    "비밀번호 양식이 맞지 않습니다.",
                     new IllegalArgumentException()
             );
         }
@@ -118,7 +117,5 @@ public class ValidAccount {
                     new IllegalArgumentException()
             );
         }
-
     }
-
 }

@@ -109,4 +109,11 @@ public class AccountDto {
         private String email;
     }
 
+    @Getter
+    public static class changePasswordDto {
+        private String oldPassword;
+        private String newPassword;
+        private String confirmPassword;
+    }
+
 }

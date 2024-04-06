@@ -103,7 +103,7 @@ public class SecurityConfig {
         // TODO: 경로별 접근 권한 설정 주기
         http
                 .authorizeRequests(auth -> auth
-                        .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/", "/error", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/logout/", "/api/accounts/password/reset/", "/api/accounts/email/change/").permitAll()
+                        .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/", "/error", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/logout/", "/api/accounts/password/reset/", "/api/accounts/email/change/", "/api/accounts/password/change/").permitAll()
 //                        .requestMatchers("/api/accounts/password/reset/").hasAnyRole("USER")
                         .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()

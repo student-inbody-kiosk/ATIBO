@@ -1,5 +1,7 @@
 package com.atibo.backendspring.accounts.application;
 
+import java.util.Objects;
+
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.domain.AccountRole;
 import com.atibo.backendspring.accounts.dto.AccountDto;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
 
 
 @RequiredArgsConstructor
@@ -58,6 +61,30 @@ public class AccountService {
         Account account = accountRepository.findByUsername(username);
         validAccount.validEmail(email);
         account.changeEmail(email);
+    }
+
+    public void changePassword(AccountDto.changePasswordDto passwordDto) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Account account = accountRepository.findByUsername(auth.getName());
+        String encodedPwd = account.getPassword();
+        String requestPwd = passwordDto.getOldPassword();
+        String newPwd = bCryptPasswordEncoder.encode(requestPwd);
+        if (!bCryptPasswordEncoder.matches(requestPwd, encodedPwd)) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "비밀번호가 틀렸습니다.",
+                    new IllegalArgumentException()
+            );
+        }
+        validAccount.validPassword(passwordDto.getNewPassword());
+        if (!Objects.equals(passwordDto.getNewPassword(), passwordDto.getConfirmPassword())) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "비밀번호가 일치하지 않습니다.",
+                    new IllegalArgumentException()
+            );
+        }
+        account.changePassword(newPwd);
     }
 
     public void existByUserName(String username) {
