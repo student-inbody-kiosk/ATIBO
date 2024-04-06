@@ -5,11 +5,11 @@ import java.util.regex.Pattern;
 import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-
+@Configuration
 public class ValidAccount {
 
     private final AccountRepository accountRepository;
@@ -17,8 +17,8 @@ public class ValidAccount {
     private static final String USER_NAME_PATTERN = "^(?=.*[A-Za-z])([A-Za-z\\d]{5,20}$)";      //한글과 영어 조합 5~20자. 최소 1개의 문자 포함
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";    // email 형식
     //문자, 숫자, 특수문자 조합 8~24자. 각각 1개의 문자 포함
-    private static final String PASSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[\\(\\)\\[\\]\\{\\}\\|\\\\`~!@#\\$%\\^&\\*\\-+=;:,<>\\./\\?])[A-Za-z\\d\\(\\)\\[\\]\\{\\}\\|\\\\`~!@#\\$%\\^&\\*\\-+=;:,<>\\./\\?]{8,24}$";
-
+    public static final String PASSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[\\(\\)\\[\\]\\{\\}\\|\\\\`~!@#\\$%\\^&\\*\\-+=;:,<>\\./\\?])[A-Za-z\\d\\(\\)\\[\\]\\{\\}\\|\\\\`~!@#\\$%\\^&\\*\\-+=;:,<>\\./\\?]{8,24}$";
+//    public static final String asd = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,24}$";
     private static final String NAME_PATTERN = "^[가-힣]{2,5}$";
     private static final String COMMENT_PATTERN = "^.{10,100}$";
 
@@ -58,7 +58,7 @@ public class ValidAccount {
         if (!regex) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
-                    "check email pattern",
+                    "Enter a valid email address.",
                     new IllegalArgumentException()
             );
         }
@@ -97,5 +97,28 @@ public class ValidAccount {
         }
     }
 
+    public void existedUserName(String username) {
+        boolean exist = accountRepository.existsByUsername(username);
+        if (!exist) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Check username or email",
+                    new IllegalArgumentException()
+            );
+        }
+
+    }
+
+    public void existedEmail(String email) {
+        boolean exist = accountRepository.existsByEmail(email);
+        if (!exist) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Check username or email",
+                    new IllegalArgumentException()
+            );
+        }
+
+    }
 
 }

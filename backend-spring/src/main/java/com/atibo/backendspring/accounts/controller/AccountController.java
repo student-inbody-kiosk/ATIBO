@@ -1,6 +1,7 @@
 package com.atibo.backendspring.accounts.controller;
 
 import com.atibo.backendspring.accounts.application.AccountService;
+import com.atibo.backendspring.accounts.application.EmailService;
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.dto.Response;
@@ -26,15 +27,16 @@ public class AccountController {
     private final AccountRepository accountRepository;
     private final RefreshRepository refreshRepository;
     private final AccountService accountService;
+    private final EmailService emailService;
 
 
-    public AccountController(JWTUtil jwtUtil, AccountRepository accountRepository, AccountService accountService, RefreshRepository refreshRepository) {
+    public AccountController(JWTUtil jwtUtil, AccountRepository accountRepository, AccountService accountService, RefreshRepository refreshRepository, EmailService emailService    ) {
 
         this.jwtUtil = jwtUtil;
         this.accountRepository = accountRepository;
         this.accountService = accountService;
         this.refreshRepository = refreshRepository;
-
+        this.emailService = emailService;
     }
 
     @GetMapping("/api/accounts/")
@@ -62,6 +64,7 @@ public class AccountController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
     @PostMapping("/api/accounts/token/refresh/")
     public ResponseEntity<?> reissue(@RequestBody AccountDto.tokenDto request) {
 
@@ -112,11 +115,25 @@ public class AccountController {
 
         //make new JWT
         String accessToken = jwtUtil.createJwt("access", username, role, 600000L);
-                                    //DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장 (Refresh Rotate 기능 고려해보기)
+        //DB에 기존의 Refresh 토큰 삭제 후 새 Refresh 토큰 저장 (Refresh Rotate 기능 고려해보기)
         //response
         AccountDto.reissueDto newAccess = new AccountDto.reissueDto(accessToken);
         return new ResponseEntity<>(newAccess, HttpStatus.OK);
     }
 
+    @PutMapping("/api/accounts/password/reset/")
+    public ResponseEntity<?> passwordReset(@RequestBody AccountDto.resetPasswordDto request) {
+        emailService.setMail(request);
+        Response response = new Response("A new password has been sent to your email");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/api/accounts/email/change/")
+    public ResponseEntity<?> changeEmail(@RequestBody AccountDto.changeEmailDto emailDto) {
+        String email = emailDto.getEmail();
+        accountService.changeEmail(email);
+        Response.emailResponse emailResponse = new Response.emailResponse(email);
+        return new ResponseEntity<>(emailResponse, HttpStatus.OK);
+    }
 }
 

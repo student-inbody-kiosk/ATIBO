@@ -9,11 +9,17 @@ public class Response {
     @JsonProperty("message")
     String message;
 
-    public Response() {
-    }
-
     public Response(String message) {
 
         this.message = message;
+    }
+
+    public static class emailResponse {
+        @JsonProperty("email")
+        String email;
+
+        public emailResponse(String email) {
+            this.email = email;
+        }
     }
 }

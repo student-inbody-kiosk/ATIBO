@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,15 +22,16 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
+    private final ValidAccount validAccount;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public AccountService(AccountRepository accountRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public AccountService(AccountRepository accountRepository, ValidAccount validAccount, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.accountRepository = accountRepository;
+        this.validAccount = validAccount;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 
     }
-
     // 회원가입
     public AccountDto.ResponseDto saveAccount(AccountDto.RequestDto requestDto) {
         //
@@ -46,6 +49,15 @@ public class AccountService {
         Account account = accountRepository.save(data);
 
         return new AccountDto.ResponseDto().toResponseDto(account);
+    }
+
+    // email 변경
+    public void changeEmail(String email) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        Account account = accountRepository.findByUsername(username);
+        validAccount.validEmail(email);
+        account.changeEmail(email);
     }
 
     public void existByUserName(String username) {

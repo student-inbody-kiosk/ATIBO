@@ -14,13 +14,11 @@ spring:
             format_sql: true # ???? ???? ??? ???? ?? ???
             hibernate.dialect: org.hibernate.dialect.MySQLDialect
             naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStanderImpl
-
     # 개발용(Postman 요청)
-    spring:
-        security:
-            user:
-                name: user
-                password: 1234
+    security:
+        user:
+            name: user
+            password: 1234
 
     # 임의의 긴 암호 문자열
     jwt:
@@ -31,11 +29,26 @@ spring:
         servlet:
             expose-request-attributes: true
 
+    #   메일 발송
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: "atibo5268@gmail.com"
+        password: "dgktrgaygqnvmuqr"
+        properties:
+            mail.smtp.auth: true
+            mail.smtp.starttls.enable: true
+
+    #    subject:
+    #        user:
+    #            password-reset: "[ATIBO] new password"
+
 #   세션 소멸시간
 server:
     servlet:
         session:
             timeout: 90m
+
 
 
 

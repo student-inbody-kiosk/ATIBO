@@ -50,4 +50,12 @@ public class Account {
         this.role = role;
         this.comment = comment;
     }
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
+    public void changeEmail(String email) {
+        this.email = email;
+    }
 }

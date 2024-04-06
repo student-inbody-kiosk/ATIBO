@@ -6,11 +6,7 @@ import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.domain.AccountRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.springframework.data.annotation.Id;
-
-import jakarta.persistence.GeneratedValue;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
 
 
 public class AccountDto {
@@ -60,14 +56,12 @@ public class AccountDto {
     }
 
     public static class LoginRequestDto {
-
         public String username;
         public String password;
     }
 
     @Builder
     public static class LoginResponseDto {
-
         @JsonProperty("accessToken")
         private String accessToken;
         @JsonProperty("refreshToken")
@@ -77,7 +71,6 @@ public class AccountDto {
     @Getter
     @Setter
     public static class tokenDto {
-
         @JsonProperty("user")
         private String username;
         private String refreshToken;
@@ -86,29 +79,34 @@ public class AccountDto {
     public static class reissueDto {
         @JsonProperty("accessToken")
         private String accessToken;
-
         public reissueDto(String token) {
-
             this.accessToken = token;
         }
     }
 
     @Getter
     public static class checkUserNameDto {
-
         private String username;
 
         public checkUserNameDto(String username) {
-
             this.username = username;
         }
     }
 
     public static final class checkUserNameResponse {
-
         @JsonProperty("duplicate")
         private boolean duplicate = false;
     }
 
+    @Getter
+    public static final class resetPasswordDto {
+        private String username;
+        private String email;
+    }
+
+    @Getter
+    public static final class changeEmailDto {
+        private String email;
+    }
 
 }
