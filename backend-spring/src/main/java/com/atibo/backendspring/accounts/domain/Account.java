@@ -21,25 +21,21 @@ public class Account {
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "id", updatable = false, columnDefinition = "BINARY(16)")
     private UUID id;
-
     @Column(name = "username")
     @NotNull
     private String username;
-
     private String password;
-
     @Column(name = "name")
     @NotNull
     private String name;
-
     @Column(name = "email", unique = true)
     @NotNull
     private String email;
-
     @Enumerated(EnumType.STRING)
     private AccountRole role;
-
     private String comment;
+    private boolean isActive;
+
 
     @Builder
     public Account(String username, String name, String email, String password, AccountRole role, String comment) {
@@ -49,6 +45,7 @@ public class Account {
         this.password = password;
         this.role = role;
         this.comment = comment;
+        this.isActive = false;
     }
 
     public void changePassword(String password) {
@@ -58,4 +55,9 @@ public class Account {
     public void changeEmail(String email) {
         this.email = email;
     }
+
+    public void changeActive() {
+        this.isActive = true;
+    }
+
 }

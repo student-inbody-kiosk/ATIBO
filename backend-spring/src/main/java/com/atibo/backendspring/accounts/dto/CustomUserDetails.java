@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.atibo.backendspring.accounts.domain.Account;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -59,6 +60,9 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        if (!account.isActive()) {
+            System.out.println("승인대기중");
+        }
+        return account.isActive();
     }
 }

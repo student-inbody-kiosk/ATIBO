@@ -22,4 +22,13 @@ public class Response {
             this.email = email;
         }
     }
+
+    public static class isActiveResponse {
+        @JsonProperty("isWaiting")
+        Boolean isWaiting;
+
+        public isActiveResponse(Boolean b) {
+            this.isWaiting = b;
+        }
+    }
 }

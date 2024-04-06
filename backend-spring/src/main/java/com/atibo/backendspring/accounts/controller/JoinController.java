@@ -1,8 +1,8 @@
 package com.atibo.backendspring.accounts.controller;
 
 import com.atibo.backendspring.accounts.application.AccountService;
-import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.application.ValidAccount;
+import com.atibo.backendspring.accounts.dto.AccountDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.ServletOutputStream;
 
 @RestController
 public class JoinController {

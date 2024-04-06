@@ -116,6 +116,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String res = objectMapper.writeValueAsString(tokens);
         System.out.println(">>>>>>>>>>>> tokens:" + res);
         response.getWriter().print(res);
+        System.out.println(auth.getAuthority());
     }
 
     //로그인 실패시 실행하는 메소드

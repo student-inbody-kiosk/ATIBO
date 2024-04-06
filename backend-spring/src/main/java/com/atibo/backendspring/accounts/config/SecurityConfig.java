@@ -8,9 +8,11 @@ import com.atibo.backendspring.accounts.jwt.JWTUtil;
 import com.atibo.backendspring.accounts.jwt.LoginFilter;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 import com.atibo.backendspring.accounts.repository.RefreshRepository;
+import com.atibo.backendspring.common.CustomAccessDeniedHandler;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -55,12 +57,17 @@ public class SecurityConfig {
 
         return new BCryptPasswordEncoder();
     }
+
+    //    @Bean
+    //    public AccessDeniedHandler accessDeniedHandler(){
+    //        return new CustomAccessDeniedHandler();
+    //    }
     @Bean
     //    계층 권한 설정
     public RoleHierarchy roleHierarchy() {
 
         RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
-        hierarchy.setHierarchy("ADMIN > USER");
+        hierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
 
         return hierarchy;
     }
@@ -103,9 +110,13 @@ public class SecurityConfig {
         // TODO: 경로별 접근 권한 설정 주기
         http
                 .authorizeRequests(auth -> auth
-                        .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/", "/error", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/logout/", "/api/accounts/password/reset/", "/api/accounts/email/change/", "/api/accounts/password/change/").permitAll()
-//                        .requestMatchers("/api/accounts/password/reset/").hasAnyRole("USER")
-                        .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/accounts/").permitAll()
+                        .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/")
+                        .permitAll()
+                        .requestMatchers("/api/accounts/admin/**")
+                        .hasAnyRole("ADMIN")
+                        .requestMatchers("/api/accounts/**")
+                        .hasAnyRole("USER")
                         .anyRequest().authenticated()
                 );
 
@@ -122,6 +133,9 @@ public class SecurityConfig {
         http
                 .addFilterBefore(customLogoutFilter, UsernamePasswordAuthenticationFilter.class);
 
+        http
+                .exceptionHandling()
+                .accessDeniedHandler(new CustomAccessDeniedHandler());
 
         return http.build();
     }

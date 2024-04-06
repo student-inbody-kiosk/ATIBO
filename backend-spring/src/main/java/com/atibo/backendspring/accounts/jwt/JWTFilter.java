@@ -80,7 +80,8 @@ public class JWTFilter extends OncePerRequestFilter {
 
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
-
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(auth);
         filterChain.doFilter(request, response);
     }
 }
