@@ -53,9 +53,9 @@ public class EmailService {
     public String createCode() {
 //    TODO: 랜덤 비밀번호 생성
 
-//        Generex generex = new Generex("[-");
-//        String newPassword = generex.random();
-//        System.out.println(newPassword);
+        Generex generex = new Generex(ValidAccount.PSQ);
+        String newPassword = generex.random();
+        System.out.println(newPassword);
         return "1q2w3e4r!";
     }
 }

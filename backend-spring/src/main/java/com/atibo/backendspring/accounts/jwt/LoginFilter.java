@@ -24,7 +24,6 @@ import org.springframework.util.StreamUtils;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletInputStream;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -32,8 +31,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
     private final JWTUtil jwtUtil;
-    private RefreshRepository refreshRepository;
-    private AccountRepository accountRepository;
+    private final RefreshRepository refreshRepository;
+    private final AccountRepository accountRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

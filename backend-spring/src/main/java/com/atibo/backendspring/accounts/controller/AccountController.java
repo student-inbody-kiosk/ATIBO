@@ -123,6 +123,7 @@ public class AccountController {
 
     @PutMapping("/api/accounts/password/reset/")
     public ResponseEntity<?> passwordReset(@RequestBody AccountDto.resetPasswordDto request) {
+        System.out.println("비밀번호 초기화");
         emailService.setMail(request);
         Response response = new Response("A new password has been sent to your email");
         return new ResponseEntity<>(response, HttpStatus.OK);

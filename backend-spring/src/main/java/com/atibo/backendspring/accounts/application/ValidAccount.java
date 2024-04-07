@@ -18,7 +18,9 @@ public class ValidAccount {
     private static final String EMAIL_PATTERN = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";    // email 형식
     //문자, 숫자, 특수문자 조합 8~24자. 각각 1개의 문자 포함
     public static final String PASSWORD_PATTERN = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[\\(\\)\\[\\]\\{\\}\\|\\\\`~!@#\\$%\\^&\\*\\-+=;:,<>\\./\\?])[A-Za-z\\d\\(\\)\\[\\]\\{\\}\\|\\\\`~!@#\\$%\\^&\\*\\-+=;:,<>\\./\\?]{8,24}$";
-//    public static final String asd = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,24}$";
+    //    public static final String asd = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,24}$";
+    public static final String PSQ = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#\\$%^\\&*])([A-Za-z\\d!@#\\$%^\\&*]{8,24})$";
+
     private static final String NAME_PATTERN = "^[가-힣]{2,5}$";
     private static final String COMMENT_PATTERN = "^.{10,100}$";
 

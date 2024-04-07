@@ -12,7 +12,6 @@ spring:
         properties:
             show_sql: true # ???? ?? ?? ??
             format_sql: true # ???? ???? ??? ???? ?? ???
-            hibernate.dialect: org.hibernate.dialect.MySQLDialect
             naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStanderImpl
     # 개발용(Postman 요청)
     security:
@@ -48,7 +47,3 @@ server:
     servlet:
         session:
             timeout: 90m
-
-
-
-

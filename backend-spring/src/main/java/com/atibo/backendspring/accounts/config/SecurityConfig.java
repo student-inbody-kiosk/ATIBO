@@ -9,6 +9,7 @@ import com.atibo.backendspring.accounts.jwt.LoginFilter;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 import com.atibo.backendspring.accounts.repository.RefreshRepository;
 import com.atibo.backendspring.common.CustomAccessDeniedHandler;
+import com.atibo.backendspring.common.CustomAuthenticationEntryPoint;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -58,10 +60,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    //    @Bean
-    //    public AccessDeniedHandler accessDeniedHandler(){
-    //        return new CustomAccessDeniedHandler();
-    //    }
     @Bean
     //    계층 권한 설정
     public RoleHierarchy roleHierarchy() {
@@ -95,13 +93,13 @@ public class SecurityConfig {
                 })));
         //      api 서버의 경우 세션을 jwt 등의 방법으로 관리하므로 disable
         http
-                .csrf(auth -> auth.disable());
+                .csrf(AbstractHttpConfigurer::disable);
         //      Form 로그인 방식 disable
         http
-                .formLogin((auth) -> auth.disable());
+                .formLogin(AbstractHttpConfigurer::disable);
         //      http basic 인증 방식 disable
         http
-                .httpBasic((auth) -> auth.disable());
+                .httpBasic(AbstractHttpConfigurer::disable);
         //      세션 설정 (JWT 인증/인가 위해서는 STATELESS 상태로 설정하는 것이 중요
         http
                 .sessionManagement((auth) -> auth
@@ -110,7 +108,8 @@ public class SecurityConfig {
         // TODO: 경로별 접근 권한 설정 주기
         http
                 .authorizeRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/accounts/").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/accounts/")
+                        .permitAll()
                         .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/")
                         .permitAll()
                         .requestMatchers("/api/accounts/admin/**")
@@ -135,6 +134,7 @@ public class SecurityConfig {
 
         http
                 .exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .accessDeniedHandler(new CustomAccessDeniedHandler());
 
         return http.build();

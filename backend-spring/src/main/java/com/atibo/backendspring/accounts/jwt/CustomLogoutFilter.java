@@ -108,18 +108,11 @@ public class CustomLogoutFilter extends GenericFilterBean {
 
         refreshRepository.deleteByAccount(account);
 
-
-        //Refresh 토큰 Cookie 값 0
-//        Cookie cookie = new Cookie("refresh", null);
-//        cookie.setMaxAge(0);
-//        cookie.setPath("/");
-
         response.setHeader("Content-type","application/json");
         response.setCharacterEncoding("utf-8");
 
         Response res = new Response("Logged out successfully");
         String result = objectMapper.writeValueAsString(res);
-//        response.addCookie(cookie);
         response.setStatus(HttpServletResponse.SC_OK);
         response.getWriter().write(result);
     }
