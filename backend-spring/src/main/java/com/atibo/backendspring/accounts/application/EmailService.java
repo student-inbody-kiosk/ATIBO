@@ -1,18 +1,16 @@
 package com.atibo.backendspring.accounts.application;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.mail.SimpleMailMessage;
-
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
-
-
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
-import com.mifmif.common.regex.Generex;
+import com.atibo.backendspring.util.PasswordGenerator;
+
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
@@ -26,17 +24,18 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
     private final ValidAccount validAccount;
     private final AccountRepository accountRepository;
+    private final PasswordGenerator passwordGenerator;
 
     public void setMail(AccountDto.resetPasswordDto request) {
-    // TODO: account service 로 기능 분리할 필요가 있음
+        // TODO: account service 로 기능 분리할 필요가 있음
         String username = request.getUsername();
         String email = request.getEmail();
         Account account = accountRepository.findByUsername(username);
         validAccount.existedUserName(username);
         validAccount.existedEmail(email);
-        String newPassword = createCode();
+        String newPassword = passwordGenerator.generatePassword();
         account.changePassword(newPassword);
-        sendMail(email, EMAIL_SUBJECT, EMAIL_BODY+"("+newPassword+")");
+        sendMail(email, EMAIL_SUBJECT, EMAIL_BODY + "[ " + newPassword + " ]");
     }
 
     public void sendMail(String to, String subject, String body) {
@@ -47,15 +46,5 @@ public class EmailService {
         message.setFrom(EMAIL_FROM);
         javaMailSender.send(message);
 
-    }
-
-    // 인증번호 및 임시 비밀번호 생성 메서드
-    public String createCode() {
-//    TODO: 랜덤 비밀번호 생성
-
-        Generex generex = new Generex(ValidAccount.PSQ);
-        String newPassword = generex.random();
-        System.out.println(newPassword);
-        return "1q2w3e4r!";
     }
 }
