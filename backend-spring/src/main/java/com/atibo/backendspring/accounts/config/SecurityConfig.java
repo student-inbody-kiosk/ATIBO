@@ -124,6 +124,11 @@ public class SecurityConfig {
         loginFilter.setFilterProcessesUrl("/api/accounts/login/");
         CustomLogoutFilter customLogoutFilter = new CustomLogoutFilter(jwtUtil, refreshRepository, accountRepository);
 
+        http
+                .exceptionHandling()
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                .accessDeniedHandler(new CustomAccessDeniedHandler());
+
         // securityFilter 동작 설정
         http
                 .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
@@ -132,10 +137,6 @@ public class SecurityConfig {
         http
                 .addFilterBefore(customLogoutFilter, UsernamePasswordAuthenticationFilter.class);
 
-        http
-                .exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                .accessDeniedHandler(new CustomAccessDeniedHandler());
 
         return http.build();
     }

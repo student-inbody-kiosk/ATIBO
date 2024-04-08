@@ -103,7 +103,7 @@ public class ValidAccount {
         if (!exist) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Check username or email",
+                    "Check username",
                     new IllegalArgumentException()
             );
         }
@@ -115,7 +115,7 @@ public class ValidAccount {
         if (!exist) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Check username or email",
+                    "Check email",
                     new IllegalArgumentException()
             );
         }

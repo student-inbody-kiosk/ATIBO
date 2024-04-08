@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.Iterator;
 
 import com.atibo.backendspring.accounts.domain.Account;
-import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.domain.RefreshToken;
+import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 import com.atibo.backendspring.accounts.repository.RefreshRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -121,7 +121,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     //로그인 실패시 실행하는 메소드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-
         response.setStatus(401);
         System.out.println("======= login 실패 =======");
     }
@@ -138,7 +137,5 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         refreshToken.setExpiration(date.toString());
         refreshRepository.deleteByAccount(account);
         refreshRepository.save(refreshToken);
-
-//        account.setRefreshToken(refreshToken);
     }
 }

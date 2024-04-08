@@ -1,6 +1,7 @@
 package com.atibo.backendspring.accounts.application;
 
 import com.atibo.backendspring.accounts.domain.Account;
+import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 
 import org.springframework.security.core.Authentication;
@@ -16,15 +17,27 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminService {
 
     private final AccountRepository accountRepository;
+    private ValidAccount validAccount;
 
-    public AdminService(AccountRepository accountRepository) {
+    public AdminService(AccountRepository accountRepository, ValidAccount validAccount) {
         this.accountRepository = accountRepository;
+        this.validAccount = validAccount;
     }
 
     public boolean isWaiting() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         Account account = accountRepository.findByUsername(username);
+
         return account.isActive();
+    }
+
+    public AccountDto.accountDetail approveAccount(String userName) {
+        validAccount.existedUserName(userName);
+        Account account = accountRepository.findByUsername(userName);
+        account.changeActive();
+        System.out.println("계정 승인: " + account.getUsername());
+
+        return new AccountDto.accountDetail().toAccountDto(account);
     }
 }

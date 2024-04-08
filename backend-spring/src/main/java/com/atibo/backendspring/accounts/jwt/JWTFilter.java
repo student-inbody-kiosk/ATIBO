@@ -33,7 +33,6 @@ public class JWTFilter extends OncePerRequestFilter {
         String accessToken = request.getHeader("Authorization");
         // 토큰이 없다면 다음 필터로 넘김
         if (accessToken == null) {
-
             filterChain.doFilter(request, response);
 
             return;
@@ -68,7 +67,6 @@ public class JWTFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-
         // username, role 값을 획득
         String username = jwtUtil.getUsername(accessToken);
         String role = jwtUtil.getRole(accessToken);
@@ -77,11 +75,11 @@ public class JWTFilter extends OncePerRequestFilter {
         account.setUsername(username);
         account.setRole(AccountRole.valueOf(role));
         CustomUserDetails customUserDetails = new CustomUserDetails(account);
-
+        System.out.println("====요청 토큰 정보====");
+        System.out.println("username: " + username);
+        System.out.println("role: " + AccountRole.valueOf(role));
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth);
         filterChain.doFilter(request, response);
     }
 }

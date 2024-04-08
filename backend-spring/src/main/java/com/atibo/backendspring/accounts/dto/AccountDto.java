@@ -47,6 +47,33 @@ public class AccountDto {
         }
     }
 
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    @Getter
+    public static class accountDetail {
+        private String comment;
+        private String email;
+        private UUID id;
+        private Boolean isActive;
+        private String name;
+        private AccountRole role;
+        private String username;
+
+        public accountDetail toAccountDto(Account account) {
+            return accountDetail.builder()
+                                .id(account.getId())
+                                .username(account.getUsername())
+                                .name(account.getName())
+                                .email(account.getEmail())
+                                .role(account.getRole())
+                                .comment(account.getComment())
+                                .isActive(account.isActive())
+                                .build();
+        }
+    }
+
+
     @Getter
     public static class JoinFailDto {
         //TODO 정규식 처리
