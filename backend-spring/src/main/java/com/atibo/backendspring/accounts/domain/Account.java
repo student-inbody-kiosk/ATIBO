@@ -2,6 +2,9 @@ package com.atibo.backendspring.accounts.domain;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,6 +27,7 @@ public class Account {
     @Column(name = "username")
     @NotNull
     private String username;
+    @JsonIgnore
     private String password;
     @Column(name = "name")
     @NotNull
@@ -32,8 +36,10 @@ public class Account {
     @NotNull
     private String email;
     @Enumerated(EnumType.STRING)
+    @JsonIgnore
     private AccountRole role;
     private String comment;
+    @JsonProperty("isActive")
     private boolean isActive;
 
 

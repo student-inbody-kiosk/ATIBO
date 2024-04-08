@@ -1,10 +1,13 @@
 package com.atibo.backendspring.accounts.application;
 
 import java.sql.SQLOutput;
+import java.util.List;
 
 import com.atibo.backendspring.accounts.domain.Account;
+import com.atibo.backendspring.accounts.domain.Accounts;
 import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
+import com.atibo.backendspring.util.JsonUtil;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,5 +50,12 @@ public class AdminService {
         validAccount.existedUserName(userName);
         System.out.println("계정 삭제: " + userName);
         accountRepository.deleteByUsername(userName);
+    }
+
+    public String getAccounts() {
+        Accounts accounts = new Accounts(accountRepository.findAll());
+        List<Account> inActives = accounts.inActiveAccounts();
+        List<Account> actives = accounts.activeAccounts();
+        return JsonUtil.listsToJson(actives, inActives);
     }
 }

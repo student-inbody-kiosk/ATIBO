@@ -27,6 +27,13 @@ public class AdminController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/api/accounts/admin/")
+    public ResponseEntity<?> allAccount() {
+        String accounts = adminService.getAccounts();
+
+        return new ResponseEntity<>(accounts, HttpStatus.OK);
+    }
+
     @PutMapping("/api/accounts/admin/{userId}/")
     public ResponseEntity<?> approveAccount(@PathVariable("userId") String userId) {
         AccountDto.accountDetail response = adminService.approveAccount(userId);
