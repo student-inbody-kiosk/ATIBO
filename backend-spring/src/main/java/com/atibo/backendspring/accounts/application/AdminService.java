@@ -1,5 +1,7 @@
 package com.atibo.backendspring.accounts.application;
 
+import java.sql.SQLOutput;
+
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
@@ -39,5 +41,11 @@ public class AdminService {
         System.out.println("계정 승인: " + account.getUsername());
 
         return new AccountDto.accountDetail().toAccountDto(account);
+    }
+
+    public void deleteAccount(String userName) {
+        validAccount.existedUserName(userName);
+        System.out.println("계정 삭제: " + userName);
+        accountRepository.deleteByUsername(userName);
     }
 }
