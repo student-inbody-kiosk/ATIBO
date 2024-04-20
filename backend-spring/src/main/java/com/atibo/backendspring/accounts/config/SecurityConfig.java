@@ -112,9 +112,9 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/")
                         .permitAll()
-                        .requestMatchers("/api/accounts/admin/**")
+                        .requestMatchers("/api/accounts/admin/**", "/api/admin/**")
                         .hasAnyRole("ADMIN")
-                        .requestMatchers("/api/accounts/**")
+                        .requestMatchers("/api/accounts/**", "/api/students/")
                         .hasAnyRole("USER")
                         .anyRequest().authenticated()
                 );

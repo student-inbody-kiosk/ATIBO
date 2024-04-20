@@ -1,5 +1,6 @@
 package com.atibo.backendspring.accounts.application;
 
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import com.atibo.backendspring.accounts.dto.AccountDto;
@@ -107,7 +108,17 @@ public class ValidAccount {
                     new IllegalArgumentException()
             );
         }
+    }
 
+    public void existedUserId(UUID userId) {
+        boolean exist = accountRepository.existsById(userId);
+        if (!exist) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Check userId",
+                    new IllegalArgumentException()
+            );
+        }
     }
 
     public void existedEmail(String email) {

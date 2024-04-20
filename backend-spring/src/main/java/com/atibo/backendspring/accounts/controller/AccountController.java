@@ -1,5 +1,7 @@
 package com.atibo.backendspring.accounts.controller;
 
+import java.util.List;
+
 import com.atibo.backendspring.accounts.application.AccountService;
 import com.atibo.backendspring.accounts.application.EmailService;
 import com.atibo.backendspring.accounts.domain.Account;
@@ -8,6 +10,9 @@ import com.atibo.backendspring.accounts.dto.Response;
 import com.atibo.backendspring.accounts.jwt.JWTUtil;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 import com.atibo.backendspring.accounts.repository.RefreshRepository;
+import com.atibo.backendspring.students.application.StudentService;
+import com.atibo.backendspring.students.domain.Student;
+import com.atibo.backendspring.students.dto.StudentDto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,15 +33,17 @@ public class AccountController {
     private final RefreshRepository refreshRepository;
     private final AccountService accountService;
     private final EmailService emailService;
+    private final StudentService studentService;
 
 
-    public AccountController(JWTUtil jwtUtil, AccountRepository accountRepository, AccountService accountService, RefreshRepository refreshRepository, EmailService emailService) {
+    public AccountController(JWTUtil jwtUtil, AccountRepository accountRepository, AccountService accountService, RefreshRepository refreshRepository, EmailService emailService, StudentService studentService) {
 
         this.jwtUtil = jwtUtil;
         this.accountRepository = accountRepository;
         this.accountService = accountService;
         this.refreshRepository = refreshRepository;
         this.emailService = emailService;
+        this.studentService = studentService;
     }
 
     @GetMapping("/api/accounts/")
@@ -72,6 +79,7 @@ public class AccountController {
         String refresh = request.getRefreshToken();
         // TODO: username 이 잘못되었을 경우 에러처리 확인하고 만들기
         String username = request.getUsername();
+        System.out.println("token_refresh");
         System.out.println(username);
         System.out.println(refresh);
         accountService.existByUserName1(username);
@@ -93,7 +101,6 @@ public class AccountController {
 
         //토큰이 refresh인지 확인 (발급시 페이로드에 명시)
         String category = jwtUtil.getCategory(refresh);
-
 
         if (!category.equals("refresh")) {
 
@@ -142,6 +149,14 @@ public class AccountController {
         accountService.changePassword(request);
         Response response = new Response("The password is changed");
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/api/students/")
+    public ResponseEntity<?> saveStudents(@RequestBody List<StudentDto> students) {
+
+        studentService.saveStudents(students);
+//        Response response = new Response("The password is changed");
+        return new ResponseEntity<>(students, HttpStatus.OK);
     }
 }
 

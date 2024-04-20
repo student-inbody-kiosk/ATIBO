@@ -3,7 +3,6 @@ package com.atibo.backendspring.accounts.domain;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.atibo.backendspring.accounts.repository.AccountRepository;
 
 public class Accounts {
     private final List<Account> accounts;

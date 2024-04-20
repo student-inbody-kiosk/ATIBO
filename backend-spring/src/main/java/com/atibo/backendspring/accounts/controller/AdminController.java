@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @Controller
 @ResponseBody
 public class AdminController {
@@ -35,16 +37,21 @@ public class AdminController {
     }
 
     @PutMapping("/api/accounts/admin/{userId}/")
-    public ResponseEntity<?> approveAccount(@PathVariable("userId") String userId) {
+    public ResponseEntity<?> approveAccount(@PathVariable("userId") UUID userId) {
         AccountDto.accountDetail response = adminService.approveAccount(userId);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/accounts/admin/{userId}/")
-    public ResponseEntity<?> deleteAccount(@PathVariable("userId") String userId) {
+    public ResponseEntity<?> deleteAccount(@PathVariable("userId") UUID userId) {
         adminService.deleteAccount(userId);
         Response response = new Response("Delete Successfully");
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/school/")
+    public ResponseEntity<?> School() {
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

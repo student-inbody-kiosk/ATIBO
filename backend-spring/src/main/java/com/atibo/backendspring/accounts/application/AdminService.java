@@ -2,6 +2,7 @@ package com.atibo.backendspring.accounts.application;
 
 import java.sql.SQLOutput;
 import java.util.List;
+import java.util.UUID;
 
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.domain.Accounts;
@@ -37,19 +38,19 @@ public class AdminService {
         return account.isActive();
     }
 
-    public AccountDto.accountDetail approveAccount(String userName) {
-        validAccount.existedUserName(userName);
-        Account account = accountRepository.findByUsername(userName);
+    public AccountDto.accountDetail approveAccount(UUID userId) {
+        validAccount.existedUserId(userId);
+        Account account = accountRepository.findById(userId);
         account.changeActive();
         System.out.println("계정 승인: " + account.getUsername());
 
         return new AccountDto.accountDetail().toAccountDto(account);
     }
 
-    public void deleteAccount(String userName) {
-        validAccount.existedUserName(userName);
-        System.out.println("계정 삭제: " + userName);
-        accountRepository.deleteByUsername(userName);
+    public void deleteAccount(UUID userId) {
+        validAccount.existedUserId(userId);
+        System.out.println("계정 삭제");
+        accountRepository.deleteById(userId);
     }
 
     public String getAccounts() {

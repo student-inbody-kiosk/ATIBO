@@ -3,7 +3,6 @@ package com.atibo.backendspring.accounts.dto;
 import java.util.UUID;
 
 import com.atibo.backendspring.accounts.domain.Account;
-import com.atibo.backendspring.accounts.domain.AccountRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.*;
@@ -32,7 +31,7 @@ public class AccountDto {
         private String username;
         private String name;
         private String email;
-        private AccountRole role;
+        private String role;
         private String comment;
 
         public ResponseDto toResponseDto(Account account) {
@@ -41,7 +40,7 @@ public class AccountDto {
                               .username(account.getUsername())
                               .name(account.getName())
                               .email(account.getEmail())
-                              .role(account.getRole())
+                              .role(account.getRole().getRole())
                               .comment(account.getComment())
                               .build();
         }
@@ -57,7 +56,7 @@ public class AccountDto {
         private UUID id;
         private Boolean isActive;
         private String name;
-        private AccountRole role;
+        private String role;
         private String username;
 
         public accountDetail toAccountDto(Account account) {
@@ -66,7 +65,7 @@ public class AccountDto {
                                 .username(account.getUsername())
                                 .name(account.getName())
                                 .email(account.getEmail())
-                                .role(account.getRole())
+                                .role(account.getRole().getRole())
                                 .comment(account.getComment())
                                 .isActive(account.isActive())
                                 .build();
@@ -98,7 +97,7 @@ public class AccountDto {
     @Getter
     @Setter
     public static class tokenDto {
-        @JsonProperty("user")
+        @JsonProperty("username")
         private String username;
         private String refreshToken;
     }
