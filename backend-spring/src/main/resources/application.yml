@@ -5,6 +5,7 @@ spring:
         url: jdbc:mysql://localhost:3306/atibo?characterEncoding=utf8
         username: root
         password: 1q2w3e4r!
+
     # JPA ??
     jpa:
         hibernate:
@@ -42,6 +43,10 @@ spring:
     #        user:
     #            password-reset: "[ATIBO] new password"
 
+logging:
+    level:
+        org.hibernate.SQL: debug # logger에 출력하려면
+        org.hibernate.type.descriptor.sql:
 #   세션 소멸시간
 server:
     servlet:

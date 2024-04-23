@@ -1,7 +1,5 @@
 package com.atibo.backendspring.accounts.controller;
 
-import java.util.List;
-
 import com.atibo.backendspring.accounts.application.AccountService;
 import com.atibo.backendspring.accounts.application.EmailService;
 import com.atibo.backendspring.accounts.domain.Account;
@@ -13,6 +11,7 @@ import com.atibo.backendspring.accounts.repository.RefreshRepository;
 import com.atibo.backendspring.students.application.StudentService;
 import com.atibo.backendspring.students.domain.Student;
 import com.atibo.backendspring.students.dto.StudentDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import io.jsonwebtoken.ExpiredJwtException;
+
+import java.util.List;
 
 
 @Controller
@@ -35,8 +36,10 @@ public class AccountController {
     private final EmailService emailService;
     private final StudentService studentService;
 
+    private final ObjectMapper objectMapper;
 
-    public AccountController(JWTUtil jwtUtil, AccountRepository accountRepository, AccountService accountService, RefreshRepository refreshRepository, EmailService emailService, StudentService studentService) {
+
+    public AccountController(JWTUtil jwtUtil, AccountRepository accountRepository, AccountService accountService, RefreshRepository refreshRepository, EmailService emailService, StudentService studentService, ObjectMapper objectMapper) {
 
         this.jwtUtil = jwtUtil;
         this.accountRepository = accountRepository;
@@ -44,6 +47,7 @@ public class AccountController {
         this.refreshRepository = refreshRepository;
         this.emailService = emailService;
         this.studentService = studentService;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/api/accounts/")
@@ -155,8 +159,16 @@ public class AccountController {
     public ResponseEntity<?> saveStudents(@RequestBody List<StudentDto> students) {
 
         studentService.saveStudents(students);
-//        Response response = new Response("The password is changed");
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
-}
 
+    @GetMapping("/api/students/")
+    public ResponseEntity<List<StudentDto>> findStudents(@RequestParam(required = false) Integer grade,
+                                                     @RequestParam(required = false) Integer room,
+                                                     @RequestParam(required = false) Integer number,
+                                                     @RequestParam(required = false) String name) {
+        System.out.println("학생 조회");
+        List<StudentDto> studentDtos = studentService.findStudents(grade, room, number, name);
+        return new ResponseEntity<>(studentDtos, HttpStatus.OK);
+    }
+}
