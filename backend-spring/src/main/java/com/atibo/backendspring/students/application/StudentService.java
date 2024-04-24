@@ -1,18 +1,19 @@
 package com.atibo.backendspring.students.application;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.stream.Collectors;
-
 import com.atibo.backendspring.students.domain.Student;
 import com.atibo.backendspring.students.dto.StudentDto;
 import com.atibo.backendspring.students.repository.StudentRepository;
 
-import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.criteria.Predicate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -56,5 +57,20 @@ public class StudentService {
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
+    }
+
+    public List<StudentDto> updateStudents(List<StudentDto> studentDtos) {
+        List<UUID> uuids = studentDtos.stream().map(StudentDto::getId).toList();
+        studentDtos.forEach(this::updateStudent);
+        List<Student> students = studentRepository.findByIdIn(uuids);
+        List<StudentDto> studentDTOs = students.stream().map(StudentDto::new)  // Student 객체를 StudentDto로 변환
+                                               .toList();
+        return studentDTOs;
+    }
+
+    private void updateStudent(StudentDto studentDto) {
+        Student student = studentRepository.findById(studentDto.getId());
+        student.update(studentDto.getName(), studentDto.getGrade(), studentDto.getRoom(), studentDto.getNumber(), studentDto.getSex(), studentDto.getPassword(), studentDto.getBirthDate());
+        studentRepository.save(student);
     }
 }

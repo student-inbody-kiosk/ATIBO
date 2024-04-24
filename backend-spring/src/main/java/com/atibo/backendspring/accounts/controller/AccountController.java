@@ -9,7 +9,6 @@ import com.atibo.backendspring.accounts.jwt.JWTUtil;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 import com.atibo.backendspring.accounts.repository.RefreshRepository;
 import com.atibo.backendspring.students.application.StudentService;
-import com.atibo.backendspring.students.domain.Student;
 import com.atibo.backendspring.students.dto.StudentDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -157,7 +156,6 @@ public class AccountController {
 
     @PostMapping("/api/students/")
     public ResponseEntity<?> saveStudents(@RequestBody List<StudentDto> students) {
-
         studentService.saveStudents(students);
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
@@ -171,4 +169,13 @@ public class AccountController {
         List<StudentDto> studentDtos = studentService.findStudents(grade, room, number, name);
         return new ResponseEntity<>(studentDtos, HttpStatus.OK);
     }
+
+    @PutMapping("/api/students/")
+    public ResponseEntity<List<StudentDto>> updateStudents(@RequestBody List<StudentDto> students) {
+        System.out.println("학생 목록 수정");
+        List<StudentDto> studentDtos = studentService.updateStudents(students);
+        return new ResponseEntity<>(studentDtos, HttpStatus.OK);
+    }
+
+
 }

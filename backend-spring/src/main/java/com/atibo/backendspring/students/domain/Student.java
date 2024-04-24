@@ -46,6 +46,15 @@ public class Student {
     }
 
     public Student() {
+    }
 
+    public void update(String name, int grade, int room, int number, int sex, String password, Date birth_date) {
+        this.name = name;
+        this.grade = grade;
+        this.room = room;
+        this.number = number;
+        this.sex = sex;
+        this.password = password;
+        this.birth_date = birth_date;
     }
 }

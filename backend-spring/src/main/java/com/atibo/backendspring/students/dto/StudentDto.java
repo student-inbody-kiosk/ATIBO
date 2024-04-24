@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 public class StudentDto {
 
-    private UUID uuid;
+    private UUID id;
     private String name;
     private int grade;
     private int room;
@@ -25,7 +25,7 @@ public class StudentDto {
     }
 
     public StudentDto(Student student) {
-        this.uuid = student.getId();
+        this.id = student.getId();
         this.name = student.getName();
         this.grade = student.getGrade();
         this.room = student.getRoom();
