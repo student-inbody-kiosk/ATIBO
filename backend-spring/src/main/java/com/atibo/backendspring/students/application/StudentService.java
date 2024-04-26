@@ -73,4 +73,9 @@ public class StudentService {
         student.update(studentDto.getName(), studentDto.getGrade(), studentDto.getRoom(), studentDto.getNumber(), studentDto.getSex(), studentDto.getPassword(), studentDto.getBirthDate());
         studentRepository.save(student);
     }
+
+    public void deleteStudents(StudentDto.IdsRequest idsRequest) {
+        List<Student> students = studentRepository.findByIdIn(idsRequest.getIds());
+        studentRepository.deleteByStudentIn(students);
+    }
 }

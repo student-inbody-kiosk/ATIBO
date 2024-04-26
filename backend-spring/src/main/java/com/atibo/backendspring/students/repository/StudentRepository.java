@@ -11,8 +11,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student> {
 
     Student findById(UUID uuid);
-
     List<Student> findAll();
     List<Student> findByIdIn(List<UUID> uuids);
+
+    void deleteByStudentIn(List<Student> students);
 
 }
