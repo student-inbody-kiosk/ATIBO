@@ -1,6 +1,7 @@
 package com.atibo.backendspring.students.application;
 
 import com.atibo.backendspring.students.domain.Student;
+import com.atibo.backendspring.students.dto.StudentDetailResponse;
 import com.atibo.backendspring.students.dto.StudentDto;
 import com.atibo.backendspring.students.repository.StudentRepository;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class StudentService {
 
     private final StudentRepository studentRepository;
@@ -74,8 +76,14 @@ public class StudentService {
         studentRepository.save(student);
     }
 
-    public void deleteStudents(StudentDto.IdsRequest idsRequest) {
-        List<Student> students = studentRepository.findByIdIn(idsRequest.getIds());
-        studentRepository.deleteByStudentIn(students);
+    public void deleteStudents(StudentDto.deleteStudentDto request) {
+        List<UUID> uuids = request.getIds();
+        studentRepository.deleteByIdIn(uuids);
+        System.out.println("학생학제완료");
+    }
+
+    public StudentDetailResponse studentDetail(int grade, int room, int number) {
+        Student student = studentRepository.findByGradeAndRoomAndNumber(grade, room, number);
+        return new StudentDetailResponse(student);
     }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -44,6 +45,25 @@ public class StudentDto {
                 this.sex,
                 this.password,
                 this.birthDate);
+    }
+
+    public static class deleteStudentDto {
+        private List<UUID> ids;
+
+        public deleteStudentDto(List<UUID> ids) {
+            this.ids = ids;
+        }
+
+        public deleteStudentDto() {
+        }
+
+        public List<UUID> getIds() {
+            return this.ids;
+        }
+    }
+
+    public static class StudentLoginRequest {
+        public String password;
     }
 }
 

@@ -35,10 +35,9 @@ public class AccountController {
     private final EmailService emailService;
     private final StudentService studentService;
 
-    private final ObjectMapper objectMapper;
 
 
-    public AccountController(JWTUtil jwtUtil, AccountRepository accountRepository, AccountService accountService, RefreshRepository refreshRepository, EmailService emailService, StudentService studentService, ObjectMapper objectMapper) {
+    public AccountController(JWTUtil jwtUtil, AccountRepository accountRepository, AccountService accountService, RefreshRepository refreshRepository, EmailService emailService, StudentService studentService) {
 
         this.jwtUtil = jwtUtil;
         this.accountRepository = accountRepository;
@@ -46,7 +45,6 @@ public class AccountController {
         this.refreshRepository = refreshRepository;
         this.emailService = emailService;
         this.studentService = studentService;
-        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/api/accounts/")
@@ -175,6 +173,14 @@ public class AccountController {
         System.out.println("학생 목록 수정");
         List<StudentDto> studentDtos = studentService.updateStudents(students);
         return new ResponseEntity<>(studentDtos, HttpStatus.OK);
+    }
+
+    @PatchMapping("/api/students/")
+    public ResponseEntity<?> deleteStudents(@RequestBody StudentDto.deleteStudentDto request) {
+        System.out.println("학생 정보 삭제");
+        studentService.deleteStudents(request);
+        Response response = new Response("Deleted successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

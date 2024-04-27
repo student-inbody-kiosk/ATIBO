@@ -65,7 +65,7 @@ public class SecurityConfig {
     public RoleHierarchy roleHierarchy() {
 
         RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
-        hierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
+        hierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER > ROLE_STUDENT");
 
         return hierarchy;
     }
@@ -108,7 +108,7 @@ public class SecurityConfig {
         // TODO: 경로별 접근 권한 설정 주기
         http
                 .authorizeRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/accounts/")
+                        .requestMatchers(HttpMethod.POST, "/api/accounts/", "api/students/**/**/**/login/")
                         .permitAll()
                         .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/")
                         .permitAll()
@@ -116,6 +116,8 @@ public class SecurityConfig {
                         .hasAnyRole("ADMIN")
                         .requestMatchers("/api/accounts/**", "/api/students/")
                         .hasAnyRole("USER")
+                        .requestMatchers("api/students/**")
+                        .hasAnyRole("STUDENT")
                         .anyRequest().authenticated()
                 );
 
