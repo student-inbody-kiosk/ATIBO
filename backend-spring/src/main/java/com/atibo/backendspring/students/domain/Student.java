@@ -1,8 +1,11 @@
 package com.atibo.backendspring.students.domain;
 
+import com.atibo.backendspring.inbodys.domain.Inbody;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -34,8 +37,11 @@ public class Student {
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birth_date;
+    @OneToMany(mappedBy = "student")
+    List<Inbody> inbodyList = new ArrayList<Inbody>();
 
     public Student(String name, int grade, int room, int number, int sex, String password, Date birthDate) {
+
         this.name = name;
         this.grade = grade;
         this.room = room;
@@ -56,5 +62,17 @@ public class Student {
         this.sex = sex;
         this.password = password;
         this.birth_date = birth_date;
+    }
+
+    public void setId(String id) {
+        this.id = UUID.fromString(id);
+    }
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
+    public List<Inbody> getInbodyList() {
+        return this.inbodyList;
     }
 }

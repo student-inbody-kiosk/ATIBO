@@ -11,7 +11,6 @@ import java.util.UUID;
 
 @Getter
 public class StudentDto {
-
     private UUID id;
     private String name;
     private int grade;
@@ -64,6 +63,10 @@ public class StudentDto {
 
     public static class StudentLoginRequest {
         public String password;
+
+        public String getPassword() {
+            return this.password;
+        }
     }
 }
 
