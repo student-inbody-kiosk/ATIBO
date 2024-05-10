@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 @Entity
 public class RefreshToken {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

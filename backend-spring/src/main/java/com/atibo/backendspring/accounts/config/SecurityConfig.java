@@ -2,17 +2,17 @@ package com.atibo.backendspring.accounts.config;
 
 import java.util.Collections;
 
-import com.atibo.backendspring.accounts.jwt.CustomLogoutFilter;
-import com.atibo.backendspring.accounts.jwt.JWTFilter;
-import com.atibo.backendspring.accounts.jwt.JWTUtil;
-import com.atibo.backendspring.accounts.jwt.LoginFilter;
+import com.atibo.backendspring.accounts.jwt.*;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 import com.atibo.backendspring.accounts.repository.RefreshRepository;
 import com.atibo.backendspring.common.CustomAccessDeniedHandler;
 import com.atibo.backendspring.common.CustomAuthenticationEntryPoint;
+import com.atibo.backendspring.students.repository.StudentRepository;
+import com.atibo.backendspring.students.security.StudentAuthenticationProvider;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
@@ -31,7 +31,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
     //AuthenticationManager 가 인자로 받을 AuthenticationConfiguration 객체 생성자 주입
@@ -39,20 +39,26 @@ public class SecurityConfig {
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
     private final AccountRepository accountRepository;
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository, AccountRepository accountRepository) {
+    private final StudentRepository studentRepository;
+    private final CustomAuthenticationProvider customAuthenticationProvider;
+    private final StudentAuthenticationProvider studentAuthenticationProvider;
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository, AccountRepository accountRepository, StudentRepository studentRepository, CustomAuthenticationProvider customAuthenticationProvider, StudentAuthenticationProvider studentAuthenticationProvider) {
 
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
         this.accountRepository = accountRepository;
+        this.studentRepository = studentRepository;
+        this.customAuthenticationProvider = customAuthenticationProvider;
+        this.studentAuthenticationProvider = studentAuthenticationProvider;
     }
 
     //AuthenticationManager Bean 등록
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-
-        return configuration.getAuthenticationManager();
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+//
+//        return configuration.getAuthenticationManager();
+//    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -70,8 +76,78 @@ public class SecurityConfig {
         return hierarchy;
     }
 
+
+//    @Bean
+//    @Order(1)
+//    public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
+//        http
+//                .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
+//
+//                    @Override
+//                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+//
+//                        CorsConfiguration configuration = new CorsConfiguration();
+//
+//                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+//                        configuration.setAllowedMethods(Collections.singletonList("*"));
+//                        configuration.setAllowCredentials(true);
+//                        configuration.setAllowedHeaders(Collections.singletonList("*"));
+//                        configuration.setMaxAge(3600L);
+//                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+//
+//                        return configuration;
+//                    }
+//                })));
+//        //      api 서버의 경우 세션을 jwt 등의 방법으로 관리하므로 disable
+//        http
+//                .csrf(AbstractHttpConfigurer::disable);
+//        //      Form 로그인 방식 disable
+//        http
+//                .formLogin(AbstractHttpConfigurer::disable);
+//        //      http basic 인증 방식 disable
+//        http
+//                .httpBasic(AbstractHttpConfigurer::disable);
+//        //      세션 설정 (JWT 인증/인가 위해서는 STATELESS 상태로 설정하는 것이 중요
+//        http
+//                .sessionManagement((auth) -> auth
+//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//
+//        // TODO: 경로별 접근 권한 설정 주기
+//        http
+//                .securityMatcher("/api/students/*/*/*/login/")
+//                .authorizeRequests(auth -> auth
+//                        .requestMatchers(HttpMethod.POST, "/api/students/{grade}/{room}/{number}/password/change", "/api/students/*/*/*/login/")
+//                        .permitAll()
+////                        .requestMatchers("api/students/**")
+////                        .hasAnyRole("STUDENT")
+//                        .anyRequest().authenticated()
+//                );
+//
+//        // LoginFilter 설정
+//        StudentLoginFilter studentLoginFilter = new StudentLoginFilter(customAuthenticationProvider, jwtUtil, studentRepository);
+//        studentLoginFilter.setFilterProcessesUrl("/api/students/*/*/*/login/");
+//
+//        http
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+//                .accessDeniedHandler(new CustomAccessDeniedHandler());
+//
+//        // securityFilter 동작 설정
+////        http
+////                .addFilterBefore(new JWTFilter(jwtUtil), StudentLoginFilter.class);
+//        http
+//                .addFilterAt(studentLoginFilter, UsernamePasswordAuthenticationFilter.class);
+//        //        http
+//        //                .addFilterBefore(customLogoutFilter, UsernamePasswordAuthenticationFilter.class);
+//
+//
+//
+//        return http.build();
+//    }
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {
         //      cors 설정
         http
                 .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
@@ -108,22 +184,24 @@ public class SecurityConfig {
         // TODO: 경로별 접근 권한 설정 주기
         http
                 .authorizeRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/accounts/", "api/students/**/**/**/login/")
+                        .requestMatchers(HttpMethod.POST, "/api/accounts/")
                         .permitAll()
-                        .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/")
+                        .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/", "/api/students/*/*/*/login/")
                         .permitAll()
                         .requestMatchers("/api/accounts/admin/**", "/api/admin/**")
                         .hasAnyRole("ADMIN")
                         .requestMatchers("/api/accounts/**", "/api/students/")
                         .hasAnyRole("USER")
-                        .requestMatchers("api/students/**")
+                        .requestMatchers("/api/students/*/*/*/check/")
                         .hasAnyRole("STUDENT")
                         .anyRequest().authenticated()
                 );
 
         // LoginFilter 설정
-        LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository, accountRepository);
+        LoginFilter loginFilter = new LoginFilter(customAuthenticationProvider, jwtUtil, refreshRepository, accountRepository);
         loginFilter.setFilterProcessesUrl("/api/accounts/login/");
+        StudentLoginFilter studentLoginFilter = new StudentLoginFilter(studentAuthenticationProvider, jwtUtil, studentRepository);
+        studentLoginFilter.setFilterProcessesUrl("/api/students/*/*/*/login/");
         CustomLogoutFilter customLogoutFilter = new CustomLogoutFilter(jwtUtil, refreshRepository, accountRepository);
 
         http
@@ -133,9 +211,11 @@ public class SecurityConfig {
 
         // securityFilter 동작 설정
         http
-                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
+                .addFilterBefore(new JWTFilter(jwtUtil, studentLoginFilter, loginFilter), LoginFilter.class);
         http
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class);
+        http
+                .addFilterAt(studentLoginFilter, UsernamePasswordAuthenticationFilter.class);
         http
                 .addFilterBefore(customLogoutFilter, UsernamePasswordAuthenticationFilter.class);
 

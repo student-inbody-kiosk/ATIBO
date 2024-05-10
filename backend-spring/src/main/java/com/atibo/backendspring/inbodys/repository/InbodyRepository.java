@@ -10,5 +10,4 @@ import java.util.List;
 import java.util.UUID;
 
 public interface InbodyRepository extends JpaRepository<Inbody, Long>, JpaSpecificationExecutor<Inbody> {
-    Inbody findBy(UUID uuid);
 }

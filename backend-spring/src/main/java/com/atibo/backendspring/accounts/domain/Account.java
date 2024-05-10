@@ -42,7 +42,6 @@ public class Account {
     @JsonProperty("isActive")
     private boolean isActive;
 
-
     @Builder
     public Account(String username, String name, String email, String password, AccountRole role, String comment) {
         this.username = username;

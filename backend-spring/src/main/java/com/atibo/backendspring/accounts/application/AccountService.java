@@ -10,6 +10,7 @@ import com.atibo.backendspring.accounts.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +30,7 @@ public class AccountService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public AccountService(AccountRepository accountRepository, ValidAccount validAccount, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public AccountService(AccountRepository accountRepository, ValidAccount validAccount, @Lazy BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.accountRepository = accountRepository;
         this.validAccount = validAccount;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -59,8 +60,12 @@ public class AccountService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         Account account = accountRepository.findByUsername(username);
-        validAccount.validEmail(email);
+        ValidAccount.validEmail(email);
         account.changeEmail(email);
+    }
+
+    public boolean isNotMatches(String password, String encodePassword) {
+        return !bCryptPasswordEncoder.matches(password, encodePassword);
     }
 
     public void changePassword(AccountDto.changePasswordDto passwordDto) {
@@ -69,14 +74,14 @@ public class AccountService {
         String encodedPwd = account.getPassword();
         String requestPwd = passwordDto.getOldPassword();
         String newPwd = bCryptPasswordEncoder.encode(requestPwd);
-        if (!bCryptPasswordEncoder.matches(requestPwd, encodedPwd)) {
+        if (isNotMatches(requestPwd, encodedPwd)) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,
                     "비밀번호가 틀렸습니다.",
                     new IllegalArgumentException()
             );
         }
-        validAccount.validPassword(passwordDto.getNewPassword());
+        ValidAccount.validPassword(passwordDto.getNewPassword());
         if (!Objects.equals(passwordDto.getNewPassword(), passwordDto.getConfirmPassword())) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST,

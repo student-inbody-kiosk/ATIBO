@@ -87,6 +87,7 @@ public class AccountDto {
     }
 
     @Builder
+    @AllArgsConstructor(access = AccessLevel.PUBLIC)
     public static class LoginResponseDto {
         @JsonProperty("accessToken")
         private String accessToken;

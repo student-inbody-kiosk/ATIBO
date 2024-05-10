@@ -33,7 +33,7 @@ public class Inbody {
     private int bodyMassIndex;
     private int score;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "student_id")
     private Student student;
 
     public Inbody() {
