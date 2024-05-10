@@ -46,6 +46,26 @@ public class StudentDto {
                 this.birthDate);
     }
 
+    @Getter
+    public static class StudentCheckResponse {
+        private UUID id;
+        private String name;
+        private int grade;
+        private int room;
+        private int number;
+
+        public StudentCheckResponse() {}
+
+        public StudentCheckResponse(Student student) {
+            this.id = student.getId();
+            this.name = student.getName();
+            this.grade = student.getGrade();
+            this.room = student.getRoom();
+            this.number = student.getNumber();
+        }
+    }
+
+
     public static class deleteStudentDto {
         private List<UUID> ids;
 
