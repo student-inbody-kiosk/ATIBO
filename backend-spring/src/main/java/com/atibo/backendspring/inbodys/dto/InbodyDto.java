@@ -6,10 +6,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.Getter;
 
 import java.util.Date;
 import java.util.UUID;
 
+@Getter
 public class InbodyDto {
     private UUID id;
     @Temporal(TemporalType.DATE)
@@ -27,6 +29,9 @@ public class InbodyDto {
     private int bodyMassIndex;
     private int score;
 
+    public InbodyDto() {
+    }
+
     public InbodyDto(Inbody inbody) {
         this.id = inbody.getId();
         this.testDate = inbody.getTest_date();
@@ -43,6 +48,7 @@ public class InbodyDto {
         this.score = inbody.getScore();
     }
 
+    @Getter
     public static class createInbodyRequest {
         @Temporal(TemporalType.DATE)
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -59,6 +65,9 @@ public class InbodyDto {
         private int bodyMassIndex;
         private int score;
         private Student student;
+
+        public createInbodyRequest() {
+        }
 
         public Inbody convertToEntity() {
             return new Inbody(

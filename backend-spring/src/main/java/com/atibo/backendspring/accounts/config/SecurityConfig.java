@@ -192,7 +192,7 @@ public class SecurityConfig {
                         .hasAnyRole("ADMIN")
                         .requestMatchers("/api/accounts/**", "/api/students/")
                         .hasAnyRole("USER")
-                        .requestMatchers("/api/students/*/*/*/check/", "/api/students/*/*/*/password/change/")
+                        .requestMatchers("/api/students/*/*/*/check/", "/api/students/*/*/*/password/change/", "/api/students/inbody/*/*/*/")
                         .hasAnyRole("STUDENT")
                         .anyRequest().authenticated()
                 );
