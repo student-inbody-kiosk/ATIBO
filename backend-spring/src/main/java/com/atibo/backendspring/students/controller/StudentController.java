@@ -12,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 public class StudentController {
 
@@ -75,5 +78,16 @@ public class StudentController {
         System.out.println("인바디 디테일 생성");
         InbodyDto inbody = inbodyService.createInbody(grade, room, number, inbodyRequest);
         return new ResponseEntity<>(inbody, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/students/inbody/{grade}/{room}/{number}/")
+    public ResponseEntity<List<InbodyDto>> getStudentInbodyList(@PathVariable Integer grade,
+                                                                @PathVariable Integer room,
+                                                                @PathVariable Integer number,
+                                                                @RequestParam("startDate") LocalDate startDate,
+                                                                @RequestParam("endDate") LocalDate endDate) {
+        System.out.println("학생 인바디 조회");
+        List<InbodyDto> inbodyList = inbodyService.getInbodyList(grade, room, number, startDate, endDate);
+        return new ResponseEntity<>(inbodyList, HttpStatus.OK);
     }
 }

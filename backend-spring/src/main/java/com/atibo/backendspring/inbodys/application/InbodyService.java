@@ -8,6 +8,9 @@ import com.atibo.backendspring.students.repository.StudentRepository;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Service
 public class InbodyService {
     private final StudentRepository studentRepository;
@@ -24,5 +27,11 @@ public class InbodyService {
         Inbody data = inbodyRequest.convertToEntity();
         inbodyRepository.save(data);
         return new InbodyDto(data);
+    }
+
+    public List<InbodyDto> getInbodyList(Integer grade, Integer room, Integer number, LocalDate startDate, LocalDate endDate) {
+        Student student = studentRepository.findByGradeAndRoomAndNumber(grade, room, number);
+        List<Inbody> inbodyList = inbodyRepository.findByStudentAndTestDateBetween(student, startDate, endDate);
+        return inbodyList.stream().map(InbodyDto::new).toList();
     }
 }

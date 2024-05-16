@@ -8,15 +8,14 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import lombok.Getter;
 
-import java.util.Date;
-import java.util.UUID;
+import java.time.LocalDate;
 
 @Getter
 public class InbodyDto {
-    private UUID id;
+    private int id;
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date testDate;
+    private LocalDate testDate;
     private int weight;
     private int percentBodyFat;
     private int skeletalMuscleMass;
@@ -52,7 +51,7 @@ public class InbodyDto {
     public static class createInbodyRequest {
         @Temporal(TemporalType.DATE)
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-        private Date testDate;
+        private LocalDate testDate;
         private int weight;
         private int percentBodyFat;
         private int skeletalMuscleMass;

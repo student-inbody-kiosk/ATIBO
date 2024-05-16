@@ -5,22 +5,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.hibernate.annotations.GenericGenerator;
 
-import java.util.Date;
-import java.util.UUID;
+import java.time.LocalDate;
 
 @Entity
 @Getter
 public class Inbody {
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, columnDefinition = "BINARY(16)")
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
+    private int id;
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date test_date;
+    private LocalDate test_date;
     private int weight;
     private int percentBodyFat;
     private int skeletalMuscleMass;
@@ -39,7 +36,7 @@ public class Inbody {
     public Inbody() {
     }
 
-    public Inbody(Date testDate,
+    public Inbody(LocalDate testDate,
                   int weight,
                   int percentBodyFat,
                   int skeletalMuscleMass,

@@ -4,10 +4,12 @@ import com.atibo.backendspring.inbodys.domain.Inbody;
 import com.atibo.backendspring.students.domain.Student;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
-public interface InbodyRepository extends JpaRepository<Inbody, Long>, JpaSpecificationExecutor<Inbody> {
+public interface InbodyRepository extends JpaRepository<Inbody, Long> {
+    @Query("SELECT i FROM Inbody i WHERE i.student = :student AND i.test_date BETWEEN :startDate AND :endDate")
+    List<Inbody> findByStudentAndTestDateBetween(Student student, LocalDate startDate, LocalDate endDate);
 }
