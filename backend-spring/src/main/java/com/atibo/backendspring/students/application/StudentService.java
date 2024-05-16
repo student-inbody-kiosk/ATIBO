@@ -94,6 +94,13 @@ public class StudentService {
     }
 
     public StudentDetailResponse studentDetail(int grade, int room, int number) {
+        boolean isExist = studentRepository.existsByGradeAndRoomAndNumber(grade, room, number);
+        if (!isExist) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "There's no corresponding student",
+                    new IllegalArgumentException());
+        }
         Student student = studentRepository.findByGradeAndRoomAndNumber(grade, room, number);
         return new StudentDetailResponse(student);
     }

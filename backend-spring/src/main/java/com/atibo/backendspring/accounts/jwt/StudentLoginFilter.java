@@ -8,12 +8,14 @@ import com.atibo.backendspring.students.security.StudentAuthenticationProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletInputStream;
@@ -84,6 +86,13 @@ public class StudentLoginFilter extends UsernamePasswordAuthenticationFilter {
         }
 
         //클라이언트 요청 Username, password 추출
+        boolean isExist = studentRepository.existsByGradeAndRoomAndNumber(grade, room, number);
+        if (!isExist) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "There's no corresponding student",
+                    new IllegalArgumentException());
+        }
         Student student = studentRepository.findByGradeAndRoomAndNumber(grade, room, number);
         UUID studentId = student.getId();
         System.out.println(studentId);
@@ -99,7 +108,6 @@ public class StudentLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         return studentAuthenticationProvider.authenticate(authToken);
     }
-
     //로그인 성공시 실행하는 메소드 (JWT 발급), spring security 에서 자동실행
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
@@ -131,7 +139,6 @@ public class StudentLoginFilter extends UsernamePasswordAuthenticationFilter {
         response.getWriter().print(res);
         System.out.println(auth.getAuthority());
     }
-
     //로그인 실패시 실행하는 메소드
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
