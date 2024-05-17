@@ -90,4 +90,11 @@ public class StudentController {
         List<InbodyDto> inbodyList = inbodyService.getInbodyList(grade, room, number, startDate, endDate);
         return new ResponseEntity<>(inbodyList, HttpStatus.OK);
     }
+
+    @GetMapping("/api/students/inbody/{inbodyId}/")
+    public ResponseEntity<InbodyDto> getInbody(@PathVariable Integer inbodyId) {
+        System.out.println("인바디 디테일 조회");
+        InbodyDto inbody = inbodyService.getInbody(inbodyId);
+        return new ResponseEntity<>(inbody, HttpStatus.OK);
+    }
 }

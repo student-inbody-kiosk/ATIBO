@@ -12,4 +12,6 @@ import java.util.List;
 public interface InbodyRepository extends JpaRepository<Inbody, Long> {
     @Query("SELECT i FROM Inbody i WHERE i.student = :student AND i.test_date BETWEEN :startDate AND :endDate")
     List<Inbody> findByStudentAndTestDateBetween(Student student, LocalDate startDate, LocalDate endDate);
+
+    Inbody findInbodyById(int id);
 }

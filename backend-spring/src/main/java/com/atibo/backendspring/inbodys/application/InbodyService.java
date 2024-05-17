@@ -34,4 +34,9 @@ public class InbodyService {
         List<Inbody> inbodyList = inbodyRepository.findByStudentAndTestDateBetween(student, startDate, endDate);
         return inbodyList.stream().map(InbodyDto::new).toList();
     }
+
+    public InbodyDto getInbody(Integer inbodyId) {
+        Inbody data = inbodyRepository.findInbodyById(inbodyId);
+        return new InbodyDto(data);
+    }
 }
