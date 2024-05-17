@@ -9,6 +9,8 @@ import jakarta.persistence.TemporalType;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class InbodyDto {
@@ -45,6 +47,14 @@ public class InbodyDto {
         this.bodyFatMass = inbody.getBodyFatMass();
         this.bodyMassIndex = inbody.getBodyMassIndex();
         this.score = inbody.getScore();
+    }
+
+    public static List<InbodyDto> convertToDtoList(List<Inbody> inbodies) {
+        List<InbodyDto> dtoList = new ArrayList<>();
+        for (Inbody inbody : inbodies) {
+            dtoList.add(new InbodyDto(inbody));
+        }
+        return dtoList;
     }
 
     @Getter

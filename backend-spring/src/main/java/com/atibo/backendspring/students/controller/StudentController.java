@@ -7,6 +7,7 @@ import com.atibo.backendspring.inbodys.dto.InbodyDto;
 import com.atibo.backendspring.students.application.StudentService;
 import com.atibo.backendspring.students.dto.StudentDetailResponse;
 import com.atibo.backendspring.students.dto.StudentDto;
+import com.atibo.backendspring.students.dto.StudentWithInbodyDto;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -96,6 +97,18 @@ public class StudentController {
         System.out.println("인바디 디테일 조회");
         InbodyDto inbody = inbodyService.getInbody(inbodyId);
         return new ResponseEntity<>(inbody, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/students/inbody/{startDate}/{endDate}/")
+    public ResponseEntity<List<StudentWithInbodyDto>> getInbodyList(@PathVariable LocalDate startDate,
+                                                                    @PathVariable LocalDate endDate,
+                                                                    @RequestParam(required = false) Integer grade,
+                                                                    @RequestParam(required = false) Integer room,
+                                                                    @RequestParam(required = false) Integer number,
+                                                                    @RequestParam(required = false) String name) {
+        System.out.println("인바디 조회");
+        List<StudentWithInbodyDto> inbodyList = inbodyService.searchInbodyList(grade, room, number, name, startDate, endDate);
+        return new ResponseEntity<>(inbodyList, HttpStatus.OK);
     }
 
     @PutMapping("/api/students/inbody/{inbodyId}/")

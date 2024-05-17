@@ -16,7 +16,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -53,13 +52,6 @@ public class SecurityConfig {
         this.studentAuthenticationProvider = studentAuthenticationProvider;
     }
 
-    //AuthenticationManager Bean 등록
-//    @Bean
-//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-//
-//        return configuration.getAuthenticationManager();
-//    }
-
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
 
@@ -76,78 +68,8 @@ public class SecurityConfig {
         return hierarchy;
     }
 
-
-//    @Bean
-//    @Order(1)
-//    public SecurityFilterChain filterChain1(HttpSecurity http) throws Exception {
-//        http
-//                .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
-//
-//                    @Override
-//                    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-//
-//                        CorsConfiguration configuration = new CorsConfiguration();
-//
-//                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
-//                        configuration.setAllowedMethods(Collections.singletonList("*"));
-//                        configuration.setAllowCredentials(true);
-//                        configuration.setAllowedHeaders(Collections.singletonList("*"));
-//                        configuration.setMaxAge(3600L);
-//                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
-//
-//                        return configuration;
-//                    }
-//                })));
-//        //      api 서버의 경우 세션을 jwt 등의 방법으로 관리하므로 disable
-//        http
-//                .csrf(AbstractHttpConfigurer::disable);
-//        //      Form 로그인 방식 disable
-//        http
-//                .formLogin(AbstractHttpConfigurer::disable);
-//        //      http basic 인증 방식 disable
-//        http
-//                .httpBasic(AbstractHttpConfigurer::disable);
-//        //      세션 설정 (JWT 인증/인가 위해서는 STATELESS 상태로 설정하는 것이 중요
-//        http
-//                .sessionManagement((auth) -> auth
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//
-//        // TODO: 경로별 접근 권한 설정 주기
-//        http
-//                .securityMatcher("/api/students/*/*/*/login/")
-//                .authorizeRequests(auth -> auth
-//                        .requestMatchers(HttpMethod.POST, "/api/students/{grade}/{room}/{number}/password/change", "/api/students/*/*/*/login/")
-//                        .permitAll()
-////                        .requestMatchers("api/students/**")
-////                        .hasAnyRole("STUDENT")
-//                        .anyRequest().authenticated()
-//                );
-//
-//        // LoginFilter 설정
-//        StudentLoginFilter studentLoginFilter = new StudentLoginFilter(customAuthenticationProvider, jwtUtil, studentRepository);
-//        studentLoginFilter.setFilterProcessesUrl("/api/students/*/*/*/login/");
-//
-//        http
-//                .exceptionHandling()
-//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-//                .accessDeniedHandler(new CustomAccessDeniedHandler());
-//
-//        // securityFilter 동작 설정
-////        http
-////                .addFilterBefore(new JWTFilter(jwtUtil), StudentLoginFilter.class);
-//        http
-//                .addFilterAt(studentLoginFilter, UsernamePasswordAuthenticationFilter.class);
-//        //        http
-//        //                .addFilterBefore(customLogoutFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//
-//
-//        return http.build();
-//    }
-
     @Bean
-    @Order(1)
-    public SecurityFilterChain filterChain2(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //      cors 설정
         http
                 .cors((corsCustomizer -> corsCustomizer.configurationSource(new CorsConfigurationSource() {
@@ -192,7 +114,7 @@ public class SecurityConfig {
                         .hasAnyRole("ADMIN")
                         .requestMatchers("/api/accounts/**", "/api/students/")
                         .hasAnyRole("USER")
-                        .requestMatchers("/api/students/*/*/*/check/", "/api/students/*/*/*/password/change/", "/api/students/inbody/*/*/*/", "/api/sutdnets/inbody/*/")
+                        .requestMatchers("/api/students/*/*/*/check/", "/api/students/*/*/*/password/change/", "/api/students/inbody/*/*/*/", "/api/students/inbody/*/", "/api/students/inbody/*/*/")
                         .hasAnyRole("STUDENT")
                         .anyRequest().authenticated()
                 );

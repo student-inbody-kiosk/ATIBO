@@ -53,7 +53,7 @@ public class StudentService {
         return studentDtos;
     }
 
-    public static Specification<Student> buildCriteria(Integer grade, Integer room, Integer number, String name) {
+    public Specification<Student> buildCriteria(Integer grade, Integer room, Integer number, String name) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
             if (grade != 0) {
