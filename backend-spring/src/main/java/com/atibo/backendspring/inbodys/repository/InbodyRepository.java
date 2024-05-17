@@ -16,4 +16,6 @@ public interface InbodyRepository extends JpaRepository<Inbody, Integer> {
     Inbody findInbodyById(int id);
     @Query("SELECT COUNT(i) > 0 FROM Inbody i WHERE i.student = :student AND i.test_date BETWEEN :startDate AND :endDate")
     boolean existsByStudentAndTestDateBetween(Student student, LocalDate startDate, LocalDate endDate);
+
+    List<Inbody> findByIdIn(List<Integer> ids);
 }

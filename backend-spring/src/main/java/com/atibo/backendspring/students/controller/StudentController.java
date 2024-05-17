@@ -85,8 +85,8 @@ public class StudentController {
     public ResponseEntity<List<InbodyDto>> getStudentInbodyList(@PathVariable Integer grade,
                                                                 @PathVariable Integer room,
                                                                 @PathVariable Integer number,
-                                                                @RequestParam("startDate") LocalDate startDate,
-                                                                @RequestParam("endDate") LocalDate endDate) {
+                                                                @RequestParam(required = false) LocalDate startDate,
+                                                                @RequestParam(required = false) LocalDate endDate) {
         System.out.println("학생 인바디 조회");
         List<InbodyDto> inbodyList = inbodyService.getInbodyList(grade, room, number, startDate, endDate);
         return new ResponseEntity<>(inbodyList, HttpStatus.OK);
@@ -128,10 +128,18 @@ public class StudentController {
     }
 
     @PutMapping("/api/students/inbody/list/")
-    public ResponseEntity<List<InbodyDto>> changeInbodyLis(@RequestBody List<InbodyDto> request) {
+    public ResponseEntity<List<InbodyDto>> changeInbodyList(@RequestBody List<InbodyDto> request) {
         // TODO: id 가 null 일 경우 새로 생성해야하는데 학생 구별이 되지 않는 문제가 있음(프론트에서 학생을 넘겨주면 좋을듯) null 이 아닌 인바디를 통해 가져오려고 해도 전부다 null인 요청이 들어오면 불가능함
         System.out.println("인바디 목록 수정");
         List<InbodyDto> inbodyDtoList = inbodyService.changeInbodyList(request);
         return new ResponseEntity<>(inbodyDtoList, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/students/inbody/list/")
+    public ResponseEntity<Response> deleteInbodyList(@RequestBody InbodyDto.inbodyDeleteRequest request) {
+        System.out.println("인바디 목록 삭제");
+        inbodyService.deleteInbodyList(request);
+        Response response = new Response("Deleted successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

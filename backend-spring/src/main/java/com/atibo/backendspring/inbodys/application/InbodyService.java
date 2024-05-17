@@ -112,4 +112,10 @@ public class InbodyService {
                 inbodyDto.getBodyMassIndex(),
                 inbodyDto.getScore());
     }
+
+    public void deleteInbodyList(InbodyDto.inbodyDeleteRequest request) {
+        List<Integer> ids = request.getIds();
+        List<Inbody> inbodyList = inbodyRepository.findByIdIn(ids);
+        inbodyRepository.deleteAllInBatch(inbodyList);
+    }
 }

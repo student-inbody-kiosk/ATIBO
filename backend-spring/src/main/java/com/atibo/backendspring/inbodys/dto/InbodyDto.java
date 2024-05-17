@@ -95,9 +95,16 @@ public class InbodyDto {
                     this.student
             );
         }
-
         public void setStudent(Student student) {
             this.student = student;
+        }
+    }
+
+    public static class inbodyDeleteRequest {
+        private List<Integer> ids;
+
+        public List<Integer> getIds() {
+            return ids;
         }
     }
 }
