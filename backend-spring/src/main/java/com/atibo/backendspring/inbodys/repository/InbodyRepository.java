@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface InbodyRepository extends JpaRepository<Inbody, Long> {
+public interface InbodyRepository extends JpaRepository<Inbody, Integer> {
     @Query("SELECT i FROM Inbody i WHERE i.student = :student AND i.test_date BETWEEN :startDate AND :endDate")
     List<Inbody> findByStudentAndTestDateBetween(Student student, LocalDate startDate, LocalDate endDate);
 

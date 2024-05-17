@@ -97,4 +97,20 @@ public class StudentController {
         InbodyDto inbody = inbodyService.getInbody(inbodyId);
         return new ResponseEntity<>(inbody, HttpStatus.OK);
     }
+
+    @PutMapping("/api/students/inbody/{inbodyId}/")
+    public ResponseEntity<InbodyDto> changeInbody(@PathVariable Integer inbodyId,
+                                                  @RequestBody InbodyDto.createInbodyRequest inbodyRequest) {
+        System.out.println("인바디 수정");
+        InbodyDto inbodyDto = inbodyService.changeInbody(inbodyId, inbodyRequest);
+        return new ResponseEntity<>(inbodyDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/students/inbody/{inbodyId}/")
+    public ResponseEntity<Response> deleteInbody(@PathVariable Integer inbodyId) {
+        System.out.println("인바디 삭제");
+        inbodyService.deleteInbody(inbodyId);
+        Response response = new Response("The Inbody is successfully deleted");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

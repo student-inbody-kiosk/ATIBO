@@ -39,4 +39,26 @@ public class InbodyService {
         Inbody data = inbodyRepository.findInbodyById(inbodyId);
         return new InbodyDto(data);
     }
+
+    public InbodyDto changeInbody(Integer inbodyId, InbodyDto.createInbodyRequest inbodyRequest) {
+        Inbody data = inbodyRepository.findInbodyById(inbodyId);
+        data.update(inbodyRequest.getTestDate(),
+                inbodyRequest.getWeight(),
+                inbodyRequest.getPercentBodyFat(),
+                inbodyRequest.getSkeletalMuscleMass(),
+                inbodyRequest.getHeight(),
+                inbodyRequest.getAge(),
+                inbodyRequest.getTotalBodyWater(),
+                inbodyRequest.getProtein(),
+                inbodyRequest.getMinerals(),
+                inbodyRequest.getBodyFatMass(),
+                inbodyRequest.getBodyMassIndex(),
+                inbodyRequest.getScore());
+        inbodyRepository.save(data);
+        return new InbodyDto(data);
+    }
+
+    public void deleteInbody(Integer inbodyId) {
+        inbodyRepository.deleteById(inbodyId);
+    }
 }
