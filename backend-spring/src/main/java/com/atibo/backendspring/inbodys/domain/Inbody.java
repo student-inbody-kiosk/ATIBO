@@ -1,6 +1,5 @@
 package com.atibo.backendspring.inbodys.domain;
 
-import com.atibo.backendspring.inbodys.dto.InbodyDto;
 import com.atibo.backendspring.students.domain.Student;
 import com.fasterxml.jackson.annotation.JsonFormat;
 

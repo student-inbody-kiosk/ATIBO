@@ -1,7 +1,5 @@
 package com.atibo.backendspring.accounts.config;
 
-import java.util.Collections;
-
 import com.atibo.backendspring.accounts.jwt.*;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 import com.atibo.backendspring.accounts.repository.RefreshRepository;
@@ -12,7 +10,6 @@ import com.atibo.backendspring.students.security.StudentAuthenticationProvider;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
@@ -28,6 +25,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -110,7 +109,7 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/", "/api/students/*/*/*/login/")
                         .permitAll()
-                        .requestMatchers("/api/accounts/admin/**", "/api/admin/**")
+                        .requestMatchers("/api/accounts/admin/**", "/api/admin/**", "/api/gym/")
                         .hasAnyRole("ADMIN")
                         .requestMatchers("/api/accounts/**", "/api/students/", "/api/students/inbody/list/")
                         .hasAnyRole("USER")
