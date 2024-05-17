@@ -87,4 +87,29 @@ public class InbodyService {
             result.add(new StudentWithInbodyDto(student, inbodyList));
         }
     }
+
+    public List<InbodyDto> changeInbodyList(List<InbodyDto> request) {
+        for (InbodyDto inbodyDto : request) {
+            if (inbodyDto.getId() != 0) {
+                updateInbody(inbodyDto.getId(), inbodyDto);
+            }
+        }
+        return request;
+    }
+
+    public void updateInbody(int id, InbodyDto inbodyDto) {
+        Inbody data = inbodyRepository.findInbodyById(id);
+        data.update(inbodyDto.getTestDate(),
+                inbodyDto.getWeight(),
+                inbodyDto.getPercentBodyFat(),
+                inbodyDto.getSkeletalMuscleMass(),
+                inbodyDto.getHeight(),
+                inbodyDto.getAge(),
+                inbodyDto.getTotalBodyWater(),
+                inbodyDto.getProtein(),
+                inbodyDto.getMinerals(),
+                inbodyDto.getBodyFatMass(),
+                inbodyDto.getBodyMassIndex(),
+                inbodyDto.getScore());
+    }
 }

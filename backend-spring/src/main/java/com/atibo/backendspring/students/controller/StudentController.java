@@ -126,4 +126,12 @@ public class StudentController {
         Response response = new Response("The Inbody is successfully deleted");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PutMapping("/api/students/inbody/list/")
+    public ResponseEntity<List<InbodyDto>> changeInbodyLis(@RequestBody List<InbodyDto> request) {
+        // TODO: id 가 null 일 경우 새로 생성해야하는데 학생 구별이 되지 않는 문제가 있음(프론트에서 학생을 넘겨주면 좋을듯) null 이 아닌 인바디를 통해 가져오려고 해도 전부다 null인 요청이 들어오면 불가능함
+        System.out.println("인바디 목록 수정");
+        List<InbodyDto> inbodyDtoList = inbodyService.changeInbodyList(request);
+        return new ResponseEntity<>(inbodyDtoList, HttpStatus.OK);
+    }
 }
