@@ -37,4 +37,8 @@ public class MachineService {
         machine.update(request.getName(), request.getDescription());
         return new MachineDto(machine);
     }
+
+    public void deleteMachine(Integer gymId) {
+        machineRepository.deleteById(gymId);
+    }
 }

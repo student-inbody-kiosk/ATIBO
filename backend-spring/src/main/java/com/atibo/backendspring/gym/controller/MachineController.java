@@ -1,5 +1,6 @@
 package com.atibo.backendspring.gym.controller;
 
+import com.atibo.backendspring.accounts.dto.Response;
 import com.atibo.backendspring.gym.application.MachineService;
 import com.atibo.backendspring.gym.dto.MachineDto;
 
@@ -44,6 +45,14 @@ public class MachineController {
                                                     @RequestBody MachineDto request) {
         System.out.println("운동기구 디테일 수정");
         MachineDto response = machineService.updateMachine(gymId, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/gym/{gymId}/")
+    public ResponseEntity<Response> deleteMachine(@PathVariable Integer gymId) {
+        System.out.println("운동기구 디테일 삭제");
+        machineService.deleteMachine(gymId);
+        Response response = new Response("Deleted Successfully");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
