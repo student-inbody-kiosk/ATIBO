@@ -107,6 +107,8 @@ public class SecurityConfig {
                 .authorizeRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/accounts/")
                         .permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/gym/*/")
+                        .hasAnyRole("ADMIN")
                         .requestMatchers("/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/", "/api/students/*/*/*/login/")
                         .permitAll()
                         .requestMatchers("/api/accounts/admin/**", "/api/admin/**", "/api/gym/")

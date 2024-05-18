@@ -27,8 +27,14 @@ public class MachineService {
         return machineList.stream().map(MachineDto::new).toList();
     }
 
-    public MachineDto searchMachine(Integer id) {
-        Machine data = machineRepository.findMachineById(id);
+    public MachineDto searchMachine(Integer gymId) {
+        Machine data = machineRepository.findMachineById(gymId);
         return new MachineDto(data);
+    }
+
+    public MachineDto updateMachine(Integer gymId, MachineDto request) {
+        Machine machine = machineRepository.findMachineById(gymId);
+        machine.update(request.getName(), request.getDescription());
+        return new MachineDto(machine);
     }
 }

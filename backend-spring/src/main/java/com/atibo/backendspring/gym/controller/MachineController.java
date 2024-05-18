@@ -38,4 +38,12 @@ public class MachineController {
         MachineDto response = machineService.searchMachine(gymId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PutMapping("/api/gym/{gymId}/")
+    public ResponseEntity<MachineDto> updateMachine(@PathVariable Integer gymId,
+                                                    @RequestBody MachineDto request) {
+        System.out.println("운동기구 디테일 수정");
+        MachineDto response = machineService.updateMachine(gymId, request);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
