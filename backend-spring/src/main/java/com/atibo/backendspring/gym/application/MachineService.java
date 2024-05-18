@@ -26,4 +26,9 @@ public class MachineService {
         List<Machine> machineList = machineRepository.findAll();
         return machineList.stream().map(MachineDto::new).toList();
     }
+
+    public MachineDto searchMachine(Integer id) {
+        Machine data = machineRepository.findMachineById(id);
+        return new MachineDto(data);
+    }
 }

@@ -113,7 +113,7 @@ public class SecurityConfig {
                         .hasAnyRole("ADMIN")
                         .requestMatchers("/api/accounts/**", "/api/students/", "/api/students/inbody/list/")
                         .hasAnyRole("USER")
-                        .requestMatchers("/api/students/*/*/*/check/", "/api/students/*/*/*/password/change/", "/api/students/inbody/*/*/*/", "/api/students/inbody/*/", "/api/students/inbody/*/*/")
+                        .requestMatchers("/api/students/*/*/*/check/", "/api/students/*/*/*/password/change/", "/api/students/inbody/*/*/*/", "/api/students/inbody/*/", "/api/students/inbody/*/*/", "/api/gym/*/")
                         .hasAnyRole("STUDENT")
                         .anyRequest().authenticated()
                 );
