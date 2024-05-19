@@ -1,18 +1,18 @@
 package com.atibo.backendspring.students.domain;
 
+import com.atibo.backendspring.attendance.domain.Attendance;
 import com.atibo.backendspring.inbodys.domain.Inbody;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Getter
@@ -39,6 +39,8 @@ public class Student {
     private Date birth_date;
     @OneToMany(mappedBy = "student")
     List<Inbody> inbodyList = new ArrayList<Inbody>();
+    @OneToMany(mappedBy = "student")
+    private List<Attendance> attendances;
 
     public Student(String name, int grade, int room, int number, int sex, String password, Date birthDate) {
 

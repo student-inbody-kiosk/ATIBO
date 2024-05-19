@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student> {
 
     Student findById(UUID uuid);
-
     Student findByGradeAndRoomAndNumber(int grade, int room, int number);
     boolean existsByGradeAndRoomAndNumber(int grade, int room, int number);
     List<Student> findAll();
