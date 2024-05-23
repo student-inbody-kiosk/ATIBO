@@ -50,8 +50,8 @@ public class AdminController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/api/school/")
-    public ResponseEntity<?> School() {
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @GetMapping("/api/school/")
+//    public ResponseEntity<?> School() {
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 }

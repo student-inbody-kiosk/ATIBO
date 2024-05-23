@@ -1,15 +1,17 @@
 package com.atibo.backendspring.gym.domain;
 
-import com.atibo.backendspring.students.domain.Student;
-
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.util.UUID;
 
 @Entity
 public class MachineImage {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false)
-    private Integer id;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, columnDefinition = "BINARY(16)")
+    private UUID id;
     private String image;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "machine_id")

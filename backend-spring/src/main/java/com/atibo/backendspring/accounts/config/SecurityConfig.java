@@ -111,7 +111,7 @@ public class SecurityConfig {
                         .hasAnyRole("ADMIN")
                         .requestMatchers("/api/students/*/*/*/check/", "/api/students/attendance/*/*/*/", "/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/", "/api/students/*/*/*/login/")
                         .permitAll()
-                        .requestMatchers("/api/accounts/admin/**", "/api/admin/**", "/api/gym/")
+                        .requestMatchers("/api/accounts/admin/**", "/api/admin/**", "/api/gym/", "/api/school/")
                         .hasAnyRole("ADMIN")
                         .requestMatchers("/api/accounts/**", "/api/students/", "/api/students/inbody/list/", "/api/students/attendance/*/")
                         .hasAnyRole("USER")

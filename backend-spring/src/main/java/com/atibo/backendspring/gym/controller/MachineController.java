@@ -3,6 +3,7 @@ package com.atibo.backendspring.gym.controller;
 import com.atibo.backendspring.accounts.dto.Response;
 import com.atibo.backendspring.gym.application.MachineService;
 import com.atibo.backendspring.gym.dto.MachineDto;
+import com.atibo.backendspring.gym.dto.MachineImageRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,5 +55,13 @@ public class MachineController {
         machineService.deleteMachine(gymId);
         Response response = new Response("Deleted Successfully");
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/api/gym/{gymId}/image")
+    public ResponseEntity downLoadImage(@PathVariable Integer gymId,
+                                                  @RequestBody MachineImageRequest request) {
+        System.out.println("운동기구 사진 등록");
+        machineService.registerImage(gymId, request);
+        return ResponseEntity.ok("Image saved successfully");
     }
 }
