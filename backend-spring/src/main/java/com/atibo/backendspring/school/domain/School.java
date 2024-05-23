@@ -1,33 +1,32 @@
 package com.atibo.backendspring.school.domain;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-
-import java.io.File;
-
 
 @Entity
 public class School {
     @Id
     private final int id = 1;
     private String name;
-    private File logoImage;
+    private String logoImagePath;
 
     public School() {
     }
 
-    public void updateSchool(String name, File logoImage) {
+    public void updateSchool(String name, String logoImage) {
         this.name = name;
-        this.logoImage = logoImage;
+        this.logoImagePath = logoImage;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
     }
 
     public String getName() {
         return name;
     }
 
-    public File getLogoImage() {
-        return logoImage;
+    public String getLogoImagePath() {
+        return logoImagePath;
     }
 }

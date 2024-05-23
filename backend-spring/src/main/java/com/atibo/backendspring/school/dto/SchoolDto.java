@@ -12,13 +12,18 @@ import java.io.File;
 public class SchoolDto {
 
     private String name;
-    private File logoImage;
+    private String logoImage;
 
     public SchoolDto() {
     }
 
     public SchoolDto(School school) {
         this.name = school.getName();
-        this.logoImage = school.getLogoImage();
+        this.logoImage = school.getLogoImagePath();
+    }
+
+    public SchoolDto(String name, String logoImage) {
+        this.name = name;
+        this.logoImage = logoImage;
     }
 }
