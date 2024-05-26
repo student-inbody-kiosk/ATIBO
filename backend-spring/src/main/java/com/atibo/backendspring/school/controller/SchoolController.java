@@ -20,7 +20,7 @@ import java.util.Optional;
 @RestController
 public class SchoolController {
     private final SchoolService schoolService;
-    private static final String FILE_DIRECTORY = "src/main/resources/static/";
+    public static final String FILE_DIRECTORY = "src/main/resources/static/";
 
     public SchoolController(SchoolService schoolService) {
         this.schoolService = schoolService;
@@ -43,10 +43,10 @@ public class SchoolController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/src/main/resources/static/{filePath:.+}")
+    @GetMapping("/src/main/resources/static/logo/{filePath:.+}")
     public ResponseEntity<Resource> serveFile(@PathVariable String filePath) {
-        System.out.println("이미지 전 ");
-        Path fileLocation = Paths.get(FILE_DIRECTORY).resolve(filePath);
+        System.out.println("이미지 전송");
+        Path fileLocation = Paths.get(FILE_DIRECTORY+"/logo").resolve(filePath);
         Resource resource;
         try {
             resource = new UrlResource(fileLocation.toUri());

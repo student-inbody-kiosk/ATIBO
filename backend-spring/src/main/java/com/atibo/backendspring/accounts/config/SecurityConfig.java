@@ -109,7 +109,7 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/gym/*/", "/api/school/")
                         .hasAnyRole("ADMIN")
-                        .requestMatchers("/src/**", "/api/school/", "/api/students/*/*/*/check/", "/api/students/attendance/*/*/*/", "/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/", "/api/students/*/*/*/login/", "/")
+                        .requestMatchers("/src/**", "/api/school/", "/api/students/*/*/*/check/", "/api/students/attendance/*/*/*/", "/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/", "/api/students/*/*/*/login/", "/", "/api/gym/*/image/")
                         .permitAll()
                         .requestMatchers("/api/accounts/admin/**", "/api/admin/**", "/api/gym/")
                         .hasAnyRole("ADMIN")

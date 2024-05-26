@@ -12,8 +12,8 @@ import java.util.Optional;
 
 @Service
 public class SchoolService {
-    private static final String UPLOAD_DIR = "src/main/resources/static/";
-    private static final String LOCAL_DIR = "http://localhost:8080/";
+    private static final String UPLOAD_DIR = "src/main/resources/static/logo/";
+    public static final String LOCAL_DIR = "http://localhost:8080/";
     private final SchoolRepository schoolRepository;
 
     public SchoolService(SchoolRepository schoolRepository) {
@@ -27,13 +27,11 @@ public class SchoolService {
 
     public SchoolDto changeSchool(Optional<MultipartFile> logoImage, String name) {
         School school = schoolRepository.findSchoolById(1);
-        System.out.println(school.getName());
-//        if (logoImage.isEmpty()) {
-//            System.out.println("이름만변경");
-//            school.changeName(name);
-//            schoolRepository.save(school);
-//            return new SchoolDto(school);
-//        }
+        if (logoImage.isEmpty()) {
+            school.changeName(name);
+            schoolRepository.save(school);
+            return new SchoolDto(school);
+        }
 //TODO: 디렉토리 초기화 할꺼면 사용(사진 1장만 사용시)...
 
 //        try {

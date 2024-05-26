@@ -3,9 +3,13 @@ package com.atibo.backendspring.gym.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Set;
 
 @Entity
 @Getter
+@Setter
 public class Machine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +19,9 @@ public class Machine {
     private String name;
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<MachineImage> imageSet;
 
     public Machine() {
     }
@@ -27,5 +34,15 @@ public class Machine {
     public void update(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public void addImage(MachineImage image) {
+        imageSet.add(image);
+        image.setMachine(this);
+    }
+
+    public void removeImage(MachineImage image) {
+        imageSet.remove(image);
+        image.setMachine(null);
     }
 }

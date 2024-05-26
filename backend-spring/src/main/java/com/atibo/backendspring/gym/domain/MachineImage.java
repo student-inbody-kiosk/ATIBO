@@ -1,18 +1,18 @@
 package com.atibo.backendspring.gym.domain;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.UUID;
-
+@Getter
+@Setter
 @Entity
 public class MachineImage {
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, columnDefinition = "BINARY(16)")
-    private UUID id;
-    private String image;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", updatable = false)
+    private int id;
+    private String imagePath;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "machine_id")
     private Machine machine;
@@ -22,6 +22,6 @@ public class MachineImage {
 
     public MachineImage(Machine machine, String image) {
         this.machine = machine;
-        this.image = image;
+        this.imagePath = image;
     }
 }
