@@ -47,6 +47,7 @@ public class MachineService {
         return new MachineDto(data);
     }
 
+    @Transactional
     public MachineDto updateMachine(Integer gymId, MachineDto request) {
         Machine machine = machineRepository.findMachineById(gymId);
         machine.update(request.getName(), request.getDescription());

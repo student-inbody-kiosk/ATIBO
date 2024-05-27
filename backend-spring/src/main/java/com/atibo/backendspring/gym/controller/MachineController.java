@@ -64,10 +64,7 @@ public class MachineController {
     public ResponseEntity<List<MachineImageResponse>> changeMachineImageList(@PathVariable Integer gymId,
                                                     @RequestParam Map<String, Object> paramMap,
                                                     @RequestParam Map<String, MultipartFile> fileMap)  {
-        System.out.println("운동기구 사진 수정");
-        System.out.println("운동기구 사진 삭제");
         machineService.deleteRemainImages(gymId, paramMap);
-        System.out.println("운동기구 사진 생성");
         machineService.createImages(gymId, fileMap);
         List<MachineImageResponse> response = machineService.getMachineImageList(gymId);
         return new ResponseEntity<>(response, HttpStatus.OK);
