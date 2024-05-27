@@ -54,7 +54,13 @@ public class MachineService {
     }
 
     public void deleteMachine(Integer gymId) {
-        machineRepository.deleteById(gymId);
+        Machine machine = machineRepository.findMachineById(gymId);
+        Set<MachineImage> machineImageSet = machine.getImageSet();
+        // 실제 파일 지우기
+        for (MachineImage machineImage : machineImageSet) {
+            deleteImage(machineImage);
+        }
+        machineRepository.delete(machine);
     }
 
     public void registerImage(Integer gymId, MachineImageRequest request) {
@@ -84,6 +90,7 @@ public class MachineService {
     public void deleteImages(Machine machine, Set<Integer> idsToDelete) {
         for (Integer id : idsToDelete) {
             MachineImage machineImage = machineImageRepository.findMachineImageById(id);
+            deleteImage(machineImage);
             machine.getImageSet().remove(machineImage);
             machineRepository.save(machine);
         }
@@ -118,6 +125,19 @@ public class MachineService {
 
     private List<MultipartFile> getImages(Map<String, MultipartFile> fileMap) {
         return new ArrayList<>(fileMap.values());
+    }
+
+    public void deleteImage(MachineImage machineImage) {
+        String filePath = machineImage.getImagePath();
+        filePath = filePath.substring(SchoolService.LOCAL_DIR.length());
+        Path path = Paths.get(filePath);
+        if (Files.exists(path)) {
+            try {
+                Files.delete(path);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private void createImage(Machine machine, MultipartFile image) {
