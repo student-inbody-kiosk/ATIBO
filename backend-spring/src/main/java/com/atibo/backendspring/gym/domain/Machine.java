@@ -20,7 +20,7 @@ public class Machine {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(mappedBy = "machine", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "machine", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
     private Set<MachineImage> imageSet;
 
     public Machine() {
@@ -34,15 +34,5 @@ public class Machine {
     public void update(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    public void addImage(MachineImage image) {
-        imageSet.add(image);
-        image.setMachine(this);
-    }
-
-    public void removeImage(MachineImage image) {
-        imageSet.remove(image);
-        image.setMachine(null);
     }
 }

@@ -72,14 +72,20 @@ public class MachineService {
         return response;
     }
 
-    @Transactional
     public void deleteRemainImages(Integer gymId, Map<String, Object> paramMap) {
         Machine machine = machineRepository.findMachineById(gymId);
         Set<MachineImage> machineImages = machine.getImageSet();
         List<Integer> imageIds = getImageIds(paramMap);
         Set<Integer> idsToDelete = getDeleteIds(machineImages, imageIds);
+        deleteImages(machine, idsToDelete);
+    }
+
+    @Transactional
+    public void deleteImages(Machine machine, Set<Integer> idsToDelete) {
         for (Integer id : idsToDelete) {
-            machineImageRepository.deleteById(id);
+            MachineImage machineImage = machineImageRepository.findMachineImageById(id);
+            machine.getImageSet().remove(machineImage);
+            machineRepository.save(machine);
         }
     }
 
