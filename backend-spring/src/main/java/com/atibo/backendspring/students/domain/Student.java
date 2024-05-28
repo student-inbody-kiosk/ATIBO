@@ -37,9 +37,9 @@ public class Student {
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birth_date;
-    @OneToMany(mappedBy = "student")
-    List<Inbody> inbodyList = new ArrayList<Inbody>();
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
+    List<Inbody> inbodyList;
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<Attendance> attendances;
 
     public Student(String name, int grade, int room, int number, int sex, String password, Date birthDate) {
