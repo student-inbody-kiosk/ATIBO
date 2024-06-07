@@ -2,9 +2,10 @@ spring:
     # MySQL ?? ??
     datasource:
         driverClassName: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://localhost:3306/atibo?characterEncoding=utf8
-        username: root
-        password: 1q2w3e4r!
+#        url: jdbc:mysql://localhost:3306/atibo?characterEncoding=utf8
+        url: jdbc:mysql://mysql-container:3306/atibo
+#        username: root
+#        password: 1q2w3e4r!
 
     # JPA ??
     jpa:

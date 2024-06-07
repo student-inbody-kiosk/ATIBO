@@ -47,10 +47,9 @@ public class StudentService {
     public List<StudentDto> findStudents(Integer grade, Integer room, Integer number, String name) {
         Specification<Student> criteria = buildCriteria(grade, room, number, name);
         List<Student> students  = studentRepository.findAll(criteria);
-        List<StudentDto> studentDtos = students.stream()
-                                               .map(StudentDto::new)  // Student 객체를 StudentDto로 변환
-                                               .toList();
-        return studentDtos;
+        return students.stream()
+                       .map(StudentDto::new)  // Student 객체를 StudentDto로 변환
+                       .toList();
     }
 
     public Specification<Student> buildCriteria(Integer grade, Integer room, Integer number, String name) {
@@ -76,9 +75,8 @@ public class StudentService {
         List<UUID> uuids = studentDtos.stream().map(StudentDto::getId).toList();
         studentDtos.forEach(this::updateStudent);
         List<Student> students = studentRepository.findByIdIn(uuids);
-        List<StudentDto> studentDTOs = students.stream().map(StudentDto::new)  // Student 객체를 StudentDto로 변환
-                                               .toList();
-        return studentDTOs;
+        return students.stream().map(StudentDto::new)  // Student 객체를 StudentDto로 변환
+                       .toList();
     }
 
     private void updateStudent(StudentDto studentDto) {
