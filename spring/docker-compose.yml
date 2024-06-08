@@ -1,0 +1,73 @@
+version: '3'
+
+services:
+  frontend:
+    image: byongho/atibo-front
+    environment:
+      - VITE_API_IP=${DOMAIN_OR_PUBLIC_IP}
+      - VITE_API_PORT=${PORT}
+    networks:
+      - atibo-web-net
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost/']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  backend:
+    image: tph0093/atibo-backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      - DB_IP=mysql
+      - DB_PORT=3306
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
+    networks:
+      - atibo-web-net
+      - atibo-db-net
+
+  mysql:
+    image: mysql
+    volumes:
+      - atibo-mysql:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - TZ=Asia/Seoul
+    networks:
+      - atibo-db-net
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'mysqladmin ping -h 127.0.0.1 -u root --password=1q2w3e4r!',
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  nginx:
+    build: ./nginx
+    ports:
+      - ${PORT}:80
+    depends_on:
+      frontend:
+        condition: service_healthy
+    networks:
+      - atibo-web-net
+
+volumes:
+  atibo-mysql:
+
+networks:
+  atibo-web-net:
+    driver: bridge
+  atibo-db-net:
+    driver: bridge
