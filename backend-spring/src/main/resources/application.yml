@@ -14,17 +14,12 @@ spring:
             show_sql: true
             format_sql: true
             naming.physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStanderImpl
-    # 개발용(Postman 요청)
-    security:
-        user:
-            name: user
-            password: 1234
 
     # 임의의 긴 암호 문자열
     jwt:
         secret: vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb
 
-# TODO: test 해보고 삭제해도 될듯( csrf 설정 )
+    # csrf 설정
     mustache:
         servlet:
             expose-request-attributes: true
@@ -41,7 +36,7 @@ spring:
 
 logging:
     level:
-        org.hibernate.SQL: debug # logger에 출력하려면
+        org.hibernate.SQL: debug
         org.hibernate.type.descriptor.sql: TRACE
 #   세션 소멸시간
 server:

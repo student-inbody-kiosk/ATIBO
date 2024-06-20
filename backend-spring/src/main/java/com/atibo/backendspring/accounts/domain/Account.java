@@ -15,7 +15,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table(name = "accounts")
 public class Account {
@@ -65,4 +64,7 @@ public class Account {
         this.isActive = true;
     }
 
+    public void changeRole(AccountRole role) {
+        this.role = role;
+    }
 }

@@ -1,4 +1,4 @@
-package com.atibo.backendspring.accounts.config;
+package com.atibo.backendspring.config;
 
 import java.util.HashMap;
 import java.util.Map;

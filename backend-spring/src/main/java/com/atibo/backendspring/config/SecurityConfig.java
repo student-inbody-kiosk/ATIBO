@@ -1,4 +1,4 @@
-package com.atibo.backendspring.accounts.config;
+package com.atibo.backendspring.config;
 
 import com.atibo.backendspring.accounts.jwt.*;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
