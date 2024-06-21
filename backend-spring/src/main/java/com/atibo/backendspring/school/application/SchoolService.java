@@ -3,11 +3,14 @@ package com.atibo.backendspring.school.application;
 import com.atibo.backendspring.school.domain.School;
 import com.atibo.backendspring.school.dto.SchoolDto;
 import com.atibo.backendspring.school.repository.SchoolRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @Service
@@ -21,12 +24,12 @@ public class SchoolService {
     }
 
     public SchoolDto getSchool() {
-        School school = schoolRepository.findSchoolById(1);
+        School school = schoolRepository.findSchoolById(0);
         return new SchoolDto(school);
     }
 
     public SchoolDto changeSchool(Optional<MultipartFile> logoImage, String name) {
-        School school = schoolRepository.findSchoolById(1);
+        School school = schoolRepository.findSchoolById(0);
         if (logoImage.isEmpty()) {
             school.changeName(name);
             schoolRepository.save(school);

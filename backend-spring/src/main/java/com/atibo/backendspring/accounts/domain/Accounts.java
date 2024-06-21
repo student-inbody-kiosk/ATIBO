@@ -8,7 +8,13 @@ public class Accounts {
     private final List<Account> accounts;
 
     public Accounts(List<Account> accounts) {
-        this.accounts = accounts;
+        this.accounts = excludeAdmin(accounts);
+    }
+
+    private List<Account> excludeAdmin(List<Account> accounts) {
+        return accounts.stream()
+                       .filter(account -> account.getRole().equals(AccountRole.ROLE_STUDENT))
+                       .collect(Collectors.toList());
     }
 
     public List<Account> activeAccounts() {

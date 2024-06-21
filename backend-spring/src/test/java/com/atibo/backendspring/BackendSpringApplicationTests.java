@@ -7,8 +7,4 @@ import org.junit.jupiter.api.Test;
 @SpringBootTest
 class BackendSpringApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
-
 }

@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 @Entity
 public class School {
     @Id
-    private final int id = 1;
+    private final int id = 0;
     private String name;
     private String logoImagePath;
 

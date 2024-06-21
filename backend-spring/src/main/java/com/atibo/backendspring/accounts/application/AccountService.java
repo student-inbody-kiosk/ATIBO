@@ -1,13 +1,9 @@
 package com.atibo.backendspring.accounts.application;
 
-import java.util.Objects;
-
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.domain.AccountRole;
 import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
-
-import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -18,6 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import lombok.RequiredArgsConstructor;
+
+import java.util.Objects;
 
 
 
@@ -36,9 +36,9 @@ public class AccountService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 
     }
-    // 회원가입
+
     public AccountDto.ResponseDto saveAccount(AccountDto.RequestDto requestDto) {
-        //
+
         existByUserName(requestDto.getUsername());
         existByEmail(requestDto.getEmail());
         ValidAccount.validAccount(requestDto);
