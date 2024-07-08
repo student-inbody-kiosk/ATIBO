@@ -1,4 +1,4 @@
-package com.atibo.backendspring.accounts.jwt;
+package com.atibo.backendspring.common.jwt;
 
 import com.atibo.backendspring.accounts.application.AccountService;
 import com.atibo.backendspring.accounts.application.CustomUserDetailService;
@@ -9,8 +9,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component

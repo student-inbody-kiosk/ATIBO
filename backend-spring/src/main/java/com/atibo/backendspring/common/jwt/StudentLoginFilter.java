@@ -1,4 +1,4 @@
-package com.atibo.backendspring.accounts.jwt;
+package com.atibo.backendspring.common.jwt;
 
 import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.students.domain.Student;

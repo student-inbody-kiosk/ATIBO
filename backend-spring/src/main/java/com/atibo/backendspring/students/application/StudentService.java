@@ -1,7 +1,7 @@
 package com.atibo.backendspring.students.application;
 
 import com.atibo.backendspring.accounts.dto.AccountDto;
-import com.atibo.backendspring.accounts.jwt.JWTUtil;
+import com.atibo.backendspring.common.jwt.JWTUtil;
 import com.atibo.backendspring.students.domain.Student;
 import com.atibo.backendspring.students.dto.StudentDetailResponse;
 import com.atibo.backendspring.students.dto.StudentDto;

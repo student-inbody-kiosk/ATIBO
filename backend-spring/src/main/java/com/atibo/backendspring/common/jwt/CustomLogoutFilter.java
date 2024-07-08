@@ -1,6 +1,4 @@
-package com.atibo.backendspring.accounts.jwt;
-
-import java.io.IOException;
+package com.atibo.backendspring.common.jwt;
 
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.dto.Response;
@@ -18,6 +16,8 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 
 public class CustomLogoutFilter extends GenericFilterBean {
 

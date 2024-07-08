@@ -1,4 +1,4 @@
-package com.atibo.backendspring.accounts.config;
+package com.atibo.backendspring.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

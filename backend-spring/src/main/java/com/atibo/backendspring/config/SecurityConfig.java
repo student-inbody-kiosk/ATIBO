@@ -1,10 +1,10 @@
-package com.atibo.backendspring.accounts.config;
+package com.atibo.backendspring.config;
 
-import com.atibo.backendspring.accounts.jwt.*;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 import com.atibo.backendspring.accounts.repository.RefreshRepository;
 import com.atibo.backendspring.common.CustomAccessDeniedHandler;
 import com.atibo.backendspring.common.CustomAuthenticationEntryPoint;
+import com.atibo.backendspring.common.jwt.*;
 import com.atibo.backendspring.students.repository.StudentRepository;
 import com.atibo.backendspring.students.security.StudentAuthenticationProvider;
 
@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -33,16 +32,14 @@ import java.util.Collections;
 public class SecurityConfig {
 
     //AuthenticationManager 가 인자로 받을 AuthenticationConfiguration 객체 생성자 주입
-    private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
     private final AccountRepository accountRepository;
     private final StudentRepository studentRepository;
     private final CustomAuthenticationProvider customAuthenticationProvider;
     private final StudentAuthenticationProvider studentAuthenticationProvider;
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository, AccountRepository accountRepository, StudentRepository studentRepository, CustomAuthenticationProvider customAuthenticationProvider, StudentAuthenticationProvider studentAuthenticationProvider) {
 
-        this.authenticationConfiguration = authenticationConfiguration;
+    public SecurityConfig(JWTUtil jwtUtil, RefreshRepository refreshRepository, AccountRepository accountRepository, StudentRepository studentRepository, CustomAuthenticationProvider customAuthenticationProvider, StudentAuthenticationProvider studentAuthenticationProvider) {
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
         this.accountRepository = accountRepository;
@@ -77,8 +74,8 @@ public class SecurityConfig {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 
                         CorsConfiguration configuration = new CorsConfiguration();
-
-                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+                        //TODO: 여기 주소 변경하면 코스설정 해결될듯?
+                        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
                         configuration.setAllowedMethods(Collections.singletonList("*"));
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
@@ -111,7 +108,7 @@ public class SecurityConfig {
                         .hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/gym/")
                         .hasAnyRole("ADMIN")
-                        .requestMatchers("/src/**", "/api/school/", "/api/students/*/*/*/check/", "/api/students/attendance/*/*/*/", "/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/", "/api/students/*/*/*/login/", "/", "/api/gym/*/image/", "/api/gym/", "/api/gym/*/")
+                        .requestMatchers("/health", "/src/**", "/api/school/", "/api/students/*/*/*/check/", "/api/students/attendance/*/*/*/", "/api/school/", "/api/accounts/login/", "/api/accounts/token/refresh/", "/api/accounts/username/check/", "/api/accounts/password/reset/", "/api/students/*/*/*/login/", "/", "/api/gym/*/image/", "/api/gym/", "/api/gym/*/")
                         .permitAll()
                         .requestMatchers("/api/accounts/admin/**", "/api/admin/**")
                         .hasAnyRole("ADMIN")
@@ -143,7 +140,6 @@ public class SecurityConfig {
                 .addFilterAt(studentLoginFilter, UsernamePasswordAuthenticationFilter.class);
         http
                 .addFilterBefore(customLogoutFilter, UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }

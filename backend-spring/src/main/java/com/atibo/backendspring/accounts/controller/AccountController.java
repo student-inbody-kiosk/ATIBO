@@ -5,12 +5,11 @@ import com.atibo.backendspring.accounts.application.EmailService;
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.dto.AccountDto;
 import com.atibo.backendspring.accounts.dto.Response;
-import com.atibo.backendspring.accounts.jwt.JWTUtil;
 import com.atibo.backendspring.accounts.repository.AccountRepository;
 import com.atibo.backendspring.accounts.repository.RefreshRepository;
+import com.atibo.backendspring.common.jwt.JWTUtil;
 import com.atibo.backendspring.students.application.StudentService;
 import com.atibo.backendspring.students.dto.StudentDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,24 +26,20 @@ import java.util.List;
 @Controller
 @ResponseBody
 public class AccountController {
-
-    private final JWTUtil jwtUtil;
     private final AccountRepository accountRepository;
     private final RefreshRepository refreshRepository;
     private final AccountService accountService;
     private final EmailService emailService;
     private final StudentService studentService;
+    private final JWTUtil jwtUtil;
 
-
-
-    public AccountController(JWTUtil jwtUtil, AccountRepository accountRepository, AccountService accountService, RefreshRepository refreshRepository, EmailService emailService, StudentService studentService) {
-
-        this.jwtUtil = jwtUtil;
+    public AccountController(AccountRepository accountRepository, AccountService accountService, RefreshRepository refreshRepository, EmailService emailService, StudentService studentService, JWTUtil jwtUtil) {
         this.accountRepository = accountRepository;
         this.accountService = accountService;
         this.refreshRepository = refreshRepository;
         this.emailService = emailService;
         this.studentService = studentService;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping("/api/accounts/")
@@ -75,7 +70,6 @@ public class AccountController {
 
     @PostMapping("/api/accounts/token/refresh/")
     public ResponseEntity<?> reissue(@RequestBody AccountDto.tokenDto request) {
-
         //get refresh token
         String refresh = request.getRefreshToken();
         // TODO: username 이 잘못되었을 경우 에러처리 확인하고 만들기
@@ -86,11 +80,9 @@ public class AccountController {
         accountService.existByUserName1(username);
 
         if (refresh == null) {
-
             //response status code
             return new ResponseEntity<>("You may be logged in from another place with that ID", HttpStatus.UNAUTHORIZED);
         }
-
         //expired check
         try {
             jwtUtil.isExpired(refresh);

@@ -1,7 +1,5 @@
 package com.atibo.backendspring.accounts.domain;
 
-import java.util.UUID;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -12,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.GenericGenerator;
+
+import java.util.UUID;
 
 @NoArgsConstructor
 @Getter
@@ -65,4 +65,7 @@ public class Account {
         this.isActive = true;
     }
 
+    public void changeRole(AccountRole role) {
+        this.role = role;
+    }
 }

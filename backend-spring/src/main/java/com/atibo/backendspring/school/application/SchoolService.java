@@ -3,17 +3,24 @@ package com.atibo.backendspring.school.application;
 import com.atibo.backendspring.school.domain.School;
 import com.atibo.backendspring.school.dto.SchoolDto;
 import com.atibo.backendspring.school.repository.SchoolRepository;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Optional;
 
 @Service
 public class SchoolService {
-    private static final String UPLOAD_DIR = "src/main/resources/static/logo/";
-    public static final String LOCAL_DIR = "http://localhost:8080/";
+    private static final String UPLOAD_DIR = "/src/main/resources/static/logo/";
+    @Value("${spring.server.host_ip}")
+    public static String LOCAL_IP;
+    @Value("${spring.server.host_port}")
+    public static String LOCAL_PORT;
+    public static final String LOCAL_DIR = LOCAL_IP +':'+ LOCAL_PORT;
     private final SchoolRepository schoolRepository;
 
     public SchoolService(SchoolRepository schoolRepository) {
@@ -21,32 +28,30 @@ public class SchoolService {
     }
 
     public SchoolDto getSchool() {
-        School school = schoolRepository.findSchoolById(1);
+        School school = schoolRepository.findSchoolById(0);
         return new SchoolDto(school);
     }
 
     public SchoolDto changeSchool(Optional<MultipartFile> logoImage, String name) {
-        School school = schoolRepository.findSchoolById(1);
+        School school = schoolRepository.findSchoolById(0);
         if (logoImage.isEmpty()) {
             school.changeName(name);
             schoolRepository.save(school);
             return new SchoolDto(school);
         }
-//TODO: 디렉토리 초기화 할꺼면 사용(사진 1장만 사용시)...
+        try {
+            Files.walkFileTree(Path.of(UPLOAD_DIR), new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Files.delete(file);
+                    System.out.println("파일이 삭제되었습니다: " + file.toString());
+                    return FileVisitResult.CONTINUE;
+                }
 
-//        try {
-//            Files.walkFileTree(Path.of(UPLOAD_DIR), new SimpleFileVisitor<Path>() {
-//                @Override
-//                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-//                    Files.delete(file);
-//                    System.out.println("파일이 삭제되었습니다: " + file.toString());
-//                    return FileVisitResult.CONTINUE;
-//                }
-//
-//            });
-//        } catch (IOException e) {
-//            System.err.println("디렉토리를 비우는 도중 오류가 발생했습니다: " + e.getMessage());
-//        }
+            });
+        } catch (IOException e) {
+            System.err.println("디렉토리를 비우는 도중 오류가 발생했습니다: " + e.getMessage());
+        }
 
         try {
             // 디렉토리가 존재하지 않으면 생성
@@ -65,7 +70,8 @@ public class SchoolService {
                 Files.copy(logoImage.get().getInputStream(), filePath);
             }
 
-            school.updateSchool(name, LOCAL_DIR + filePath.toString());
+            school.updateSchool(name, filePath.toString());
+            System.out.println(school.getLogoImagePath());
             schoolRepository.save(school);
 
             return new SchoolDto(school);

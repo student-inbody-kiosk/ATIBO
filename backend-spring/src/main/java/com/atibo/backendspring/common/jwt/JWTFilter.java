@@ -1,8 +1,4 @@
-package com.atibo.backendspring.accounts.jwt;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Objects;
+package com.atibo.backendspring.common.jwt;
 
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.domain.AccountRole;
@@ -21,6 +17,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Objects;
 
 public class JWTFilter extends OncePerRequestFilter {
 
