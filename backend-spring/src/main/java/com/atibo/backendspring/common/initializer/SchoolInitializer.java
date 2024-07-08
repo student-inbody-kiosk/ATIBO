@@ -1,5 +1,7 @@
-package com.atibo.backendspring.config;
+package com.atibo.backendspring.common.initializer;
 
+import com.atibo.backendspring.config.ConfigEnv;
+import com.atibo.backendspring.school.application.SchoolService;
 import com.atibo.backendspring.school.domain.School;
 import com.atibo.backendspring.school.repository.SchoolRepository;
 
@@ -11,16 +13,19 @@ import org.springframework.stereotype.Component;
 public class SchoolInitializer implements ApplicationRunner {
 
     private final SchoolRepository schoolRepository;
+    private final ConfigEnv configEnv;
 
-    public SchoolInitializer(SchoolRepository schoolRepository) {
+    public SchoolInitializer(SchoolRepository schoolRepository, ConfigEnv configEnv) {
         this.schoolRepository = schoolRepository;
+        this.configEnv = configEnv;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         if (!schoolRepository.existsById(0)) {
             School school = new School();
-            school.updateSchool("아티초등학교", "http://localhost:8080/src/main/resources/static/logo/default-logo-image.png");
+            System.out.println(configEnv.getLocalDir());
+            school.updateSchool("아티초등학교", "/src/main/resources/static/logo/default-logo-image.png");
             schoolRepository.save(school);
         }
     }

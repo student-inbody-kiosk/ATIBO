@@ -1,10 +1,4 @@
-package com.atibo.backendspring.accounts.jwt;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
+package com.atibo.backendspring.common.jwt;
 
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.domain.RefreshToken;
@@ -14,7 +8,6 @@ import com.atibo.backendspring.accounts.repository.RefreshRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -27,6 +20,12 @@ import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final CustomAuthenticationProvider customAuthenticationProvider;
@@ -37,7 +36,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public LoginFilter(CustomAuthenticationProvider customAuthenticationProvider, JWTUtil jwtUtil, RefreshRepository refreshRepository, AccountRepository accountRepository) {
-
         this.customAuthenticationProvider = customAuthenticationProvider;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;

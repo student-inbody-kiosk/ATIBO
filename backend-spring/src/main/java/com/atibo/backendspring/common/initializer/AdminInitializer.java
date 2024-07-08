@@ -1,4 +1,4 @@
-package com.atibo.backendspring.config;
+package com.atibo.backendspring.common.initializer;
 
 import com.atibo.backendspring.accounts.domain.Account;
 import com.atibo.backendspring.accounts.domain.AccountRole;
@@ -25,6 +25,8 @@ public class AdminInitializer implements ApplicationRunner {
         if (!accountRepository.existsByUsername("admin1")) {
             Account adminData = new Account("admin1", "관리자", "admin@c.com", bCryptPasswordEncoder.encode("1q2w3e4r!"), AccountRole.ROLE_ADMIN, "관리자 계정입니다.");
             adminData.changeActive();
+            System.out.println("어드민 계정 생성" + adminData.getPassword());
+            System.out.println(adminData.isActive());
             accountRepository.save(adminData);
         }
     }
