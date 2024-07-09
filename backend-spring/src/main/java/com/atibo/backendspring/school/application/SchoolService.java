@@ -4,7 +4,6 @@ import com.atibo.backendspring.school.domain.School;
 import com.atibo.backendspring.school.dto.SchoolDto;
 import com.atibo.backendspring.school.repository.SchoolRepository;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,11 +15,6 @@ import java.util.Optional;
 @Service
 public class SchoolService {
     private static final String UPLOAD_DIR = "/src/main/resources/static/logo/";
-    @Value("${spring.server.host_ip}")
-    public static String LOCAL_IP;
-    @Value("${spring.server.host_port}")
-    public static String LOCAL_PORT;
-    public static final String LOCAL_DIR = LOCAL_IP +':'+ LOCAL_PORT;
     private final SchoolRepository schoolRepository;
 
     public SchoolService(SchoolRepository schoolRepository) {
@@ -71,7 +65,6 @@ public class SchoolService {
             }
 
             school.updateSchool(name, filePath.toString());
-            System.out.println(school.getLogoImagePath());
             schoolRepository.save(school);
 
             return new SchoolDto(school);

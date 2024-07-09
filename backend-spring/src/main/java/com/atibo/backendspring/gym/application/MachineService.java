@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class MachineService {
-    private static final String UPLOAD_DIR = "src/main/resources/static/machine/";
+    private static final String UPLOAD_DIR = "/src/main/resources/static/machine/";
     private final MachineRepository machineRepository;
     private final MachineImageRepository machineImageRepository;
 
@@ -130,7 +130,7 @@ public class MachineService {
 
     public void deleteImage(MachineImage machineImage) {
         String filePath = machineImage.getImagePath();
-        filePath = filePath.substring(SchoolService.LOCAL_DIR.length());
+//        filePath = filePath.substring(SchoolService.LOCAL_DIR.length());
         Path path = Paths.get(filePath);
         if (Files.exists(path)) {
             try {
@@ -157,7 +157,7 @@ public class MachineService {
                 Files.copy(image.getInputStream(), filePath);
             }
 
-            MachineImage data = new MachineImage(machine, SchoolService.LOCAL_DIR + filePath.toString());
+            MachineImage data = new MachineImage(machine, filePath.toString());
             machineImageRepository.save(data);
 
         } catch (IOException e) {

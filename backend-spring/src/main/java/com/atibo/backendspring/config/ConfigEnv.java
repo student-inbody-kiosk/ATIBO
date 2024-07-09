@@ -14,7 +14,6 @@ public class ConfigEnv {
     }
 
     public String getLocalDir() {
-        System.out.println("주소");
-        return environment.getProperty("spring.server.host_ip" + ":" + "spring.server.host_port");
+        return environment.getProperty("spring.server.host_ip")+":"+environment.getProperty("spring.server.host_port");
     }
 }
