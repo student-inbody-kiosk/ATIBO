@@ -53,3 +53,16 @@ server:
     servlet:
         session:
             timeout: 90m
+
+# Actuator 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+    enabled-by-default: false
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
